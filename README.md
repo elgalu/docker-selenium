@@ -2,12 +2,10 @@
 
 See: https://github.com/SeleniumHQ/docker-selenium
 
-## Docker images for Selenium Standalone Server Hub and Node configurations with Chrome and Firefox
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-So commits in this repo are only meant for people who are not yet aware that the repo moved to [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) and in order to avoid CI failures trusting this docker image.
+Commits in this repo are only meant for people who are not yet aware that the repo moved to [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) and in order to avoid CI failures trusting this docker image.
 
 ## Docker build to spawn selenium standalone servers with Chrome and Firefox
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * selenium-server-standalone
 * google-chrome-stable
