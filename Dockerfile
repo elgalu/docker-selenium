@@ -83,7 +83,7 @@ RUN  mkdir -p /opt/selenium \
 #==================
 # Chrome webdriver
 #==================
-ENV CHROME_DRIVER_VERSION 2.12
+ENV CHROME_DRIVER_VERSION 2.13
 RUN cd /tmp \
   && wget --no-verbose -O chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
   && cd /opt/selenium \
