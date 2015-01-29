@@ -39,7 +39,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.1:
 
-    docker pull -t="elgalu/docker-selenium:latest" elgalu/docker-selenium
+    docker pull elgalu/docker-selenium:latest
 
 #### 2. Use this image
 

@@ -17,7 +17,7 @@ RUN  echo "deb http://archive.ubuntu.com/ubuntu trusty main universe\n" > /etc/a
 # Miscellaneous packages
 #========================
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     ca-certificates \
     unzip \
     wget \
@@ -31,7 +31,7 @@ ENV LANG en_US.UTF-8
 RUN locale-gen en_US.UTF-8 \
   && dpkg-reconfigure --frontend noninteractive locales \
   && apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     language-pack-en \
   && rm -rf /var/lib/apt/lists/*
 
@@ -39,7 +39,7 @@ RUN locale-gen en_US.UTF-8 \
 # Timezone settings
 #===================
 ENV TZ "US/Pacific"
-RUN echo "US/Pacific" | sudo tee /etc/timezone \
+RUN echo "US/Pacific" | tee /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
 #==============
@@ -58,7 +58,7 @@ RUN apt-get update -qqy \
 # Minimal runtime used for executing non GUI Java programs
 #======
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     openjdk-7-jre-headless \
   && rm -rf /var/lib/apt/lists/*
 
@@ -66,7 +66,7 @@ RUN apt-get update -qqy \
 # Fonts
 #=======
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     fonts-ipafont-gothic \
     xfonts-100dpi \
     xfonts-75dpi \
@@ -83,7 +83,7 @@ RUN  mkdir -p /opt/selenium \
 #==================
 # Chrome webdriver
 #==================
-ENV CHROME_DRIVER_VERSION 2.13
+ENV CHROME_DRIVER_VERSION 2.14
 RUN cd /tmp \
   && wget --no-verbose -O chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
   && cd /opt/selenium \
@@ -99,8 +99,9 @@ RUN cd /tmp \
 # A fast, lightweight and responsive window manager
 #=========
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     fluxbox \
+    eterm \
   && rm -rf /var/lib/apt/lists/*
 
 #===============
@@ -109,7 +110,7 @@ RUN apt-get update -qqy \
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     google-chrome-stable \
   && rm -rf /var/lib/apt/lists/* \
   && rm /etc/apt/sources.list.d/google-chrome.list
@@ -118,16 +119,26 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 # Mozilla Firefox
 #=================
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install \
+  && apt-get -qqy install \
     firefox \
   && rm -rf /var/lib/apt/lists/*
 
 #========================================
 # Add normal user with passwordless sudo
 #========================================
-RUN sudo useradd seluser --shell /bin/bash --create-home \
-  && sudo usermod -a -G sudo seluser \
+RUN useradd seluser --shell /bin/bash --create-home \
+  && usermod -a -G sudo seluser \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+#==============================================================================
+# java blocks until kernel have enough entropy to generate the /dev/random seed
+#==============================================================================
+# SeleniumHQ/docker-selenium/issues/14
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    haveged \
+  && service haveged start \
+  && update-rc.d haveged defaults
 
 #====================================================================
 # Script to run selenium standalone server for Chrome and/or Firefox
@@ -153,7 +164,7 @@ ENV SCREEN_WIDTH 1360
 ENV SCREEN_HEIGHT 1020
 ENV SCREEN_DEPTH 24
 ENV SELENIUM_PORT 4444
-ENV DISPLAY :20.0
+ENV DISPLAY :10.0
 
 #================================
 # Expose Container's Directories
