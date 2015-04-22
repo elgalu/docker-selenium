@@ -1,7 +1,7 @@
 ################
 # Headless e2e #
 ################
-FROM ubuntu:14.04.1
+FROM ubuntu:14.04.2
 MAINTAINER Leo Gallucci <elgalu3@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -21,6 +21,7 @@ RUN apt-get update -qqy \
     ca-certificates \
     unzip \
     wget \
+    curl \
   && rm -rf /var/lib/apt/lists/*
 
 #=================
@@ -77,19 +78,27 @@ RUN apt-get update -qqy \
 #==========
 # Selenium
 #==========
+ENV SELENIUM_MAJOR_MINOR_VERSION 2.45
+ENV SELENIUM_PATCH_LEVEL_VERSION 0
 RUN  mkdir -p /opt/selenium \
-  && wget --no-verbose http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar -O /opt/selenium/selenium-server-standalone.jar
+  && wget --no-verbose http://selenium-release.storage.googleapis.com/$SELENIUM_MAJOR_MINOR_VERSION/selenium-server-standalone-$SELENIUM_MAJOR_MINOR_VERSION.$SELENIUM_PATCH_LEVEL_VERSION.jar -O /opt/selenium/selenium-server-standalone.jar
 
 #==================
 # Chrome webdriver
 #==================
-ENV CHROME_DRIVER_VERSION 2.14
+# How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
+ENV CPU_ARCH 64
+ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
+ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
+# Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN cd /tmp \
-  && wget --no-verbose -O chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip \
+  && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
+  && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
+  && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && cd /opt/selenium \
   && rm -rf chromedriver \
-  && unzip /tmp/chromedriver_linux64.zip \
-  && rm /tmp/chromedriver_linux64.zip \
+  && unzip /tmp/chromedriver_linux${CPU_ARCH}.zip \
+  && rm /tmp/chromedriver_linux${CPU_ARCH}.zip \
   && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
   && chmod 755 /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
   && ln -fs /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
@@ -118,9 +127,11 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 #=================
 # Mozilla Firefox
 #=================
+# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     firefox \
+    dbus-x11 \
   && rm -rf /var/lib/apt/lists/*
 
 #========================================
@@ -156,15 +167,17 @@ COPY ./etc/hosts /tmp/hosts
 #  RUN mkdir -p -- /lib-override && cp /lib/x86_64-linux-gnu/libnss_files.so.2 /lib-override
 #  RUN perl -pi -e 's:/etc/hosts:/tmp/hosts:g' /lib-override/libnss_files.so.2
 #  ENV LD_LIBRARY_PATH /lib-override
+# Trying to fix: Xlib: extension "RANDR" missing on display
+# ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/
 
 #============================
 # Some configuration options
 #============================
-ENV SCREEN_WIDTH 1360
-ENV SCREEN_HEIGHT 1020
+ENV SCREEN_WIDTH 1900
+ENV SCREEN_HEIGHT 1080
 ENV SCREEN_DEPTH 24
 ENV SELENIUM_PORT 4444
-ENV DISPLAY :10.0
+ENV DISPLAY :0
 
 #================================
 # Expose Container's Directories

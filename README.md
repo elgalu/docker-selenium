@@ -15,17 +15,17 @@ Commits in this repo are only meant for people who are not yet aware that the re
 
 ### One-liner Install & Usage
 
+In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
+
     sudo docker run --privileged -p 4444:4444 -p 5900:5900 elgalu/docker-selenium
 
 ### Step by step non-privileged do it yourself
-
-General note: add `sudo` only if needed in your environment
 
 #### 1. Build this image
 
 Ensure you have the Ubuntu base image downloaded, this step is optional since docker takes care of downloading the parent base image automatically, but for the sake of curiosity:
 
-    docker run -i -t ubuntu:14.04.1 /bin/bash
+    docker run -i -t ubuntu:14.04.2 /bin/bash
 
 If you don't git clone this repo, you can simply build from github:
 
@@ -37,7 +37,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
     docker build -t="elgalu/docker-selenium:local" .
 
-If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.1:
+If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
     docker pull elgalu/docker-selenium:latest
 
@@ -81,8 +81,8 @@ This command line is the same as for Chrome, remember that the selenium running 
     #=>
 
     REPOSITORY               TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
-    elgalu/docker-selenium   local               1c68c8823418        2 minutes ago       813.2 MB
-    ubuntu                   14.04.1             e54ca5efa2e9        2 weeks ago         199.8 MB
+    elgalu/docker-selenium   local               eab41ff50f72        About an hour ago   931.1 MB
+    ubuntu                   14.04.2             d0955f21bf24        4 weeks ago         188.3 MB
 
 ### Troubleshooting
 
