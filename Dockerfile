@@ -43,17 +43,6 @@ ENV TZ "US/Pacific"
 RUN echo "US/Pacific" | tee /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
-#==============
-# VNC and Xvfb
-#==============
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    x11vnc \
-    xvfb \
-  && rm -rf /var/lib/apt/lists/* \
-  && mkdir -p ~/.vnc \
-  && x11vnc -storepasswd secret ~/.vnc/passwd
-
 #======
 # Java
 # Minimal runtime used for executing non GUI Java programs
@@ -110,8 +99,37 @@ RUN cd /tmp \
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     fluxbox \
-    eterm \
   && rm -rf /var/lib/apt/lists/*
+
+#=========
+# GNOME Shell provides core interface functions like switching windows,
+# launching applications or see your notifications
+#=========
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     gnome-shell \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=========
+# LXDE lxde/lubuntu-desktop
+# A Lightweight X11 Desktop Environment
+#=========
+# NOT working!
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     xorg \
+#     lxde \
+#   && mkdir -p /usr/share/backgrounds \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=========
+# GNOME ubuntu-desktop
+# The fat and full featured windows manager
+#=========
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     ubuntu-desktop \
+#   && rm -rf /var/lib/apt/lists/*
 
 #===============
 # Google Chrome
@@ -134,13 +152,6 @@ RUN apt-get update -qqy \
     dbus-x11 \
   && rm -rf /var/lib/apt/lists/*
 
-#========================================
-# Add normal user with passwordless sudo
-#========================================
-RUN useradd seluser --shell /bin/bash --create-home \
-  && usermod -a -G sudo seluser \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
-
 #==============================================================================
 # java blocks until kernel have enough entropy to generate the /dev/random seed
 #==============================================================================
@@ -150,6 +161,22 @@ RUN apt-get update -qqy \
     haveged \
   && service haveged start \
   && update-rc.d haveged defaults
+
+#========================================
+# Add normal user with passwordless sudo
+#========================================
+RUN useradd seluser --shell /bin/bash --create-home \
+  && usermod -a -G sudo seluser \
+  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+#==============
+# VNC and Xvfb
+#==============
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    x11vnc \
+    xvfb \
+  && rm -rf /var/lib/apt/lists/*
 
 #====================================================================
 # Script to run selenium standalone server for Chrome and/or Firefox
@@ -169,6 +196,10 @@ COPY ./etc/hosts /tmp/hosts
 #  ENV LD_LIBRARY_PATH /lib-override
 # Trying to fix: Xlib: extension "RANDR" missing on display
 # ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/
+
+USER seluser
+RUN mkdir -p $HOME/.vnc \
+  && x11vnc -storepasswd secret $HOME/.vnc/passwd
 
 #============================
 # Some configuration options

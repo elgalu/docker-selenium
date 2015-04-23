@@ -95,7 +95,7 @@ $ docker logs -f <container-id|container-name>
 Container leaves a few logs files to see what happened:
 
     /tmp/Xvfb_headless.log
-    /tmp/fluxbox_manager.log
+    /tmp/xmanager.log
     /tmp/x11vnc_forever.log
     /tmp/local-sel-headless.log
     /tmp/selenium-server-standalone.log
