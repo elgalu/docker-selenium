@@ -35,8 +35,8 @@ RUN apt-get update -qqy \
 # Locale settings
 #=================
 ENV LANGUAGE en_US.UTF-8
-ENV LANG en_US.UTF-8
-RUN locale-gen en_US.UTF-8 \
+ENV LANG $LANGUAGE
+RUN locale-gen $LANGUAGE \
   && dpkg-reconfigure --frontend noninteractive locales \
   && apt-get update -qqy \
   && apt-get -qqy install \
@@ -46,8 +46,12 @@ RUN locale-gen en_US.UTF-8 \
 #===================
 # Timezone settings
 #===================
-ENV TZ "US/Pacific"
-RUN echo "US/Pacific" | tee /etc/timezone \
+# Full list at http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+#  e.g. "US/Pacific" for Los Angeles, California, USA
+# ENV TZ "US/Pacific"
+ENV TZ "Europe/Berlin"
+# Apply TimeZone
+RUN echo $TZ | tee /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
 #==========================
@@ -122,19 +126,19 @@ RUN cd /tmp \
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     fluxbox \
-#   && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    fluxbox \
+  && rm -rf /var/lib/apt/lists/*
 
 #=========
 # Openbox
 # A lightweight window manager using freedesktop standards
 #=========
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    openbox obconf \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     openbox obconf \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=========
 # GNOME Shell provides core interface functions like switching windows,

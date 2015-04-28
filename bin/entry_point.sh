@@ -33,29 +33,29 @@ sleep 0.5
 
 # Alternative 1.
 #  Fluxbox is a fast, lightweight and responsive window manager
-# fluxbox -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
-# sleep 0.5
+fluxbox -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
+sleep 0.5
 
 # Alternative 2.
+#  Not working: Openbox is a lightweight window manager using freedesktop standards
+# openbox-session 2>&1 | tee $XMANAGER_LOG &
+# sleep 0.5
+
+# Alternative 3.
 #  GNOME Shell provides core interface functions like switching windows,
 #  launching applications or see your notifications
 # gnome-shell -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
 
-# Alternative 3.
+# Alternative 4.
 #  GNOME ubuntu desktop; The fat and full featured windows manager
 # /etc/X11/Xsession &
 # sleep 0.3
 # gnome-session &
 # sleep 0.3
 
-# Alternative 4.
+# Alternative 5.
 #  Not working: LXDE is a Lightweight X11 Desktop Environment
 # lxde -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
-
-# Alternative 5.
-#  Not working: Openbox is a lightweight window manager using freedesktop standards
-openbox-session 2>&1 | tee $XMANAGER_LOG &
-sleep 0.5
 
 # Start a GUI xTerm to help debugging when VNC into the container
 x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
