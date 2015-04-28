@@ -1,24 +1,31 @@
 ################
 # Headless e2e #
 ################
-FROM ubuntu:14.04.2
+#== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
+FROM ubuntu:vivid-20150421
+RUN  echo "deb http://archive.ubuntu.com/ubuntu vivid main universe\n" > /etc/apt/sources.list \
+  && echo "deb http://archive.ubuntu.com/ubuntu vivid-updates main universe\n" >> /etc/apt/sources.list
+
+#== Ubuntu Trusty is 14.04.x, i.e. FROM ubuntu:14.04
+#== Could also use ubuntu:latest but for the sake I replicating an precise env...
+# FROM ubuntu:14.04.2
+# RUN  echo "deb http://archive.ubuntu.com/ubuntu trusty main universe\n" > /etc/apt/sources.list \
+#   && echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main universe\n" >> /etc/apt/sources.list
+
 MAINTAINER Leo Gallucci <elgalu3@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
-
-#================================================
-# Customize sources for apt-get
-#================================================
-RUN  echo "deb http://archive.ubuntu.com/ubuntu trusty main universe\n" > /etc/apt/sources.list \
-  && echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main universe\n" >> /etc/apt/sources.list
 
 #========================
 # Miscellaneous packages
 #========================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
-    ca-certificates \
+    apt-utils \
+    sudo \
+    net-tools \
+    iputils-ping \
     unzip \
     wget \
     curl \
@@ -43,14 +50,30 @@ ENV TZ "US/Pacific"
 RUN echo "US/Pacific" | tee /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
-#======
-# Java
+#==========================
+# Java7 - OpenJDK headless
 # Minimal runtime used for executing non GUI Java programs
-#======
+#==========================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     openjdk-7-jre-headless \
   && rm -rf /var/lib/apt/lists/*
+
+#==================
+# Java8 - Oracle
+#==================
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     software-properties-common \
+#   && echo debconf shared/accepted-oracle-license-v1-1 \
+#       select true | debconf-set-selections \
+#   && echo debconf shared/accepted-oracle-license-v1-1 \
+#       seen true | debconf-set-selections \
+#   && add-apt-repository ppa:webupd8team/java \
+#   && apt-get update -qqy \
+#   && apt-get -qqy install \
+#     oracle-java8-installer \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=======
 # Fonts
@@ -62,6 +85,9 @@ RUN apt-get update -qqy \
     xfonts-75dpi \
     xfonts-cyrillic \
     xfonts-scalable \
+    ttf-ubuntu-font-family \
+    libfreetype6 \
+    libfontconfig \
   && rm -rf /var/lib/apt/lists/*
 
 #==========
@@ -96,9 +122,18 @@ RUN cd /tmp \
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     fluxbox \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=========
+# Openbox
+# A lightweight window manager using freedesktop standards
+#=========
 RUN apt-get update -qqy \
   && apt-get -qqy install \
-    fluxbox \
+    openbox obconf \
   && rm -rf /var/lib/apt/lists/*
 
 #=========
@@ -117,7 +152,6 @@ RUN apt-get update -qqy \
 # NOT working!
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
-#     xorg \
 #     lxde \
 #   && mkdir -p /usr/share/backgrounds \
 #   && rm -rf /var/lib/apt/lists/*
@@ -176,6 +210,7 @@ RUN apt-get update -qqy \
   && apt-get -qqy install \
     x11vnc \
     xvfb \
+    xorg \
   && rm -rf /var/lib/apt/lists/*
 
 #====================================================================
@@ -205,10 +240,11 @@ RUN mkdir -p $HOME/.vnc \
 # Some configuration options
 #============================
 ENV SCREEN_WIDTH 1900
-ENV SCREEN_HEIGHT 1080
+ENV SCREEN_HEIGHT 1480
 ENV SCREEN_DEPTH 24
 ENV SELENIUM_PORT 4444
-ENV DISPLAY :0
+ENV DISPLAY :1
+ENV SCREEN_NUM 0
 
 #================================
 # Expose Container's Directories
