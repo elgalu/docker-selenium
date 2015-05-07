@@ -16,7 +16,7 @@ However SeleniumHQ/docker-selenium project focus on building selenium grids whil
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 elgalu/docker-selenium
+    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e SCREEN_WIDTH=1550 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=secret elgalu/selenium:v2.45.0-berlin3
 
 ### Step by step non-privileged do it yourself
 
@@ -38,7 +38,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/docker-selenium:latest
+    docker pull elgalu/selenium:latest
 
 #### 2. Use this image
 

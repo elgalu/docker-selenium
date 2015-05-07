@@ -10,34 +10,36 @@ echoerr() {
 
 # Print error and exit
 die () {
-  ERROR_MSG=$1
-  OPT_EXIT_CODE=$2
-  OPT_PERFORM_SHUTDOWN=$3
-  echoerr "ERROR: $ERROR_MSG"
-  if [ "$OPT_PERFORM_SHUTDOWN" = "true" ]; then
+  local error_msg=$1
+  local opt_exit_code=$2
+  local opt_perform_shutdown=$3
+
+  echoerr "ERROR: $error_msg"
+  if [ "$opt_perform_shutdown" = "true" ]; then
     shutdown
   fi
-  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "1"
-  errnum=${OPT_EXIT_CODE-1}
+  # if $opt_exit_code is defined AND NOT EMPTY, use
+  # $opt_exit_code; otherwise, set to "1"
+  local errnum=${opt_exit_code-1}
   exit $errnum
 }
 
 # Kill process gracefully or force it if is resilient
 kill_pid_gracefully() {
-  THE_PID=$1
-  PDESC=$2
-  [ -z "$THE_PID" ] && die "Need to set PID as 1st param for kill_pid_gracefully()" 4
-  [ -z "$PDESC" ]   && die "Need to set PDESC as 2nd param for kill_pid_gracefully()" 5
-  if [ "$THE_PID" -gt "0" ] && [ -d /proc/$THE_PID ]; then
-    echo "Shutting down $PDESC PID: $THE_PID.."
-    kill -s SIGTERM $THE_PID
-    WAIT_MSG="waiting for $PDESC PID: $THE_PID to die..."
-    timeout 3 bash -c "while [ -d /proc/$THE_PID ]; do sleep 0.1 && echo $WAIT_MSG; done"
-    if [ -d /proc/$THE_PID ]; then
-      echo "$PDESC PID: $THE_PID still running, forcing with kill -SIGKILL..."
-      kill -SIGKILL $THE_PID
-      echo "waiting for $PDESC PID: $THE_PID to finally terminate.."
-      wait $THE_PID
+  local the_pid=$1
+  local pdesc=$2
+  [ -z "$the_pid" ] && die "Need to set PID as 1st param for kill_pid_gracefully()" 4
+  [ -z "$pdesc" ]   && die "Need to set Description as 2nd param for kill_pid_gracefully()" 5
+  if [ "$the_pid" -gt "0" ] && [ -d /proc/$the_pid ]; then
+    echo "Shutting down $pdesc PID: $the_pid.."
+    kill -s SIGTERM $the_pid
+    local wait_msg="waiting for $pdesc PID: $the_pid to die..."
+    timeout 3 bash -c "while [ -d /proc/$the_pid ]; do sleep 0.1 && echo $wait_msg; done"
+    if [ -d /proc/$the_pid ]; then
+      echo "$pdesc PID: $the_pid still running, forcing with kill -SIGKILL..."
+      kill -SIGKILL $the_pid
+      echo "waiting for $pdesc PID: $the_pid to finally terminate.."
+      wait $the_pid
     fi
   fi
 }
@@ -82,6 +84,13 @@ function with_backoff_and_slient {
   fi
 
   return $exitCode
+}
+
+# Generate a random password between 5 and 15 characters long
+# returns the value as echo to stdout due to bash limitation
+# that only integers are allowed: http://stackoverflow.com/a/3236940/511069
+function genpassword {
+  echo $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%&*_+~' | fold -w $(shuf -i 5-15 -n 1) | head -n 1)
 }
 
 # Exit all child processes properly
@@ -172,7 +181,13 @@ x-terminal-emulator -geometry 160x40-10-10 -ls -title "local-sel-headless" \
 -e "local-sel-headless.sh" 2>&1 | tee $XTERMINAL_LOG &
 SELENIUM_PID=$!
 
-# Set VNC password
+# Set VNC password to a random one is not defined yet
+if [ -z "$VNC_PASSWORD" ]; then
+  vnc_password_generated=true
+  random_password=$(genpassword)
+  VNC_PASSWORD=${VNC_PASSWORD-$random_password}
+fi
+
 x11vnc -storepasswd $VNC_PASSWORD $HOME/.vnc/passwd
 
 # Start VNC server to enable viewing what's going on but not mandatory
@@ -210,6 +225,9 @@ with_backoff_and_slient "Selenium" "curl -s http://localhost:$SELENIUM_PORT/wd/h
 
 echo
 echo "Container docker internal IP is $CONTAINER_IP"
+if [ "$vnc_password_generated" = "true" ]; then
+  echo "a VNC password was generated for you: $VNC_PASSWORD"
+fi
 echo "start.sh all done and ready for testing"
 
 trap shutdown SIGTERM SIGINT

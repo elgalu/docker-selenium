@@ -273,7 +273,8 @@ ENV SCREEN_DEPTH 24
 ENV SELENIUM_PORT 4444
 ENV DISPLAY :1
 ENV SCREEN_NUM 0
-ENV VNC_PASSWORD topsecret
+# You can set the VNC password or leave null so a random password is generated:
+# ENV VNC_PASSWORD topsecret
 
 #================================
 # Expose Container's Directories
