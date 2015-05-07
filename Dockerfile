@@ -2,7 +2,8 @@
 # Headless e2e #
 ################
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
-FROM ubuntu:vivid-20150421
+# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
+FROM ubuntu:vivid-20150427
 RUN  echo "deb http://archive.ubuntu.com/ubuntu vivid main universe\n" > /etc/apt/sources.list \
   && echo "deb http://archive.ubuntu.com/ubuntu vivid-updates main universe\n" >> /etc/apt/sources.list
 
@@ -20,20 +21,30 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 #========================
 # Miscellaneous packages
 #========================
+# netcat-openbsd - nc — arbitrary TCP and UDP connections and listens
+# net-tools - arp, hostname, ifconfig, netstat, route, plipconfig, iptunnel
+# iputils-ping - ping, ping6 - send ICMP ECHO_REQUEST to network hosts
+# apt-utils - commandline utilities related to package management with APT
+# wget - The non-interactive network downloader
+# curl - transfer a URL
+# bc - An arbitrary precision calculator language
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     apt-utils \
     sudo \
     net-tools \
+    netcat-openbsd \
     iputils-ping \
     unzip \
     wget \
     curl \
+    bc \
   && rm -rf /var/lib/apt/lists/*
 
 #=================
 # Locale settings
 #=================
+# TODO: Allow to change instance language OS and Browser level
 ENV LANGUAGE en_US.UTF-8
 ENV LANG $LANGUAGE
 RUN locale-gen $LANGUAGE \
@@ -54,10 +65,10 @@ ENV TZ "Europe/Berlin"
 RUN echo $TZ | tee /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
-#==========================
-# Java7 - OpenJDK headless
+#==============================
+# Java7 - OpenJDK JRE headless
 # Minimal runtime used for executing non GUI Java programs
-#==========================
+#==============================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     openjdk-7-jre-headless \
@@ -78,6 +89,18 @@ RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     oracle-java8-installer \
 #   && rm -rf /var/lib/apt/lists/*
+
+#====================================
+# Java8 - OpenJDK latest from utopic
+#====================================
+# Workaround to use latest OpenJDK package which is only available for utopic
+# https://github.com/zalando/docker-openjdk/blob/master/Dockerfile
+# RUN curl -o /tmp/openjdk-8-#1.deb \
+#   http://de.archive.ubuntu.com/ubuntu/pool/universe/o/openjdk-8/openjdk-8-{jre,jre-headless,jdk}_8u40~b09-1_amd64.deb
+# # http://stackoverflow.com/questions/8477036/how-to-make-debian-package-install-dependencies
+# RUN dpkg -i /tmp/openjdk-8-*.deb || apt-get -f --force-yes --yes install \
+#   && dpkg -i /tmp/openjdk-8-*.deb \
+#   && rm /tmp/openjdk-8-*.deb
 
 #=======
 # Fonts
@@ -126,19 +149,21 @@ RUN cd /tmp \
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    fluxbox \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     fluxbox \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=========
 # Openbox
 # A lightweight window manager using freedesktop standards
 #=========
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     openbox obconf \
-#   && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    openbox obconf menu \
+  && mkdir -p /tmp/.X11-unix \
+  && chmod 1777 /tmp/.X11-unix \
+  && rm -rf /var/lib/apt/lists/*
 
 #=========
 # GNOME Shell provides core interface functions like switching windows,
@@ -217,38 +242,38 @@ RUN apt-get update -qqy \
     xorg \
   && rm -rf /var/lib/apt/lists/*
 
-#====================================================================
-# Script to run selenium standalone server for Chrome and/or Firefox
-#====================================================================
-COPY ./bin/*.sh /opt/selenium/
-RUN  chmod +x /opt/selenium/*.sh
-
-#===========
-# DNS stuff
-#===========
-COPY ./etc/hosts /tmp/hosts
-# Below hack is no longer necessary since docker >= 1.2.0, commented to ease old users transition
-#  Poor man /etc/hosts updates until https://github.com/dotcloud/docker/issues/2267
-#  Ref: https://stackoverflow.com/questions/19414543/how-can-i-make-etc-hosts-writable-by-root-in-a-docker-container
-#  RUN mkdir -p -- /lib-override && cp /lib/x86_64-linux-gnu/libnss_files.so.2 /lib-override
-#  RUN perl -pi -e 's:/etc/hosts:/tmp/hosts:g' /lib-override/libnss_files.so.2
-#  ENV LD_LIBRARY_PATH /lib-override
-# Trying to fix: Xlib: extension "RANDR" missing on display
-# ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/
-
 USER seluser
-RUN mkdir -p $HOME/.vnc \
-  && x11vnc -storepasswd secret $HOME/.vnc/passwd
+RUN  mkdir -p $HOME/.vnc
 
-#============================
-# Some configuration options
-#============================
+#===================
+# DNS & hosts stuff
+#===================
+COPY ./etc/hosts /tmp/hosts
+
+#================
+# Binary scripts
+#================
+# COPY ./bin/*.sh /bin-utils
+# RUN  chmod +x /opt/selenium/*.sh
+ADD bin /bin-utils
+# RUN chmod +x /bin-utils/*.sh
+
+#========================================================================
+# Some configuration options that can be customized at container runtime
+#========================================================================
+ENV PATH ${PATH}:/bin-utils
+ENV USE_SUDO_TO_FIX_ETC_HOSTS true
+# JVM uses only 1/4 of system memory by default
+ENV MEM_JAVA_PERCENT 80
+ENV RETRY_START_SLEEP_SECS 0.1
+ENV MAX_WAIT_RETRY_ATTEMPTS 8
 ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
 ENV SCREEN_DEPTH 24
 ENV SELENIUM_PORT 4444
 ENV DISPLAY :1
 ENV SCREEN_NUM 0
+ENV VNC_PASSWORD topsecret
 
 #================================
 # Expose Container's Directories
@@ -264,4 +289,4 @@ EXPOSE 4444 5900
 # CMD or ENTRYPOINT
 #===================
 # Start a selenium standalone server for Chrome and/or Firefox
-CMD ["/opt/selenium/entry_point.sh"]
+CMD ["start.sh"]

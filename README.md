@@ -1,17 +1,16 @@
-# THIS REPO HAS MOVED
-
-See: https://github.com/SeleniumHQ/docker-selenium
-
-Commits in this repo are only meant for people who are not yet aware that the repo moved to [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) and in order to avoid CI failures trusting this docker image.
-
-## Docker build to spawn selenium standalone servers with Chrome and Firefox
+# Docker repo to spawn selenium standalone servers with Chrome and Firefox with VNC support
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * selenium-server-standalone
 * google-chrome-stable
 * firefox (stable)
 * VNC access (useful for debugging the container)
-* fluxbox (lightweight window manager for X)
+* openbox (lightweight window manager using freedesktop standards)
+
+## Note this repo evolved into SeleniumHQ/docker-selenium
+See: https://github.com/SeleniumHQ/docker-selenium
+
+However SeleniumHQ/docker-selenium project focus on building selenium grids while this one focusing on debugging via VNC and meant to be run as a standalone selenium server.
 
 ### One-liner Install & Usage
 
@@ -66,7 +65,7 @@ A dynamic port will be binded to the container ones, i.e.
 
 In case you have RealVNC binary `vnc` in your path, you can always take a look, view only to avoid messing around your tests with an unintended mouse click or keyboard.
 
-    ./bin/vncview 127.0.0.1:49160
+    ./bin/vncview.sh 127.0.0.1:49160
 
 ##### e.g. Spawn a container for Firefox testing:
 
