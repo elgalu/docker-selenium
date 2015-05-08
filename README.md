@@ -16,7 +16,7 @@ However SeleniumHQ/docker-selenium project focus on building selenium grids whil
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e SCREEN_WIDTH=1550 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=secret elgalu/selenium:v2.45.0-berlin3
+    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e SCREEN_WIDTH=1550 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=secret elgalu/selenium:v2.45.0-berlin4
 
 ### Step by step non-privileged do it yourself
 

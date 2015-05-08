@@ -107,7 +107,6 @@ function shutdown {
 export GEOMETRY="$SCREEN_WIDTH""x""$SCREEN_HEIGHT""x""$SCREEN_DEPTH"
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 export CONTAINER_IP=$(ip addr show dev eth0 | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
-export VNC_PORT=5900
 export XVFB_LOG="/tmp/Xvfb_headless.log"
 export XMANAGER_LOG="/tmp/xmanager.log"
 export VNC_LOG="/tmp/x11vnc_forever.log"

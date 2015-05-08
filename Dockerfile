@@ -270,9 +270,12 @@ ENV MAX_WAIT_RETRY_ATTEMPTS 8
 ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
 ENV SCREEN_DEPTH 24
-ENV SELENIUM_PORT 4444
 ENV DISPLAY :1
 ENV SCREEN_NUM 0
+# Even though you can change them below, don't worry too much about container
+# internal ports since you can map them to the host via `docker run -p`
+ENV SELENIUM_PORT 4444
+ENV VNC_PORT 5900
 # You can set the VNC password or leave null so a random password is generated:
 # ENV VNC_PASSWORD topsecret
 
