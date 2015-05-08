@@ -38,8 +38,9 @@ kill_pid_gracefully() {
     if [ -d /proc/$the_pid ]; then
       echo "$pdesc PID: $the_pid still running, forcing with kill -SIGKILL..."
       kill -SIGKILL $the_pid
-      echo "waiting for $pdesc PID: $the_pid to finally terminate.."
-      wait $the_pid
+      # Better not to wait since docker will terminate the cleanup anyway
+      # echo "waiting for $pdesc PID: $the_pid to finally terminate.."
+      # wait $the_pid
     fi
   fi
 }
@@ -58,8 +59,9 @@ function with_backoff_and_slient {
   local timeout=$RETRY_START_SLEEP_SECS
   local attempt=0
   local exitCode=0
-  local cmd_desc=$1
-  local cmd=$2
+  local cmd_desc=$CMD_DESC_PARAM
+  local cmd=$CMD_PARAM
+  local log_file=$LOG_FILE_PARAM
 
   # while [[ $attempt < $max_attempts ]]; do
   while [ "$attempt" -lt "$max_attempts" ]; do
@@ -79,7 +81,8 @@ function with_backoff_and_slient {
   done
 
   if [[ $exitCode != 0 ]]; then
-    echo "Failed me for the last time! ($@)" 1>&2
+    echo "$cmd_desc failed me for the last time! ($cmd)" 1>&2
+    [ -f "$log_file" ] && cat $log_file 1>&2
     exit $exitCode
   fi
 
@@ -126,6 +129,8 @@ if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
   sudo -E sh -c 'echo "$CONTAINER_IP    guest.docker"       >> /etc/hosts'
 fi
 
+# Need to ensure a home folder in case is not present
+mkdir -p ~/
 # Start the X server that can run on machines with no display
 # hardware and no physical input devices
 Xvfb $DISPLAY -screen $SCREEN_NUM $GEOMETRY \
@@ -141,12 +146,10 @@ XVFB_PID=$!
 # if [ "$i" -ge "$MAX_WAIT_RETRY_ATTEMPTS" ]; then
 #   die "Failed to start Xvfb!" 1 true
 # fi
-with_backoff_and_slient "Xvfb Server" "xdpyinfo -display $DISPLAY"
-
-# Note: sudo -i creates a login shell for someUser, which implies the following:
-# - someUser's user-specific shell profile, if defined, is loaded.
-# - $HOME points to someUser's home directory, so there's no need for -H (though you may still specify it)
-# - the working directory for the impersonating shell is the someUser's home directory.
+CMD_DESC_PARAM="Xvfb Server"
+CMD_PARAM="xdpyinfo -display $DISPLAY"
+LOG_FILE_PARAM="$XVFB_LOG"
+with_backoff_and_slient
 
 # Alternative 1.
 #  Fluxbox is a fast, lightweight and responsive window manager
@@ -177,7 +180,7 @@ HANDY_TERM_PID=$!
 
 # Start a GUI xTerm to easily debug the headless instance
 x-terminal-emulator -geometry 160x40-10-10 -ls -title "local-sel-headless" \
--e "local-sel-headless.sh" 2>&1 | tee $XTERMINAL_LOG &
+-e "$BIN_UTILS/local-sel-headless.sh" 2>&1 | tee $XTERMINAL_LOG &
 SELENIUM_PID=$!
 
 # Set VNC password to a random one is not defined yet
@@ -187,7 +190,8 @@ if [ -z "$VNC_PASSWORD" ]; then
   VNC_PASSWORD=${VNC_PASSWORD-$random_password}
 fi
 
-x11vnc -storepasswd $VNC_PASSWORD $HOME/.vnc/passwd
+mkdir -p ~/.vnc
+x11vnc -storepasswd $VNC_PASSWORD ~/.vnc/passwd
 
 # Start VNC server to enable viewing what's going on but not mandatory
 x11vnc -forever -usepw -shared -rfbport $VNC_PORT -display $DISPLAY \
@@ -206,7 +210,10 @@ VNC_SERVER_PID=$!
 # fi
 # Note this provokes "webSocketsHandshake: unknown connection error"
 # so ignore that in the VNC server logs:
-with_backoff_and_slient "VNC Server" "nc -z localhost $VNC_PORT"
+CMD_DESC_PARAM="VNC Server"
+CMD_PARAM="nc -z localhost $VNC_PORT"
+LOG_FILE_PARAM="$VNC_LOG"
+with_backoff_and_slient
 
 # Active wait until selenium is up
 #  Inspired from: http://stackoverflow.com/a/21378425/511069
@@ -217,7 +224,10 @@ with_backoff_and_slient "VNC Server" "nc -z localhost $VNC_PORT"
 #   echo Waiting for Selenium to start up...
 #   sleep 0.1
 # done
-with_backoff_and_slient "Selenium" "curl -s http://localhost:$SELENIUM_PORT/wd/hub/status"
+CMD_DESC_PARAM="Selenium"
+CMD_PARAM="curl -s http://localhost:$SELENIUM_PORT/wd/hub/status"
+LOG_FILE_PARAM="$SELENIUM_LOG"
+with_backoff_and_slient
 # if [ "$i" -ge "$MAX_WAIT_RETRY_ATTEMPTS" ]; then
 #   die "Failed to start Selenium!" 3 true
 # fi
@@ -229,5 +239,8 @@ if [ "$vnc_password_generated" = "true" ]; then
 fi
 echo "start.sh all done and ready for testing"
 
+# Run function shutdown() when this process receives SIGTERM or SIGINT
 trap shutdown SIGTERM SIGINT
-wait # tells bash to wait until child processes have exited
+
+# tells bash to wait until child processes have exited
+wait

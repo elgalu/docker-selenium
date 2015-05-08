@@ -228,8 +228,10 @@ RUN apt-get update -qqy \
 #========================================
 # Add normal user with passwordless sudo
 #========================================
-RUN useradd seluser --shell /bin/bash --create-home \
-  && usermod -a -G sudo seluser \
+ENV NORMAL_USER application
+ENV NORMAL_USER_UID 999
+RUN useradd $NORMAL_USER --uid $NORMAL_USER_UID --shell /bin/bash --create-home \
+  && usermod -a -G sudo $NORMAL_USER \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #==============
@@ -242,8 +244,8 @@ RUN apt-get update -qqy \
     xorg \
   && rm -rf /var/lib/apt/lists/*
 
-USER seluser
-RUN  mkdir -p $HOME/.vnc
+# USER $NORMAL_USER
+# RUN  mkdir -p $HOME/.vnc
 
 #===================
 # DNS & hosts stuff
@@ -253,15 +255,15 @@ COPY ./etc/hosts /tmp/hosts
 #================
 # Binary scripts
 #================
-# COPY ./bin/*.sh /bin-utils
-# RUN  chmod +x /opt/selenium/*.sh
-ADD bin /bin-utils
-# RUN chmod +x /bin-utils/*.sh
+ENV BIN_UTILS /bin-utils
+ADD bin $BIN_UTILS
 
 #========================================================================
 # Some configuration options that can be customized at container runtime
 #========================================================================
-ENV PATH ${PATH}:/bin-utils
+ENV PATH ${PATH}:${BIN_UTILS}
+# Using sudo on your dockerized app is not supported by stups-senza tools
+# so allow this to be deactivated
 ENV USE_SUDO_TO_FIX_ETC_HOSTS true
 # JVM uses only 1/4 of system memory by default
 ENV MEM_JAVA_PERCENT 80
@@ -293,4 +295,4 @@ EXPOSE 4444 5900
 # CMD or ENTRYPOINT
 #===================
 # Start a selenium standalone server for Chrome and/or Firefox
-CMD ["start.sh"]
+CMD ["entry.sh"]
