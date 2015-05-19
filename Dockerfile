@@ -39,15 +39,20 @@ RUN apt-get update -qqy \
     wget \
     curl \
     bc \
+  && mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
+  && chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
   && rm -rf /var/lib/apt/lists/*
 
-#=================
-# Locale settings
-#=================
+#==============================
+# Locale and encoding settings
+#==============================
 # TODO: Allow to change instance language OS and Browser level
-ENV LANGUAGE en_US.UTF-8
-ENV LANG $LANGUAGE
-RUN locale-gen $LANGUAGE \
+ENV LANG_WHICH en
+ENV LANG_WHERE US
+ENV ENCODING UTF-8
+ENV LANGUAGE ${LANG_WHICH}_${LANG_WHERE}.${ENCODING}
+ENV LANG ${LANGUAGE}
+RUN locale-gen ${LANGUAGE} \
   && dpkg-reconfigure --frontend noninteractive locales \
   && apt-get update -qqy \
   && apt-get -qqy install \
@@ -145,6 +150,16 @@ RUN cd /tmp \
   && chmod 755 /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
   && ln -fs /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
 
+#========================================
+# Add normal user with passwordless sudo
+#========================================
+ENV NORMAL_USER application
+ENV NORMAL_USER_UID 999
+RUN useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} --shell /bin/bash --create-home \
+  && usermod -a -G sudo ${NORMAL_USER} \
+  && gpasswd -a ${NORMAL_USER} video \
+  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
+
 #=========
 # fluxbox
 # A fast, lightweight and responsive window manager
@@ -158,12 +173,10 @@ RUN cd /tmp \
 # Openbox
 # A lightweight window manager using freedesktop standards
 #=========
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    openbox obconf menu \
-  && mkdir -p /tmp/.X11-unix \
-  && chmod 1777 /tmp/.X11-unix \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     openbox obconf menu \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=========
 # GNOME Shell provides core interface functions like switching windows,
@@ -186,6 +199,28 @@ RUN apt-get update -qqy \
 #   && rm -rf /var/lib/apt/lists/*
 
 #=========
+# LightDM is the display manager running in Ubuntu
+# A fat and full featured windows manager
+#=========
+# Fixes chrome start issue "Failed to move to new PID namespace" on OpenVZ
+#  https://bugs.launchpad.net/chromium-browser/+bug/577919
+# allowed_users=anybody fixes X: user not authorized to run the X server, aborting
+#  http://karuppuswamy.com/wordpress/2010/09/26/how-to-fix-x-user-not-authorized-to-run-the-x-server-aborting/
+# The issue can be recreated with "ami-ed7c149a" and maybe in CentOS
+ENV XAUTH_DIR /var/lib/lightdm
+ENV XAUTHORITY ${XAUTH_DIR}/.Xauthority
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    lightdm dbus-x11 x11-common \
+  && dpkg-reconfigure --frontend noninteractive lightdm x11-common \
+  && sed -i 's/allowed_users=console/allowed_users=anybody/g' \
+            /etc/X11/Xwrapper.config \
+  && touch ${XAUTHORITY} \
+  && chmod 666 ${XAUTHORITY} \
+  && chown -R lightdm:lightdm ${XAUTH_DIR} \
+  && rm -rf /var/lib/apt/lists/*
+
+#=========
 # GNOME ubuntu-desktop
 # The fat and full featured windows manager
 #=========
@@ -194,26 +229,54 @@ RUN apt-get update -qqy \
 #     ubuntu-desktop \
 #   && rm -rf /var/lib/apt/lists/*
 
-#===============
-# Google Chrome
-#===============
+#==========================
+# Google Chrome - Latest
+#==========================
+# Why /dev/shm? see: https://github.com/travis-ci/travis-ci/issues/938#issuecomment-16345102
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
   && apt-get -qqy install \
     google-chrome-stable \
+  && sudo chmod 1777 /dev/shm \
   && rm -rf /var/lib/apt/lists/* \
   && rm /etc/apt/sources.list.d/google-chrome.list
 
-#=================
-# Mozilla Firefox
-#=================
+#=========
+# Android
+#=========
+# TODO
+# https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L50
+
+#==========================
+# Mozilla Firefox - Latest
+#==========================
 # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     firefox \
     dbus-x11 \
   && rm -rf /var/lib/apt/lists/*
+
+#====================================
+# Mozilla Firefox - Specific Version
+#====================================
+# # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
+# # FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
+# ENV FIREFOX_VERSION latest
+# # FF_LANG can be either en-US // de // fr and so on
+# ENV FF_LANG "en-US"
+# # RUN apt-get update -qqy \
+# #   && apt-get -qqy install \
+# #     python2.7 python-pip python2.7-dev python-openssl libssl-dev libffi-dev \
+# #     dbus-x11 \
+# #   && easy_install -U pip \
+# #   && pip install --upgrade mozdownload mozInstall \
+# #   && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
+# #                  --platform=linux64  --log-level=WARN --version=$FIREFOX_VERSION \
+# #   && mozinstall --app=firefox firefox-$FIREFOX_VERSION.$FF_LANG.linux64.tar.bz2 --destination=/opt/selenium \
+# #   && ln -s /opt/selenium/firefox/firefox /usr/bin \
+# #   && rm -rf /var/lib/apt/lists/*
 
 #==============================================================================
 # java blocks until kernel have enough entropy to generate the /dev/random seed
@@ -224,15 +287,6 @@ RUN apt-get update -qqy \
     haveged \
   && service haveged start \
   && update-rc.d haveged defaults
-
-#========================================
-# Add normal user with passwordless sudo
-#========================================
-ENV NORMAL_USER application
-ENV NORMAL_USER_UID 999
-RUN useradd $NORMAL_USER --uid $NORMAL_USER_UID --shell /bin/bash --create-home \
-  && usermod -a -G sudo $NORMAL_USER \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #==============
 # VNC and Xvfb

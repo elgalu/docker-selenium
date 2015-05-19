@@ -151,14 +151,19 @@ CMD_PARAM="xdpyinfo -display $DISPLAY"
 LOG_FILE_PARAM="$XVFB_LOG"
 with_backoff_and_slient
 
+# Same for all X servers
+# TODO fix lightdm Xauthority issue:
+#  xauth: timeout in locking authority file /var/lib/lightdm/.Xauthority
+startx -- $DISPLAY 2>&1 | tee $XMANAGER_LOG &
+XSESSION_PID=$!
+
 # Alternative 1.
 #  Fluxbox is a fast, lightweight and responsive window manager
 # fluxbox -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
 
 # Alternative 2.
 #  Openbox is a lightweight window manager using freedesktop standards
-openbox-session 2>&1 | tee $XMANAGER_LOG &
-XSESSION_PID=$!
+# openbox-session 2>&1 | tee $XMANAGER_LOG &
 
 # Alternative 3.
 #  GNOME Shell provides core interface functions like switching windows,
@@ -173,6 +178,10 @@ XSESSION_PID=$!
 # Alternative 5.
 #  Not working: LXDE is a Lightweight X11 Desktop Environment
 # lxde -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
+
+# Alternative 6.
+#  lightdm
+# lightdm-session -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
 
 # Start a GUI xTerm to help debugging when VNC into the container
 x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
@@ -195,6 +204,7 @@ x11vnc -storepasswd $VNC_PASSWORD ~/.vnc/passwd
 
 # Start VNC server to enable viewing what's going on but not mandatory
 x11vnc -forever -usepw -shared -rfbport $VNC_PORT -display $DISPLAY \
+    --auth $XAUTHORITY \
     -noadd_keysyms -clear_mods -clear_keys -clear_all 2>&1 | tee $VNC_LOG &
 VNC_SERVER_PID=$!
 

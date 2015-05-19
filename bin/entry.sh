@@ -4,7 +4,7 @@ RUNAS="sudo -E HOME=/home/$NORMAL_USER -u $NORMAL_USER $BIN_UTILS/start.sh"
 WHOAMI=$(whoami)
 WHOAMI_EXIT_CODE=$?
 
-echo "-- INFO: Container USER var is: '$USER', whoami returns '$WHOAMI', UID is '$UID'"
+echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID is '$UID'"
 
 if [ $WHOAMI_EXIT_CODE != 0 ]; then
   echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
@@ -15,6 +15,7 @@ elif [ "$WHOAMI" = "root" ]; then
   echo "-- will use NORMAL_USER: '$NORMAL_USER' instead."
   exec $RUNAS
 else
+  echo "-- INFO: Will use \$USER '$USER' and \$(whoami) is '$WHOAMI'"
   exec $BIN_UTILS/start.sh
 fi
 
