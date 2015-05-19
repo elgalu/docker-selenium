@@ -161,21 +161,21 @@ RUN useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} --shell /bin/bash --create-h
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #=========
+# Openbox
+# A lightweight window manager using freedesktop standards
+#=========
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    openbox obconf menu \
+  && rm -rf /var/lib/apt/lists/*
+
+#=========
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     fluxbox \
-#   && rm -rf /var/lib/apt/lists/*
-
-#=========
-# Openbox
-# A lightweight window manager using freedesktop standards
-#=========
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     openbox obconf menu \
 #   && rm -rf /var/lib/apt/lists/*
 
 #=========
@@ -207,18 +207,18 @@ RUN useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} --shell /bin/bash --create-h
 # allowed_users=anybody fixes X: user not authorized to run the X server, aborting
 #  http://karuppuswamy.com/wordpress/2010/09/26/how-to-fix-x-user-not-authorized-to-run-the-x-server-aborting/
 # The issue can be recreated with "ami-ed7c149a" and maybe in CentOS
-ENV XAUTH_DIR /var/lib/lightdm
-ENV XAUTHORITY ${XAUTH_DIR}/.Xauthority
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    lightdm dbus-x11 x11-common \
-  && dpkg-reconfigure --frontend noninteractive lightdm x11-common \
-  && sed -i 's/allowed_users=console/allowed_users=anybody/g' \
-            /etc/X11/Xwrapper.config \
-  && touch ${XAUTHORITY} \
-  && chmod 666 ${XAUTHORITY} \
-  && chown -R lightdm:lightdm ${XAUTH_DIR} \
-  && rm -rf /var/lib/apt/lists/*
+# ENV XAUTH_DIR /var/lib/lightdm
+# ENV XAUTHORITY ${XAUTH_DIR}/.Xauthority
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     lightdm dbus-x11 x11-common \
+#   && dpkg-reconfigure --frontend noninteractive lightdm x11-common \
+#   && sed -i 's/allowed_users=console/allowed_users=anybody/g' \
+#             /etc/X11/Xwrapper.config \
+#   && touch ${XAUTHORITY} \
+#   && chmod 666 ${XAUTHORITY} \
+#   && chown -R ${NORMAL_USER}:${NORMAL_USER} ${XAUTH_DIR} \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=========
 # GNOME ubuntu-desktop

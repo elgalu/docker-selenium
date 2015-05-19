@@ -154,16 +154,17 @@ with_backoff_and_slient
 # Same for all X servers
 # TODO fix lightdm Xauthority issue:
 #  xauth: timeout in locking authority file /var/lib/lightdm/.Xauthority
-startx -- $DISPLAY 2>&1 | tee $XMANAGER_LOG &
-XSESSION_PID=$!
+# startx -- $DISPLAY 2>&1 | tee $XMANAGER_LOG &
+# XSESSION_PID=$!
 
 # Alternative 1.
-#  Fluxbox is a fast, lightweight and responsive window manager
-# fluxbox -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
+#  Openbox is a lightweight window manager using freedesktop standards
+openbox-session 2>&1 | tee $XMANAGER_LOG &
+XSESSION_PID=$!
 
 # Alternative 2.
-#  Openbox is a lightweight window manager using freedesktop standards
-# openbox-session 2>&1 | tee $XMANAGER_LOG &
+#  Fluxbox is a fast, lightweight and responsive window manager
+# fluxbox -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
 
 # Alternative 3.
 #  GNOME Shell provides core interface functions like switching windows,
@@ -180,8 +181,9 @@ XSESSION_PID=$!
 # lxde -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
 
 # Alternative 6.
-#  lightdm
-# lightdm-session -display $DISPLAY 2>&1 | tee $XMANAGER_LOG &
+#  lightdm is a fat and full featured windows manager
+# lightdm-session 2>&1 | tee $XMANAGER_LOG &
+# XSESSION_PID=$!
 
 # Start a GUI xTerm to help debugging when VNC into the container
 x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
