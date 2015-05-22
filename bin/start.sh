@@ -32,12 +32,20 @@ kill_pid_gracefully() {
   [ -z "$pdesc" ]   && die "Need to set Description as 2nd param for kill_pid_gracefully()" 5
   if [ "$the_pid" -gt "0" ] && [ -d /proc/$the_pid ]; then
     echo "Shutting down $pdesc PID: $the_pid.."
-    kill -s SIGTERM $the_pid
+	  if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+	    sudo kill -s SIGTERM $the_pid
+	  else
+	    kill -s SIGTERM $the_pid
+	  fi
     local wait_msg="waiting for $pdesc PID: $the_pid to die..."
-    timeout 3 bash -c "while [ -d /proc/$the_pid ]; do sleep 0.1 && echo $wait_msg; done"
+    timeout 1 bash -c "while [ -d /proc/$the_pid ]; do sleep 0.1 && echo $wait_msg; done"
     if [ -d /proc/$the_pid ]; then
       echo "$pdesc PID: $the_pid still running, forcing with kill -SIGKILL..."
-      kill -SIGKILL $the_pid
+      if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+        sudo kill -SIGKILL $the_pid
+      else
+        kill -SIGKILL $the_pid
+      fi
       # Better not to wait since docker will terminate the cleanup anyway
       # echo "waiting for $pdesc PID: $the_pid to finally terminate.."
       # wait $the_pid
@@ -108,6 +116,7 @@ function shutdown {
   kill_pid_gracefully $VNC_SERVER_PID "VNC server"
   kill_pid_gracefully $XVFB_PID "Xvfb"
   kill_pid_gracefully $XSESSION_PID "X server session"
+  kill_pid_gracefully $SSHD_PID "OpenSSH server"
   echo "Shutdown complete."
 }
 
@@ -138,8 +147,6 @@ if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
   sudo -E sh -c 'echo "$CONTAINER_IP    guest.docker"       >> /etc/hosts'
 fi
 
-# Need to ensure a home folder in case is not present
-mkdir -p ~/
 # Start the X server that can run on machines with no display
 # hardware and no physical input devices
 Xvfb $DISPLAY -screen $SCREEN_NUM $GEOMETRY \
@@ -240,6 +247,23 @@ x11vnc -rfbport $VNC_PORT -display $DISPLAY \
     -forever -usepw -shared -noadd_keysyms -nopw -xkb \
     -clear_mods -clear_keys -clear_all 2>&1 | tee $VNC_LOG &
 VNC_SERVER_PID=$!
+
+# Authorize ssh user if $SSH_PUB_KEY was provided
+[ -z "$HOME" ] && die "Need (\$HOME) to be set" 6
+if [ ! -z "$HOME" ];then
+  echo "INFO: \$SSH_PUB_KEY detected! will add to $HOME/.ssh/authorized_keys"
+  echo $SSH_PUB_KEY >> $HOME/.ssh/authorized_keys
+fi
+# Start ssh server. Unfortunately needs sudo
+# -e Write debug logs to standard error instead of the system log
+# -D will not detach and does not become a daemon allowing easy monitoring
+# -p Specifies the port on which the server listens for connections (default 22)
+if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+  echo "INFO: Starting OpenSSH server..."
+  sudo /usr/sbin/sshd -e -D -p ${SSHD_PORT} &
+  SSHD_PID=$!
+  # TODO: Add active wait to validate sshd started and works
+fi
 
 # Active wait until VNC server is listening
 # for i in $(seq 1 $MAX_WAIT_RETRY_ATTEMPTS); do

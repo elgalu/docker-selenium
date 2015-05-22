@@ -308,6 +308,21 @@ RUN apt-get update -qqy \
     xorg \
   && rm -rf /var/lib/apt/lists/*
 
+#======================
+# OpenSSH server (sshd)
+#======================
+# http://linux.die.net/man/5/sshd_config
+# http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/sshd_config.5
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    openssh-server \
+  && mkdir -p /var/run/sshd \
+  && chmod 744 /var/run/sshd \
+  && echo "PidFile /tmp/run_sshd.pid" >> /etc/ssh/sshd_config \
+  && echo "X11Forwarding yes" >> /etc/ssh/sshd_config \
+  && echo "GatewayPorts yes"  >> /etc/ssh/sshd_config \
+  && rm -rf /var/lib/apt/lists/*
+
 #===================
 # DNS & hosts stuff
 #===================
@@ -318,6 +333,16 @@ COPY ./etc/hosts /tmp/hosts
 #================
 ENV BIN_UTILS /bin-utils
 ADD bin $BIN_UTILS
+
+#==================
+# User & ssh stuff
+#==================
+USER ${NORMAL_USER}
+ENV USER ${NORMAL_USER}
+RUN mkdir -p ~/.ssh \
+  && touch ~/.ssh/authorized_keys \
+  && chmod 700 ~/.ssh \
+  && chmod 600 ~/.ssh/authorized_keys
 
 #========================================================================
 # Some configuration options that can be customized at container runtime
@@ -342,6 +367,7 @@ ENV SELENIUM_PORT 4444
 ENV VNC_PORT 5900
 # You can set the VNC password or leave null so a random password is generated:
 # ENV VNC_PASSWORD topsecret
+ENV SSHD_PORT 2222
 
 #================================
 # Expose Container's Directories
@@ -351,12 +377,10 @@ VOLUME /var/log
 #================================
 # Expose Container's Ports
 #================================
-EXPOSE 4444 5900
+EXPOSE ${SELENIUM_PORT} ${VNC_PORT} ${SSHD_PORT}
 
 #===================
 # CMD or ENTRYPOINT
 #===================
 # Start a selenium standalone server for Chrome and/or Firefox
-USER ${NORMAL_USER}
-ENV USER ${NORMAL_USER}
 CMD ["entry.sh"]
