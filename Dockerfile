@@ -28,6 +28,7 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 # wget - The non-interactive network downloader
 # curl - transfer a URL
 # bc - An arbitrary precision calculator language
+# pwgen: generates random, meaningless but pronounceable passwords
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     apt-utils \
@@ -38,6 +39,7 @@ RUN apt-get update -qqy \
     unzip \
     wget \
     curl \
+    pwgen \
     bc \
   && mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
   && chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
@@ -74,9 +76,18 @@ RUN echo $TZ | tee /etc/timezone \
 # Java7 - OpenJDK JRE headless
 # Minimal runtime used for executing non GUI Java programs
 #==============================
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     openjdk-7-jre-headless \
+#   && rm -rf /var/lib/apt/lists/*
+
+#==============================
+# Java8 - OpenJDK JRE headless
+# Minimal runtime used for executing non GUI Java programs
+#==============================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
-    openjdk-7-jre-headless \
+    openjdk-8-jre-headless \
   && rm -rf /var/lib/apt/lists/*
 
 #==================
@@ -94,18 +105,6 @@ RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     oracle-java8-installer \
 #   && rm -rf /var/lib/apt/lists/*
-
-#====================================
-# Java8 - OpenJDK latest from utopic
-#====================================
-# Workaround to use latest OpenJDK package which is only available for utopic
-# https://github.com/zalando/docker-openjdk/blob/master/Dockerfile
-# RUN curl -o /tmp/openjdk-8-#1.deb \
-#   http://de.archive.ubuntu.com/ubuntu/pool/universe/o/openjdk-8/openjdk-8-{jre,jre-headless,jdk}_8u40~b09-1_amd64.deb
-# # http://stackoverflow.com/questions/8477036/how-to-make-debian-package-install-dependencies
-# RUN dpkg -i /tmp/openjdk-8-*.deb || apt-get -f --force-yes --yes install \
-#   && dpkg -i /tmp/openjdk-8-*.deb \
-#   && rm /tmp/openjdk-8-*.deb
 
 #=======
 # Fonts
@@ -139,6 +138,7 @@ ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN cd /tmp \
+  # && CHROME_DRIVER_VERSION=2.15 \
   && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -202,8 +202,6 @@ RUN apt-get update -qqy \
 # LightDM is the display manager running in Ubuntu
 # A fat and full featured windows manager
 #=========
-# Fixes chrome start issue "Failed to move to new PID namespace" on OpenVZ
-#  https://bugs.launchpad.net/chromium-browser/+bug/577919
 # allowed_users=anybody fixes X: user not authorized to run the X server, aborting
 #  http://karuppuswamy.com/wordpress/2010/09/26/how-to-fix-x-user-not-authorized-to-run-the-x-server-aborting/
 # The issue can be recreated with "ami-ed7c149a" and maybe in CentOS
@@ -232,7 +230,12 @@ RUN apt-get update -qqy \
 #==========================
 # Google Chrome - Latest
 #==========================
-# Why /dev/shm? see: https://github.com/travis-ci/travis-ci/issues/938#issuecomment-16345102
+# If you have issue "Failed to move to new PID namespace" on OpenVZ (AWS ECS)
+#  https://bugs.launchpad.net/chromium-browser/+bug/577919
+# - try to pass chrome switch --no-sandbox see: http://peter.sh/experiments/chromium-command-line-switches/#no-sandbox
+# - try /dev/shm? see: https://github.com/travis-ci/travis-ci/issues/938#issuecomment-16345102
+# - try xserver-xephyr see: https://github.com/enkidulan/hangout_api/blob/master/.travis.yml#L5
+# - try /opt/google/chrome/chrome-sandbox see: https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L66
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
@@ -291,15 +294,19 @@ RUN apt-get update -qqy \
 #==============
 # VNC and Xvfb
 #==============
+# xvfb: Xvfb or X virtual framebuffer is a display server
+#  + implements the X11 display server protocol
+#  + performs all graphical operations in memory
+#
+# Xdummy: Is like Xvfb but uses an LD_PRELOAD hack to run a stock X server
+#  - uses a "dummy" video driver
+#  - with Xpra allows to use extensions like Randr, Composite, Damage
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     x11vnc \
     xvfb \
     xorg \
   && rm -rf /var/lib/apt/lists/*
-
-# USER $NORMAL_USER
-# RUN  mkdir -p $HOME/.vnc
 
 #===================
 # DNS & hosts stuff
@@ -326,7 +333,8 @@ ENV MAX_WAIT_RETRY_ATTEMPTS 8
 ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
 ENV SCREEN_DEPTH 24
-ENV DISPLAY :1
+ENV DISPLAY_NUM 1
+ENV DISPLAY :$DISPLAY_NUM
 ENV SCREEN_NUM 0
 # Even though you can change them below, don't worry too much about container
 # internal ports since you can map them to the host via `docker run -p`
@@ -349,4 +357,6 @@ EXPOSE 4444 5900
 # CMD or ENTRYPOINT
 #===================
 # Start a selenium standalone server for Chrome and/or Firefox
+USER ${NORMAL_USER}
+ENV USER ${NORMAL_USER}
 CMD ["entry.sh"]

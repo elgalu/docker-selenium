@@ -62,11 +62,12 @@ function with_backoff_and_slient {
   local cmd_desc=$CMD_DESC_PARAM
   local cmd=$CMD_PARAM
   local log_file=$LOG_FILE_PARAM
+  [ -z "$log_file" ] && log_file=/dev/null
 
   # while [[ $attempt < $max_attempts ]]; do
   while [ "$attempt" -lt "$max_attempts" ]; do
-    # Silent
-    $cmd >/dev/null 2>&1
+    # Silent but keep the log for later reporting
+    $cmd >$log_file 2>&1
     exitCode=$?
 
     if [[ $exitCode == 0 ]]; then
@@ -82,7 +83,7 @@ function with_backoff_and_slient {
 
   if [[ $exitCode != 0 ]]; then
     echo "$cmd_desc failed me for the last time! ($cmd)" 1>&2
-    [ -f "$log_file" ] && cat $log_file 1>&2
+    [ -f "$log_file" ] && cat $log_file
     exit $exitCode
   fi
 
@@ -93,7 +94,10 @@ function with_backoff_and_slient {
 # returns the value as echo to stdout due to bash limitation
 # that only integers are allowed: http://stackoverflow.com/a/3236940/511069
 function genpassword {
-  echo $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%&*_+~' | fold -w $(shuf -i 5-15 -n 1) | head -n 1)
+  # Switched to a better password generator `pwgen` but let's keep the old fn here
+  # echo $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%&*_+~' | fold -w $(shuf -i 5-15 -n 1) | head -n 1)
+  # pwget generates random password; pwgen [ OPTIONS ] [ pw_length ] [ num_pw ]
+  pwgen -c -n -1 $(echo $[ 7 + $[ RANDOM % 17 ]]) 1
 }
 
 # Exit all child processes properly
@@ -113,8 +117,11 @@ export CONTAINER_IP=$(ip addr show dev eth0 | grep "inet " | awk '{print $2}' | 
 export XVFB_LOG="/tmp/Xvfb_headless.log"
 export XMANAGER_LOG="/tmp/xmanager.log"
 export VNC_LOG="/tmp/x11vnc_forever.log"
-export XTERMINAL_LOG="/tmp/local-sel-headless.log"
 export SELENIUM_LOG="/tmp/selenium-server-standalone.log"
+# more active waiti (poll) logs
+export XVFB_POLL_LOG="/tmp/xvfb_poll_start.log"
+export VNC_POLL_LOG="/tmp/vnc_poll_start.log"
+export SELENIUM_POLL_LOG="/tmp/selenium_poll_start.log"
 
 # As of docker >= 1.2.0 is possible to append our stuff directly into /etc/hosts
 if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
@@ -122,9 +129,11 @@ if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
   sudo -E sh -c 'echo "$DOCKER_HOST_IP  docker.host"        >> /etc/hosts'
   sudo -E sh -c 'echo "$CONTAINER_IP    docker.guest"       >> /etc/hosts'
   sudo -E sh -c 'echo "$DOCKER_HOST_IP  docker.host.dev"    >> /etc/hosts'
+  sudo -E sh -c 'echo "$DOCKER_HOST_IP  d.host.loc.dev"     >> /etc/hosts'
   sudo -E sh -c 'echo "$CONTAINER_IP    docker.guest.dev"   >> /etc/hosts'
   sudo -E sh -c 'echo "$DOCKER_HOST_IP  host.docker.local"  >> /etc/hosts'
   sudo -E sh -c 'echo "$CONTAINER_IP    guest.docker.local" >> /etc/hosts'
+  sudo -E sh -c 'echo "$CONTAINER_IP    d.guest.loc.dev"    >> /etc/hosts'
   sudo -E sh -c 'echo "$DOCKER_HOST_IP  host.docker"        >> /etc/hosts'
   sudo -E sh -c 'echo "$CONTAINER_IP    guest.docker"       >> /etc/hosts'
 fi
@@ -148,7 +157,7 @@ XVFB_PID=$!
 # fi
 CMD_DESC_PARAM="Xvfb Server"
 CMD_PARAM="xdpyinfo -display $DISPLAY"
-LOG_FILE_PARAM="$XVFB_LOG"
+LOG_FILE_PARAM="$XVFB_POLL_LOG"
 with_backoff_and_slient
 
 # Same for all X servers
@@ -190,9 +199,31 @@ x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
 HANDY_TERM_PID=$!
 
 # Start a GUI xTerm to easily debug the headless instance
-x-terminal-emulator -geometry 160x40-10-10 -ls -title "local-sel-headless" \
--e "$BIN_UTILS/local-sel-headless.sh" 2>&1 | tee $XTERMINAL_LOG &
+# Note sometimes chrome fails with:
+#  session deleted because of page crash from tab crashed
+#  "session deleted because of page crash" "from tab crashed"
+#  reported as tmux related:
+#    https://github.com/angular/protractor/issues/731
+#  reported to be fixed with --disable-impl-side-painting:
+#    https://code.google.com/p/chromedriver/issues/detail?id=732#c19
+#    Protractor config example:
+#      capabilities: {
+#          browserName: 'chrome',
+#          chromeOptions: {
+#              args: ['--disable-impl-side-painting'],
+#          },
+#      },
+# Example of using xvfb-run to just run selenium:
+#   xvfb-run --server-num=$DISPLAY_NUM --server-args="-screen $SCREEN_NUM $GEOMETRY" \
+#       "$BIN_UTILS/local-sel-headless.sh"  &
+# Example of sending selenium output to a log instead of stdout
+#   $BIN_UTILS/local-sel-headless.sh > $SELENIUM_LOG  &
+# Current preferred way: to send selenium output to docker logs stream
+$BIN_UTILS/local-sel-headless.sh 2>&1 | tee $SELENIUM_LOG &
 SELENIUM_PID=$!
+# You can also start it within an xterm but then the logs won't be at docker logs
+# x-terminal-emulator -geometry 160x40-10-10 -ls -title "local-sel-headless" \
+# -e "$BIN_UTILS/local-sel-headless.sh" 2>&1 | tee $SELENIUM_LOG &
 
 # Set VNC password to a random one is not defined yet
 if [ -z "$VNC_PASSWORD" ]; then
@@ -205,9 +236,9 @@ mkdir -p ~/.vnc
 x11vnc -storepasswd $VNC_PASSWORD ~/.vnc/passwd
 
 # Start VNC server to enable viewing what's going on but not mandatory
-x11vnc -forever -usepw -shared -rfbport $VNC_PORT -display $DISPLAY \
-    --auth $XAUTHORITY \
-    -noadd_keysyms -clear_mods -clear_keys -clear_all 2>&1 | tee $VNC_LOG &
+x11vnc -rfbport $VNC_PORT -display $DISPLAY \
+    -forever -usepw -shared -noadd_keysyms -nopw -xkb \
+    -clear_mods -clear_keys -clear_all 2>&1 | tee $VNC_LOG &
 VNC_SERVER_PID=$!
 
 # Active wait until VNC server is listening
@@ -224,7 +255,7 @@ VNC_SERVER_PID=$!
 # so ignore that in the VNC server logs:
 CMD_DESC_PARAM="VNC Server"
 CMD_PARAM="nc -z localhost $VNC_PORT"
-LOG_FILE_PARAM="$VNC_LOG"
+LOG_FILE_PARAM="$VNC_POLL_LOG"
 with_backoff_and_slient
 
 # Active wait until selenium is up
@@ -238,14 +269,14 @@ with_backoff_and_slient
 # done
 CMD_DESC_PARAM="Selenium"
 CMD_PARAM="curl -s http://localhost:$SELENIUM_PORT/wd/hub/status"
-LOG_FILE_PARAM="$SELENIUM_LOG"
+LOG_FILE_PARAM="$SELENIUM_POLL_LOG"
 with_backoff_and_slient
 # if [ "$i" -ge "$MAX_WAIT_RETRY_ATTEMPTS" ]; then
 #   die "Failed to start Selenium!" 3 true
 # fi
 
 echo
-echo "Container docker internal IP is $CONTAINER_IP"
+echo "Container docker internal IP: $CONTAINER_IP"
 if [ "$vnc_password_generated" = "true" ]; then
   echo "a VNC password was generated for you: $VNC_PASSWORD"
 fi
