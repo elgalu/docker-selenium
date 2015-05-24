@@ -32,7 +32,7 @@ kill_pid_gracefully() {
   [ -z "$pdesc" ]   && die "Need to set Description as 2nd param for kill_pid_gracefully()" 5
   if [ "$the_pid" -gt "0" ] && [ -d /proc/$the_pid ]; then
     echo "Shutting down $pdesc PID: $the_pid.."
-	  if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+	  if [ "$SUDO_ALLOWED" = true ]; then
 	    sudo kill -s SIGTERM $the_pid
 	  else
 	    kill -s SIGTERM $the_pid
@@ -41,7 +41,7 @@ kill_pid_gracefully() {
     timeout 1 bash -c "while [ -d /proc/$the_pid ]; do sleep 0.1 && echo $wait_msg; done"
     if [ -d /proc/$the_pid ]; then
       echo "$pdesc PID: $the_pid still running, forcing with kill -SIGKILL..."
-      if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+      if [ "$SUDO_ALLOWED" = true ]; then
         sudo kill -SIGKILL $the_pid
       else
         kill -SIGKILL $the_pid
@@ -75,7 +75,7 @@ function with_backoff_and_slient {
   # while [[ $attempt < $max_attempts ]]; do
   while [ "$attempt" -lt "$max_attempts" ]; do
     # Silent but keep the log for later reporting
-    $cmd >$log_file 2>&1
+    bash -a -c "$cmd" >$log_file 2>&1
     exitCode=$?
 
     if [[ $exitCode == 0 ]]; then
@@ -117,23 +117,23 @@ function shutdown {
   kill_pid_gracefully $XVFB_PID "Xvfb"
   kill_pid_gracefully $XSESSION_PID "X server session"
   kill_pid_gracefully $SSHD_PID "OpenSSH server"
+  [ "$WITH_GUACAMOLE" = true ] && kill_pid_gracefully $CATALINA_PID "Tomcat Catalina server"
+  [ "$WITH_GUACAMOLE" = true ] && kill_pid_gracefully $GUACD_PID "Guacamole server"
   echo "Shutdown complete."
 }
 
 export GEOMETRY="$SCREEN_WIDTH""x""$SCREEN_HEIGHT""x""$SCREEN_DEPTH"
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 export CONTAINER_IP=$(ip addr show dev eth0 | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
-export XVFB_LOG="/tmp/Xvfb_headless.log"
-export XMANAGER_LOG="/tmp/xmanager.log"
-export VNC_LOG="/tmp/x11vnc_forever.log"
-export SELENIUM_LOG="/tmp/selenium-server-standalone.log"
-# more active waiti (poll) logs
-export XVFB_POLL_LOG="/tmp/xvfb_poll_start.log"
-export VNC_POLL_LOG="/tmp/vnc_poll_start.log"
-export SELENIUM_POLL_LOG="/tmp/selenium_poll_start.log"
+# Active waits (poll) logs
+export XVFB_POLL_LOG="/var/log/sele/xvfb_poll_start.log"
+export VNC_POLL_LOG="/var/log/sele/vnc_poll_start.log"
+export SELENIUM_POLL_LOG="/var/log/sele/selenium_poll_start.log"
+export TOMCAT_POLL_LOG="/var/log/sele/tomcat_poll_start.log"
+export GUACD_POLL_LOG="/var/log/sele/guacd_poll_start.log"
 
 # As of docker >= 1.2.0 is possible to append our stuff directly into /etc/hosts
-if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+if [ "$SUDO_ALLOWED" = true ]; then
   sudo -E sh -c 'cat /tmp/hosts >> /etc/hosts'
   sudo -E sh -c 'echo "$DOCKER_HOST_IP  docker.host"        >> /etc/hosts'
   sudo -E sh -c 'echo "$CONTAINER_IP    docker.guest"       >> /etc/hosts'
@@ -152,6 +152,14 @@ fi
 Xvfb $DISPLAY -screen $SCREEN_NUM $GEOMETRY \
     -ac -r -cc 4 -accessx -xinerama -extension RANDR 2>&1 | tee $XVFB_LOG &
 XVFB_PID=$!
+
+if [ "$WITH_GUACAMOLE" = true ]; then
+	# Run guacd
+	# -f     Causes guacd to run in the foreground, rather than automatically forking into the background.
+	guacd -f -b "0.0.0.0" -l ${GUACAMOLE_SERVER_PORT} 2>&1 | tee ${GUACD_LOG} &
+	GUACD_PID=$!
+fi
+
 # Active wait for $DISPLAY to be ready: https://goo.gl/mGttpb
 # for i in $(seq 1 $MAX_WAIT_RETRY_ATTEMPTS); do
 #   xdpyinfo -display $DISPLAY >/dev/null 2>&1
@@ -201,6 +209,12 @@ XSESSION_PID=$!
 # lightdm-session 2>&1 | tee $XMANAGER_LOG &
 # XSESSION_PID=$!
 
+if [ "$WITH_GUACAMOLE" = true ]; then
+	# Run tomcat to start guacamole web-server
+	catalina.sh run 2>&1 | tee ${CATALINA_LOG} &
+	CATALINA_PID=$!
+fi
+
 # Start a GUI xTerm to help debugging when VNC into the container
 x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
 HANDY_TERM_PID=$!
@@ -239,13 +253,27 @@ if [ -z "$VNC_PASSWORD" ]; then
   VNC_PASSWORD=${VNC_PASSWORD-$random_password}
 fi
 
-mkdir -p ~/.vnc
-x11vnc -storepasswd $VNC_PASSWORD ~/.vnc/passwd
+# Generate the password file
+x11vnc -storepasswd ${VNC_PASSWORD} ${VNC_STORE_PWD_FILE}
 
 # Start VNC server to enable viewing what's going on but not mandatory
+# -rfbport  port TCP port for RFB protocol
+# -rfbauth  passwd-file, use authentication on RFB protocol
+# -viewonly all VNC clients can only watch (default off).
+# -forever  keep listening for more connections rather than exiting as soon
+#           as the first client(s) disconnect.
+# -usepw    first look for ~/.vnc/passwd then -rfbauth or prompt for pwd
+# -shared   more than one viewer can connect at the same time (default off)
+# -noadd_keysyms add the Keysym to X srv keybd mapping on an unused key.
+#           Default: -add_keysyms
+# -nopw     disable the warn msg when running without some sort of password
+# -xkb      when in modtweak mode, use the XKEYBOARD extension
+# -clear_mods used to clear the state if the display was accidentally left
+# 				  with any pressed down.
+# -clear_keys As -clear_mods, except try to release ANY pressed key
+# -clear_all  As -clear_keys, except try to release any CapsLock, NumLock ...
 x11vnc -rfbport $VNC_PORT -display $DISPLAY \
-    -forever -usepw -shared -noadd_keysyms -nopw -xkb \
-    -clear_mods -clear_keys -clear_all 2>&1 | tee $VNC_LOG &
+		-rfbauth ${VNC_STORE_PWD_FILE} -forever -shared 2>&1 | tee $VNC_LOG &
 VNC_SERVER_PID=$!
 
 # Authorize ssh user if $SSH_PUB_KEY was provided
@@ -258,7 +286,7 @@ fi
 # -e Write debug logs to standard error instead of the system log
 # -D will not detach and does not become a daemon allowing easy monitoring
 # -p Specifies the port on which the server listens for connections (default 22)
-if [ "$USE_SUDO_TO_FIX_ETC_HOSTS" = true ]; then
+if [ "$SUDO_ALLOWED" = true ]; then
   echo "INFO: Starting OpenSSH server..."
   sudo /usr/sbin/sshd -e -D -p ${SSHD_PORT} &
   SSHD_PID=$!
@@ -298,6 +326,24 @@ with_backoff_and_slient
 # if [ "$i" -ge "$MAX_WAIT_RETRY_ATTEMPTS" ]; then
 #   die "Failed to start Selenium!" 3 true
 # fi
+
+if [ "$WITH_GUACAMOLE" = true ]; then
+	CMD_DESC_PARAM="Tomcat Catalina server"
+	# TODO change hard-coded tomcat port 8080:
+	# http://stackoverflow.com/a/16722349/511069
+	# CMD_PARAM="nc -z localhost 8080"
+	# CMD_PARAM="curl --silent --show-error --connect-timeout 1 -I http://localhost:8080 | grep 'HTTP 1.00000'"
+	CMD_PARAM="grep \"org.apache.catalina.startup.Catalina.start Server startup in\" ${CATALINA_LOG}"
+	LOG_FILE_PARAM="$TOMCAT_POLL_LOG"
+	with_backoff_and_slient
+
+	# Also wait for guacd
+	CMD_DESC_PARAM="guacd server"
+	# CMD_PARAM="nc -z localhost ${GUACAMOLE_SERVER_PORT}"
+	CMD_PARAM="grep \"Guacamole proxy daemon (guacd) version ${GUACAMOLE_VERSION} started\" ${GUACD_LOG}"
+	LOG_FILE_PARAM="$GUACD_POLL_LOG"
+	with_backoff_and_slient
+fi
 
 echo
 echo "Container docker internal IP: $CONTAINER_IP"

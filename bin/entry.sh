@@ -7,9 +7,17 @@ WHOAMI_EXIT_CODE=$?
 echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID is '$UID'"
 
 if [ $WHOAMI_EXIT_CODE != 0 ]; then
-  echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
-  echo "-- will try to use NORMAL_USER: '$NORMAL_USER' instead."
-  exec $RUNAS
+  if [ $UID != $NORMAL_USER_UID]; then
+    echo "-- WARN: UID '$UID' is different from the expected '$NORMAL_USER_UID'"
+    echo "-- INFO: Will try to fix uid before continuing"
+    # TODO: fix it ...
+    echo "-- now will try to use NORMAL_USER: '$NORMAL_USER' to continue"
+    exec $RUNAS
+  else
+    echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
+    echo "-- will try to use NORMAL_USER: '$NORMAL_USER' instead."
+    exec $RUNAS
+  fi
 elif [ "$WHOAMI" = "root" ]; then
   echo "-- WARN: Container running user is 'root' so switching to less privileged one"
   echo "-- will use NORMAL_USER: '$NORMAL_USER' instead."

@@ -43,6 +43,7 @@ RUN apt-get update -qqy \
     bc \
   && mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
   && chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
+  && mkdir -p /var/log/sele \
   && rm -rf /var/lib/apt/lists/*
 
 #==============================
@@ -191,7 +192,7 @@ RUN apt-get update -qqy \
 # LXDE lxde/lubuntu-desktop
 # A Lightweight X11 Desktop Environment
 #=========
-# NOT working!
+# NOT working! TODO: see https://github.com/dockerfile/ubuntu-desktop/blob/master/Dockerfile#L13
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     lxde \
@@ -323,10 +324,103 @@ RUN apt-get update -qqy \
   && echo "GatewayPorts yes"  >> /etc/ssh/sshd_config \
   && rm -rf /var/lib/apt/lists/*
 
+#========================
+# Guacamole dependencies
+#========================
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    gcc make \
+    libcairo2-dev libpng12-dev libossp-uuid-dev \
+    libssh2-1 libssh-dev libssh2-1-dev \
+    libssl-dev libssl0.9.8 \
+    libpango1.0-dev \
+    autoconf libvncserver-dev \
+  && rm -rf /var/lib/apt/lists/*
+
 #===================
 # DNS & hosts stuff
 #===================
 COPY ./etc/hosts /tmp/hosts
+
+#==================
+# User & ssh stuff
+#==================
+USER ${NORMAL_USER}
+ENV USER ${NORMAL_USER}
+ENV HOME /home/${USER}
+RUN mkdir -p ~/.ssh \
+  && touch ~/.ssh/authorized_keys \
+  && chmod 700 ~/.ssh \
+  && chmod 600 ~/.ssh/authorized_keys \
+  && mkdir -p ${HOME}/.vnc \
+  && sudo chown ${NORMAL_USER}:${NORMAL_USER} /var/log/sele
+ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
+
+#======================
+# Tomcat for Guacamole
+#======================
+ENV TOMCAT_MAJOR 8
+ENV TOMCAT_VERSION 8.0.23
+ENV TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+# ENV CATALINA_HOME /usr/local/tomcat
+ENV CATALINA_HOME ${HOME}/tomcat
+# WORKDIR ${CATALINA_HOME}
+# see https://www.apache.org/dist/tomcat/tomcat-8/KEYS
+RUN mkdir -p ${CATALINA_HOME} \
+  && cd ${CATALINA_HOME} \
+  && gpg --keyserver pool.sks-keyservers.net --recv-keys \
+       05AB33110949707C93A279E3D3EFE6B686867BA6 \
+       07E48665A34DCAFAE522E5E6266191C37C037D42 \
+       47309207D818FFD8DCD3F83F1931D684307A10A5 \
+       541FBE7D8F78B25E055DDEE13C370389288584E7 \
+       61B832AC2F1C5A90F0F9B00A1C506407564C17A3 \
+       79F7026C690BAA50B92CD8B66A3AD3F4F22C4FED \
+       9BA44C2621385CB966EBA586F72C284D731FABEE \
+       A27677289986DB50844682F8ACB77FC2E86E29AC \
+       A9C5DF4D22E99998D9875A5110C01C5A2F6059E7 \
+       DCFD35E0BF8CA7344752DE8B6FB21E8933C60243 \
+       F3A04C595DB5B6A5F1ECA43E3B7BBB100D811BBE \
+       F7DA48BB64BCB84ECBA7EE6935CD23C10D498E23 \
+  && wget --no-verbose "$TOMCAT_TGZ_URL" -O tomcat.tar.gz \
+  && wget --no-verbose "$TOMCAT_TGZ_URL.asc" -O tomcat.tar.gz.asc \
+  && gpg --verify tomcat.tar.gz.asc \
+  && tar -xvf tomcat.tar.gz --strip-components=1 > /dev/null \
+  && rm bin/*.bat \
+  && rm tomcat.tar.gz*
+
+#===================
+# Guacamole web-app
+#===================
+# https://github.com/glyptodon/guacamole-server/releases
+ENV GUACAMOLE_VERSION 0.9.6
+ENV GUACAMOLE_WAR_SHA1 cfe41c7b2c6229db7bd10ae96f3844d9da19f8e4
+ENV GUACAMOLE_HOME ${HOME}/guacamole
+RUN mkdir -p ${GUACAMOLE_HOME}
+# http://guac-dev.org/doc/gug/configuring-guacamole.html
+COPY guacamole_home/* ${GUACAMOLE_HOME}/
+# Disable Tomcat's manager application.
+# e.g. to customize JVM's max heap size 256MB: -e JAVA_OPTS="-Xmx256m"
+RUN cd ${CATALINA_HOME} && rm -rf webapps/* \
+  && echo "${GUACAMOLE_WAR_SHA1}  ROOT.war" > webapps/ROOT.war.sha1 \
+  && wget --no-verbose -O webapps/ROOT.war "http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-${GUACAMOLE_VERSION}.war/download" \
+  && cd webapps && sha1sum -c --quiet ROOT.war.sha1 && cd .. \
+  && echo "export CATALINA_OPTS=\"${JAVA_OPTS}\"" >> bin/setenv.sh
+#========================
+# Guacamole server guacd
+#========================
+ENV GUACAMOLE_SERVER_PORT 4822
+ENV GUACAMOLE_SERVER_SHA1 46d3a541129fb7cad744e4e319be1404781458de
+RUN cd /tmp \
+  && echo ${GUACAMOLE_SERVER_SHA1}  guacamole-server.tar.gz > guacamole-server.tar.gz.sha1 \
+  && wget --no-verbose -O guacamole-server.tar.gz "http://sourceforge.net/projects/guacamole/files/current/source/guacamole-server-${GUACAMOLE_VERSION}.tar.gz/download" \
+  && sha1sum -c --quiet guacamole-server.tar.gz.sha1 \
+  && tar xzf guacamole-server.tar.gz \
+  && rm guacamole-server.tar.gz* \
+  && cd guacamole-server-${GUACAMOLE_VERSION} \
+  && ./configure \
+  && make \
+  && sudo make install \
+  && sudo ldconfig
 
 #================
 # Binary scripts
@@ -334,23 +428,13 @@ COPY ./etc/hosts /tmp/hosts
 ENV BIN_UTILS /bin-utils
 ADD bin $BIN_UTILS
 
-#==================
-# User & ssh stuff
-#==================
-USER ${NORMAL_USER}
-ENV USER ${NORMAL_USER}
-RUN mkdir -p ~/.ssh \
-  && touch ~/.ssh/authorized_keys \
-  && chmod 700 ~/.ssh \
-  && chmod 600 ~/.ssh/authorized_keys
-
 #========================================================================
 # Some configuration options that can be customized at container runtime
 #========================================================================
-ENV PATH ${PATH}:${BIN_UTILS}
-# Using sudo on your dockerized app is not supported by stups-senza tools
-# so allow this to be deactivated
-ENV USE_SUDO_TO_FIX_ETC_HOSTS true
+ENV PATH ${PATH}:${BIN_UTILS}:${CATALINA_HOME}/bin
+# Security requirements might prevent using sudo in the running container
+ENV SUDO_ALLOWED true
+ENV WITH_GUACAMOLE false
 # JVM uses only 1/4 of system memory by default
 ENV MEM_JAVA_PERCENT 80
 ENV RETRY_START_SLEEP_SECS 0.1
@@ -368,6 +452,13 @@ ENV VNC_PORT 5900
 # You can set the VNC password or leave null so a random password is generated:
 # ENV VNC_PASSWORD topsecret
 ENV SSHD_PORT 2222
+# Logs
+ENV XVFB_LOG "/var/log/sele/Xvfb_headless.log"
+ENV XMANAGER_LOG "/var/log/sele/xmanager.log"
+ENV VNC_LOG "/var/log/sele/x11vnc_forever.log"
+ENV SELENIUM_LOG "/var/log/sele/selenium-server-standalone.log"
+ENV CATALINA_LOG "/var/log/sele/tomcat-server.log"
+ENV GUACD_LOG "/var/log/sele/guacd-server.log"
 
 #================================
 # Expose Container's Directories

@@ -1,0 +1,7 @@
+<configs>
+    <config name="some_config" protocol="vnc">
+        <param name="hostname" value="localhost" />
+        <param name="port" value="5920" />
+        <param name="password" value="hola" />
+    </config>
+</configs>

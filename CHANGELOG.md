@@ -2,6 +2,7 @@
 
 ## v2.45.0-ssh1 (in progress)
  + Add sshd so can tunnel to test local apps remotely (Leo Gallucci)
+ + Add guacamole server (WIP)
  + Image tag details:
   + Selenium: v2.45.0 (5017cb8)
   + Chrome: 43.0.2357.65
