@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.45.0-ssh2 (in progress)
+ + Make ssh server optional and default to true
+ + TODO: Test ssh tunneling works properly
+
 ## v2.45.0-ssh1 (2015-05-26)
  + Add sshd so can tunnel to test local apps remotely (Leo Gallucci)
  + Add guacamole server

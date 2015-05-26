@@ -435,6 +435,7 @@ ENV PATH ${PATH}:${BIN_UTILS}:${CATALINA_HOME}/bin
 # Security requirements might prevent using sudo in the running container
 ENV SUDO_ALLOWED true
 ENV WITH_GUACAMOLE false
+ENV WITH_SSH true
 # JVM uses only 1/4 of system memory by default
 ENV MEM_JAVA_PERCENT 80
 ENV RETRY_START_SLEEP_SECS 0.1

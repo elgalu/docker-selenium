@@ -116,7 +116,7 @@ function shutdown {
   kill_pid_gracefully $VNC_SERVER_PID "VNC server"
   kill_pid_gracefully $XVFB_PID "Xvfb"
   kill_pid_gracefully $XSESSION_PID "X server session"
-  kill_pid_gracefully $SSHD_PID "OpenSSH server"
+  [ "$WITH_SSH" = true ]       && kill_pid_gracefully $SSHD_PID "OpenSSH server"
   [ "$WITH_GUACAMOLE" = true ] && kill_pid_gracefully $CATALINA_PID "Tomcat Catalina server"
   [ "$WITH_GUACAMOLE" = true ] && kill_pid_gracefully $GUACD_PID "Guacamole server"
   echo "Shutdown complete."
@@ -294,7 +294,7 @@ fi
 # -e Write debug logs to standard error instead of the system log
 # -D will not detach and does not become a daemon allowing easy monitoring
 # -p Specifies the port on which the server listens for connections (default 22)
-if [ "$SUDO_ALLOWED" = true ]; then
+if [ "$SUDO_ALLOWED" = true ] && [ "$WITH_SSH" = true ]; then
   echo "INFO: Starting OpenSSH server..."
   sudo /usr/sbin/sshd -e -D -p ${SSHD_PORT} &
   SSHD_PID=$!
