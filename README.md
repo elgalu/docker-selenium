@@ -18,6 +18,20 @@ In general: add `sudo` only if needed in your environment and `--privileged` if 
 
     sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e SCREEN_WIDTH=1550 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=secret elgalu/selenium:v2.45.0-openbox1
 
+If your setup is correct, privileged mode and sudo should not be necessary. Also guacamole server is now available:
+
+    docker run --rm --name=ch -p=0.0.0.0:8081:8080 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true elgalu/selenium:v2.45.0-ssh1
+
+Then open a browser into http://localhost:8081/#/login/ and login to guacamole with user "docker" and the same password as ${VNC_PASSWORD} so you no longer need a VNC client to debug the docker instance.
+
+You can also ssh into the machine as long as `SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)"` is correct.
+
+    ssh -p 2222 -o StrictHostKeyChecking=no application@localhost
+
+That's is useful for tunneling else you can stick with `docker exec` to get into the instance with a shell:
+
+    docker exec -ti ch bash
+
 ### Step by step non-privileged do it yourself
 
 #### 1. Build this image

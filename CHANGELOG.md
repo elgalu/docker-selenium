@@ -1,16 +1,16 @@
 # Changelog
 
-## v2.45.0-ssh1 (in progress)
+## v2.45.0-ssh1 (2015-05-26)
  + Add sshd so can tunnel to test local apps remotely (Leo Gallucci)
- + Add guacamole server (WIP)
+ + Add guacamole server
  + Image tag details:
   + Selenium: v2.45.0 (5017cb8)
-  + Chrome: 43.0.2357.65
+  + Chrome: 43.0.2357.81
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
   + Java: 1.8.0_45-internal OpenJDK 1.8.0_45-internal-b14
   + Timezone: Europe/Berlin
-  + Digest: TBD
+  + Digest: sha256:023e36054783629a1d36f74c2abc70f281041aa9f830e13ed8ec79e215f433f5
 
 ## v2.45.0-openbox1 (2015-05-22)
  + Send selenium output to stdout so can be picked up by docker logs (Leo Gallucci)

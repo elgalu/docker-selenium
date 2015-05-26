@@ -153,13 +153,6 @@ Xvfb $DISPLAY -screen $SCREEN_NUM $GEOMETRY \
     -ac -r -cc 4 -accessx -xinerama -extension RANDR 2>&1 | tee $XVFB_LOG &
 XVFB_PID=$!
 
-if [ "$WITH_GUACAMOLE" = true ]; then
-	# Run guacd
-	# -f     Causes guacd to run in the foreground, rather than automatically forking into the background.
-	guacd -f -b "0.0.0.0" -l ${GUACAMOLE_SERVER_PORT} 2>&1 | tee ${GUACD_LOG} &
-	GUACD_PID=$!
-fi
-
 # Active wait for $DISPLAY to be ready: https://goo.gl/mGttpb
 # for i in $(seq 1 $MAX_WAIT_RETRY_ATTEMPTS); do
 #   xdpyinfo -display $DISPLAY >/dev/null 2>&1
@@ -209,12 +202,6 @@ XSESSION_PID=$!
 # lightdm-session 2>&1 | tee $XMANAGER_LOG &
 # XSESSION_PID=$!
 
-if [ "$WITH_GUACAMOLE" = true ]; then
-	# Run tomcat to start guacamole web-server
-	catalina.sh run 2>&1 | tee ${CATALINA_LOG} &
-	CATALINA_PID=$!
-fi
-
 # Start a GUI xTerm to help debugging when VNC into the container
 x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
 HANDY_TERM_PID=$!
@@ -250,7 +237,28 @@ SELENIUM_PID=$!
 if [ -z "$VNC_PASSWORD" ]; then
   vnc_password_generated=true
   random_password=$(genpassword)
-  VNC_PASSWORD=${VNC_PASSWORD-$random_password}
+  export VNC_PASSWORD=${VNC_PASSWORD-$random_password}
+fi
+
+if [ "$WITH_GUACAMOLE" = true ]; then
+	# Generate config files based on env vars before starting guacamole
+	genereate_guaca_configs.sh || die "Failed to start genereate_guaca_configs!" 9 true
+
+	# Run guacd
+	# -f     Causes guacd to run in the foreground, rather than automatically forking into the background.
+	guacd -f -b "0.0.0.0" -l ${GUACAMOLE_SERVER_PORT} 2>&1 | tee ${GUACD_LOG} &
+	GUACD_PID=$!
+
+	# For guacd
+	CMD_DESC_PARAM="guacd server"
+	# CMD_PARAM="nc -z localhost ${GUACAMOLE_SERVER_PORT}"
+	CMD_PARAM="grep \"Guacamole proxy daemon (guacd) version ${GUACAMOLE_VERSION} started\" ${GUACD_LOG}"
+	LOG_FILE_PARAM="$GUACD_POLL_LOG"
+	with_backoff_and_slient
+
+	# Run tomcat to start guacamole web-server
+	catalina.sh run 2>&1 | tee ${CATALINA_LOG} &
+	CATALINA_PID=$!
 fi
 
 # Generate the password file
@@ -335,13 +343,6 @@ if [ "$WITH_GUACAMOLE" = true ]; then
 	# CMD_PARAM="curl --silent --show-error --connect-timeout 1 -I http://localhost:8080 | grep 'HTTP 1.00000'"
 	CMD_PARAM="grep \"org.apache.catalina.startup.Catalina.start Server startup in\" ${CATALINA_LOG}"
 	LOG_FILE_PARAM="$TOMCAT_POLL_LOG"
-	with_backoff_and_slient
-
-	# Also wait for guacd
-	CMD_DESC_PARAM="guacd server"
-	# CMD_PARAM="nc -z localhost ${GUACAMOLE_SERVER_PORT}"
-	CMD_PARAM="grep \"Guacamole proxy daemon (guacd) version ${GUACAMOLE_VERSION} started\" ${GUACD_LOG}"
-	LOG_FILE_PARAM="$GUACD_POLL_LOG"
 	with_backoff_and_slient
 fi
 
