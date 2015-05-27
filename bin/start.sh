@@ -256,8 +256,50 @@ if [ "$WITH_GUACAMOLE" = true ]; then
 	LOG_FILE_PARAM="$GUACD_POLL_LOG"
 	with_backoff_and_slient
 
+	# Generate TOMCAT_CONF with dynamic port
+	#
+	export TOMCAT_DIR_CONF=${HOME}/tomcat/conf
+	export TOMCAT_CONF=${TOMCAT_DIR_CONF}/new_server.xml
+
+# http://examples.javacodegeeks.com/enterprise-java/tomcat/tomcat-server-xml-configuration-example/
+cat >${TOMCAT_CONF} <<EOF
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="${TOMCAT_SHUTDOWN_PORT}" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+  <Service name="Catalina">
+    <Connector port="${TOMCAT_PORT}" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="${TOMCAT_REDIRECT_PORT}" />
+    <Connector port="${TOMCAT_AJP_PORT}" protocol="AJP/1.3" redirectPort="${TOMCAT_REDIRECT_PORT}" />
+    <Engine name="Catalina" defaultHost="localhost">
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+EOF
+
 	# Run tomcat to start guacamole web-server
-	catalina.sh run 2>&1 | tee ${CATALINA_LOG} &
+	catalina.sh run -config ${TOMCAT_CONF} 2>&1 | tee ${CATALINA_LOG} &
 	CATALINA_PID=$!
 fi
 
@@ -337,10 +379,6 @@ with_backoff_and_slient
 
 if [ "$WITH_GUACAMOLE" = true ]; then
 	CMD_DESC_PARAM="Tomcat Catalina server"
-	# TODO change hard-coded tomcat port 8080:
-	# http://stackoverflow.com/a/16722349/511069
-	# CMD_PARAM="nc -z localhost 8080"
-	# CMD_PARAM="curl --silent --show-error --connect-timeout 1 -I http://localhost:8080 | grep 'HTTP 1.00000'"
 	CMD_PARAM="grep \"org.apache.catalina.startup.Catalina.start Server startup in\" ${CATALINA_LOG}"
 	LOG_FILE_PARAM="$TOMCAT_POLL_LOG"
 	with_backoff_and_slient

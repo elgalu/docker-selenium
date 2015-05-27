@@ -1,12 +1,22 @@
 # Changelog
 
-## v2.45.0-ssh2 (in progress)
- + Make ssh server optional and default to true
- + TODO: Test ssh tunneling works properly
+## v2.45.0-ssh2 (2015-05-27)
+ + Make ssh server optional and default to true (Leo Gallucci)
+ + Allow -e TOMCAT_PORT to be changed from new default port 8484 #15 (Leo Gallucci)
+ + Stop exposing unsecure tcp ports (selenium, vnc, tomcat) and only expose sshd (Leo Gallucci)
+ + Document how to do tunneling in the secured container (Leo Gallucci)
+ + Image tag details:
+  + Selenium: v2.45.0 (5017cb8)
+  + Chrome: 43.0.2357.81
+  + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
+  + Firefox: 38.0
+  + Java: 1.8.0_45-internal OpenJDK 1.8.0_45-internal-b14
+  + Timezone: Europe/Berlin
+  + Digest: sha256:b12e6710b7f8b44721f2c1248df2f41d57a0fb8586314651b126390e1721bf68
 
 ## v2.45.0-ssh1 (2015-05-26)
  + Add sshd so can tunnel to test local apps remotely (Leo Gallucci)
- + Add guacamole server
+ + Add guacamole server (Leo Gallucci)
  + Image tag details:
   + Selenium: v2.45.0 (5017cb8)
   + Chrome: 43.0.2357.81

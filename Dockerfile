@@ -34,6 +34,7 @@ RUN apt-get update -qqy \
     apt-utils \
     sudo \
     net-tools \
+    telnet \
     netcat-openbsd \
     iputils-ping \
     unzip \
@@ -408,7 +409,6 @@ RUN cd ${CATALINA_HOME} && rm -rf webapps/* \
 #========================
 # Guacamole server guacd
 #========================
-ENV GUACAMOLE_SERVER_PORT 4822
 ENV GUACAMOLE_SERVER_SHA1 46d3a541129fb7cad744e4e319be1404781458de
 RUN cd /tmp \
   && echo ${GUACAMOLE_SERVER_SHA1}  guacamole-server.tar.gz > guacamole-server.tar.gz.sha1 \
@@ -453,6 +453,12 @@ ENV VNC_PORT 5900
 # You can set the VNC password or leave null so a random password is generated:
 # ENV VNC_PASSWORD topsecret
 ENV SSHD_PORT 2222
+ENV GUACAMOLE_SERVER_PORT 4822
+# All tomcat ports can be customized if necessary
+ENV TOMCAT_PORT 8484
+ENV TOMCAT_SHUTDOWN_PORT 8485
+ENV TOMCAT_AJP_PORT 8489
+ENV TOMCAT_REDIRECT_PORT 8483
 # Logs
 ENV XVFB_LOG "/var/log/sele/Xvfb_headless.log"
 ENV XMANAGER_LOG "/var/log/sele/xmanager.log"
@@ -466,10 +472,10 @@ ENV GUACD_LOG "/var/log/sele/guacd-server.log"
 #================================
 VOLUME /var/log
 
-#================================
-# Expose Container's Ports
-#================================
-EXPOSE ${SELENIUM_PORT} ${VNC_PORT} ${SSHD_PORT}
+# Only expose ssh port given the other services are not secured
+# forcing the user to open ssh tunnels or use docker run -p ports...
+# EXPOSE ${SELENIUM_PORT} ${VNC_PORT} ${SSHD_PORT} ${TOMCAT_PORT}
+EXPOSE ${SSHD_PORT}
 
 #===================
 # CMD or ENTRYPOINT
