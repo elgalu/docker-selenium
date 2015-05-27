@@ -20,7 +20,11 @@ In general: add `sudo` only if needed in your environment and `--privileged` if 
 
 If your setup is correct, privileged mode and sudo should not be necessary. Also guacamole server is now available:
 
-    docker run --rm --name=ch -p=0.0.0.0:8081:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true elgalu/selenium:v2.45.0-ssh2
+    docker run --rm --name=ch -p=0.0.0.0:8081:8484 -p=0.0.0.0:2222:2222 \
+        -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 \
+        -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
+        -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true \
+        elgalu/selenium:v2.45.0-ssh2
 
 Then open a browser into http://localhost:8081/#/login/ and login to guacamole with user "docker" and the same password as ${VNC_PASSWORD} so you no longer need a VNC client to debug the docker instance.
 
@@ -45,52 +49,67 @@ Enter tunneling.
     # -- Option 1. docker run - Running docker locally
     # Run a selenium instance binding to host random ports
     REMOTE_DOCKER_SRV=localhost
-    CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -p=0.0.0.0:0:4444 -p=0.0.0.0:0:5900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.45.0-ssh2)
+    CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -p=0.0.0.0:0:4444 -p=0.0.0.0:0:5900 \
+        -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.45.0-ssh2)
 
     # -- Option 2. docker run - Running docker on remote docker server like in the cloud
     # Useful if the docker server is running in the cloud. Establish free local ports
     REMOTE_DOCKER_SRV=some.docker.server.com
     ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
     # Note in remote server I'm using authorized_keys instead of id_rsa.pub given it acts as a jump host so my public key is already on that server
-    CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" elgalu/selenium:v2.45.0-ssh2)
+    CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
+        -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" elgalu/selenium:v2.45.0-ssh2)
 
     # -- Common: Wait for the container to start
     while ! docker logs ${CONTAINER} 2>&1 | grep "start.sh all done" >/dev/null; do sleep 0.2; done
-    SSHD_PORT=$(docker inspect -f='{{(index (index .NetworkSettings.Ports "2222/tcp") 0).HostPort}}' $CONTAINER)
+    json_filter='{{(index (index .NetworkSettings.Ports "2222/tcp") 0).HostPort}}'
+    SSHD_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
     echo $SSHD_PORT #=> e.g. SSHD_PORT=32769
 
     # -- Option 1. Obtain dynamic values like container IP and assigned free ports
-    FREE_SELE_PORT=$(docker inspect -f='{{(index (index .NetworkSettings.Ports "4444/tcp") 0).HostPort}}' $CONTAINER)
-    FREE_VNC_PORT=$(docker inspect -f='{{(index (index .NetworkSettings.Ports "5900/tcp") 0).HostPort}}' $CONTAINER)
+    json_filter='{{(index (index .NetworkSettings.Ports "4444/tcp") 0).HostPort}}'
+    FREE_SELE_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
+    json_filter='{{(index (index .NetworkSettings.Ports "5900/tcp") 0).HostPort}}'
+    FREE_VNC_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
 
     # -- Option 2. Get some free ports in current local machine. Needs python.
     # IMPORTANT: Go back to development machine
-    FREE_SELE_PORT=$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-    FREE_VNC_PORT=$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+    FREE_SELE_PORT=$(python -c 'import socket; s=socket.socket(); \
+        s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+    FREE_VNC_PORT=$(python -c 'import socket; s=socket.socket(); \
+        s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
     # -- Option 2. Tunneling selenium and vnc is necessary when using a remote docker machine
-    ssh ${TUNLOCOPTS} localhost:${FREE_SELE_PORT}:localhost:4444 -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
+    ssh ${TUNLOCOPTS} localhost:${FREE_SELE_PORT}:localhost:4444 \
+        -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     LOC_TUN_SELE_PID=$!
-    ssh ${TUNLOCOPTS} localhost:${FREE_VNC_PORT}:localhost:5900 -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
+    ssh ${TUNLOCOPTS} localhost:${FREE_VNC_PORT}:localhost:5900 \
+        -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     LOC_TUN_VNC_PID=$!
     echo $FREE_SELE_PORT $FREE_VNC_PORT
 
     # -- Common: Expose local ports so can be tested as 'localhost' inside the docker container
-    ssh ${TUNREVOPTS} localhost:3000:localhost:3000 -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
+    ssh ${TUNREVOPTS} localhost:3000:localhost:3000 \
+        -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     REM_TUN1_PID=$!
-    ssh ${TUNREVOPTS} localhost:2525:localhost:2525 -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
+    ssh ${TUNREVOPTS} localhost:2525:localhost:2525 \
+        -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     REM_TUN2_PID=$!
-    ssh ${TUNREVOPTS} localhost:4545:localhost:4545 -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
+    ssh ${TUNREVOPTS} localhost:4545:localhost:4545 \
+        -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     REM_TUN3_PID=$!
-    ssh ${TUNREVOPTS} localhost:4546:localhost:4546 -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
+    ssh ${TUNREVOPTS} localhost:4546:localhost:4546 \
+        -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     REM_TUN4_PID=$!
     echo Option 1. Should show 4 ports when doing it locally
     echo Option 2. Should show 6 ports when doing it remotely
-    echo $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
+    echo $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
+        $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
     # Use the container as if selenium and VNC were running locally thanks to ssh -L port FWD
     google-chrome-stable "http://localhost:${FREE_SELE_PORT}/wd/hub/static/resource/hub.html"
     vncv localhost:${FREE_VNC_PORT} -Scaling=70% &
     # Stop all the things after your tests are done
-    kill $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
+    kill $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
+        $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
     # if in Option 2. execute below commands inside docker provider machine `ssh ${REMOTE_DOCKER_SRV}`
     docker stop ${CONTAINER}
     docker rm ${CONTAINER}
