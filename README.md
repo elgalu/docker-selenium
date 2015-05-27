@@ -53,11 +53,12 @@ Enter tunneling.
         -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
         -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.45.0-ssh2)
 
-    # -- Option 2. docker run - Running docker on remote docker server like in the cloud
+    # -- Option 2.docker run- Running docker on remote docker server like in the cloud
     # Useful if the docker server is running in the cloud. Establish free local ports
     REMOTE_DOCKER_SRV=some.docker.server.com
     ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
-    # Note in remote server I'm using authorized_keys instead of id_rsa.pub given it acts as a jump host so my public key is already on that server
+    # Note in remote server I'm using authorized_keys instead of id_rsa.pub given
+    # it acts as a jump host so my public key is already on that server
     CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -e SCREEN_HEIGHT=1110 \
         -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" \
         elgalu/selenium:v2.45.0-ssh2)
@@ -81,7 +82,7 @@ Enter tunneling.
         s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
     FREE_VNC_PORT=$(python -c 'import socket; s=socket.socket(); \
         s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-    # -- Option 2. Tunneling selenium and vnc is necessary when using a remote docker machine
+    # -- Option 2. Tunneling selenium+vnc is necessary if using a remote docker
     ssh ${TUNLOCOPTS} localhost:${FREE_SELE_PORT}:localhost:4444 \
         -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     LOC_TUN_SELE_PID=$!
@@ -90,7 +91,8 @@ Enter tunneling.
     LOC_TUN_VNC_PID=$!
     echo $FREE_SELE_PORT $FREE_VNC_PORT
 
-    # -- Common: Expose local ports so can be tested as 'localhost' inside the docker container
+    # -- Common: Expose local ports so can be tested as 'localhost'
+    # inside the docker container
     ssh ${TUNREVOPTS} localhost:3000:localhost:3000 \
         -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
     REM_TUN1_PID=$!
@@ -107,13 +109,16 @@ Enter tunneling.
     echo Option 2. Should show 6 ports when doing it remotely
     echo $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
         $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
-    # Use the container as if selenium and VNC were running locally thanks to ssh -L port FWD
-    google-chrome-stable "http://localhost:${FREE_SELE_PORT}/wd/hub/static/resource/hub.html"
+    # Use the container as if selenium and VNC were running locally
+    # thanks to ssh -L port FWD
+    google-chrome-stable \
+        "http://localhost:${FREE_SELE_PORT}/wd/hub/static/resource/hub.html"
     vncv localhost:${FREE_VNC_PORT} -Scaling=70% &
     # Stop all the things after your tests are done
     kill $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
         $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
-    # if in Option 2. execute below commands inside docker provider machine `ssh ${REMOTE_DOCKER_SRV}`
+    # if in Option 2. execute below commands inside docker
+    # provider machine `ssh ${REMOTE_DOCKER_SRV}`
     docker stop ${CONTAINER}
     docker rm ${CONTAINER}
 
