@@ -16,14 +16,17 @@ However SeleniumHQ/docker-selenium project focus on building selenium grids whil
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e SCREEN_WIDTH=1550 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=secret elgalu/selenium:v2.45.0-openbox1
+    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.45.0-ssh2
+
+### Non-privileged
 
 If your setup is correct, privileged mode and sudo should not be necessary. Also guacamole server is now available:
 
     docker run --rm --name=ch -p=0.0.0.0:8081:8484 -p=0.0.0.0:2222:2222 \
-        -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 \
-        -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-        -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true \
+                              -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 \
+        -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 \
+        -e VNC_PASSWORD=hola -e WITH_GUACAMOLE=true \
+        -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
         elgalu/selenium:v2.45.0-ssh2
 
 Then open a browser into http://localhost:8081/#/login/ and login to guacamole with user "docker" and the same password as ${VNC_PASSWORD} so you no longer need a VNC client to debug the docker instance.
@@ -46,12 +49,14 @@ Enter tunneling.
 SOPTS="-o StrictHostKeyChecking=no"
 TUNLOCOPTS="-v -N $SOPTS -L"
 TUNREVOPTS="-v -N $SOPTS -R"
+# port 0 means bind to a free available port
+ANYPORT=0
 
 # -- Option 1. docker run - Running docker locally
 # Run a selenium instance binding to host random ports
 REMOTE_DOCKER_SRV=localhost
-CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -p=0.0.0.0:0:4444 -p=0.0.0.0:0:5900 \
-    -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
+CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -p=0.0.0.0:${ANYPORT}:4444 \
+    -p=0.0.0.0:${ANYPORT}:5900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
     -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.45.0-ssh2)
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
@@ -60,7 +65,7 @@ REMOTE_DOCKER_SRV=some.docker.server.com
 ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # Note in remote server I'm using authorized_keys instead of id_rsa.pub given
 # it acts as a jump host so my public key is already on that server
-CONTAINER=$(docker run -d -p=0.0.0.0:0:2222 -e SCREEN_HEIGHT=1110 \
+CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" \
     elgalu/selenium:v2.45.0-ssh2)
 
@@ -124,7 +129,7 @@ docker stop ${CONTAINER}
 docker rm ${CONTAINER}
 ```
 
-### Step by step non-privileged do it yourself
+### Step by step build
 
 #### 1. Build this image
 
