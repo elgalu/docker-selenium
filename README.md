@@ -10,7 +10,7 @@
 ## Note this repo evolved into SeleniumHQ/docker-selenium
 See: https://github.com/SeleniumHQ/docker-selenium
 
-However SeleniumHQ/docker-selenium project focus on building selenium grids while this one focusing on debugging via VNC and meant to be run as a standalone selenium server.
+Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone selenium servers that you should `docker stop` as soon as your tests finishes. It also focuses on debugging via VNC which can be difficult on a Selenium Grid given you can't know in advance in which node will your test end running and therefore can't know to which node to connect via VNC to actually see the test running.
 
 ### One-liner Install & Usage
 
@@ -20,7 +20,7 @@ In general: add `sudo` only if needed in your environment and `--privileged` if 
 
 ### Non-privileged
 
-If your setup is correct, privileged mode and sudo should not be necessary. Also guacamole server is now available:
+If your setup is correct, privileged mode and sudo should not be necessary:
 
     docker run --rm --name=ch -p=0.0.0.0:8484:8484 -p=0.0.0.0:2222:2222 \
                               -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 \
