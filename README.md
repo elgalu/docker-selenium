@@ -29,7 +29,7 @@ If your setup is correct, privileged mode and sudo should not be necessary. Also
         -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
         elgalu/selenium:v2.45.0-ssh2
 
-Make sure `docker run` finishes with *start.sh all done and ready for testing* else you won't be able to start your tests.
+Make sure `docker run` finishes with **start.sh all done and ready for testing** else you won't be able to start your tests.
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
 
 If using option `WITH_GUACAMOLE=true` you can open a browser into http://localhost:8484/#/login/ and login to guacamole with user "docker" and the same password as ${VNC_PASSWORD} so you no longer need a VNC client to debug the docker instance. Else you can simply connect to vnc://localhost:5920 using a VNC client or Safari Browser.
