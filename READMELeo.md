@@ -31,7 +31,9 @@ Note anything after the image will be taken as arguments for the cmd/entrypoint
 
     docker run --rm --name=ch -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true elgalu/selenium:v2.45.0-ssh2
 
-    docker run --rm --name=ch -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 registry.hub.docker.com/elgalu/selenium:v2.45.0-ssh2
+    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.45.0-ssh2
+    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola elgalu/selenium@sha256:b12e6710b7f8b44721f2c1248df2f41d57a0fb8586314651b126390e1721bf68
+    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:v2.45.0-ssh2
     docker run --rm --name=ch -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:v2.45.0-ssh2
 
 However adding a custom host IP to server-selenium.local (e.g. bsele ssh config) is more work:
@@ -51,7 +53,7 @@ https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
     docker login
     docker push elgalu/selenium:v2.45.0-ssh2 ;echo $?;beep
     # doesn't work:
-    docker push registry.hub.docker.com/elgalu/selenium:v2.45.0-ssh2
+    docker push docker.io/elgalu/selenium:v2.45.0-ssh2
 
 Another version
 
@@ -63,7 +65,7 @@ https://registry.hub.docker.com/u/elgalu/selenium/tags/manage/
 
     docker push elgalu/selenium:v2.45.0-ssh2
     docker push elgalu/docker-selenium:v2.45.0-ssh2
-    docker push registry.hub.docker.com/elgalu/docker-selenium:v2.45.0-ssh2
+    docker push docker.io/elgalu/docker-selenium:v2.45.0-ssh2
 
 ## Pulling
 
@@ -130,10 +132,11 @@ https://github.com/mccahill/docker-eclipse-novnc
 
 https://github.com/bencawkwell/dockerfile-xpra/blob/master/Dockerfile#L18
 
+cd ~/oss/docker-desktop/
 https://github.com/rogaha/docker-desktop/blob/master/startup.sh#L7
 https://github.com/rogaha/docker-desktop/blob/master/Dockerfile#L38
 
-## TODO docker nodejsj client for Protractor
+## TODO docker NodeJS client for Protractor
 https://github.com/apocas/dockerode#creating-a-container
 https://github.com/apocas/dockerode/blob/master/examples/run_stdin.js
 https://github.com/apocas/dockerode/blob/master/examples/external_volume.js#L14
