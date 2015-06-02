@@ -24,7 +24,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
 
     docker run --rm --name=ch -p=0.0.0.0:8484:8484 -p=0.0.0.0:2222:2222 \
                               -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 \
-        -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=8000 \
+        -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola -e WITH_GUACAMOLE=false \
         -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
         elgalu/selenium:v2.45.0-ssh2
