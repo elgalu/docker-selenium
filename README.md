@@ -10,7 +10,7 @@
 ## Note this repo evolved into SeleniumHQ/docker-selenium
 See: https://github.com/SeleniumHQ/docker-selenium
 
-Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone selenium servers that you should `docker stop` as soon as your tests finishes. It also focuses on debugging via VNC which can be difficult on a Selenium Grid given you can't know in advance in which node will your test end running and therefore can't know to which node to connect via VNC to actually see the test running.
+Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone selenium servers that you should `docker stop` as soon as your tests finishes. It also focuses on debugging via VNC which can be difficult on a Selenium Grid given you can't know in advance in which node will your test end up running and therefore can't know to which node to connect via VNC to actually see the test running.
 
 ### One-liner Install & Usage
 
@@ -41,6 +41,14 @@ You can also ssh into the machine as long as `SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.p
 That's is useful for tunneling else you can stick with `docker exec` to get into the instance with a shell:
 
     docker exec -ti ch bash
+
+### Security - Use immutable image digests
+Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
+
+    # e.g. for tag v2.45.0-ssh2
+    docker pull elgalu/selenium@sha256:b12e6710b7f8b44721f2c1248df2f41d57a0fb8586314651b126390e1721bf68
+
+You can find all digests sha256 per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
 
 ### Using free available ports and tunneling to emulate localhost testing
 Let's say you need to expose 4 ports (3000, 2525, 4545, 4546) from your laptop but test on the remote docker selenium.
