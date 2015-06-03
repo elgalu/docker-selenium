@@ -42,14 +42,28 @@ That's is useful for tunneling else you can stick with `docker exec` to get into
 
     docker exec -ti ch bash
 
-### Security - Use immutable image digests
+## Security
+
+### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag v2.45.0-ssh2
     export SHA=b12e6710b7f8b44721f2c1248df2f41d57a0fb8586314651b126390e1721bf68
     docker pull elgalu/selenium@sha256:${SHA}
 
-You can find all digests sha256 per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
+### Option 2 - Check the Full Image Id
+
+Verify that image id is indeed correct
+
+    # e.g. full image id for tag v2.45.0-ssh2
+    export IMGID=4b411d30788bbe0bb8e64eaf21af03250388e700d60e1064c93ef5499809ff73
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.45.0-ssh2 |grep ${IMGID} &> /dev/null; then
+        echo "Image ID tested ok"
+    else
+        echo "Image ID doesn't match"
+    fi
+
+You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
 
 ### Using free available ports and tunneling to emulate localhost testing
 Let's say you need to expose 4 ports (3000, 2525, 4545, 4546) from your laptop but test on the remote docker selenium.

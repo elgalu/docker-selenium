@@ -13,6 +13,7 @@
   + Java: 1.8.0_45-internal OpenJDK 1.8.0_45-internal-b14
   + Timezone: Europe/Berlin
   + Digest: sha256:b12e6710b7f8b44721f2c1248df2f41d57a0fb8586314651b126390e1721bf68
+  + Image ID: 4b411d30788bbe0bb8e64eaf21af03250388e700d60e1064c93ef5499809ff73
 
 ## v2.45.0-ssh1 (2015-05-26)
  + Add sshd so can tunnel to test local apps remotely (Leo Gallucci)
@@ -25,6 +26,7 @@
   + Java: 1.8.0_45-internal OpenJDK 1.8.0_45-internal-b14
   + Timezone: Europe/Berlin
   + Digest: sha256:023e36054783629a1d36f74c2abc70f281041aa9f830e13ed8ec79e215f433f5
+  + Image ID: 92400bcf07af7fee256c782596aaa65c7f66d41508ce729a8b1cb6a7b72ef05f
 
 ## v2.45.0-openbox1 (2015-05-22)
  + Send selenium output to stdout so can be picked up by docker logs (Leo Gallucci)
