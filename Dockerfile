@@ -3,7 +3,7 @@
 ################
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:vivid-20150427
+FROM ubuntu:vivid-20150528
 RUN  echo "deb http://archive.ubuntu.com/ubuntu vivid main universe\n" > /etc/apt/sources.list \
   && echo "deb http://archive.ubuntu.com/ubuntu vivid-updates main universe\n" >> /etc/apt/sources.list
 

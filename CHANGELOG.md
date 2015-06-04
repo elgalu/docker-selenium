@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.45.0-ssh3 (2015-06-03)
+ + Upgrade Ubuntu from vivid-20150427 to vivid-20150528 (Leo Gallucci)
+ + Document how to use this docker image securely via sha256 and image ids (Leo Gallucci)
+ + Image tag details:
+  + Selenium: v2.45.0 (5017cb8)
+  + Chrome: 43.0.2357.81
+  + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
+  + Firefox: 38.0
+  + Java: 1.8.0_45-internal OpenJDK 1.8.0_45-internal-b14
+  + Timezone: Europe/Berlin
+  + Digest: sha256:4f9d0d50a1f2f13c3b5fbbe19792dc826d0eb177f87384a9536418e26a6333c5
+  + Image ID: 7edb56ee8ec7aaa6e8e95cc762a80392b662aa75a3c45e97868ad5018f710dc2
+
 ## v2.45.0-ssh2 (2015-05-27)
  + Make ssh server optional and default to true (Leo Gallucci)
  + Allow -e TOMCAT_PORT to be changed from new default port 8484 #15 (Leo Gallucci)

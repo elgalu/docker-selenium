@@ -16,7 +16,7 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.45.0-ssh2
+    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.45.0-ssh3
 
 ### Non-privileged
 
@@ -27,7 +27,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola -e WITH_GUACAMOLE=false \
         -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:v2.45.0-ssh2
+        elgalu/selenium:v2.45.0-ssh3
 
 Make sure `docker run` finishes with **start.sh all done and ready for testing** else you won't be able to start your tests.
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
@@ -47,17 +47,17 @@ That's is useful for tunneling else you can stick with `docker exec` to get into
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag v2.45.0-ssh2
-    export SHA=b12e6710b7f8b44721f2c1248df2f41d57a0fb8586314651b126390e1721bf68
+    # e.g. sha256 for tag v2.45.0-ssh3
+    export SHA=4f9d0d50a1f2f13c3b5fbbe19792dc826d0eb177f87384a9536418e26a6333c5
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
 
 Verify that image id is indeed correct
 
-    # e.g. full image id for tag v2.45.0-ssh2
-    export IMGID=4b411d30788bbe0bb8e64eaf21af03250388e700d60e1064c93ef5499809ff73
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.45.0-ssh2 |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag v2.45.0-ssh3
+    export IMGID=7edb56ee8ec7aaa6e8e95cc762a80392b662aa75a3c45e97868ad5018f710dc2
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.45.0-ssh3 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -83,7 +83,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -p=0.0.0.0:${ANYPORT}:4444 \
     -p=0.0.0.0:${ANYPORT}:5900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.45.0-ssh2)
+    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.45.0-ssh3)
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -93,7 +93,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:v2.45.0-ssh2)
+    elgalu/selenium:v2.45.0-ssh3)
 
 # -- Common: Wait for the container to start
 while ! docker logs ${CONTAINER} 2>&1 | grep \
@@ -165,7 +165,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:v2.45.0-ssh2
+    docker pull elgalu/selenium:v2.45.0-ssh3
 
 #### 2. Use this image
 
