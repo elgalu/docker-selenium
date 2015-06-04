@@ -79,35 +79,56 @@ RUN echo $TZ | tee /etc/timezone \
 # Java7 - OpenJDK JRE headless
 # Minimal runtime used for executing non GUI Java programs
 #==============================
+# Regarding urandom see
+#  http://stackoverflow.com/q/26021181/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     openjdk-7-jre-headless \
+#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/java.security \
+#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/java.security \
 #   && rm -rf /var/lib/apt/lists/*
 
 #==============================
 # Java8 - OpenJDK JRE headless
 # Minimal runtime used for executing non GUI Java programs
 #==============================
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    openjdk-8-jre-headless \
-  && rm -rf /var/lib/apt/lists/*
+# Regarding urandom see
+#  http://stackoverflow.com/q/26021181/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     openjdk-8-jre-headless \
+#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
+#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
+#   && rm -rf /var/lib/apt/lists/*
 
 #==================
 # Java8 - Oracle
 #==================
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     software-properties-common \
-#   && echo debconf shared/accepted-oracle-license-v1-1 \
-#       select true | debconf-set-selections \
-#   && echo debconf shared/accepted-oracle-license-v1-1 \
-#       seen true | debconf-set-selections \
-#   && add-apt-repository ppa:webupd8team/java \
-#   && apt-get update -qqy \
-#   && apt-get -qqy install \
-#     oracle-java8-installer \
-#   && rm -rf /var/lib/apt/lists/*
+# Regarding urandom see
+#  http://stackoverflow.com/q/26021181/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    software-properties-common \
+  && echo debconf shared/accepted-oracle-license-v1-1 \
+      select true | debconf-set-selections \
+  && echo debconf shared/accepted-oracle-license-v1-1 \
+      seen true | debconf-set-selections \
+  && add-apt-repository ppa:webupd8team/java \
+  && apt-get update -qqy \
+  && apt-get -qqy install \
+    oracle-java8-installer \
+  && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+       /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
+  && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+       /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
+  && rm -rf /var/lib/apt/lists/*
 
 #=======
 # Fonts
@@ -277,12 +298,13 @@ RUN apt-get update -qqy \
 #==============================================================================
 # java blocks until kernel have enough entropy to generate the /dev/random seed
 #==============================================================================
-# SeleniumHQ/docker-selenium/issues/14
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    haveged \
-  && service haveged start \
-  && update-rc.d haveged defaults
+# This fix is not working so commented out.
+#  SeleniumHQ/docker-selenium/issues/14
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     haveged rng-tools \
+#   && service haveged start \
+#   && update-rc.d haveged defaults
 
 #==============
 # VNC and Xvfb
@@ -334,8 +356,8 @@ RUN apt-get update -qqy \
 #========================================
 ENV NORMAL_USER application
 ENV NORMAL_GROUP ${NORMAL_USER}
-ENV NORMAL_USER_UID 1001
-ENV NORMAL_USER_GID 1002
+ENV NORMAL_USER_UID 999
+ENV NORMAL_USER_GID 999
 RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
   && useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} \
          --shell /bin/bash  --gid ${NORMAL_USER_GID} \

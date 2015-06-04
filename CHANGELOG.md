@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.45.0-oracle1 (2015-06-04)
+ + Include urandom fix that hangs selenium start up (Matthew Smith)
+ + Switch to Oracle Java 8 to test it out (Leo Gallucci)
+ + Image tag details:
+  + Selenium: v2.45.0 (5017cb8)
+  + Chrome: 43.0.2357.81
+  + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
+  + Firefox: 38.0
+  + Java: 1.8.0_45 HotSpot(TM) 1.8.0_45-b14
+  + Timezone: Europe/Berlin
+  + Digest: sha256:TBD
+  + Image ID: fcaf12794d4311ae5c511cbc5ebc500ff01782b4eac18fe28f994557ebb401fe
+
 ## v2.45.0-ssh4 (2015-06-04)
  + Add option to disable wait for selenium to start (Leo Gallucci)
  + Add jq tool for json querying (Leo Gallucci)
