@@ -57,7 +57,7 @@ Verify that image id is indeed correct
 
     # e.g. full image id for tag v2.45.0-ssh4
     export IMGID=34cffc685e12a021b720c2ea19fe1a48c7d438c129f7859bbae43473e4afc95a
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.45.0-ssh4 |grep ${IMGID} &> /dev/null; the4
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.45.0-ssh4 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
