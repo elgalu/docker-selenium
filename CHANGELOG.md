@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.45.0-ssh4 (2015-06-04)
+ + Add option to disable wait for selenium to start (Leo Gallucci)
+ + Add jq tool for json querying (Leo Gallucci)
+ + Make possible to docker run -v /var/run/docker.sock (Leo Gallucci)
+ + Image tag details:
+  + Selenium: v2.45.0 (5017cb8)
+  + Chrome: 43.0.2357.81
+  + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
+  + Firefox: 38.0
+  + Java: 1.8.0_45-internal OpenJDK 1.8.0_45-internal-b14
+  + Timezone: Europe/Berlin
+  + Digest: sha256:def2d462d0224382c8ac5709ee2b468287d88e6973eb14089925631db8065fbd
+  + Image ID: 34cffc685e12a021b720c2ea19fe1a48c7d438c129f7859bbae43473e4afc95a
+
 ## v2.45.0-ssh3 (2015-06-03)
  + Upgrade Ubuntu from vivid-20150427 to vivid-20150528 (Leo Gallucci)
  + Document how to use this docker image securely via sha256 and image ids (Leo Gallucci)

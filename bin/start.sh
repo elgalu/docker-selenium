@@ -32,11 +32,11 @@ kill_pid_gracefully() {
   [ -z "$pdesc" ]   && die "Need to set Description as 2nd param for kill_pid_gracefully()" 5
   if [ "$the_pid" -gt "0" ] && [ -d /proc/$the_pid ]; then
     echo "Shutting down $pdesc PID: $the_pid.."
-	  if [ "$SUDO_ALLOWED" = true ]; then
-	    sudo kill -s SIGTERM $the_pid
-	  else
-	    kill -s SIGTERM $the_pid
-	  fi
+    if [ "$SUDO_ALLOWED" = true ]; then
+      sudo kill -s SIGTERM $the_pid
+    else
+      kill -s SIGTERM $the_pid
+    fi
     local wait_msg="waiting for $pdesc PID: $the_pid to die..."
     timeout 1 bash -c "while [ -d /proc/$the_pid ]; do sleep 0.1 && echo $wait_msg; done"
     if [ -d /proc/$the_pid ]; then
@@ -202,10 +202,6 @@ XSESSION_PID=$!
 # lightdm-session 2>&1 | tee $XMANAGER_LOG &
 # XSESSION_PID=$!
 
-# Start a GUI xTerm to help debugging when VNC into the container
-x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
-HANDY_TERM_PID=$!
-
 # Start a GUI xTerm to easily debug the headless instance
 # Note sometimes chrome fails with:
 #  session deleted because of page crash from tab crashed
@@ -233,6 +229,10 @@ SELENIUM_PID=$!
 # x-terminal-emulator -geometry 160x40-10-10 -ls -title "local-sel-headless" \
 # -e "$BIN_UTILS/local-sel-headless.sh" 2>&1 | tee $SELENIUM_LOG &
 
+# Start a GUI xTerm to help debugging when VNC into the container
+x-terminal-emulator -geometry 120x40+10+10 -ls -title "x-terminal-emulator" &
+HANDY_TERM_PID=$!
+
 # Set VNC password to a random one is not defined yet
 if [ -z "$VNC_PASSWORD" ]; then
   vnc_password_generated=true
@@ -241,25 +241,25 @@ if [ -z "$VNC_PASSWORD" ]; then
 fi
 
 if [ "$WITH_GUACAMOLE" = true ]; then
-	# Generate config files based on env vars before starting guacamole
-	genereate_guaca_configs.sh || die "Failed to start genereate_guaca_configs!" 9 true
+  # Generate config files based on env vars before starting guacamole
+  genereate_guaca_configs.sh || die "Failed to start genereate_guaca_configs!" 9 true
 
-	# Run guacd
-	# -f     Causes guacd to run in the foreground, rather than automatically forking into the background.
-	guacd -f -b "0.0.0.0" -l ${GUACAMOLE_SERVER_PORT} 2>&1 | tee ${GUACD_LOG} &
-	GUACD_PID=$!
+  # Run guacd
+  # -f     Causes guacd to run in the foreground, rather than automatically forking into the background.
+  guacd -f -b "0.0.0.0" -l ${GUACAMOLE_SERVER_PORT} 2>&1 | tee ${GUACD_LOG} &
+  GUACD_PID=$!
 
-	# For guacd
-	CMD_DESC_PARAM="guacd server"
-	# CMD_PARAM="nc -z localhost ${GUACAMOLE_SERVER_PORT}"
-	CMD_PARAM="grep \"Guacamole proxy daemon (guacd) version ${GUACAMOLE_VERSION} started\" ${GUACD_LOG}"
-	LOG_FILE_PARAM="$GUACD_POLL_LOG"
-	with_backoff_and_slient
+  # For guacd
+  CMD_DESC_PARAM="guacd server"
+  # CMD_PARAM="nc -z localhost ${GUACAMOLE_SERVER_PORT}"
+  CMD_PARAM="grep \"Guacamole proxy daemon (guacd) version ${GUACAMOLE_VERSION} started\" ${GUACD_LOG}"
+  LOG_FILE_PARAM="$GUACD_POLL_LOG"
+  with_backoff_and_slient
 
-	# Generate TOMCAT_CONF with dynamic port
-	#
-	export TOMCAT_DIR_CONF=${HOME}/tomcat/conf
-	export TOMCAT_CONF=${TOMCAT_DIR_CONF}/new_server.xml
+  # Generate TOMCAT_CONF with dynamic port
+  #
+  export TOMCAT_DIR_CONF=${HOME}/tomcat/conf
+  export TOMCAT_CONF=${TOMCAT_DIR_CONF}/new_server.xml
 
 # http://examples.javacodegeeks.com/enterprise-java/tomcat/tomcat-server-xml-configuration-example/
 cat >${TOMCAT_CONF} <<EOF
@@ -298,9 +298,9 @@ cat >${TOMCAT_CONF} <<EOF
 </Server>
 EOF
 
-	# Run tomcat to start guacamole web-server
-	catalina.sh run -config ${TOMCAT_CONF} 2>&1 | tee ${CATALINA_LOG} &
-	CATALINA_PID=$!
+  # Run tomcat to start guacamole web-server
+  catalina.sh run -config ${TOMCAT_CONF} 2>&1 | tee ${CATALINA_LOG} &
+  CATALINA_PID=$!
 fi
 
 # Generate the password file
@@ -319,11 +319,11 @@ x11vnc -storepasswd ${VNC_PASSWORD} ${VNC_STORE_PWD_FILE}
 # -nopw     disable the warn msg when running without some sort of password
 # -xkb      when in modtweak mode, use the XKEYBOARD extension
 # -clear_mods used to clear the state if the display was accidentally left
-# 				  with any pressed down.
+#           with any pressed down.
 # -clear_keys As -clear_mods, except try to release ANY pressed key
 # -clear_all  As -clear_keys, except try to release any CapsLock, NumLock ...
 x11vnc -rfbport $VNC_PORT -display $DISPLAY \
-		-rfbauth ${VNC_STORE_PWD_FILE} -forever -shared 2>&1 | tee $VNC_LOG &
+    -rfbauth ${VNC_STORE_PWD_FILE} -forever -shared 2>&1 | tee $VNC_LOG &
 VNC_SERVER_PID=$!
 
 # Authorize ssh user if $SSH_PUB_KEY was provided
@@ -360,6 +360,27 @@ CMD_PARAM="nc -z localhost $VNC_PORT"
 LOG_FILE_PARAM="$VNC_POLL_LOG"
 with_backoff_and_slient
 
+# If docker running with
+#  -v /var/run/docker.sock:/var/run/docker.sock
+#  -v $(which docker):$(which docker)
+# Fix perms to avoid sudo when the docker container can docker run
+# outside of itself. Useful for integration environments for ex.
+if [ -S "${DOCKER_SOCK}" ] && [ "$SUDO_ALLOWED" = true ]; then
+  TARGET_GID=$(stat -c "%g" ${DOCKER_SOCK})
+  EXISTS=$(cat /etc/group | grep $TARGET_GID | wc -l)
+  # Create new group using target GID and add ${NORMAL_USER}
+  if [ ${EXISTS} == "0" ]; then
+    GROUP_NAME="dockersockgrphelper"
+    # Create the group as it doesn't exist yet
+    sudo groupadd -g ${TARGET_GID} ${GROUP_NAME}
+  else
+    # GID exists, find the group name
+    GROUP_NAME=$(getent group ${TARGET_GID} | cut -d: -f1)
+  fi
+  sudo gpasswd -a ${NORMAL_USER} ${GROUP_NAME}
+  newgrp ${GROUP_NAME}
+fi
+
 # Active wait until selenium is up
 #  Inspired from: http://stackoverflow.com/a/21378425/511069
 #  while ! curl http://localhost:4444/wd/hub/status &>/dev/null; do :; done
@@ -370,7 +391,7 @@ with_backoff_and_slient
 #   sleep 0.1
 # done
 CMD_DESC_PARAM="Selenium"
-CMD_PARAM="curl -s http://localhost:$SELENIUM_PORT/wd/hub/status"
+CMD_PARAM="curl -s http://localhost:$SELENIUM_PORT/wd/hub/status | jq '.state' | grep success"
 LOG_FILE_PARAM="$SELENIUM_POLL_LOG"
 with_backoff_and_slient
 # if [ "$i" -ge "$MAX_WAIT_RETRY_ATTEMPTS" ]; then
@@ -378,10 +399,10 @@ with_backoff_and_slient
 # fi
 
 if [ "$WITH_GUACAMOLE" = true ]; then
-	CMD_DESC_PARAM="Tomcat Catalina server"
-	CMD_PARAM="grep \"org.apache.catalina.startup.Catalina.start Server startup in\" ${CATALINA_LOG}"
-	LOG_FILE_PARAM="$TOMCAT_POLL_LOG"
-	with_backoff_and_slient
+  CMD_DESC_PARAM="Tomcat Catalina server"
+  CMD_PARAM="grep \"org.apache.catalina.startup.Catalina.start Server startup in\" ${CATALINA_LOG}"
+  LOG_FILE_PARAM="$TOMCAT_POLL_LOG"
+  with_backoff_and_slient
 fi
 
 echo

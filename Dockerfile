@@ -35,6 +35,7 @@ RUN apt-get update -qqy \
     sudo \
     net-tools \
     telnet \
+    jq \
     netcat-openbsd \
     iputils-ping \
     unzip \
@@ -151,16 +152,6 @@ RUN cd /tmp \
   && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
   && chmod 755 /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
   && ln -fs /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
-
-#========================================
-# Add normal user with passwordless sudo
-#========================================
-ENV NORMAL_USER application
-ENV NORMAL_USER_UID 999
-RUN useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} --shell /bin/bash --create-home \
-  && usermod -a -G sudo ${NORMAL_USER} \
-  && gpasswd -a ${NORMAL_USER} video \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #=========
 # Openbox
@@ -338,6 +329,21 @@ RUN apt-get update -qqy \
     autoconf libvncserver-dev \
   && rm -rf /var/lib/apt/lists/*
 
+#========================================
+# Add normal user with passwordless sudo
+#========================================
+ENV NORMAL_USER application
+ENV NORMAL_GROUP ${NORMAL_USER}
+ENV NORMAL_USER_UID 1001
+ENV NORMAL_USER_GID 1002
+RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
+  && useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} \
+         --shell /bin/bash  --gid ${NORMAL_USER_GID} \
+         --create-home \
+  && usermod -a -G sudo ${NORMAL_USER} \
+  && gpasswd -a ${NORMAL_USER} video \
+  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
+
 #===================
 # DNS & hosts stuff
 #===================
@@ -356,6 +362,13 @@ RUN mkdir -p ~/.ssh \
   && mkdir -p ${HOME}/.vnc \
   && sudo chown ${NORMAL_USER}:${NORMAL_USER} /var/log/sele
 ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
+
+#===============================
+# Run docker from inside docker
+#===============================
+# Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
+#                   -v $(which docker):$(which docker)
+ENV DOCKER_SOCK "/var/run/docker.sock"
 
 #======================
 # Tomcat for Guacamole
@@ -439,7 +452,7 @@ ENV WITH_SSH true
 # JVM uses only 1/4 of system memory by default
 ENV MEM_JAVA_PERCENT 80
 ENV RETRY_START_SLEEP_SECS 0.1
-ENV MAX_WAIT_RETRY_ATTEMPTS 8
+ENV MAX_WAIT_RETRY_ATTEMPTS 9
 ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
 ENV SCREEN_DEPTH 24
