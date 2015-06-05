@@ -10,7 +10,7 @@
   + Firefox: 38.0
   + Java: 1.8.0_45 HotSpot(TM) 1.8.0_45-b14
   + Timezone: Europe/Berlin
-  + Digest: sha256:TBD
+  + Digest: sha256:e7698b35ca2bbf51caed32ffbc26d1a653ba4a4d26adbbbaab98fb5d02f92fbf
   + Image ID: fcaf12794d4311ae5c511cbc5ebc500ff01782b4eac18fe28f994557ebb401fe
 
 ## v2.45.0-ssh4 (2015-06-04)
