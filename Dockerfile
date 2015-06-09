@@ -4,14 +4,16 @@
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 FROM ubuntu:vivid-20150528
-RUN  echo "deb http://archive.ubuntu.com/ubuntu vivid main universe\n" > /etc/apt/sources.list \
-  && echo "deb http://archive.ubuntu.com/ubuntu vivid-updates main universe\n" >> /etc/apt/sources.list
+ENV UBUNTU_FLAVOR vivid
 
 #== Ubuntu Trusty is 14.04.x, i.e. FROM ubuntu:14.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
 # FROM ubuntu:14.04.2
-# RUN  echo "deb http://archive.ubuntu.com/ubuntu trusty main universe\n" > /etc/apt/sources.list \
-#   && echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main universe\n" >> /etc/apt/sources.list
+# ENV UBUNTU_FLAVOR trusty
+
+#== Ubuntu flavors - common
+RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
+  && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-updates main universe\n" >> /etc/apt/sources.list
 
 MAINTAINER Leo Gallucci <elgalu3@gmail.com>
 
@@ -52,6 +54,7 @@ RUN apt-get update -qqy \
 # Locale and encoding settings
 #==============================
 # TODO: Allow to change instance language OS and Browser level
+#  see if this helps: https://github.com/rogaha/docker-desktop/blob/68d7ca9df47b98f3ba58184c951e49098024dc24/Dockerfile#L57
 ENV LANG_WHICH en
 ENV LANG_WHERE US
 ENV ENCODING UTF-8
@@ -148,7 +151,7 @@ RUN apt-get update -qqy \
 #==========
 # Selenium
 #==========
-ENV SELENIUM_MAJOR_MINOR_VERSION 2.45
+ENV SELENIUM_MAJOR_MINOR_VERSION 2.46
 ENV SELENIUM_PATCH_LEVEL_VERSION 0
 RUN  mkdir -p /opt/selenium \
   && wget --no-verbose http://selenium-release.storage.googleapis.com/$SELENIUM_MAJOR_MINOR_VERSION/selenium-server-standalone-$SELENIUM_MAJOR_MINOR_VERSION.$SELENIUM_PATCH_LEVEL_VERSION.jar -O /opt/selenium/selenium-server-standalone.jar
@@ -250,11 +253,13 @@ RUN apt-get update -qqy \
 # - try /dev/shm? see: https://github.com/travis-ci/travis-ci/issues/938#issuecomment-16345102
 # - try xserver-xephyr see: https://github.com/enkidulan/hangout_api/blob/master/.travis.yml#L5
 # - try /opt/google/chrome/chrome-sandbox see: https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L66
+# Package libnss3-1d might help with issue 20
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
   && apt-get -qqy install \
     google-chrome-stable \
+    libnss3-1d \
   && sudo chmod 1777 /dev/shm \
   && rm -rf /var/lib/apt/lists/* \
   && rm /etc/apt/sources.list.d/google-chrome.list
@@ -306,9 +311,9 @@ RUN apt-get update -qqy \
 #   && service haveged start \
 #   && update-rc.d haveged defaults
 
-#==============
-# VNC and Xvfb
-#==============
+#===================
+# VNC, Xvfb, Xdummy
+#===================
 # xvfb: Xvfb or X virtual framebuffer is a display server
 #  + implements the X11 display server protocol
 #  + performs all graphical operations in memory
@@ -321,6 +326,7 @@ RUN apt-get update -qqy \
     x11vnc \
     xvfb \
     xorg \
+    xserver-xorg-video-dummy \
   && rm -rf /var/lib/apt/lists/*
 
 #======================
@@ -357,7 +363,7 @@ RUN apt-get update -qqy \
 ENV NORMAL_USER application
 ENV NORMAL_GROUP ${NORMAL_USER}
 ENV NORMAL_USER_UID 999
-ENV NORMAL_USER_GID 999
+ENV NORMAL_USER_GID 998
 RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
   && useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} \
          --shell /bin/bash  --gid ${NORMAL_USER_GID} \
@@ -382,7 +388,7 @@ RUN mkdir -p ~/.ssh \
   && chmod 700 ~/.ssh \
   && chmod 600 ~/.ssh/authorized_keys \
   && mkdir -p ${HOME}/.vnc \
-  && sudo chown ${NORMAL_USER}:${NORMAL_USER} /var/log/sele
+  && sudo chown ${NORMAL_USER}:${NORMAL_GROUP} /var/log/sele
 ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
 
 #===============================
@@ -457,15 +463,10 @@ RUN cd /tmp \
   && sudo make install \
   && sudo ldconfig
 
-#================
-# Binary scripts
-#================
-ENV BIN_UTILS /bin-utils
-ADD bin $BIN_UTILS
-
 #========================================================================
 # Some configuration options that can be customized at container runtime
 #========================================================================
+ENV BIN_UTILS /bin-utils
 ENV PATH ${PATH}:${BIN_UTILS}:${CATALINA_HOME}/bin
 # Security requirements might prevent using sudo in the running container
 ENV SUDO_ALLOWED true
@@ -477,9 +478,12 @@ ENV RETRY_START_SLEEP_SECS 0.1
 ENV MAX_WAIT_RETRY_ATTEMPTS 9
 ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
-ENV SCREEN_DEPTH 24
-ENV DISPLAY_NUM 1
+ENV SCREEN_MAIN_DEPTH 24
+ENV SCREEN_DEPTH ${SCREEN_MAIN_DEPTH}+32
+ENV DISPLAY_NUM 10
 ENV DISPLAY :$DISPLAY_NUM
+ENV XEPHYR_DISPLAY_NUM 11
+ENV XEPHYR_DISPLAY :$DISPLAY_NUM
 ENV SCREEN_NUM 0
 # Even though you can change them below, don't worry too much about container
 # internal ports since you can map them to the host via `docker run -p`
@@ -511,6 +515,11 @@ VOLUME /var/log
 # forcing the user to open ssh tunnels or use docker run -p ports...
 # EXPOSE ${SELENIUM_PORT} ${VNC_PORT} ${SSHD_PORT} ${TOMCAT_PORT}
 EXPOSE ${SSHD_PORT}
+
+#================
+# Binary scripts
+#================
+ADD bin $BIN_UTILS
 
 #===================
 # CMD or ENTRYPOINT

@@ -1,15 +1,16 @@
 ## Build
 
-    docker build -t="elgalu/selenium:v2.45.0-oracle1" . ;echo $?;beep
+    docker build -t="elgalu/selenium:v2.46.0-base1" . ;echo $?;beep
 
 ## Run with shared dir
 
     docker run --rm --name=ch -p=127.0.0.1:4460:4444 -p=127.0.0.1:5910:5900 \
-      -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.45.0-oracle1
-    docker run --rm --name=ch -p=127.0.0.1:4460:4444 -p=127.0.0.1:5910:5900 \
-      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium:v2.45.0-oracle1
+      -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.46.0-base1
+    docker run --rm --name=ch -p=4460:4444 -p=5910:5900 \
+      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium:v2.46.0-base1
 
-    docker run --rm --name=ff -p=127.0.0.1:4461:4444 -p=127.0.0.1:5911:5900 -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.45.0-oracle1
+
+    docker run --rm --name=ff -p=127.0.0.1:4461:4444 -p=127.0.0.1:5911:5900 -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.46.0-base1
 
 ## Run without shared dir and bind ports to all network interfaces
 
@@ -32,11 +33,11 @@
 ## Run without dir and bind to all interfaces
 Note anything after the image will be taken as arguments for the cmd/entrypoint
 
-    docker run --rm --name=ch -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true elgalu/selenium:v2.45.0-oracle1
+    docker run --rm --name=ch -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" -e WITH_GUACAMOLE=true elgalu/selenium:v2.46.0-base1
 
-    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.45.0-oracle1
-    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:v2.45.0-oracle1
-    docker run --rm --name=ch -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:v2.45.0-oracle1
+    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-base1
+    docker run --rm --name=ch -p=4470:4444 -p=5920:5900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:v2.46.0-base1
+    docker run --rm --name=ch -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:v2.46.0-base1
 
 However adding a custom host IP to server-selenium.local (e.g. bsele ssh config) is more work:
 
@@ -45,7 +46,7 @@ However adding a custom host IP to server-selenium.local (e.g. bsele ssh config)
 
     vncv localhost:5920 -Scaling=60%  &
 
-    docker run --rm --name=ff -p=0.0.0.0:4471:4444 -p=0.0.0.0:5921:5900 elgalu/selenium:v2.45.0-oracle1
+    docker run --rm --name=ff -p=0.0.0.0:4471:4444 -p=0.0.0.0:5921:5900 elgalu/selenium:v2.46.0-base1
 
 Automatic builds not working for me right now, maybe there is an issue with docker registry v1 vs v2
 https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
@@ -53,24 +54,24 @@ https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
 ## Push version
 
     docker login
-    docker push docker.io/elgalu/selenium:v2.45.0-oracle1 ;echo $?;beep
-    docker tag elgalu/selenium:v2.45.0-oracle1 elgalu/selenium:latest
+    docker push docker.io/elgalu/selenium:v2.46.0-base1 ;echo $?;beep
+    docker tag elgalu/selenium:v2.46.0-base1 elgalu/selenium:latest
     docker push docker.io/elgalu/selenium:latest
 
 Not working maybe because it has automated builds enabled but then it fails in the cloud but works locally
 https://registry.hub.docker.com/u/elgalu/selenium/tags/manage/
 
-    docker push elgalu/selenium:v2.45.0-oracle1
-    docker push elgalu/docker-selenium:v2.45.0-oracle1
-    docker push docker.io/elgalu/docker-selenium:v2.45.0-oracle1
+    docker push elgalu/selenium:v2.46.0-base1
+    docker push elgalu/docker-selenium:v2.46.0-base1
+    docker push docker.io/elgalu/docker-selenium:v2.46.0-base1
 
 ## Pulling
 
-    docker pull registry.hub.docker.com/elgalu/selenium:v2.45.0-oracle1
+    docker pull registry.hub.docker.com/elgalu/selenium:v2.46.0-base1
 
 ## Pull
 
-    docker run -d --name=max -p=0.0.0.0:4411:4444 -p=0.0.0.0:5911:5900 elgalu/selenium:v2.45.0-oracle1
+    docker run -d --name=max -p=0.0.0.0:4411:4444 -p=0.0.0.0:5911:5900 elgalu/selenium:v2.46.0-base1
 
 How to connect through vnc (need a vnc client)
 
@@ -110,6 +111,59 @@ Check it works
                 ],
         },
     },
+
+## Some stuff that didn't help solve the chrome crashed issue
+Dockerfile
+
+    # Disable the SUID sandbox so that Chrome can launch without being in a privileged container.
+    # One unfortunate side effect is that `google-chrome --help` will no longer work.
+    RUN dpkg-divert --add --rename --divert \
+          /opt/google/chrome/google-chrome.real /opt/google/chrome/google-chrome \
+      && echo "#!/bin/bash\nexec /opt/google/chrome/google-chrome.real --disable-setuid-sandbox \"\$@\"" \
+          > /opt/google/chrome/google-chrome \
+      && chmod 755 /opt/google/chrome/google-chrome
+
+    #=========================
+    # Install Xpra and Xephyr
+    #=========================
+    USER root
+    RUN wget -qO - http://winswitch.org/gpg.asc | apt-key add - \
+      && echo "deb http://winswitch.org/ ${UBUNTU_FLAVOR} main" > /etc/apt/sources.list.d/winswitch.list
+    RUN apt-get update -qqy \
+      && apt-get -qqy install \
+        xpra \
+        xserver-xephyr \
+        xserver-xorg-video-dummy \
+      && mkdir -p ${HOME}/.xpra \
+      && chown ${NORMAL_USER}:${NORMAL_GROUP} ${HOME}/.xpra \
+      && rm -rf /var/lib/apt/lists/*
+
+start.sh
+
+    # Xorg -dpi 96 -noreset -nolisten tcp +extension GLX +extension RANDR +extension RENDER -logfile ${XVFB_LOG} -config ~/xorg.conf &
+    # XORG_CMD="Xorg -dpi 96 -noreset -nolisten tcp +extension GLX +extension RANDR +extension RENDER -logfile ${XVFB_LOG} -config ~/xorg.conf"
+    # xpra --no-daemon --xvfb="${XORG_CMD}" start ${DISPLAY}
+    # XVFB_PID=$!
+
+    # xpra start ${DISPLAY}
+    # sleep 5
+
+    # xpra stop ${DISPLAY}
+    # sleep 5
+
+    # dbus-launch - Utility to start a message bus from a shell script
+    # With no arguments, dbus-launch will launch a session bus instance
+    # and print the address and PID of that instance to standard output
+    # dbus-launch
+    # DBUS_PID=$!
+    # | sed -e "DBUS_SESSION_BUS_PID="
+
+    # --xvfb -auth /home/docker/.Xauthority
+      # --start-child="Xephyr -ac -screen ${SCREEN_SIZE} -query localhost -host-cursor -reset -terminate ${DISPLAY}" \
+      # --xvfb="Xorg -dpi 96 -noreset -nolisten tcp +extension GLX +extension RANDR +extension RENDER -logfile ${XVFB_LOG} -config ~/xorg.conf"
+    # xpra start ${DISPLAY} --no-daemon --no-pulseaudio --no-mdns --no-notifications \
+    #   --start-child="Xephyr -ac -screen ${SCREEN_SIZE} -query localhost -host-cursor -reset -terminate ${XEPHYR_DISPLAY}" \
+    #   --xvfb="Xvfb ${DISPLAY} +extension Composite -screen ${SCREEN_NUM} ${GEOMETRY} -nolisten tcp -noreset"
 
 ## TODO R&D
 

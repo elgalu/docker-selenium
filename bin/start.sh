@@ -123,6 +123,7 @@ function shutdown {
 }
 
 export GEOMETRY="$SCREEN_WIDTH""x""$SCREEN_HEIGHT""x""$SCREEN_DEPTH"
+export SCREEN_SIZE="$SCREEN_WIDTH""x""$SCREEN_HEIGHT"""
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 export CONTAINER_IP=$(ip addr show dev eth0 | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
 # Active waits (poll) logs
@@ -147,11 +148,22 @@ if [ "$SUDO_ALLOWED" = true ]; then
   sudo -E sh -c 'echo "$CONTAINER_IP    guest.docker"       >> /etc/hosts'
 fi
 
-# Start the X server that can run on machines with no display
-# hardware and no physical input devices
-Xvfb $DISPLAY -screen $SCREEN_NUM $GEOMETRY \
-    -ac -r -cc 4 -accessx -xinerama -extension RANDR 2>&1 | tee $XVFB_LOG &
+# Start the X server that can run on machines with no real display
+#==============================
+# using Xvfb instead of Xdummy
+#==============================
+Xvfb ${DISPLAY} -screen ${SCREEN_NUM} ${GEOMETRY} -ac -r -cc 4 -accessx \
+  -xinerama +extension Composite -extension RANDR 2>&1 | tee $XVFB_LOG &
 XVFB_PID=$!
+
+# Start the X server that can run on machines with no real display
+#==============================
+# using Xdummy instead of Xvfb
+#==============================
+# genereate_xorg_configs.sh || die "Failed to start genereate_xorg_configs!" 11 true
+# Xorg ${DISPLAY} -dpi 96 -noreset -nolisten tcp +extension GLX +extension RANDR \
+#   +extension RENDER -logfile ${XVFB_LOG} -config ${HOME}/xorg.conf | tee $XVFB_LOG &
+# XVFB_PID=$!
 
 # Active wait for $DISPLAY to be ready: https://goo.gl/mGttpb
 # for i in $(seq 1 $MAX_WAIT_RETRY_ATTEMPTS); do
@@ -218,7 +230,7 @@ XSESSION_PID=$!
 #          },
 #      },
 # Example of using xvfb-run to just run selenium:
-#   xvfb-run --server-num=$DISPLAY_NUM --server-args="-screen $SCREEN_NUM $GEOMETRY" \
+#   xvfb-run --server-num=$DISPLAY_NUM --server-args="-screen ${SCREEN_NUM} ${GEOMETRY}" \
 #       "$BIN_UTILS/local-sel-headless.sh"  &
 # Example of sending selenium output to a log instead of stdout
 #   $BIN_UTILS/local-sel-headless.sh > $SELENIUM_LOG  &
