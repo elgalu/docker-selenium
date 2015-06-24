@@ -70,12 +70,6 @@ https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
     docker tag elgalu/selenium:v2.46.0-x11 elgalu/selenium:latest
     docker push docker.io/elgalu/selenium:latest
 
-Pier One
-
-    CURVERSION="v2.46.0-base1"
-    docker tag elgalu/selenium:${CURVERSION} pierone.stups.zalan.do/tip/selenium:${CURVERSION}
-    docker push pierone.stups.zalan.do/tip/selenium:${CURVERSION}
-
 Not working maybe because it has automated builds enabled but then it fails in the cloud but works locally
 https://registry.hub.docker.com/u/elgalu/selenium/tags/manage/
 
