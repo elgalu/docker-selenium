@@ -147,17 +147,17 @@ Note image ids also change after scm-source.json has being updated which trigger
  + No need to expose port 5555 (Leo Gallucci)
  + Removed the need to set --no-sandbox for Chrome (Matthew Smith)
 
-## v2.44.0 (2014-11-02)
+## v2.44.0 (2014-11-02) - alpha
  + Upgrade to selenium v2.44.0 (Leo Gallucci)
  + Upgrade chromedriver to 2.12 (Leo Gallucci)
 
-## v2.43.1 (2014-09-25)
+## v2.43.1 (2014-09-25) - alpha
  + Upgrade to selenium v2.43.1 (Leo Gallucci)
  + Upgrade chromedriver to 2.10 (Leo Gallucci)
  + /etc/hosts hack no longer necessary since docker >= 1.2.0 (Leo Gallucci)
  + Specify exact base image from ubuntu:14.04 to ubuntu:14.04.1 (Leo Gallucci)
 
-## v2.42.2 (2014-07-11)
+## v2.42.2 (2014-07-11) - alpha
  + Initial working version (Leo Gallucci)
 
 
