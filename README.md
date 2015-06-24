@@ -16,7 +16,7 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-base1
+    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-x11
 
 ### Non-privileged
 
@@ -27,7 +27,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola -e WITH_GUACAMOLE=false \
         -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:v2.46.0-base1
+        elgalu/selenium:v2.46.0-x11
 
 Make sure `docker run` finishes with **start.sh all done and ready for testing** else you won't be able to start your tests.
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
@@ -38,11 +38,27 @@ You can also ssh into the machine as long as `SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.p
 
     ssh -p 2222 -o StrictHostKeyChecking=no application@localhost
 
+Include `-X` in ssh command if you want to redirect the started GUI programs to your host, e.g.
+
+    ssh -X -p 2222 -o StrictHostKeyChecking=no application@localhost
+    echo $DISPLAY #=> localhost:10.0
+
 That's is useful for tunneling else you can stick with `docker exec` to get into the instance with a shell:
 
     docker exec -ti ch bash
 
 ## Security
+
+Starting version [v2.46.0-x11][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image. This is how the file looks like:
+
+```
+cat scm-source.json #=> { "url": "https://github.com/elgalu/docker-selenium",
+                          "revision": "8d2e03d8b4c45c72e0c73481d5141850d54122fe",
+                          "author": "lgallucci",
+                          "status": "" }
+```
+
+There are also additional steps you can take to ensure you're using the correct image:
 
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
@@ -65,6 +81,24 @@ Verify that image id is indeed correct
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
 
+### Using Xephyr to redirect X to the docker host
+Note the below method gives full access to the docker container to the host machine.
+Host machine, terminal 1:
+
+    sudo apt-get install xserver-xephyr
+    export XE_DISP_NUM=12 SCREEN_WIDTH=2000 SCREEN_HEIGHT=1500
+    Xephyr -ac -br -noreset -resizeable \
+        -screen ${SCREEN_WIDTH}x${SCREEN_HEIGHT} :${XE_DISP_NUM}
+
+Host machine, terminal 2:
+
+    docker run --rm --name=ch -p=4470:4444 \
+      -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
+      -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
+      elgalu/selenium:v2.46.0-x11
+
+Now when you run your tests instead of connecting. If docker run fails try `xhost +`
+
 ### Using free available ports and tunneling to emulate localhost testing
 Let's say you need to expose 4 ports (3000, 2525, 4545, 4546) from your laptop but test on the remote docker selenium.
 Enter tunneling.
@@ -83,7 +117,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -p=0.0.0.0:${ANYPORT}:4444 \
     -p=0.0.0.0:${ANYPORT}:5900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-base1
+    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-x11
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -93,7 +127,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:v2.46.0-base1
+    elgalu/selenium:v2.46.0-x11
 
 # -- Common: Wait for the container to start
 while ! docker logs ${CONTAINER} 2>&1 | grep \
@@ -165,7 +199,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:v2.46.0-base1
+    docker pull elgalu/selenium:v2.46.0-x11
 
 #### 2. Use this image
 
@@ -201,6 +235,11 @@ This command line is the same as for Chrome, remember that the selenium running 
     FF=$(docker run --rm --name=ff -p=127.0.0.1::4444 -p=127.0.0.1::5900 \
         -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
 
+##### How to get docker internal IP through logs
+
+    CONTAINER_IP=$(docker logs sele10 2>&1 | grep "Container docker internal IP: " | sed -e 's/.*IP: //' -e 's/<.*$//')
+    echo ${CONTAINER_IP} #=> 172.17.0.34
+
 ##### Look around
 
     docker images
@@ -225,3 +264,5 @@ Container leaves a few logs files to see what happened:
     /tmp/x11vnc_forever.log
     /tmp/local-sel-headless.log
     /tmp/selenium-server-standalone.log
+
+[v2.46.0-x11]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-x11

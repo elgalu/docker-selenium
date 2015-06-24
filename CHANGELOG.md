@@ -1,5 +1,28 @@
 # Changelog
 
+Note sha256 digests are generated after pushing the image to the registry therefore the last version of this docker-selenium will always have digest TBD (to be determined) but will be updated manually at [releases][]
+
+Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
+
+## v2.46.0-x11 (2015-06-24)
+ + Ability to pass extra params to the selenium server via SELENIUM_PARAMS (Rogov Viktor)
+ + Allow to set -e XE_DISP_NUM so X11 can be redirect to the host (Leo Gallucci)
+ + Add README note on how to use Xephyr to redirect X to the docker host
+ + Upgrade from ubuntu:vivid-20150528 to ubuntu:vivid-20150611
+ + Upgrade guacamole from 0.9.6 to 0.9.7
+ + Start using pip-based alternate script to get more up-to-date Firefox version
+ + Image tag details:
+  + Selenium: v2.46.0 (87c69e2)
+  + Chrome: 43.0.2357.130
+  + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
+  + Firefox: 38.0.5
+  + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.7.0, build 0baf609
+  + Python: 2.7.9
+  + Digest: sha256:TBD
+  + Image ID: TBD
+
 ## v2.46.0-base1 (2015-06-09)
  + Upgrade selenium from 2.45.0 to 2.46.0
  + Upgrade chromedriver from 2.15 to 2.16
@@ -10,7 +33,6 @@
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
   + Firefox: 38.0
   + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
-  + Linux Kernel: 3.18.11-031811-generic amd64
   + Timezone: Europe/Berlin
   + Digest: sha256:dc7568c79355b6bde63706165b07f3c22e64e5749e12ab3591e5160776e09b1b
   + Image ID: 4f827cfc7317413d2e73ef17c6da6216f92d60d080b70fffc15058543e820b93
@@ -137,3 +159,6 @@
 
 ## v2.42.2 (2014-07-11)
  + Initial working version (Leo Gallucci)
+
+
+[releases]: https://github.com/elgalu/docker-selenium/releases/

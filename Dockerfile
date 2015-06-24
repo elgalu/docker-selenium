@@ -1,15 +1,24 @@
-################
-# Headless e2e #
-################
-#== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
+###################################################
+# Selenium standalone docker for Chrome & Firefox #
+###################################################
+#== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:vivid-20150528
+# FROM ubuntu:wily-20150611
+# ENV UBUNTU_FLAVOR wily
+
+#== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
+FROM ubuntu:vivid-20150611
 ENV UBUNTU_FLAVOR vivid
 
-#== Ubuntu Trusty is 14.04.x, i.e. FROM ubuntu:14.04
+#== Ubuntu trusty is 14.04.x, i.e. FROM ubuntu:14.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
 # FROM ubuntu:14.04.2
 # ENV UBUNTU_FLAVOR trusty
+
+#== Ubuntu precise is 12.04.x, i.e. FROM ubuntu:12.04
+#== Could also use ubuntu:latest but for the sake I replicating an precise env...
+# FROM ubuntu:precise-20150612
+# ENV UBUNTU_FLAVOR precise
 
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
@@ -148,35 +157,6 @@ RUN apt-get update -qqy \
     libfontconfig \
   && rm -rf /var/lib/apt/lists/*
 
-#==========
-# Selenium
-#==========
-ENV SELENIUM_MAJOR_MINOR_VERSION 2.46
-ENV SELENIUM_PATCH_LEVEL_VERSION 0
-RUN  mkdir -p /opt/selenium \
-  && wget --no-verbose http://selenium-release.storage.googleapis.com/$SELENIUM_MAJOR_MINOR_VERSION/selenium-server-standalone-$SELENIUM_MAJOR_MINOR_VERSION.$SELENIUM_PATCH_LEVEL_VERSION.jar -O /opt/selenium/selenium-server-standalone.jar
-
-#==================
-# Chrome webdriver
-#==================
-# How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ENV CPU_ARCH 64
-ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
-ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
-# Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
-RUN cd /tmp \
-  # && CHROME_DRIVER_VERSION=2.15 \
-  && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
-  && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
-  && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
-  && cd /opt/selenium \
-  && rm -rf chromedriver \
-  && unzip /tmp/chromedriver_linux${CPU_ARCH}.zip \
-  && rm /tmp/chromedriver_linux${CPU_ARCH}.zip \
-  && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
-  && chmod 755 /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION \
-  && ln -fs /opt/selenium/chromedriver-$CHROME_DRIVER_VERSION /usr/bin/chromedriver
-
 #=========
 # Openbox
 # A lightweight window manager using freedesktop standards
@@ -235,34 +215,100 @@ RUN apt-get update -qqy \
 #   && chown -R ${NORMAL_USER}:${NORMAL_USER} ${XAUTH_DIR} \
 #   && rm -rf /var/lib/apt/lists/*
 
-#=========
+#======================
 # GNOME ubuntu-desktop
 # The fat and full featured windows manager
-#=========
+#======================
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     ubuntu-desktop \
 #   && rm -rf /var/lib/apt/lists/*
 
-#==========================
-# Google Chrome - Latest
+#========================================
+# Add normal user with passwordless sudo
+#========================================
+ENV NORMAL_USER application
+ENV NORMAL_GROUP ${NORMAL_USER}
+ENV NORMAL_USER_UID 998
+ENV NORMAL_USER_GID 997
+RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
+  && useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} \
+         --shell /bin/bash  --gid ${NORMAL_USER_GID} \
+         --create-home \
+  && usermod -a -G sudo ${NORMAL_USER} \
+  && gpasswd -a ${NORMAL_USER} video \
+  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
+ENV NORMAL_USER_HOME /home/${NORMAL_USER}
+
+#==========
+# Selenium
+#==========
+USER ${NORMAL_USER}
+ENV SEL_MAJOR_MINOR_VER 2.46
+ENV SEL_PATCH_LEVEL_VER 0
+ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
+RUN  mkdir -p ${SEL_HOME} \
+  && export SELBASE="http://selenium-release.storage.googleapis.com" \
+  && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
+  && wget --no-verbose ${SELBASE}/${SELPATH} \
+      -O ${SEL_HOME}/selenium-server-standalone.jar
+
+#==================
+# Chrome webdriver
+#==================
+# How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
+ENV CPU_ARCH 64
+ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
+ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
+# Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
+RUN mkdir -p ${NORMAL_USER_HOME}/tmp &&  cd ${NORMAL_USER_HOME}/tmp \
+  # && CHROME_DRIVER_VERSION=2.15 \
+  && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
+  && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
+  && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
+  && cd ${SEL_HOME} \
+  && rm -rf chromedriver \
+  && unzip ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
+  && rm ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
+  && mv ${SEL_HOME}/chromedriver \
+        ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
+  && chmod 755 ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
+  && ln -s ${SEL_HOME}/chromedriver-${CHROME_DRIVER_VERSION} \
+           ${SEL_HOME}/chromedriver
+
+#==========================================================
+# Google Chrome - Keep chrome versions as they delete them
+#==========================================================
+# TODO: Use Google fingerprint to verify downloads
+#  http://www.google.de/linuxrepositories/
+RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
+  && wget --no-verbose -O \
+    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
+    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+
+# back to sudo
+USER root
+
+#=====================================
+# Google Chrome - Latest through apt
+#=====================================
 #==========================
 # If you have issue "Failed to move to new PID namespace" on OpenVZ (AWS ECS)
 #  https://bugs.launchpad.net/chromium-browser/+bug/577919
 # - try to pass chrome switch --no-sandbox see: http://peter.sh/experiments/chromium-command-line-switches/#no-sandbox
 # - try /dev/shm? see: https://github.com/travis-ci/travis-ci/issues/938#issuecomment-16345102
 # - try xserver-xephyr see: https://github.com/enkidulan/hangout_api/blob/master/.travis.yml#L5
+#     && sudo chmod 1777 /dev/shm \
 # - try /opt/google/chrome/chrome-sandbox see: https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L66
 # Package libnss3-1d might help with issue 20
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-  && apt-get update -qqy \
-  && apt-get -qqy install \
-    google-chrome-stable \
-    libnss3-1d \
-  && sudo chmod 1777 /dev/shm \
-  && rm -rf /var/lib/apt/lists/* \
-  && rm /etc/apt/sources.list.d/google-chrome.list
+#     libnss3-1d \
+# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+#   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+#   && apt-get update -qqy \
+#   && apt-get -qqy install \
+#     google-chrome-stable \
+#   && rm -rf /var/lib/apt/lists/* \
+#   && rm /etc/apt/sources.list.d/google-chrome.list
 
 #=========
 # Android
@@ -274,31 +320,50 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 # Mozilla Firefox - Latest
 #==========================
 # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    firefox \
-    dbus-x11 \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     firefox \
+#     dbus-x11 \
+#   && rm -rf /var/lib/apt/lists/*
 
 #====================================
 # Mozilla Firefox - Specific Version
 #====================================
-# # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
-# # FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
-# ENV FIREFOX_VERSION latest
-# # FF_LANG can be either en-US // de // fr and so on
-# ENV FF_LANG "en-US"
-# # RUN apt-get update -qqy \
-# #   && apt-get -qqy install \
-# #     python2.7 python-pip python2.7-dev python-openssl libssl-dev libffi-dev \
-# #     dbus-x11 \
-# #   && easy_install -U pip \
-# #   && pip install --upgrade mozdownload mozInstall \
-# #   && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
-# #                  --platform=linux64  --log-level=WARN --version=$FIREFOX_VERSION \
-# #   && mozinstall --app=firefox firefox-$FIREFOX_VERSION.$FF_LANG.linux64.tar.bz2 --destination=/opt/selenium \
-# #   && ln -s /opt/selenium/firefox/firefox /usr/bin \
-# #   && rm -rf /var/lib/apt/lists/*
+# Where to find latest version:
+#  http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
+# FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
+# FF_LANG can be either en-US // de // fr and so on
+ENV FIREFOX_VERSION latest
+ENV FF_LANG "en-US"
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    python2.7 python-pip python2.7-dev python-openssl \
+    libssl-dev libffi-dev dbus-x11 \
+  && easy_install -U pip \
+  && pip install --upgrade mozdownload mozInstall \
+  && mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+  && cd ${NORMAL_USER_HOME}/firefox-src \
+  && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
+      --platform=linux64 --log-level=WARN --version=$FIREFOX_VERSION \
+  && mozinstall --app=firefox \
+      firefox-$FIREFOX_VERSION.$FF_LANG.linux64.tar.bz2 \
+      --destination=${SEL_HOME} \
+  && ln -s ${SEL_HOME}/firefox/firefox /usr/bin \
+  && rm -rf /var/lib/apt/lists/*
+
+#==========================================
+# Chrome, Chromedriver, Firefox sudo steps
+#==========================================
+# RUN dpkg -i ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    gdebi \
+  && gdebi --non-interactive \
+      ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
+  && ln -s ${SEL_HOME}/chromedriver /usr/bin \
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+  && rm -rf /var/lib/apt/lists/*
 
 #==============================================================================
 # java blocks until kernel have enough entropy to generate the /dev/random seed
@@ -357,21 +422,6 @@ RUN apt-get update -qqy \
     autoconf libvncserver-dev \
   && rm -rf /var/lib/apt/lists/*
 
-#========================================
-# Add normal user with passwordless sudo
-#========================================
-ENV NORMAL_USER application
-ENV NORMAL_GROUP ${NORMAL_USER}
-ENV NORMAL_USER_UID 999
-ENV NORMAL_USER_GID 998
-RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
-  && useradd ${NORMAL_USER} --uid ${NORMAL_USER_UID} \
-         --shell /bin/bash  --gid ${NORMAL_USER_GID} \
-         --create-home \
-  && usermod -a -G sudo ${NORMAL_USER} \
-  && gpasswd -a ${NORMAL_USER} video \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
-
 #===================
 # DNS & hosts stuff
 #===================
@@ -382,7 +432,7 @@ COPY ./etc/hosts /tmp/hosts
 #==================
 USER ${NORMAL_USER}
 ENV USER ${NORMAL_USER}
-ENV HOME /home/${USER}
+ENV HOME ${NORMAL_USER_HOME}
 RUN mkdir -p ~/.ssh \
   && touch ~/.ssh/authorized_keys \
   && chmod 700 ~/.ssh \
@@ -390,13 +440,6 @@ RUN mkdir -p ~/.ssh \
   && mkdir -p ${HOME}/.vnc \
   && sudo chown ${NORMAL_USER}:${NORMAL_GROUP} /var/log/sele
 ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
-
-#===============================
-# Run docker from inside docker
-#===============================
-# Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
-#                   -v $(which docker):$(which docker)
-ENV DOCKER_SOCK "/var/run/docker.sock"
 
 #======================
 # Tomcat for Guacamole
@@ -434,8 +477,8 @@ RUN mkdir -p ${CATALINA_HOME} \
 # Guacamole web-app
 #===================
 # https://github.com/glyptodon/guacamole-server/releases
-ENV GUACAMOLE_VERSION 0.9.6
-ENV GUACAMOLE_WAR_SHA1 cfe41c7b2c6229db7bd10ae96f3844d9da19f8e4
+ENV GUACAMOLE_VERSION 0.9.7
+ENV GUACAMOLE_WAR_SHA1 69b7566092cf13076bddc331772a5b31dba45fb5
 ENV GUACAMOLE_HOME ${HOME}/guacamole
 RUN mkdir -p ${GUACAMOLE_HOME}
 # http://guac-dev.org/doc/gug/configuring-guacamole.html
@@ -450,7 +493,7 @@ RUN cd ${CATALINA_HOME} && rm -rf webapps/* \
 #========================
 # Guacamole server guacd
 #========================
-ENV GUACAMOLE_SERVER_SHA1 46d3a541129fb7cad744e4e319be1404781458de
+ENV GUACAMOLE_SERVER_SHA1 43883eb86d70b68da723a2d57d50d866a8af5f16
 RUN cd /tmp \
   && echo ${GUACAMOLE_SERVER_SHA1}  guacamole-server.tar.gz > guacamole-server.tar.gz.sha1 \
   && wget --no-verbose -O guacamole-server.tar.gz "http://sourceforge.net/projects/guacamole/files/current/source/guacamole-server-${GUACAMOLE_VERSION}.tar.gz/download" \
@@ -480,10 +523,9 @@ ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
 ENV SCREEN_MAIN_DEPTH 24
 ENV SCREEN_DEPTH ${SCREEN_MAIN_DEPTH}+32
-ENV DISPLAY_NUM 10
-ENV DISPLAY :$DISPLAY_NUM
-ENV XEPHYR_DISPLAY_NUM 11
-ENV XEPHYR_DISPLAY :$DISPLAY_NUM
+ENV DISP_N 10
+ENV DISPLAY :${DISP_N}
+ENV XEPHYR_DISPLAY :${DISP_N}
 ENV SCREEN_NUM 0
 # Even though you can change them below, don't worry too much about container
 # internal ports since you can map them to the host via `docker run -p`
@@ -505,6 +547,11 @@ ENV VNC_LOG "/var/log/sele/x11vnc_forever.log"
 ENV SELENIUM_LOG "/var/log/sele/selenium-server-standalone.log"
 ENV CATALINA_LOG "/var/log/sele/tomcat-server.log"
 ENV GUACD_LOG "/var/log/sele/guacd-server.log"
+#===============================
+# Run docker from inside docker
+# Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
+#                   -v $(which docker):$(which docker)
+ENV DOCKER_SOCK "/var/run/docker.sock"
 
 #================================
 # Expose Container's Directories
@@ -520,6 +567,15 @@ EXPOSE ${SSHD_PORT}
 # Binary scripts
 #================
 ADD bin $BIN_UTILS
+
+#=====================================================
+# Meta JSON file to hold commit info of current build
+#=====================================================
+COPY scm-source.json /
+# Ensure the file is up-to-date else you should update it by running
+#  ./host-scripts/gen-scm-source.sh
+# on the host
+RUN find /scm-source.json -mmin +1 -exec echo "good enough" \;
 
 #===================
 # CMD or ENTRYPOINT
