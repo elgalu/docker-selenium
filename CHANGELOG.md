@@ -20,8 +20,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.0, build 0baf609
   + Python: 2.7.9
-  + Digest: sha256:TBD
-  + Image ID: TBD
+  + Digest: sha256:8d67d3d15dfd449e94433de46c352ff135f38678ebd6e217b613e7f1770d5490
+  + Image ID: 247b69cbd53ef323b117362fd8bb7510276c5e9a702d15e8573223b0467538fb
 
 ## v2.46.0-base1 (2015-06-09)
  + Upgrade selenium from 2.45.0 to 2.46.0

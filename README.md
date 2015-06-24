@@ -49,7 +49,11 @@ That's is useful for tunneling else you can stick with `docker exec` to get into
 
 ## Security
 
-Starting version [v2.46.0-x11][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image. This is how the file looks like:
+Starting version [v2.46.0-x11][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
+
+Note [scm-source.json](./scm-source.json) file will always be 1 commit outdated in the repo but will be correct inside the container.
+
+This is how the file looks like:
 
 ```
 cat scm-source.json #=> { "url": "https://github.com/elgalu/docker-selenium",
@@ -63,17 +67,17 @@ There are also additional steps you can take to ensure you're using the correct 
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag v2.46.0-base1
-    export SHA=dc7568c79355b6bde63706165b07f3c22e64e5749e12ab3591e5160776e09b1b
+    # e.g. sha256 for tag v2.46.0-x11
+    export SHA=8d67d3d15dfd449e94433de46c352ff135f38678ebd6e217b613e7f1770d5490
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
 
 Verify that image id is indeed correct
 
-    # e.g. full image id for tag v2.46.0-base1
-    export IMGID=4f827cfc7317413d2e73ef17c6da6216f92d60d080b70fffc15058543e820b93
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-base1 |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag v2.46.0-x11
+    export IMGID=247b69cbd53ef323b117362fd8bb7510276c5e9a702d15e8573223b0467538fb
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-x11 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
