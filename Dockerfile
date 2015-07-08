@@ -7,16 +7,22 @@
 # ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
+# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
+#                    http://cloud-images.ubuntu.com/releases/15.04/
 FROM ubuntu:vivid-20150611
 ENV UBUNTU_FLAVOR vivid
 
 #== Ubuntu trusty is 14.04.x, i.e. FROM ubuntu:14.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
+# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
+#                    http://cloud-images.ubuntu.com/releases/14.04/
 # FROM ubuntu:14.04.2
 # ENV UBUNTU_FLAVOR trusty
 
 #== Ubuntu precise is 12.04.x, i.e. FROM ubuntu:12.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
+# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
+#                    http://cloud-images.ubuntu.com/releases/12.04/
 # FROM ubuntu:precise-20150612
 # ENV UBUNTU_FLAVOR precise
 
@@ -279,6 +285,8 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp &&  cd ${NORMAL_USER_HOME}/tmp \
 #==========================================================
 # Google Chrome - Keep chrome versions as they delete them
 #==========================================================
+# How to get notified of latest version of chrome:
+#  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
@@ -315,6 +323,7 @@ USER root
 #=========
 # TODO
 # https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L50
+# https://github.com/elgalu/pastedirectory/blob/master/static/web_components/web-animations-js/tools/android/setup.sh
 
 #==========================
 # Mozilla Firefox - Latest
@@ -334,6 +343,8 @@ USER root
 # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
 # FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
 # FF_LANG can be either en-US // de // fr and so on
+# Regarding the pip packages, see released versions at:
+#  https://github.com/mozilla/mozdownload/releases
 ENV FIREFOX_VERSION latest
 ENV FF_LANG "en-US"
 RUN apt-get update -qqy \
@@ -341,7 +352,8 @@ RUN apt-get update -qqy \
     python2.7 python-pip python2.7-dev python-openssl \
     libssl-dev libffi-dev dbus-x11 \
   && easy_install -U pip \
-  && pip install --upgrade mozdownload mozInstall \
+  && pip install --upgrade mozInstall==1.12 \
+  && pip install --upgrade mozdownload==1.15 \
   && mkdir -p ${NORMAL_USER_HOME}/firefox-src \
   && cd ${NORMAL_USER_HOME}/firefox-src \
   && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
@@ -386,9 +398,14 @@ RUN apt-get update -qqy \
 # Xdummy: Is like Xvfb but uses an LD_PRELOAD hack to run a stock X server
 #  - uses a "dummy" video driver
 #  - with Xpra allows to use extensions like Randr, Composite, Damage
+#
+# Pyvnc2swf: Is a cross-platform screen recording tool (vnc2swf command)
+#  - captures screen motion through VNC protocol
+#  - generates a Shockwave Flash (SWF) movie
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     x11vnc \
+    pyvnc2swf \
     xvfb \
     xorg \
     xserver-xorg-video-dummy \

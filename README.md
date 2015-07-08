@@ -16,7 +16,7 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-x11
+    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-ff39
 
 ### Non-privileged
 
@@ -27,7 +27,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola -e WITH_GUACAMOLE=false \
         -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:v2.46.0-x11
+        elgalu/selenium:v2.46.0-ff39
 
 Make sure `docker run` finishes with **start.sh all done and ready for testing** else you won't be able to start your tests.
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
@@ -49,7 +49,7 @@ That's is useful for tunneling else you can stick with `docker exec` to get into
 
 ## Security
 
-Starting version [v2.46.0-x11][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
+Starting version [v2.46.0-ff39][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
 
 Note [scm-source.json](./scm-source.json) file will always be 1 commit outdated in the repo but will be correct inside the container.
 
@@ -67,17 +67,17 @@ There are also additional steps you can take to ensure you're using the correct 
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag v2.46.0-x11
-    export SHA=8d67d3d15dfd449e94433de46c352ff135f38678ebd6e217b613e7f1770d5490
+    # e.g. sha256 for tag v2.46.0-ff39
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
 
 Verify that image id is indeed correct
 
-    # e.g. full image id for tag v2.46.0-x11
-    export IMGID=247b69cbd53ef323b117362fd8bb7510276c5e9a702d15e8573223b0467538fb
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-x11 |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag v2.46.0-ff39
+    export IMGID=TBD
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-ff39 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -99,7 +99,7 @@ Host machine, terminal 2:
     docker run --rm --name=ch -p=4470:4444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:v2.46.0-x11
+      elgalu/selenium:v2.46.0-ff39
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -121,7 +121,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -p=0.0.0.0:${ANYPORT}:4444 \
     -p=0.0.0.0:${ANYPORT}:5900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-x11
+    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-ff39
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -131,7 +131,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:v2.46.0-x11
+    elgalu/selenium:v2.46.0-ff39
 
 # -- Common: Wait for the container to start
 while ! docker logs ${CONTAINER} 2>&1 | grep \
@@ -203,7 +203,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:v2.46.0-x11
+    docker pull elgalu/selenium:v2.46.0-ff39
 
 #### 2. Use this image
 
@@ -253,6 +253,10 @@ This command line is the same as for Chrome, remember that the selenium running 
     elgalu/docker-selenium   local               eab41ff50f72        About an hour ago   931.1 MB
     ubuntu                   14.04.2             d0955f21bf24        4 weeks ago         188.3 MB
 
+### Who is using docker-selenium?
+
+    * [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
+
 ### Troubleshooting
 
 All output is sent to stdout so it can be inspected by running:
@@ -269,4 +273,4 @@ Container leaves a few logs files to see what happened:
     /tmp/local-sel-headless.log
     /tmp/selenium-server-standalone.log
 
-[v2.46.0-x11]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-x11
+[v2.46.0-ff39]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-ff39

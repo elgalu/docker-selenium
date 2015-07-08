@@ -4,6 +4,21 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
+## v2.46.0-ff39 (2015-07-08)
+ + Upgrade Firefox from 38.0.5 to 39.0 and Chrome patch level from 130 to 132  (Leo Gallucci)
+ + Minor improvement to mozdownload and mozInstall for Firefox download
+ + Image tag details:
+  + Selenium: v2.46.0 (87c69e2)
+  + Chrome: 43.0.2357.132
+  + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
+  + Firefox: 39.0
+  + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.7.0, build 0baf609
+  + Python: 2.7.9
+  + Digest: sha256:TBD
+  + Image ID: TBD
+
 ## v2.46.0-x11 (2015-06-24)
  + Ability to pass extra params to the selenium server via SELENIUM_PARAMS (Rogov Viktor)
  + Allow to set -e XE_DISP_NUM so X11 can be redirect to the host (Leo Gallucci)
