@@ -16,8 +16,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.0, build 0baf609
   + Python: 2.7.9
-  + Digest: sha256:TBD
-  + Image ID: TBD
+  + Digest: sha256:311e42f1253868dd10208e4153b2a9419dadf8e6ce4ef31cbf200604ac9e22b8
+  + Image ID: 9a8d735a5e1ed22728426fb5cdd696215f382c74487f9616cfa3b67f31e735dc
 
 ## v2.46.0-x11 (2015-06-24)
  + Ability to pass extra params to the selenium server via SELENIUM_PARAMS (Rogov Viktor)
