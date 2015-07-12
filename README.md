@@ -16,25 +16,25 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
-    sudo docker run --privileged -p 4444:4444 -p 5900:5900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-ff39
+    sudo docker run --privileged -p 4444:24444 -p 5920:25900 \
+        -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-sup
 
 ### Non-privileged
+### Run
 
 If your setup is correct, privileged mode and sudo should not be necessary:
 
-    docker run --rm --name=ch -p=0.0.0.0:8484:8484 -p=0.0.0.0:2222:2222 \
-                              -p=0.0.0.0:4470:4444 -p=0.0.0.0:5920:5900 \
+    docker run --rm --name=ch -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 \
+                              -p=0.0.0.0:2222:22222 -p=0.0.0.0:6080:26080 \
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
-        -e VNC_PASSWORD=hola -e WITH_GUACAMOLE=false \
-        -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:v2.46.0-ff39
+        -e VNC_PASSWORD=hola -v /var/log/sele \
+        -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
+        elgalu/selenium:v2.46.0-sup
 
 Make sure `docker run` finishes with **start.sh all done and ready for testing** else you won't be able to start your tests.
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
 
-If using option `WITH_GUACAMOLE=true` you can open a browser into http://localhost:8484/#/login/ and login to guacamole with user "docker" and the same password as ${VNC_PASSWORD} so you no longer need a VNC client to debug the docker instance. Else you can simply connect to vnc://localhost:5920 using a VNC client or Safari Browser.
-
-You can also ssh into the machine as long as `SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)"` is correct.
+You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
 
     ssh -p 2222 -o StrictHostKeyChecking=no application@localhost
 
@@ -47,9 +47,15 @@ That's is useful for tunneling else you can stick with `docker exec` to get into
 
     docker exec -ti ch bash
 
+You can open a browser at http://localhost:6080/vnc.html if you don't want to use your own vnc client. Note Safari Browser comes with a built-in one, just navigate to vnc://localhost:5920
+
+Supervisor exposes an http server but is not enough to bind the ports via `docker run -p` so in this case you need to FWD ports with `ssh -L`
+
+    ssh -p 2222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
+
 ## Security
 
-Starting version [v2.46.0-ff39][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
+Starting version [v2.46.0-sup][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
 
 Note [scm-source.json](./scm-source.json) file will always be 1 commit outdated in the repo but will be correct inside the container.
 
@@ -67,17 +73,17 @@ There are also additional steps you can take to ensure you're using the correct 
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag v2.46.0-ff39
-    export SHA=311e42f1253868dd10208e4153b2a9419dadf8e6ce4ef31cbf200604ac9e22b8
+    # e.g. sha256 for tag v2.46.0-sup
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
 
 Verify that image id is indeed correct
 
-    # e.g. full image id for tag v2.46.0-ff39
-    export IMGID=9a8d735a5e1ed22728426fb5cdd696215f382c74487f9616cfa3b67f31e735dc
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-ff39 |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag v2.46.0-sup
+    export IMGID=TBD
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-sup |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -96,10 +102,10 @@ Host machine, terminal 1:
 
 Host machine, terminal 2:
 
-    docker run --rm --name=ch -p=4470:4444 \
+    docker run --rm --name=ch -p=4470:24444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:v2.46.0-ff39
+      elgalu/selenium:v2.46.0-sup
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -119,9 +125,9 @@ ANYPORT=0
 # -- Option 1. docker run - Running docker locally
 # Run a selenium instance binding to host random ports
 REMOTE_DOCKER_SRV=localhost
-CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -p=0.0.0.0:${ANYPORT}:4444 \
-    -p=0.0.0.0:${ANYPORT}:5900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_PUB_KEY="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-ff39
+CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
+    -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-sup
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -129,21 +135,21 @@ REMOTE_DOCKER_SRV=some.docker.server.com
 ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # Note in remote server I'm using authorized_keys instead of id_rsa.pub given
 # it acts as a jump host so my public key is already on that server
-CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:2222 -e SCREEN_HEIGHT=1110 \
-    -e VNC_PASSWORD=hola -e SSH_PUB_KEY="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:v2.46.0-ff39
+CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
+    -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
+    elgalu/selenium:v2.46.0-sup
 
 # -- Common: Wait for the container to start
 while ! docker logs ${CONTAINER} 2>&1 | grep \
     "start.sh all done" >/dev/null; do sleep 0.2; done
-json_filter='{{(index (index .NetworkSettings.Ports "2222/tcp") 0).HostPort}}'
+json_filter='{{(index (index .NetworkSettings.Ports "22222/tcp") 0).HostPort}}'
 SSHD_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
 echo $SSHD_PORT #=> e.g. SSHD_PORT=32769
 
 # -- Option 1. Obtain dynamic values like container IP and assigned free ports
-json_filter='{{(index (index .NetworkSettings.Ports "4444/tcp") 0).HostPort}}'
+json_filter='{{(index (index .NetworkSettings.Ports "24444/tcp") 0).HostPort}}'
 FREE_SELE_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
-json_filter='{{(index (index .NetworkSettings.Ports "5900/tcp") 0).HostPort}}'
+json_filter='{{(index (index .NetworkSettings.Ports "25900/tcp") 0).HostPort}}'
 FREE_VNC_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
 
 # -- Option 2. Get some free ports in current local machine. Needs python.
@@ -153,10 +159,10 @@ FREE_SELE_PORT=$(python -c 'import socket; s=socket.socket(); \
 FREE_VNC_PORT=$(python -c 'import socket; s=socket.socket(); \
     s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
 # -- Option 2. Tunneling selenium+vnc is necessary if using a remote docker
-ssh ${TUNLOCOPTS} localhost:${FREE_SELE_PORT}:localhost:4444 \
+ssh ${TUNLOCOPTS} localhost:${FREE_SELE_PORT}:localhost:24444 \
     -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
 LOC_TUN_SELE_PID=$!
-ssh ${TUNLOCOPTS} localhost:${FREE_VNC_PORT}:localhost:5900 \
+ssh ${TUNLOCOPTS} localhost:${FREE_VNC_PORT}:localhost:25900 \
     -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
 LOC_TUN_VNC_PID=$!
 echo $FREE_SELE_PORT $FREE_VNC_PORT
@@ -203,13 +209,13 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:v2.46.0-ff39
+    docker pull elgalu/selenium:v2.46.0-sup
 
 #### 2. Use this image
 
 ##### e.g. Spawn a container for Chrome testing:
 
-    CH=$(docker run --rm --name=ch -p=127.0.0.1::4444 -p=127.0.0.1::5900 \
+    CH=$(docker run --rm --name=ch -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
         -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
 
 Note `-v /e2e/uploads:/e2e/uploads` is optional in case you are testing browser uploads on your webapp you'll probably need to share a directory for this.
@@ -225,7 +231,7 @@ A dynamic port will be binded to the container ones, i.e.
     #=> 127.0.0.1:49155
 
     # Obtain the VNC server port in case you want to look around
-    docker port $CH 5900
+    docker port $CH 25900
     #=> 127.0.0.1:49160
 
 In case you have RealVNC binary `vnc` in your path, you can always take a look, view only to avoid messing around your tests with an unintended mouse click or keyboard.
@@ -236,7 +242,7 @@ In case you have RealVNC binary `vnc` in your path, you can always take a look, 
 
 This command line is the same as for Chrome, remember that the selenium running container is able to launch either Chrome or Firefox, the idea around having 2 separate containers, one for each browser is for convenience plus avoid certain `:focus` issues you web app may encounter during e2e automation.
 
-    FF=$(docker run --rm --name=ff -p=127.0.0.1::4444 -p=127.0.0.1::5900 \
+    FF=$(docker run --rm --name=ff -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
         -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
 
 ##### How to get docker internal IP through logs
@@ -273,4 +279,4 @@ Container leaves a few logs files to see what happened:
     /tmp/local-sel-headless.log
     /tmp/selenium-server-standalone.log
 
-[v2.46.0-ff39]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-ff39
+[v2.46.0-sup]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-sup

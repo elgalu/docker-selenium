@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo ""
+echo "Please update scm-source.json by running"
+echo "  ./host-scripts/gen-scm-source.sh"
+echo ""
+
+exit 100

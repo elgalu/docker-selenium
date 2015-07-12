@@ -18,7 +18,6 @@ die () {
 }
 
 [ -z "$HOME" ] && die "Need (\$HOME) to be set" 1
-[ -z "$GUACAMOLE_SERVER_PORT" ] && die "Need (\$GUACAMOLE_SERVER_PORT) to be set" 2
 
 xorg_file="${HOME}/xorg.conf"
 
@@ -162,7 +161,4 @@ Section "ServerLayout"
 EndSection
 EOF
 
-echo "INFO: Generated content for guacamole file: ${xorg_file}"
-# echo "INFO: content-start"
-# cat ${xorg_file}
-# echo "INFO: content-end"
+echo "INFO: Generated content for xorg file: ${xorg_file}"

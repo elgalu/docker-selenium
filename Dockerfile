@@ -3,14 +3,14 @@
 ###################################################
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-# FROM ubuntu:wily-20150611
-# ENV UBUNTU_FLAVOR wily
+FROM ubuntu:wily-20150708
+ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 #                    http://cloud-images.ubuntu.com/releases/15.04/
-FROM ubuntu:vivid-20150611
-ENV UBUNTU_FLAVOR vivid
+# FROM ubuntu:vivid-20150611
+# ENV UBUNTU_FLAVOR vivid
 
 #== Ubuntu trusty is 14.04.x, i.e. FROM ubuntu:14.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
@@ -46,6 +46,8 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 # curl - transfer a URL
 # bc - An arbitrary precision calculator language
 # pwgen: generates random, meaningless but pronounceable passwords
+# ts from moreutils will prepend a timestamp to every line of input you give it
+# grc is a terminal colorizer that works nice with tail https://github.com/garabik/grc
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     apt-utils \
@@ -60,9 +62,13 @@ RUN apt-get update -qqy \
     curl \
     pwgen \
     bc \
+    grc \
+    moreutils \
+  # TODO: do we need this X11-unix things?
   && mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
   && chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
   && mkdir -p /var/log/sele \
+  && mkdir -p /var/run/sele \
   && rm -rf /var/lib/apt/lists/*
 
 #==============================
@@ -146,6 +152,30 @@ RUN apt-get update -qqy \
        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
+  && rm -rf /var/lib/apt/lists/*
+
+#==============================================================================
+# java blocks until kernel have enough entropy to generate the /dev/random seed
+#==============================================================================
+# This fix is not working so commented out.
+#  SeleniumHQ/docker-selenium/issues/14
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     haveged rng-tools \
+#   && service haveged start \
+#   && update-rc.d haveged defaults
+
+#=========================================
+# Python2 for Firefox, Supervisor, others
+#=========================================
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    python2.7 \
+    python-pip \
+    python2.7-dev \
+    python-openssl \
+    libssl-dev libffi-dev \
+  && easy_install -U pip \
   && rm -rf /var/lib/apt/lists/*
 
 #=======
@@ -246,10 +276,32 @@ RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 ENV NORMAL_USER_HOME /home/${NORMAL_USER}
 
+#====================
+# Supervisor install
+#====================
+# https://github.com/Supervisor/supervisor
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     supervisor \
+# 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
+#  https://github.com/Supervisor/supervisor/commit/b3ad59703b554fcf61639ca922e
+# TODO: Upgrade to supervisor stable 4.0 as soon as is released
+RUN pip install --upgrade \
+      https://github.com/Supervisor/supervisor/zipball/b3ad59703b554f \
+  && mkdir -p /var/log/sele/supervisor \
+  && mkdir -p /etc/supervisor/conf.d \
+  && mkdir -p /var/run/sele \
+  && touch /var/run/sele/supervisord.pid \
+  && rm -rf /var/lib/apt/lists/*
+
+#=====================
+# Use Normal User now
+#=====================
+USER ${NORMAL_USER}
+
 #==========
 # Selenium
 #==========
-USER ${NORMAL_USER}
 ENV SEL_MAJOR_MINOR_VER 2.46
 ENV SEL_PATCH_LEVEL_VER 0
 ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
@@ -267,7 +319,7 @@ ENV CPU_ARCH 64
 ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
-RUN mkdir -p ${NORMAL_USER_HOME}/tmp &&  cd ${NORMAL_USER_HOME}/tmp \
+RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # && CHROME_DRIVER_VERSION=2.15 \
   && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
@@ -294,7 +346,9 @@ RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
     ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
     "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
-# back to sudo
+#==============
+# Back to sudo
+#==============
 USER root
 
 #=====================================
@@ -317,76 +371,6 @@ USER root
 #     google-chrome-stable \
 #   && rm -rf /var/lib/apt/lists/* \
 #   && rm /etc/apt/sources.list.d/google-chrome.list
-
-#=========
-# Android
-#=========
-# TODO
-# https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L50
-# https://github.com/elgalu/pastedirectory/blob/master/static/web_components/web-animations-js/tools/android/setup.sh
-
-#==========================
-# Mozilla Firefox - Latest
-#==========================
-# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     firefox \
-#     dbus-x11 \
-#   && rm -rf /var/lib/apt/lists/*
-
-#====================================
-# Mozilla Firefox - Specific Version
-#====================================
-# Where to find latest version:
-#  http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
-# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
-# FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
-# FF_LANG can be either en-US // de // fr and so on
-# Regarding the pip packages, see released versions at:
-#  https://github.com/mozilla/mozdownload/releases
-ENV FIREFOX_VERSION latest
-ENV FF_LANG "en-US"
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    python2.7 python-pip python2.7-dev python-openssl \
-    libssl-dev libffi-dev dbus-x11 \
-  && easy_install -U pip \
-  && pip install --upgrade mozInstall==1.12 \
-  && pip install --upgrade mozdownload==1.15 \
-  && mkdir -p ${NORMAL_USER_HOME}/firefox-src \
-  && cd ${NORMAL_USER_HOME}/firefox-src \
-  && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
-      --platform=linux64 --log-level=WARN --version=$FIREFOX_VERSION \
-  && mozinstall --app=firefox \
-      firefox-$FIREFOX_VERSION.$FF_LANG.linux64.tar.bz2 \
-      --destination=${SEL_HOME} \
-  && ln -s ${SEL_HOME}/firefox/firefox /usr/bin \
-  && rm -rf /var/lib/apt/lists/*
-
-#==========================================
-# Chrome, Chromedriver, Firefox sudo steps
-#==========================================
-# RUN dpkg -i ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    gdebi \
-  && gdebi --non-interactive \
-      ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
-  && ln -s ${SEL_HOME}/chromedriver /usr/bin \
-  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
-  && rm -rf /var/lib/apt/lists/*
-
-#==============================================================================
-# java blocks until kernel have enough entropy to generate the /dev/random seed
-#==============================================================================
-# This fix is not working so commented out.
-#  SeleniumHQ/docker-selenium/issues/14
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     haveged rng-tools \
-#   && service haveged start \
-#   && update-rc.d haveged defaults
 
 #===================
 # VNC, Xvfb, Xdummy
@@ -426,23 +410,102 @@ RUN apt-get update -qqy \
   && echo "GatewayPorts yes"  >> /etc/ssh/sshd_config \
   && rm -rf /var/lib/apt/lists/*
 
-#========================
-# Guacamole dependencies
-#========================
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    gcc make \
-    libcairo2-dev libpng12-dev libossp-uuid-dev \
-    libssh2-1 libssh-dev libssh2-1-dev \
-    libssl-dev libssl0.9.8 \
-    libpango1.0-dev \
-    autoconf libvncserver-dev \
-  && rm -rf /var/lib/apt/lists/*
+#=========
+# Android
+#=========
+# TODO
+# https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L50
+# https://github.com/elgalu/pastedirectory/blob/master/static/web_components/web-animations-js/tools/android/setup.sh
 
 #===================
 # DNS & hosts stuff
 #===================
-COPY ./etc/hosts /tmp/hosts
+COPY ./dns/etc/hosts /tmp/hosts
+
+########################################
+# noVNC to expose VNC via an html page #
+########################################
+RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
+  # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
+  && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
+  && wget -O noVNC.zip \
+      "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
+  && unzip -x noVNC.zip \
+  && mv noVNC-${NOVNC_SHA} \
+       ${NORMAL_USER_HOME}/noVNC \
+  # Download websockify commit 558a6439f dated 2015-06-02
+  && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
+  && wget -O websockify.zip \
+      "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
+  && unzip -x websockify.zip \
+  && mv websockify-${WEBSOCKIFY_SHA} \
+       ${NORMAL_USER_HOME}/noVNC/utils/websockify
+
+#======================
+# Chrome, Chromedriver
+#======================
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    gdebi \
+  && gdebi --non-interactive \
+      ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
+  && ln -s ${SEL_HOME}/chromedriver /usr/bin \
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+  && rm -rf /var/lib/apt/lists/*
+
+#==========================
+# Mozilla Firefox - Latest
+#==========================
+# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     firefox \
+#     dbus-x11 \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=================
+# Mozilla Firefox
+#=================
+# Where to find latest version:
+#  http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
+# FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
+# FF_LANG can be either en-US // de // fr and so on
+# Regarding the pip packages, see released versions at:
+#  https://github.com/mozilla/mozdownload/releases
+ENV FIREFOX_VERSION latest
+ENV FF_LANG "en-US"
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    dbus-x11 \
+  && pip install --upgrade mozInstall==1.12 \
+  # Always safer to install for git specific commit, in this case
+  #  commit 191a3e6bc700a28f3d62 dated 2015-06-02 is version 1.15
+  # && pip install --upgrade mozdownload==1.15 \
+  && pip install --upgrade \
+        https://github.com/mozilla/mozdownload/zipball/191a3e6bc700a28f3d62 \
+  && mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+  && cd ${NORMAL_USER_HOME}/firefox-src \
+  && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
+      --platform=linux64 --log-level=WARN --version=$FIREFOX_VERSION \
+  && mozinstall --app=firefox \
+      firefox-$FIREFOX_VERSION.$FF_LANG.linux64.tar.bz2 \
+      --destination=${SEL_HOME} \
+  && ln -s ${SEL_HOME}/firefox/firefox /usr/bin \
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+  && rm -rf /var/lib/apt/lists/*
+
+#=================
+# Supervisor conf
+#=================
+ADD supervisor/etc/supervisor/supervisord.conf /etc/supervisor/
+ADD xvfb/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD xmanager/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD vnc/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD novnc/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD sshd/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD selenium/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD xterm/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
 #==================
 # User & ssh stuff
@@ -454,88 +517,21 @@ RUN mkdir -p ~/.ssh \
   && touch ~/.ssh/authorized_keys \
   && chmod 700 ~/.ssh \
   && chmod 600 ~/.ssh/authorized_keys \
-  && mkdir -p ${HOME}/.vnc \
-  && sudo chown ${NORMAL_USER}:${NORMAL_GROUP} /var/log/sele
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /var/log/sele \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /var/run/sele \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /etc/supervisor \
+  && mkdir -p ${HOME}/.vnc
 ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
-
-#======================
-# Tomcat for Guacamole
-#======================
-ENV TOMCAT_MAJOR 8
-ENV TOMCAT_VERSION 8.0.23
-ENV TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
-# ENV CATALINA_HOME /usr/local/tomcat
-ENV CATALINA_HOME ${HOME}/tomcat
-# WORKDIR ${CATALINA_HOME}
-# see https://www.apache.org/dist/tomcat/tomcat-8/KEYS
-RUN mkdir -p ${CATALINA_HOME} \
-  && cd ${CATALINA_HOME} \
-  && gpg --keyserver pool.sks-keyservers.net --recv-keys \
-       05AB33110949707C93A279E3D3EFE6B686867BA6 \
-       07E48665A34DCAFAE522E5E6266191C37C037D42 \
-       47309207D818FFD8DCD3F83F1931D684307A10A5 \
-       541FBE7D8F78B25E055DDEE13C370389288584E7 \
-       61B832AC2F1C5A90F0F9B00A1C506407564C17A3 \
-       79F7026C690BAA50B92CD8B66A3AD3F4F22C4FED \
-       9BA44C2621385CB966EBA586F72C284D731FABEE \
-       A27677289986DB50844682F8ACB77FC2E86E29AC \
-       A9C5DF4D22E99998D9875A5110C01C5A2F6059E7 \
-       DCFD35E0BF8CA7344752DE8B6FB21E8933C60243 \
-       F3A04C595DB5B6A5F1ECA43E3B7BBB100D811BBE \
-       F7DA48BB64BCB84ECBA7EE6935CD23C10D498E23 \
-  && wget --no-verbose "$TOMCAT_TGZ_URL" -O tomcat.tar.gz \
-  && wget --no-verbose "$TOMCAT_TGZ_URL.asc" -O tomcat.tar.gz.asc \
-  && gpg --verify tomcat.tar.gz.asc \
-  && tar -xvf tomcat.tar.gz --strip-components=1 > /dev/null \
-  && rm bin/*.bat \
-  && rm tomcat.tar.gz*
-
-#===================
-# Guacamole web-app
-#===================
-# https://github.com/glyptodon/guacamole-server/releases
-ENV GUACAMOLE_VERSION 0.9.7
-ENV GUACAMOLE_WAR_SHA1 69b7566092cf13076bddc331772a5b31dba45fb5
-ENV GUACAMOLE_HOME ${HOME}/guacamole
-RUN mkdir -p ${GUACAMOLE_HOME}
-# http://guac-dev.org/doc/gug/configuring-guacamole.html
-COPY guacamole_home/* ${GUACAMOLE_HOME}/
-# Disable Tomcat's manager application.
-# e.g. to customize JVM's max heap size 256MB: -e JAVA_OPTS="-Xmx256m"
-RUN cd ${CATALINA_HOME} && rm -rf webapps/* \
-  && echo "${GUACAMOLE_WAR_SHA1}  ROOT.war" > webapps/ROOT.war.sha1 \
-  && wget --no-verbose -O webapps/ROOT.war "http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-${GUACAMOLE_VERSION}.war/download" \
-  && cd webapps && sha1sum -c --quiet ROOT.war.sha1 && cd .. \
-  && echo "export CATALINA_OPTS=\"${JAVA_OPTS}\"" >> bin/setenv.sh
-#========================
-# Guacamole server guacd
-#========================
-ENV GUACAMOLE_SERVER_SHA1 43883eb86d70b68da723a2d57d50d866a8af5f16
-RUN cd /tmp \
-  && echo ${GUACAMOLE_SERVER_SHA1}  guacamole-server.tar.gz > guacamole-server.tar.gz.sha1 \
-  && wget --no-verbose -O guacamole-server.tar.gz "http://sourceforge.net/projects/guacamole/files/current/source/guacamole-server-${GUACAMOLE_VERSION}.tar.gz/download" \
-  && sha1sum -c --quiet guacamole-server.tar.gz.sha1 \
-  && tar xzf guacamole-server.tar.gz \
-  && rm guacamole-server.tar.gz* \
-  && cd guacamole-server-${GUACAMOLE_VERSION} \
-  && ./configure \
-  && make \
-  && sudo make install \
-  && sudo ldconfig
 
 #========================================================================
 # Some configuration options that can be customized at container runtime
 #========================================================================
 ENV BIN_UTILS /bin-utils
-ENV PATH ${PATH}:${BIN_UTILS}:${CATALINA_HOME}/bin
-# Security requirements might prevent using sudo in the running container
-ENV SUDO_ALLOWED true
-ENV WITH_GUACAMOLE false
-ENV WITH_SSH true
+ENV PATH ${PATH}:${BIN_UTILS}
 # JVM uses only 1/4 of system memory by default
 ENV MEM_JAVA_PERCENT 80
-ENV RETRY_START_SLEEP_SECS 0.1
-ENV MAX_WAIT_RETRY_ATTEMPTS 9
+# Max amount of time to wait for other processes dependencies
+ENV WAIT_TIMEOUT 5s
 ENV SCREEN_WIDTH 1900
 ENV SCREEN_HEIGHT 1480
 ENV SCREEN_MAIN_DEPTH 24
@@ -544,26 +540,26 @@ ENV DISP_N 10
 ENV DISPLAY :${DISP_N}
 ENV XEPHYR_DISPLAY :${DISP_N}
 ENV SCREEN_NUM 0
+# ENV XEPHYR_SCREEN_SIZE "${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}"""
 # Even though you can change them below, don't worry too much about container
 # internal ports since you can map them to the host via `docker run -p`
-ENV SELENIUM_PORT 4444
-ENV VNC_PORT 5900
+ENV SELENIUM_PORT 24444
+ENV VNC_PORT 25900
+ENV NOVNC_PORT 26080
 # You can set the VNC password or leave null so a random password is generated:
 # ENV VNC_PASSWORD topsecret
-ENV SSHD_PORT 2222
-ENV GUACAMOLE_SERVER_PORT 4822
-# All tomcat ports can be customized if necessary
-ENV TOMCAT_PORT 8484
-ENV TOMCAT_SHUTDOWN_PORT 8485
-ENV TOMCAT_AJP_PORT 8489
-ENV TOMCAT_REDIRECT_PORT 8483
-# Logs
-ENV XVFB_LOG "/var/log/sele/Xvfb_headless.log"
-ENV XMANAGER_LOG "/var/log/sele/xmanager.log"
-ENV VNC_LOG "/var/log/sele/x11vnc_forever.log"
-ENV SELENIUM_LOG "/var/log/sele/selenium-server-standalone.log"
-ENV CATALINA_LOG "/var/log/sele/tomcat-server.log"
-ENV GUACD_LOG "/var/log/sele/guacd-server.log"
+ENV SSHD_PORT 22222
+# Logs are now managed by supervisord.conf, see
+#  /var/log/sele/supervisor/*.log
+# Supervisor (process management) http server
+ENV SUPERVISOR_HTTP_PORT 29001
+ENV SUPERVISOR_HTTP_USERNAME supervisorweb
+ENV SUPERVISOR_HTTP_PASSWORD somehttpbasicauthpwd
+# Supervisor loglevel and also general docker log level
+# can be: debug, warn, trace, info
+ENV LOGLEVEL info
+ENV LOGFILE_MAXBYTES 10MB
+ENV LOGFILE_BACKUPS 5
 #===============================
 # Run docker from inside docker
 # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
@@ -573,7 +569,7 @@ ENV DOCKER_SOCK "/var/run/docker.sock"
 #================================
 # Expose Container's Directories
 #================================
-VOLUME /var/log
+VOLUME /var/log/sele
 
 # Only expose ssh port given the other services are not secured
 # forcing the user to open ssh tunnels or use docker run -p ports...
@@ -583,7 +579,17 @@ EXPOSE ${SSHD_PORT}
 #================
 # Binary scripts
 #================
-ADD bin $BIN_UTILS
+ADD bin/* ${BIN_UTILS}/
+ADD utils/bin/* ${BIN_UTILS}/
+ADD java/bin/* ${BIN_UTILS}/
+ADD dns/bin/* ${BIN_UTILS}/
+ADD xvfb/bin/* ${BIN_UTILS}/
+ADD xmanager/bin/* ${BIN_UTILS}/
+ADD vnc/bin/* ${BIN_UTILS}/
+ADD novnc/bin/* ${BIN_UTILS}/
+ADD sshd/bin/* ${BIN_UTILS}/
+ADD selenium/bin/* ${BIN_UTILS}/
+ADD xterm/bin/* ${BIN_UTILS}/
 
 #=====================================================
 # Meta JSON file to hold commit info of current build
@@ -592,10 +598,12 @@ COPY scm-source.json /
 # Ensure the file is up-to-date else you should update it by running
 #  ./host-scripts/gen-scm-source.sh
 # on the host
-RUN find /scm-source.json -mmin +1 -exec echo "good enough" \;
+RUN [ $(find ./ -mtime -1 -type f -name "scm-source.json" 2>/dev/null) ] \
+    || please_update_scm-source_json
 
 #===================
 # CMD or ENTRYPOINT
 #===================
-# Start a selenium standalone server for Chrome and/or Firefox
+# ENTRYPOINT ["entry.sh"]
 CMD ["entry.sh"]
+# CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
