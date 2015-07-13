@@ -21,8 +21,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.0, build 0baf609
   + Python: 2.7.10
-  + Digest: sha256:TBD
-  + Image ID: TBD
+  + Digest: sha256:1cd291d278d888cf566e0c7ca95377407b568ca3fb05aedb11f9781277e1ecb7
+  + Image ID: 27b1674c981927123538e809d33cb7c9644da4c0f2cca85a655792d2cf57d698
 
 ## v2.46.0-ff39 (2015-07-08)
  + Upgrade Firefox from 38.0.5 to 39.0 and Chrome patch level from 130 to 132  (Leo Gallucci)
