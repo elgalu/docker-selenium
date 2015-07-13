@@ -4,7 +4,7 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
-## v2.46.0-sup (2015-07-12)
+## v2.46.0-sup (2015-07-13)
  + Switched to supervidord for process management, closes #24 (Leo Gallucci)
  + Extracted guacamole (with tomcat) into elgalu/guaca-docker.
  + Refactored code and directory structure.

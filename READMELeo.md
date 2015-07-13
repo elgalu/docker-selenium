@@ -1,12 +1,19 @@
 ## Build
 
     time (docker build -t="elgalu/selenium:v2.46.0-sup" . ;echo $?;beep)
-    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-sup
-    docker run --rm --name=ch --net=host -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=9001:29001 -p=6080:26080 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-sup
+    docker run --rm -ti --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VNC_PASSWORD=hola -v /var/log/sele elgalu/selenium:v2.46.0-sup
+
+See logs
+
+    docker exec -ti ch bash -c "ls -lah /var/log/sele/"
 
 Testing in ssh lgallucci@10.160.26.62
 
     docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" -e VNC_PASSWORD=Hola3 os-registry.stups.zalan.do/tip/selenium:v2.46.0-sup
+
+Wait for docker-selenium to finish starting
+
+    while ! docker exec ch grep 'all done and ready for testing' /var/log/sele/xterm-stdout.log > /dev/null 2>&1; do sleep 0.2; done
 
 ## Transfer used browser source artifacts to keep them in the cloud
 

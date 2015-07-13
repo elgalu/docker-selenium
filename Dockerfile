@@ -64,11 +64,6 @@ RUN apt-get update -qqy \
     bc \
     grc \
     moreutils \
-  # TODO: do we need this X11-unix things?
-  && mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
-  && chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
-  && mkdir -p /var/log/sele \
-  && mkdir -p /var/run/sele \
   && rm -rf /var/lib/apt/lists/*
 
 #==============================
@@ -288,10 +283,6 @@ ENV NORMAL_USER_HOME /home/${NORMAL_USER}
 # TODO: Upgrade to supervisor stable 4.0 as soon as is released
 RUN pip install --upgrade \
       https://github.com/Supervisor/supervisor/zipball/b3ad59703b554f \
-  && mkdir -p /var/log/sele/supervisor \
-  && mkdir -p /etc/supervisor/conf.d \
-  && mkdir -p /var/run/sele \
-  && touch /var/run/sele/supervisord.pid \
   && rm -rf /var/lib/apt/lists/*
 
 #=====================
@@ -395,6 +386,8 @@ RUN apt-get update -qqy \
     xserver-xorg-video-dummy \
   && rm -rf /var/lib/apt/lists/*
 
+ENV RUN_DIR /var/run/sele
+
 #======================
 # OpenSSH server (sshd)
 #======================
@@ -403,9 +396,7 @@ RUN apt-get update -qqy \
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     openssh-server \
-  && mkdir -p /var/run/sshd \
-  && chmod 744 /var/run/sshd \
-  && echo "PidFile /tmp/run_sshd.pid" >> /etc/ssh/sshd_config \
+  && echo "PidFile ${RUN_DIR}/sshd.pid" >> /etc/ssh/sshd_config \
   && echo "X11Forwarding yes" >> /etc/ssh/sshd_config \
   && echo "GatewayPorts yes"  >> /etc/ssh/sshd_config \
   && rm -rf /var/lib/apt/lists/*
@@ -513,14 +504,6 @@ ADD xterm/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 USER ${NORMAL_USER}
 ENV USER ${NORMAL_USER}
 ENV HOME ${NORMAL_USER_HOME}
-RUN mkdir -p ~/.ssh \
-  && touch ~/.ssh/authorized_keys \
-  && chmod 700 ~/.ssh \
-  && chmod 600 ~/.ssh/authorized_keys \
-  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /var/log/sele \
-  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /var/run/sele \
-  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /etc/supervisor \
-  && mkdir -p ${HOME}/.vnc
 ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
 
 #========================================================================
@@ -549,8 +532,6 @@ ENV NOVNC_PORT 26080
 # You can set the VNC password or leave null so a random password is generated:
 # ENV VNC_PASSWORD topsecret
 ENV SSHD_PORT 22222
-# Logs are now managed by supervisord.conf, see
-#  /var/log/sele/supervisor/*.log
 # Supervisor (process management) http server
 ENV SUPERVISOR_HTTP_PORT 29001
 ENV SUPERVISOR_HTTP_USERNAME supervisorweb
@@ -560,6 +541,9 @@ ENV SUPERVISOR_HTTP_PASSWORD somehttpbasicauthpwd
 ENV LOGLEVEL info
 ENV LOGFILE_MAXBYTES 10MB
 ENV LOGFILE_BACKUPS 5
+# Logs are now managed by supervisord.conf, see
+#  ${LOGS_DIR}/*.log
+ENV LOGS_DIR /var/log/sele
 #===============================
 # Run docker from inside docker
 # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
@@ -569,7 +553,7 @@ ENV DOCKER_SOCK "/var/run/docker.sock"
 #================================
 # Expose Container's Directories
 #================================
-VOLUME /var/log/sele
+# VOLUME ${LOGS_DIR}
 
 # Only expose ssh port given the other services are not secured
 # forcing the user to open ssh tunnels or use docker run -p ports...

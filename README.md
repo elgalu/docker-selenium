@@ -27,11 +27,11 @@ If your setup is correct, privileged mode and sudo should not be necessary:
     docker run --rm --name=ch -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 \
                               -p=0.0.0.0:2222:22222 -p=0.0.0.0:6080:26080 \
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
-        -e VNC_PASSWORD=hola -v /var/log/sele \
+        -e VNC_PASSWORD=hola \
         -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
         elgalu/selenium:v2.46.0-sup
 
-Make sure `docker run` finishes with **start.sh all done and ready for testing** else you won't be able to start your tests.
+Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests.
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
 
 You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
@@ -140,8 +140,8 @@ CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     elgalu/selenium:v2.46.0-sup
 
 # -- Common: Wait for the container to start
-while ! docker logs ${CONTAINER} 2>&1 | grep \
-    "start.sh all done" >/dev/null; do sleep 0.2; done
+while ! docker exec ch grep 'all done and ready for testing' \
+    /var/log/sele/xterm-stdout.log > /dev/null 2>&1; do sleep 0.2; done
 json_filter='{{(index (index .NetworkSettings.Ports "22222/tcp") 0).HostPort}}'
 SSHD_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
 echo $SSHD_PORT #=> e.g. SSHD_PORT=32769
