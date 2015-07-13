@@ -50,11 +50,13 @@ That's is useful for tunneling else you can stick with `docker exec` to get into
 
     docker exec -ti ch bash
 
-You can open a browser at http://localhost:6080/vnc.html if you don't want to use your own vnc client. Note Safari Browser comes with a built-in one, just navigate to vnc://localhost:5920
-
 Supervisor exposes an http server but is not enough to bind the ports via `docker run -p` so in this case you need to FWD ports with `ssh -L`
 
     ssh -p 2222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
+
+### noVNC
+
+We are now using https://github.com/kanaka/noVNC instead of guacamole so you can open a browser at [localhost:6080](http://localhost:6080/vnc.html) if you don't want to use your own vnc client. Note Safari Browser comes with a built-in one, just navigate to vnc://localhost:5920
 
 ## Security
 

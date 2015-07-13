@@ -7,6 +7,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## v2.46.0-sup (2015-07-13)
  + Switched to supervidord for process management, closes #24 (Leo Gallucci)
  + Extracted guacamole (with tomcat) into elgalu/guaca-docker.
+ + Switched from guacamole to noVNC.
  + Refactored code and directory structure.
  + Renamed SSH_PUB_KEY to SSH_AUTH_KEYS to reflect the true meaning.
  + Fixed scm-source date validation.
