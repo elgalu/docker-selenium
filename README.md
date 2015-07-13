@@ -31,7 +31,10 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
         elgalu/selenium:v2.46.0-sup
 
-Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests.
+Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `ch` is the name of the container:
+
+    while ! docker exec ch grep 'all done and ready for testing' /var/log/sele/xterm-stdout.log > /dev/null 2>&1; do sleep 0.2; done
+
 Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
 
 You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
