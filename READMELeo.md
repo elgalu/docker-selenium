@@ -14,7 +14,7 @@ Testing in ssh lgallucci@10.160.26.62
 ## Transfer used browser source artifacts to keep them in the cloud
 
     SSHCMD="-o StrictHostKeyChecking=no -q -P 2222 application@localhost"
-    scp ${SSHCMD}:/home/application/chrome-deb/google-chrome-stable_current_amd64.deb browsers-bins/google-chrome-stable_43.0.2357.132_amd64.deb
+    scp ${SSHCMD}:/home/application/chrome-deb/google*.deb browsers-bins/
     #scp ${SSHCMD}:/home/application/firefox-src/firefox-latest.en-US.linux64.tar.bz2  browsers-bins/firefox-38.0.5.en-US.linux64.tar.bz2
 
 List chrome versions via docker exec
