@@ -172,6 +172,17 @@ RUN apt-get update -qqy \
     libssl-dev libffi-dev \
   && easy_install -U pip \
   && rm -rf /var/lib/apt/lists/*
+# Python3 fails installing mozInstall==1.12 with
+#  NameError: name 'file' is not defined
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     python3.4 \
+#     python3-pip \
+#     python3.4-dev \
+#     python3-openssl \
+#     libssl-dev libffi-dev \
+#   && easy_install3 -U pip \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=======
 # Fonts
@@ -325,6 +336,13 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && ln -s ${SEL_HOME}/chromedriver-${CHROME_DRIVER_VERSION} \
            ${SEL_HOME}/chromedriver
 
+#========================================
+# Google chrome flavor to use during run
+#========================================
+# Default chrome flavor: stable, but all are installed:
+#  stable, beta, unstable
+ENV CHROME_FLAVOR stable
+
 #==========================================================
 # Google Chrome - Keep chrome versions as they delete them
 #==========================================================
@@ -332,10 +350,18 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 #  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
+# Also fix .deb file names with correct version
 RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
+  && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
     ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
-    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
+  && wget --no-verbose -O \
+    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-beta_current_amd64.deb \
+    "${CHROME_URL}/google-chrome-beta_current_amd64.deb" \
+  && wget --no-verbose -O \
+    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
+    "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
 
 #==============
 # Back to sudo
@@ -359,7 +385,7 @@ USER root
 #   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 #   && apt-get update -qqy \
 #   && apt-get -qqy install \
-#     google-chrome-stable \
+#     google-chrome-${CHROME_FLAVOR} \
 #   && rm -rf /var/lib/apt/lists/* \
 #   && rm /etc/apt/sources.list.d/google-chrome.list
 
@@ -408,6 +434,13 @@ RUN apt-get update -qqy \
 # https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L50
 # https://github.com/elgalu/pastedirectory/blob/master/static/web_components/web-animations-js/tools/android/setup.sh
 
+#============
+# SelenDroid
+#============
+# TODO
+# https://github.com/selendroid/selendroid
+# http://selendroid.io/scale.html
+
 #===================
 # DNS & hosts stuff
 #===================
@@ -435,11 +468,23 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 #======================
 # Chrome, Chromedriver
 #======================
+ENV CHROME_BASE_DEB_PATH "${NORMAL_USER_HOME}/chrome-deb/google-chrome"
+ENV GREP_ONLY_NUMS_VER "[0-9.]{2,20}"
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     gdebi \
-  && gdebi --non-interactive \
-      ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
+  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
+  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
+  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
+  && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  && export CH_BETA_VER=$(/usr/bin/google-chrome-beta --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  && export CH_UNSTABLE_VER=$(/usr/bin/google-chrome-unstable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  && mv ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
+     ${CHROME_BASE_DEB_PATH}-stable_${CH_STABLE_VER}_amd64.deb \
+  && mv ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
+     ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
+  && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
+     ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
   && ln -s ${SEL_HOME}/chromedriver /usr/bin \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && rm -rf /var/lib/apt/lists/*
@@ -454,17 +499,21 @@ RUN apt-get update -qqy \
 #     dbus-x11 \
 #   && rm -rf /var/lib/apt/lists/*
 
-#=================
-# Mozilla Firefox
-#=================
+#=======================
+# Mozilla Firefox - All
+#=======================
 # Where to find latest version:
 #  http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
 # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
-# FIREFOX_VERSION can be latest // 38.0 // 37.0 // 37.0.1 // 37.0.2 and so on
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FIREFOX_VERSION latest
+# Latest available firefox version
+# ENV FIREFOX_LATEST_VERSION latest #this also wors
+ENV FIREFOX_LATEST_VERSION 39.0
+# All firefox versions we provide from oldes to newest
+ENV FIREFOX_VERSIONS "23.0.1, 24.0, 25.0.1, 26.0, 27.0.1, 28.0, 29.0.1, 30.0, 31.0, 32.0.3, 33.0.3, 34.0.5, 35.0.1, 36.0.4, 37.0.2, 38.0.6, ${FIREFOX_LATEST_VERSION}"
+# Browser language/locale
 ENV FF_LANG "en-US"
 RUN apt-get update -qqy \
   && apt-get -qqy install \
@@ -474,17 +523,27 @@ RUN apt-get update -qqy \
   #  commit 191a3e6bc700a28f3d62 dated 2015-06-02 is version 1.15
   # && pip install --upgrade mozdownload==1.15 \
   && pip install --upgrade \
-        https://github.com/mozilla/mozdownload/zipball/191a3e6bc700a28f3d62 \
+      "https://github.com/mozilla/mozdownload/zipball/191a3e6bc700a28f3d62" \
   && mkdir -p ${NORMAL_USER_HOME}/firefox-src \
   && cd ${NORMAL_USER_HOME}/firefox-src \
-  && mozdownload --application=firefox --locale=$FF_LANG --retry-attempts=3 \
-      --platform=linux64 --log-level=WARN --version=$FIREFOX_VERSION \
-  && mozinstall --app=firefox \
-      firefox-$FIREFOX_VERSION.$FF_LANG.linux64.tar.bz2 \
-      --destination=${SEL_HOME} \
-  && ln -s ${SEL_HOME}/firefox/firefox /usr/bin \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+     ;done \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && rm -rf /var/lib/apt/lists/*
+
+#===================================
+# Firefox version to use during run
+#===================================
+# For firefox please pick one of $FIREFOX_VERSIONS, default latest
+ENV FIREFOX_VERSION ${FIREFOX_LATEST_VERSION}
 
 #=================
 # Supervisor conf
@@ -495,7 +554,9 @@ ADD xmanager/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 ADD vnc/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 ADD novnc/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 ADD sshd/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD selenium/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD selenium-hub/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD selenium-node-chrome/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD selenium-node-firefox/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 ADD xterm/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
 #==================
@@ -527,6 +588,24 @@ ENV SCREEN_NUM 0
 # Even though you can change them below, don't worry too much about container
 # internal ports since you can map them to the host via `docker run -p`
 ENV SELENIUM_PORT 24444
+ENV SELENIUM_HUB_PORT ${SELENIUM_PORT}
+# You may want to connect to another hub
+ENV SELENIUM_HUB_HOST 127.0.0.1
+ENV SELENIUM_NODE_HOST 127.0.0.1
+ENV SELENIUM_NODE_CH_PORT 25550
+ENV SELENIUM_NODE_FF_PORT 25551
+# Selenium additional params:
+ENV SELENIUM_HUB_PARAMS ""
+ENV SELENIUM_NODE_PARAMS ""
+# Selenium capabilities descriptive (to avoid opera/ie warnings)
+#  docs at https://code.google.com/p/selenium/wiki/Grid2
+ENV MAX_INSTANCES 1
+ENV MAX_SESSIONS 1
+ENV SEL_RELEASE_TIMEOUT_SECS 9000
+ENV SEL_BROWSER_TIMEOUT_SECS 6000
+ENV SEL_CLEANUPCYCLE_MS 70000
+ENV SEL_NODEPOLLING_MS 60000
+# Vnc
 ENV VNC_PORT 25900
 ENV NOVNC_PORT 26080
 # You can set the VNC password or leave null so a random password is generated:
@@ -572,7 +651,9 @@ ADD xmanager/bin/* ${BIN_UTILS}/
 ADD vnc/bin/* ${BIN_UTILS}/
 ADD novnc/bin/* ${BIN_UTILS}/
 ADD sshd/bin/* ${BIN_UTILS}/
-ADD selenium/bin/* ${BIN_UTILS}/
+ADD selenium-hub/bin/* ${BIN_UTILS}/
+ADD selenium-node-chrome/bin/* ${BIN_UTILS}/
+ADD selenium-node-firefox/bin/* ${BIN_UTILS}/
 ADD xterm/bin/* ${BIN_UTILS}/
 
 #=====================================================

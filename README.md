@@ -3,7 +3,9 @@
 
 * selenium-server-standalone
 * google-chrome-stable
-* firefox (stable)
+* google-chrome-beta
+* google-chrome-unstable
+* firefox stable latest 15 versions
 * VNC access (useful for debugging the container)
 * openbox (lightweight window manager using freedesktop standards)
 
@@ -17,7 +19,7 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
     sudo docker run --privileged -p 4444:24444 -p 5920:25900 \
-        -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-sup
+        -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-all
 
 ### Non-privileged
 ### Run
@@ -29,7 +31,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola \
         -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:v2.46.0-sup
+        elgalu/selenium:v2.46.0-all
 
 Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `ch` is the name of the container:
 
@@ -54,13 +56,21 @@ Supervisor exposes an http server but is not enough to bind the ports via `docke
 
     ssh -p 2222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
 
+### Chrome flavor
+
+To configure which Chrome flavor (stable, beta, unstable) you want to use just pass for example `-e CHROME_FLAVOR=beta` to `docker run`. Default is `stable`.
+
+### Firefox version
+
+To configure which Firefox version to use first check available versions in the [CHANGELOG](./CHANGELOG.md) then pass for example `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
+
 ### noVNC
 
 We are now using https://github.com/kanaka/noVNC instead of guacamole so you can open a browser at [localhost:6080](http://localhost:6080/vnc.html) if you don't want to use your own vnc client. Note Safari Browser comes with a built-in one, just navigate to vnc://localhost:5920
 
 ## Security
 
-Starting version [v2.46.0-sup][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
+Starting version [v2.46.0-all][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
 
 Note [scm-source.json](./scm-source.json) file will always be 1 commit outdated in the repo but will be correct inside the container.
 
@@ -78,17 +88,17 @@ There are also additional steps you can take to ensure you're using the correct 
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag v2.46.0-sup
-    export SHA=1cd291d278d888cf566e0c7ca95377407b568ca3fb05aedb11f9781277e1ecb7
+    # e.g. sha256 for tag v2.46.0-all
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
 
 Verify that image id is indeed correct
 
-    # e.g. full image id for tag v2.46.0-sup
-    export IMGID=27b1674c981927123538e809d33cb7c9644da4c0f2cca85a655792d2cf57d698
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-sup |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag v2.46.0-all
+    export IMGID=TBD
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-all |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -110,7 +120,7 @@ Host machine, terminal 2:
     docker run --rm --name=ch -p=4470:24444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:v2.46.0-sup
+      elgalu/selenium:v2.46.0-all
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -132,7 +142,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-sup
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-all
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -142,7 +152,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:v2.46.0-sup
+    elgalu/selenium:v2.46.0-all
 
 # -- Common: Wait for the container to start
 while ! docker exec ch grep 'all done and ready for testing' \
@@ -214,7 +224,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:v2.46.0-sup
+    docker pull elgalu/selenium:v2.46.0-all
 
 #### 2. Use this image
 
@@ -284,4 +294,4 @@ Container leaves a few logs files to see what happened:
     /tmp/local-sel-headless.log
     /tmp/selenium-server-standalone.log
 
-[v2.46.0-sup]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-sup
+[v2.46.0-all]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-all

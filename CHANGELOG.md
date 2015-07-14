@@ -4,6 +4,29 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
+## v2.46.0-all (2015-07-14)
+ + Make selenium maxInstances & maxSession configurable. (Leo Gallucci)
+ + MAJOR: turned docker-selenium into 1 hub N nodes localhost setup.
+ + MAJOR: Provide last 15 versions and select via -e FIREFOX_VERSION.
+ + Provide chrome stable, beta and unstable via -e CHROME_FLAVOR.
+ + Mutated SELENIUM_PARAMS into SELENIUM_HUB_PARAMS & SELENIUM_NODE_PARAMS
+ + Image tag details:
+  + Selenium: v2.46.0 (87c69e2)
+  + Chrome stable:   43.0.2357.134
+  + Chrome beta:     44.0.2403.81
+  + Chrome unstable: 45.0.2453.0
+  + Firefox versions in this image:
+              39.0    38.0.6  37.0.2  36.0.4  35.0.1
+      34.0.5  33.0.3  32.0.3  31.0    30.0    29.0.1
+      28.0    27.0.1  26.0    25.0.1  24.0    23.0.1
+  + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
+  + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.7.0, build 0baf609
+  + Python: 2.7.10
+  + Digest: sha256:TBD
+  + Image ID: TBD
+
 ## v2.46.0-sup (2015-07-13)
  + Switched to supervidord for process management, closes #24 (Leo Gallucci)
  + Extracted guacamole (with tomcat) into elgalu/guaca-docker.

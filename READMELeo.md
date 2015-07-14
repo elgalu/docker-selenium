@@ -1,7 +1,7 @@
 ## Build
 
-    time (docker build -t="elgalu/selenium:v2.46.0-sup" . ;echo $?;beep)
-    docker run --rm -ti --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VNC_PASSWORD=hola -v /var/log/sele elgalu/selenium:v2.46.0-sup
+    time (docker build -t="elgalu/selenium:v2.46.0-all" . ;echo $?;beep)
+    docker run --rm -ti --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VNC_PASSWORD=hola -v /var/log/sele elgalu/selenium:v2.46.0-all
 
 See logs
 
@@ -9,13 +9,21 @@ See logs
 
 Testing in ssh lgallucci@10.160.26.62
 
-    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" -e VNC_PASSWORD=Hola3 os-registry.stups.zalan.do/tip/selenium:v2.46.0-sup
+    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" -e VNC_PASSWORD=Hola3 os-registry.stups.zalan.do/tip/selenium:v2.46.0-all
 
 ## Transfer used browser source artifacts to keep them in the cloud
 
     SSHCMD="-o StrictHostKeyChecking=no -q -P 2222 application@localhost"
     scp ${SSHCMD}:/home/application/chrome-deb/google-chrome-stable_current_amd64.deb browsers-bins/google-chrome-stable_43.0.2357.132_amd64.deb
     #scp ${SSHCMD}:/home/application/firefox-src/firefox-latest.en-US.linux64.tar.bz2  browsers-bins/firefox-38.0.5.en-US.linux64.tar.bz2
+
+List chrome versions via docker exec
+
+    docker exec -ti ch bash -c "ls -lah /home/application/chrome-deb/"
+
+List firefox versions via docker exe
+
+    docker exec -ti ch bash -c "ls -lah /home/application/firefox-src/ && ls -lah /home/application/selenium/firefox**/firefox/firefox"
 
 ## Transfer the other way around
 
@@ -24,18 +32,18 @@ Testing in ssh lgallucci@10.160.26.62
 
 ## To update image id and digest
 
-    docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-sup
+    docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-all
     docker images --digests
 
 ## Run with shared dir
 
     docker run --rm --name=ch -p=127.0.0.1:4460:24444 -p=127.0.0.1:5910:25900 \
-      -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.46.0-sup
+      -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.46.0-all
     docker run --rm --name=ch -p=4460:24444 -p=5910:25900 \
-      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium:v2.46.0-sup
+      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium:v2.46.0-all
 
 
-    docker run --rm --name=ff -p=127.0.0.1:4461:24444 -p=127.0.0.1:5911:25900 -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.46.0-sup
+    docker run --rm --name=ff -p=127.0.0.1:4461:24444 -p=127.0.0.1:5911:25900 -v /e2e/uploads:/e2e/uploads elgalu/selenium:v2.46.0-all
 
 ## Run without shared dir and bind ports to all network interfaces
 
@@ -58,11 +66,11 @@ Testing in ssh lgallucci@10.160.26.62
 ## Run without dir and bind to all interfaces
 Note anything after the image will be taken as arguments for the cmd/entrypoint
 
-    docker run --rm --name=ch -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-sup
+    docker run --rm --name=ch -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-all
 
-    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-sup
-    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:v2.46.0-sup
-    docker run --rm --name=ch -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:v2.46.0-sup
+    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-all
+    docker run --rm --name=ch -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:v2.46.0-all
+    docker run --rm --name=ch -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:v2.46.0-all
 
 However adding a custom host IP to server-selenium.local (e.g. bsele ssh config) is more work:
 
@@ -71,7 +79,7 @@ However adding a custom host IP to server-selenium.local (e.g. bsele ssh config)
 
     vncv localhost:5920 -Scaling=60%  &
 
-    docker run --rm --name=ff -p=0.0.0.0:4471:24444 -p=0.0.0.0:5921:25900 elgalu/selenium:v2.46.0-sup
+    docker run --rm --name=ff -p=0.0.0.0:4471:24444 -p=0.0.0.0:5921:25900 elgalu/selenium:v2.46.0-all
 
 Automatic builds not working for me right now, maybe there is an issue with docker registry v1 vs v2
 https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
@@ -79,24 +87,24 @@ https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
 ## Push version
 
     docker login
-    docker push docker.io/elgalu/selenium:v2.46.0-sup ;echo $?;beep
-    docker tag elgalu/selenium:v2.46.0-sup elgalu/selenium:latest
+    docker push docker.io/elgalu/selenium:v2.46.0-all ;echo $?;beep
+    docker tag elgalu/selenium:v2.46.0-all elgalu/selenium:latest
     docker push docker.io/elgalu/selenium:latest
 
 Not working maybe because it has automated builds enabled but then it fails in the cloud but works locally
 https://registry.hub.docker.com/u/elgalu/selenium/tags/manage/
 
-    docker push elgalu/selenium:v2.46.0-sup
-    docker push elgalu/docker-selenium:v2.46.0-sup
-    docker push docker.io/elgalu/docker-selenium:v2.46.0-sup
+    docker push elgalu/selenium:v2.46.0-all
+    docker push elgalu/docker-selenium:v2.46.0-all
+    docker push docker.io/elgalu/docker-selenium:v2.46.0-all
 
 ## Pulling
 
-    docker pull registry.hub.docker.com/elgalu/selenium:v2.46.0-sup
+    docker pull registry.hub.docker.com/elgalu/selenium:v2.46.0-all
 
 ## Pull
 
-    docker run -d --name=max -p=0.0.0.0:4411:24444 -p=0.0.0.0:5911:25900 elgalu/selenium:v2.46.0-sup
+    docker run -d --name=max -p=0.0.0.0:4411:24444 -p=0.0.0.0:5911:25900 elgalu/selenium:v2.46.0-all
 
 How to connect through vnc (need a vnc client)
 

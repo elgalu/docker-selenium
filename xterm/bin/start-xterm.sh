@@ -27,12 +27,14 @@ shutdown () {
 #  http://www.gnu.org/software/coreutils/manual/coreutils.html#timeout-invocation
 
 # Wait for everyone to be done
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh     || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || shutdown
 #TODO: wait-xmanager.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh      || shutdown
-timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh    || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || shutdown
 #TODO: wait-sshd.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || shutdown
 
 # Help at http://supervisord.org/subprocess.html#process-states
 if supervisorctl -c /etc/supervisor/supervisord.conf status \

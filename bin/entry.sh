@@ -11,7 +11,12 @@ export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
 # These values are only available when the container started
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 export CONTAINER_IP=$(ip addr show dev eth0 | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
-#end.
+export COMMON_CAPS="maxInstances=${MAX_INSTANCES},platform=LINUX,acceptSslCerts=true"
+export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
+export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
+export CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
+# For current selected firefox
+export FIREFOX_DEST_BIN="${SEL_HOME}/firefox-${FIREFOX_VERSION}/firefox/firefox"
 
 #--------------------------------
 # Improve etc/hosts and fix dirs
