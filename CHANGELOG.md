@@ -25,8 +25,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.1, build 786b29d
   + Python: 2.7.6
-  + Digest: sha256:TBD
-  + Image ID: TBD
+  + Digest: sha256:94c0e3992501db24a5a07cba516d8e7e32ac419ea7accae915275eb58dd389d5
+  + Image ID: a8bc01890482646e82188ecd84b799fb2e7a1588f7627779b16735ed55d4f40c
 
 ## v2.46.0-sup (2015-07-13)
  + Switched to supervidord for process management, closes #24 (Leo Gallucci)
