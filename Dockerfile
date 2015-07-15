@@ -3,8 +3,8 @@
 ###################################################
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:wily-20150708
-ENV UBUNTU_FLAVOR wily
+# FROM ubuntu:wily-20150708
+# ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
@@ -16,8 +16,8 @@ ENV UBUNTU_FLAVOR wily
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 #                    http://cloud-images.ubuntu.com/releases/14.04/
-# FROM ubuntu:14.04.2
-# ENV UBUNTU_FLAVOR trusty
+FROM ubuntu:trusty-20150630
+ENV UBUNTU_FLAVOR trusty
 
 #== Ubuntu precise is 12.04.x, i.e. FROM ubuntu:12.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
@@ -465,6 +465,20 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && mv websockify-${WEBSOCKIFY_SHA} \
        ${NORMAL_USER_HOME}/noVNC/utils/websockify
 
+#=========================
+# ffmpeg and video codecs
+#=========================
+# ffmpeg: Is a better alternative to Pyvnc2swf
+# Use ffmpeg or libav-tools depending on the Ubuntu dist
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    libx264-142 \
+    libx264-dev \
+    libvorbis-dev \
+    libx11-dev \
+    libav-tools \
+  && rm -rf /var/lib/apt/lists/*
+
 #======================
 # Chrome, Chromedriver
 #======================
@@ -508,25 +522,28 @@ RUN apt-get update -qqy \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-# Latest available firefox version
-# ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_LATEST_VERSION 39.0
-# All firefox versions we provide from oldes to newest
-ENV FIREFOX_VERSIONS "23.0.1, 24.0, 25.0.1, 26.0, 27.0.1, 28.0, 29.0.1, 30.0, 31.0, 32.0.3, 33.0.3, 34.0.5, 35.0.1, 36.0.4, 37.0.2, 38.0.6, ${FIREFOX_LATEST_VERSION}"
-# Browser language/locale
 ENV FF_LANG "en-US"
+# Browser language/locale
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     dbus-x11 \
+  && rm -rf /var/lib/apt/lists/* \
   && pip install --upgrade mozInstall==1.12 \
   # Always safer to install for git specific commit, in this case
   #  commit 191a3e6bc700a28f3d62 dated 2015-06-02 is version 1.15
   # && pip install --upgrade mozdownload==1.15 \
   && pip install --upgrade \
       "https://github.com/mozilla/mozdownload/zipball/191a3e6bc700a28f3d62" \
-  && mkdir -p ${NORMAL_USER_HOME}/firefox-src \
-  && cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS} | tr "," "\n"); do \
+  && mkdir -p ${NORMAL_USER_HOME}/firefox-src
+
+#-------------------#
+# FIREFOX_VERSIONS1 #
+#-------------------#
+# Will split firefox versions in smaller chunks so the layers are smaller
+# All firefox versions we provide from oldes to newest
+ENV FIREFOX_VERSIONS1 "24.0, 25.0.1, 26.0, 27.0.1, 28.0, 29.0.1"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS1} | tr "," "\n"); do \
          mozdownload --application=firefox \
            --locale=${FF_LANG} --retry-attempts=1 \
            --platform=linux64 --log-level=WARN --version=${FF_VER} \
@@ -535,9 +552,48 @@ RUN apt-get update -qqy \
       && mozinstall --app=firefox \
           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
           --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+     ;done
+
+#-------------------#
+# FIREFOX_VERSIONS2 #
+#-------------------#
+ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3, 33.0.3, 34.0.5, 35.0.1"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+     ;done
+
+#-------------------#
+# FIREFOX_VERSIONS3 #
+#-------------------#
+# Latest available firefox version
+# ENV FIREFOX_LATEST_VERSION latest #this also wors
+ENV FIREFOX_LATEST_VERSION 39.0
+ENV FIREFOX_VERSIONS3 "36.0.4, 37.0.2, 38.0.6, ${FIREFOX_LATEST_VERSION}"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done \
-  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
-  && rm -rf /var/lib/apt/lists/*
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME}
+
+ENV FIREFOX_VERSIONS "${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}"
 
 #===================================
 # Firefox version to use during run
@@ -549,15 +605,7 @@ ENV FIREFOX_VERSION ${FIREFOX_LATEST_VERSION}
 # Supervisor conf
 #=================
 ADD supervisor/etc/supervisor/supervisord.conf /etc/supervisor/
-ADD xvfb/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD xmanager/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD vnc/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD novnc/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD sshd/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD selenium-hub/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD selenium-node-chrome/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD selenium-node-firefox/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-ADD xterm/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+ADD **/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
 #==================
 # User & ssh stuff
@@ -615,14 +663,34 @@ ENV SSHD_PORT 22222
 ENV SUPERVISOR_HTTP_PORT 29001
 ENV SUPERVISOR_HTTP_USERNAME supervisorweb
 ENV SUPERVISOR_HTTP_PASSWORD somehttpbasicauthpwd
+ENV SUPERVISOR_REQUIRED_SRV_LIST "vnc|novnc|sshd|selenium-hub|selenium-node-chrome|selenium-node-firefox|xmanager|xterm|xvfb"
 # Supervisor loglevel and also general docker log level
 # can be: debug, warn, trace, info
-ENV LOGLEVEL info
+ENV LOG_LEVEL info
 ENV LOGFILE_MAXBYTES 10MB
 ENV LOGFILE_BACKUPS 5
 # Logs are now managed by supervisord.conf, see
 #  ${LOGS_DIR}/*.log
 ENV LOGS_DIR /var/log/sele
+# ENV VIDEO_FORMAT xxxx
+# Encoding movie type "flv", "swf5", "swf7", "mpeg" (PyMedia required)
+# or "vnc" more info at http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
+ENV VNC2SWF_ENCODING swf5
+# Specifies the framerate in fps. (default=12.0). Reducing the frame rate
+# sometimes helps reducing the movie size.
+ENV VNC2SWF_FRAMERATE 25
+# ffmpeg encoding options
+ENV FFMPEG_FRAME_RATE 25
+# ENV FFMPEG_CODEC_ARGS "-vcodec libx264 -vpre lossless_ultrafast -threads 0"
+ENV FFMPEG_CODEC_ARGS ""
+# Video recording on container create
+ENV VIDEO false
+# Video file and extension, e.g. swf, mp4
+ENV VIDEO_FILE_EXTENSION "mkv"
+ENV VIDEO_FILE_NAME "test"
+ENV VIDEOS_DIR "${NORMAL_USER_HOME}/videos"
+ENV VIDEO_LOG_FILE "${LOGS_DIR}/video-rec-stdout.log"
+ENV VIDEO_PIDFILE "${RUN_DIR}/video.pid"
 #===============================
 # Run docker from inside docker
 # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
@@ -643,18 +711,33 @@ EXPOSE ${SSHD_PORT}
 # Binary scripts
 #================
 ADD bin/* ${BIN_UTILS}/
-ADD utils/bin/* ${BIN_UTILS}/
-ADD java/bin/* ${BIN_UTILS}/
-ADD dns/bin/* ${BIN_UTILS}/
-ADD xvfb/bin/* ${BIN_UTILS}/
-ADD xmanager/bin/* ${BIN_UTILS}/
-ADD vnc/bin/* ${BIN_UTILS}/
-ADD novnc/bin/* ${BIN_UTILS}/
-ADD sshd/bin/* ${BIN_UTILS}/
-ADD selenium-hub/bin/* ${BIN_UTILS}/
-ADD selenium-node-chrome/bin/* ${BIN_UTILS}/
-ADD selenium-node-firefox/bin/* ${BIN_UTILS}/
-ADD xterm/bin/* ${BIN_UTILS}/
+ADD **/bin/* ${BIN_UTILS}/
+
+#==========
+# Fix dirs
+#==========
+RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
+  # Videos
+  && mkdir -p ${VIDEOS_DIR} \
+  && sudo ln -s ${VIDEOS_DIR} / \
+  # Ssh stuff
+  && mkdir -p ${NORMAL_USER_HOME}/.ssh \
+  && touch ${NORMAL_USER_HOME}/.ssh/authorized_keys \
+  && chmod 700 ${NORMAL_USER_HOME}/.ssh \
+  && chmod 600 ${NORMAL_USER_HOME}/.ssh/authorized_keys \
+  # Create and fix directories perms
+  && sudo mkdir -p ${LOGS_DIR} \
+  && sudo mkdir -p ${RUN_DIR} \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${NORMAL_USER_HOME} \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${LOGS_DIR} \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${RUN_DIR} \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /etc/supervisor \
+  # This X11-unix is useful when using Xephyr
+  && sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
+  && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
+  # To avoid error "Missing privilege separation directory: /var/run/sshd"
+  && sudo mkdir -p /var/run/sshd \
+  && sudo chmod 744 /var/run/sshd
 
 #=====================================================
 # Meta JSON file to hold commit info of current build

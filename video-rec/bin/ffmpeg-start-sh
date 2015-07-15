@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Make it portable
+[ -z "${FFMPEG_FRAME_SIZE}" ] && export \
+    FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+[ -z "${VIDEO_PATH}" ] && export \
+    VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
+
+# record testing video using password file
+# using sudo due to http://stackoverflow.com/questions/23544282/
+# ffmpeg
+#  -an            no audio
+#  -f   x11grab   force format
+#  -y             overwrite output files
+#  -i             display and pos
+#  https://www.ffmpeg.org/ffmpeg-codecs.html
+sudo avconv -an -y -f x11grab \
+  -framerate ${FFMPEG_FRAME_RATE} \
+  -video_size ${FFMPEG_FRAME_SIZE} ${FFMPEG_CODEC_ARGS} \
+  -i "${DISPLAY}.0+0,0" \
+  "${VIDEO_PATH}" 2>&1

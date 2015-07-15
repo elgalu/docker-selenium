@@ -18,6 +18,8 @@ die () {
 
 # ensures supervisord dies too
 shutdown () {
+  # optionallly prints error message
+  [ ! -z "$1" ] && echoerr "ERROR: $1"
   killall supervisord
   die "ERROR: Some processes failed to start so quitting."
 }
@@ -38,11 +40,25 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || shutdown
 
 # Help at http://supervisord.org/subprocess.html#process-states
 if supervisorctl -c /etc/supervisor/supervisord.conf status \
+    | grep -E "${SUPERVISOR_REQUIRED_SRV_LIST}" \
     | grep -E "STOPPED|STOPPING|EXITED|FATAL|UNKNOWN"; then
   supervisorctl -c /etc/supervisor/supervisord.conf status 1>&2
   shutdown
 else
   echo "No failed processes reported by supervisorctl status. Looking good."
+fi
+
+# Start a GUI xTerm to help debugging when VNC into the container
+x-terminal-emulator -ls  \
+  -geometry 120x40+10+10 \
+  -title "x-terminal-emulator" \
+  &
+
+# If video recording on start, then wait that
+if [ "$VIDEO" = "true" ]; then
+  start-video-rec.sh || shutdown "Failed to start video recording!"
+  timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || shutdown \
+    "Failed while waiting for video recording to start!"
 fi
 
 # Join them in 1 bash line to avoid supervisor split them in debug output
@@ -52,7 +68,4 @@ echo "" \
   && echo "selenium all done and ready for testing" \
   && echo ""
 
-# Start a GUI xTerm to help debugging when VNC into the container
-x-terminal-emulator -ls  \
-  -geometry 120x40+10+10 \
-  -title "x-terminal-emulator"
+wait

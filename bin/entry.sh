@@ -17,6 +17,12 @@ export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | g
 export CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
 # For current selected firefox
 export FIREFOX_DEST_BIN="${SEL_HOME}/firefox-${FIREFOX_VERSION}/firefox/firefox"
+# We may need uid & gid from host machine
+export HOST_GID=$(stat -c "%g" ${VIDEOS_DIR})
+export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
+# Video
+export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
+export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
 #--------------------------------
 # Improve etc/hosts and fix dirs

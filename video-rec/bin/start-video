@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Old:
+# start-stop-daemon --start --background -m --pidfile ${VIDEO_PIDFILE} \
+#   --exec /bin-utils/vnc2swf-start.sh
+
+# Test: supervisorctl -c /etc/supervisor/supervisord.conf status
+supervisorctl -c /etc/supervisor/supervisord.conf start video-rec
+wait-video-rec.sh

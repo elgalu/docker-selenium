@@ -1,27 +1,19 @@
 #!/usr/bin/env bash
 
-mkdir -p ${HOME}/.vnc
-mkdir -p ~/.ssh
-touch ~/.ssh/authorized_keys
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys
-
-# Create and fix directories perms
-sudo mkdir -p /etc/supervisor/conf.d
-sudo mkdir -p ${LOGS_DIR}
-sudo mkdir -p ${RUN_DIR}
-sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${NORMAL_USER_HOME}
-sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${LOGS_DIR}
-sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${RUN_DIR}
-sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /etc/supervisor
-
-# This X11-unix is useful when using Xephyr
-sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix
-sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix
-
-# To avoid error "Missing privilege separation directory: /var/run/sshd"
-sudo mkdir -p /var/run/sshd
-sudo chmod 744 /var/run/sshd
-
 # Set default firefox to the chosen one
 sudo ln -s ${FIREFOX_DEST_BIN} /usr/bin
+
+# May need to fix perms when mounting volumes
+#  Issue: http://stackoverflow.com/questions/23544282/
+#  Solution: http://stackoverflow.com/a/28596874/511069
+# GROUP_EXISTS=$(cat /etc/group | grep ${HOST_GID} | wc -l)
+# # Create new group using target GID and add ${NORMAL_USER} user
+# if [ $GROUP_EXISTS == "0" ]; then
+#   sudo groupadd -g ${HOST_GID} tempgroup
+#   sudo gpasswd -a ${NORMAL_USER} tempgroup
+# else
+#   # GID exists, find group name and add
+#   EXISTING_GROUP=$(getent group ${HOST_GID} | cut -d: -f1)
+#   sudo gpasswd -a ${NORMAL_USER} ${EXISTING_GROUP}
+# fi
+# Update: Actually let's just use sudo
