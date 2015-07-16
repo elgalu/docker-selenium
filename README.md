@@ -105,7 +105,7 @@ You can lunch a node only container via environment variables:
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VIDEO=true \
       -e SELENIUM_HUB_HOST=10.161.128.170 \
       -e SELENIUM_HUB_PORT=4444 \
-      -e SELENIUM_NODE_HOST=10.161.128.170 \
+      -e SELENIUM_NODE_HOST=10.161.131.6 \
       -p 25550:25550 -p 25551:25551 \
       -e GRID=false -e CHROME=true -e FIREFOX=true \
       -v $(pwd)/videos:/videos \
@@ -134,7 +134,7 @@ There are also additional steps you can take to ensure you're using the correct 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag v2.46.0-01
-    export SHA=TBD
+    export SHA=29766e276918fd39ec679fe9ad208d3aa04deeb7e22171aaaa5877ab6f732616
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
@@ -142,7 +142,7 @@ Given docker.io currently allows to push the same tag image twice this represent
 Verify that image id is indeed correct
 
     # e.g. full image id for tag v2.46.0-01
-    export IMGID=TBD
+    export IMGID=049e6178f83f6abe4230211e0f1116ccdda92083b3f81038a1a7fc1d5325f26b
     if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-01 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else

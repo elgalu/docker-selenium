@@ -22,8 +22,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:trusty-20150630
   + Python: 2.7.6
-  + Digest: sha256:TBD
-  + Image ID: TBD
+  + Digest: sha256:29766e276918fd39ec679fe9ad208d3aa04deeb7e22171aaaa5877ab6f732616
+  + Image ID: 049e6178f83f6abe4230211e0f1116ccdda92083b3f81038a1a7fc1d5325f26b
 
 ## v2.46.0-00 (2015-07-15)
  + Make selenium maxInstances & maxSession configurable. (Leo Gallucci)
