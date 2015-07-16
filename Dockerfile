@@ -593,109 +593,105 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
      ;done \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME}
 
-ENV FIREFOX_VERSIONS "${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}"
-
-#===================================
-# Firefox version to use during run
-#===================================
-# For firefox please pick one of $FIREFOX_VERSIONS, default latest
-ENV FIREFOX_VERSION ${FIREFOX_LATEST_VERSION}
-
 #=================
 # Supervisor conf
 #=================
 ADD supervisor/etc/supervisor/supervisord.conf /etc/supervisor/
 ADD **/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
-#==================
-# User & ssh stuff
-#==================
+#======
+# User
+#======
 USER ${NORMAL_USER}
-ENV USER ${NORMAL_USER}
-ENV HOME ${NORMAL_USER_HOME}
-ENV VNC_STORE_PWD_FILE ${HOME}/.vnc/passwd
 
-#========================================================================
-# Some configuration options that can be customized at container runtime
-#========================================================================
-ENV BIN_UTILS /bin-utils
-ENV PATH ${PATH}:${BIN_UTILS}
-# JVM uses only 1/4 of system memory by default
-ENV MEM_JAVA_PERCENT 80
-# Max amount of time to wait for other processes dependencies
-ENV WAIT_TIMEOUT 5s
-ENV SCREEN_WIDTH 1900
-ENV SCREEN_HEIGHT 1480
-ENV SCREEN_MAIN_DEPTH 24
-ENV SCREEN_DEPTH ${SCREEN_MAIN_DEPTH}+32
-ENV DISP_N 10
-ENV DISPLAY :${DISP_N}
-ENV XEPHYR_DISPLAY :${DISP_N}
-ENV SCREEN_NUM 0
-# ENV XEPHYR_SCREEN_SIZE "${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}"""
-# Even though you can change them below, don't worry too much about container
-# internal ports since you can map them to the host via `docker run -p`
-ENV SELENIUM_PORT 24444
-ENV SELENIUM_HUB_PORT ${SELENIUM_PORT}
-# You may want to connect to another hub
-ENV SELENIUM_HUB_HOST 127.0.0.1
-ENV SELENIUM_NODE_HOST 127.0.0.1
-ENV SELENIUM_NODE_CH_PORT 25550
-ENV SELENIUM_NODE_FF_PORT 25551
-# Selenium additional params:
-ENV SELENIUM_HUB_PARAMS ""
-ENV SELENIUM_NODE_PARAMS ""
-# Selenium capabilities descriptive (to avoid opera/ie warnings)
-#  docs at https://code.google.com/p/selenium/wiki/Grid2
-ENV MAX_INSTANCES 1
-ENV MAX_SESSIONS 1
-ENV SEL_RELEASE_TIMEOUT_SECS 9000
-ENV SEL_BROWSER_TIMEOUT_SECS 6000
-ENV SEL_CLEANUPCYCLE_MS 70000
-ENV SEL_NODEPOLLING_MS 60000
-# Vnc
-ENV VNC_PORT 25900
-ENV NOVNC_PORT 26080
-# You can set the VNC password or leave null so a random password is generated:
-# ENV VNC_PASSWORD topsecret
-ENV SSHD_PORT 22222
-# Supervisor (process management) http server
-ENV SUPERVISOR_HTTP_PORT 29001
-ENV SUPERVISOR_HTTP_USERNAME supervisorweb
-ENV SUPERVISOR_HTTP_PASSWORD somehttpbasicauthpwd
-ENV SUPERVISOR_REQUIRED_SRV_LIST "vnc|novnc|sshd|selenium-hub|selenium-node-chrome|selenium-node-firefox|xmanager|xterm|xvfb"
-# Supervisor loglevel and also general docker log level
-# can be: debug, warn, trace, info
-ENV LOG_LEVEL info
-ENV LOGFILE_MAXBYTES 10MB
-ENV LOGFILE_BACKUPS 5
-# Logs are now managed by supervisord.conf, see
-#  ${LOGS_DIR}/*.log
-ENV LOGS_DIR /var/log/sele
-# ENV VIDEO_FORMAT xxxx
-# Encoding movie type "flv", "swf5", "swf7", "mpeg" (PyMedia required)
-# or "vnc" more info at http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
-ENV VNC2SWF_ENCODING swf5
-# Specifies the framerate in fps. (default=12.0). Reducing the frame rate
-# sometimes helps reducing the movie size.
-ENV VNC2SWF_FRAMERATE 25
-# ffmpeg encoding options
-ENV FFMPEG_FRAME_RATE 25
-# ENV FFMPEG_CODEC_ARGS "-vcodec libx264 -vpre lossless_ultrafast -threads 0"
-ENV FFMPEG_CODEC_ARGS ""
-# Video recording on container create
-ENV VIDEO false
-# Video file and extension, e.g. swf, mp4
-ENV VIDEO_FILE_EXTENSION "mkv"
-ENV VIDEO_FILE_NAME "test"
-ENV VIDEOS_DIR "${NORMAL_USER_HOME}/videos"
-ENV VIDEO_LOG_FILE "${LOGS_DIR}/video-rec-stdout.log"
-ENV VIDEO_PIDFILE "${RUN_DIR}/video.pid"
-#===============================
-# Run docker from inside docker
-# Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
-#                   -v $(which docker):$(which docker)
-ENV DOCKER_SOCK "/var/run/docker.sock"
+#======
+# Envs
+#======
+ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
+  # Firefox version to use during run
+  # For firefox please pick one of $FIREFOX_VERSIONS, default latest
+  FIREFOX_VERSION=${FIREFOX_LATEST_VERSION} \
+  # User and home
+  USER="${NORMAL_USER}" \
+  HOME="${NORMAL_USER_HOME}" \
+  # Vnc password file
+  VNC_STORE_PWD_FILE="${NORMAL_USER_HOME}/.vnc/passwd" \
+  BIN_UTILS="/bin-utils" \
+  # JVM uses only 1/4 of system memory by default
+  MEM_JAVA_PERCENT=80 \
+  # Max amount of time to wait for other processes dependencies
+  WAIT_TIMEOUT="5s" \
+  SCREEN_WIDTH=1900 \
+  SCREEN_HEIGHT=1480 \
+  SCREEN_MAIN_DEPTH=24 \
+  SCREEN_SUB_DEPTH=32 \
+  # Display number; see entry.sh for $DISPLAY
+  DISP_N=10 \
+  SCREEN_NUM=0 \
+  # ENV XEPHYR_SCREEN_SIZE "${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}"""
+  # Even though you can change them below, don't worry too much about container
+  # internal ports since you can map them to the host via `docker run -p`
+  SELENIUM_HUB_PORT=24444 \
+  # You may want to connect to another hub
+  SELENIUM_HUB_HOST="127.0.0.1" \
+  SELENIUM_NODE_HOST="127.0.0.1" \
+  SELENIUM_NODE_CH_PORT=25550 \
+  SELENIUM_NODE_FF_PORT=25551 \
+  # Selenium additional params:
+  SELENIUM_HUB_PARAMS="" \
+  SELENIUM_NODE_PARAMS="" \
+  # Selenium capabilities descriptive (to avoid opera/ie warnings)
+  #  docs at https://code.google.com/p/selenium/wiki/Grid2
+  MAX_INSTANCES=1 \
+  MAX_SESSIONS=1 \
+  SEL_RELEASE_TIMEOUT_SECS=9000 \
+  SEL_BROWSER_TIMEOUT_SECS=6000 \
+  SEL_CLEANUPCYCLE_MS=70000 \
+  SEL_NODEPOLLING_MS=60000 \
+  # Vnc
+  VNC_PORT=25900 \
+  NOVNC_PORT=26080 \
+  # You can set the VNC password or leave null so a random password is generated:
+  # ENV VNC_PASSWORD topsecret
+  SSHD_PORT=22222 \
+  # Supervisor (process management) http server
+  SUPERVISOR_HTTP_PORT=29001 \
+  SUPERVISOR_HTTP_USERNAME=supervisorweb \
+  SUPERVISOR_HTTP_PASSWORD=somehttpbasicauthpwd \
+  SUPERVISOR_REQUIRED_SRV_LIST="vnc|novnc|sshd|xmanager|xvfb" \
+  # Supervisor loglevel and also general docker log level
+  # can be: debug, warn, trace, info
+  LOG_LEVEL=info \
+  LOGFILE_MAXBYTES=10MB \
+  LOGFILE_BACKUPS=5 \
+  # Logs are now managed by supervisord.conf, see
+  #  ${LOGS_DIR}/*.log
+  LOGS_DIR="/var/log/sele" \
+  # ENV VIDEO_FORMAT xxxx
+  # Encoding movie type "flv", "swf5", "swf7", "mpeg" (PyMedia required)
+  # or "vnc" more info at http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
+  VNC2SWF_ENCODING=swf5 \
+  # Specifies the framerate in fps. (default=12.0). Reducing the frame rate
+  # sometimes helps reducing the movie size.
+  VNC2SWF_FRAMERATE=25 \
+  # ffmpeg encoding options
+  FFMPEG_FRAME_RATE=25 \
+  # ENV FFMPEG_CODEC_ARGS "-vcodec libx264 -vpre lossless_ultrafast -threads 0"
+  FFMPEG_CODEC_ARGS="" \
+  # Services to start by default; true/false
+  VIDEO=false \
+  GRID=true \
+  CHROME=true \
+  FIREFOX=true \
+  # Video file and extension, e.g. swf, mp4, mkv, flv
+  VIDEO_FILE_EXTENSION="mkv" \
+  VIDEO_FILE_NAME="test" \
+  VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
+  #===============================
+  # Run docker from inside docker
+  # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
+  #                   -v $(which docker):$(which docker)
+  DOCKER_SOCK="/var/run/docker.sock"
 
 #================================
 # Expose Container's Directories
@@ -704,7 +700,7 @@ ENV DOCKER_SOCK "/var/run/docker.sock"
 
 # Only expose ssh port given the other services are not secured
 # forcing the user to open ssh tunnels or use docker run -p ports...
-# EXPOSE ${SELENIUM_PORT} ${VNC_PORT} ${SSHD_PORT} ${TOMCAT_PORT}
+# EXPOSE ${SELENIUM_HUB_PORT} ${VNC_PORT} ${SSHD_PORT} ${TOMCAT_PORT}
 EXPOSE ${SSHD_PORT}
 
 #================
@@ -737,7 +733,8 @@ RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
   && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
   # To avoid error "Missing privilege separation directory: /var/run/sshd"
   && sudo mkdir -p /var/run/sshd \
-  && sudo chmod 744 /var/run/sshd
+  && sudo chmod 744 /var/run/sshd \
+  && echo ""
 
 #=====================================================
 # Meta JSON file to hold commit info of current build
@@ -753,5 +750,5 @@ RUN [ $(find ./ -mtime -1 -type f -name "scm-source.json" 2>/dev/null) ] \
 # CMD or ENTRYPOINT
 #===================
 # ENTRYPOINT ["entry.sh"]
-CMD ["entry.sh"]
 # CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/bin-utils/entry.sh"]

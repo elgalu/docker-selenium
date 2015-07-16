@@ -4,6 +4,27 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
+## v2.46.0-01 (2015-07-16)
+ + Launch as grid only, firefox node only, chrome node only. (Leo Gallucci)
+ + Start services via env vars VIDEO=false GRID=true CHROME=true FIREFOX=true
+ + Image tag details:
+  + Selenium: v2.46.0 (87c69e2)
+  + Chrome stable:   43.0.2357.134
+  + Chrome beta:     44.0.2403.81
+  + Chrome unstable: 45.0.2454.6
+  + Firefox versions in this image:
+                      39.0    38.0.6  37.0.2  36.0.4
+      35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
+      29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
+  + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
+  + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.7.1, build 786b29d
+  + FROM ubuntu:trusty-20150630
+  + Python: 2.7.6
+  + Digest: sha256:TBD
+  + Image ID: TBD
+
 ## v2.46.0-00 (2015-07-15)
  + Make selenium maxInstances & maxSession configurable. (Leo Gallucci)
  + MAJOR: turned docker-selenium into 1 hub N nodes localhost setup.
@@ -24,6 +45,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.1, build 786b29d
+  + FROM ubuntu:trusty-20150630
   + Python: 2.7.6
   + Digest: sha256:94c0e3992501db24a5a07cba516d8e7e32ac419ea7accae915275eb58dd389d5
   + Image ID: a8bc01890482646e82188ecd84b799fb2e7a1588f7627779b16735ed55d4f40c
@@ -45,6 +67,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.0, build 0baf609
+  + FROM ubuntu:wily-20150708
   + Python: 2.7.10
   + Digest: sha256:1cd291d278d888cf566e0c7ca95377407b568ca3fb05aedb11f9781277e1ecb7
   + Image ID: 27b1674c981927123538e809d33cb7c9644da4c0f2cca85a655792d2cf57d698
@@ -60,6 +83,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.0, build 0baf609
+  + FROM ubuntu:vivid-20150611
   + Python: 2.7.9
   + Digest: sha256:311e42f1253868dd10208e4153b2a9419dadf8e6ce4ef31cbf200604ac9e22b8
   + Image ID: 9a8d735a5e1ed22728426fb5cdd696215f382c74487f9616cfa3b67f31e735dc
@@ -79,6 +103,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Java: 1.8.0_45 HotSpot(TM) 64-Bit 1.8.0_45-b14
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.7.0, build 0baf609
+  + FROM ubuntu:vivid-20150611
   + Python: 2.7.9
   + Digest: sha256:8d67d3d15dfd449e94433de46c352ff135f38678ebd6e217b613e7f1770d5490
   + Image ID: 247b69cbd53ef323b117362fd8bb7510276c5e9a702d15e8573223b0467538fb

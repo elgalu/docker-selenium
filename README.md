@@ -19,7 +19,7 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
     sudo docker run --privileged -p 4444:24444 -p 5920:25900 \
-        -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-00
+        -e VNC_PASSWORD=hola elgalu/selenium:v2.46.0-01
 
 ### Non-privileged
 ### Run
@@ -31,7 +31,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola \
         -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:v2.46.0-00
+        elgalu/selenium:v2.46.0-01
 
 Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `ch` is the name of the container:
 
@@ -86,9 +86,36 @@ If the VNC password was randomly generated find out with
     docker exec ch grep "was generated for you:" /var/log/sele/vnc-stdout.log
     #=> a VNC password was generated for you: ooGhai0aesaesh
 
+## Grid
+## Hub
+
+You can lunch a grid only container via environment variables:
+
+    docker run --rm --name=hub -p 4444:24444 -p 5930:25900 -p 2223:22222 \
+      -p=6081:26080 -e CHROME=false -e FIREFOX=false \
+      elgalu/selenium:v2.46.0-01
+
+The important part above is `-e CHROME=false -e FIREFOX=false` which tells the docker image not run run default chorme and firefox nodes turning the container into a grid-only one.
+
+## Node
+
+You can lunch a node only container via environment variables:
+
+    docker run --rm --name=node -p=5940:25900 -p=2224:22222 -p=6082:26080 \
+      -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VIDEO=true \
+      -e SELENIUM_HUB_HOST=10.161.128.170 \
+      -e SELENIUM_HUB_PORT=4444 \
+      -e SELENIUM_NODE_HOST=10.161.128.170 \
+      -p 25550:25550 -p 25551:25551 \
+      -e GRID=false -e CHROME=true -e FIREFOX=true \
+      -v $(pwd)/videos:/videos \
+      elgalu/selenium:v2.46.0-01
+
+The important part above is `-e GRID=false` which tells the container to be a node-only node, this this case with 2 browsers `-e CHROME=true -e FIREFOX=true` but could be just 1.
+
 ## Security
 
-Starting version [v2.46.0-00][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
+Starting version [v2.46.0-01][] the file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
 
 Note [scm-source.json](./scm-source.json) file will always be 1 commit outdated in the repo but will be correct inside the container.
 
@@ -106,17 +133,17 @@ There are also additional steps you can take to ensure you're using the correct 
 ### Option 1 - Use immutable image digests
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag v2.46.0-00
-    export SHA=94c0e3992501db24a5a07cba516d8e7e32ac419ea7accae915275eb58dd389d5
+    # e.g. sha256 for tag v2.46.0-01
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
 
 Verify that image id is indeed correct
 
-    # e.g. full image id for tag v2.46.0-00
-    export IMGID=a8bc01890482646e82188ecd84b799fb2e7a1588f7627779b16735ed55d4f40c
-    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-00 |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag v2.46.0-01
+    export IMGID=TBD
+    if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-01 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -138,7 +165,7 @@ Host machine, terminal 2:
     docker run --rm --name=ch -p=4470:24444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:v2.46.0-00
+      elgalu/selenium:v2.46.0-01
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -160,7 +187,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-00
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:v2.46.0-01
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -170,7 +197,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:v2.46.0-00
+    elgalu/selenium:v2.46.0-01
 
 # -- Common: Wait for the container to start
 while ! docker exec ch grep 'all done and ready for testing' \
@@ -242,7 +269,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:v2.46.0-00
+    docker pull elgalu/selenium:v2.46.0-01
 
 #### 2. Use this image
 
@@ -312,4 +339,4 @@ Container leaves a few logs files to see what happened:
     /tmp/local-sel-headless.log
     /tmp/selenium-server-standalone.log
 
-[v2.46.0-00]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-00
+[v2.46.0-01]: https://github.com/elgalu/docker-selenium/releases/tag/v2.46.0-01

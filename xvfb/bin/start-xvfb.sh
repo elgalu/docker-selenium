@@ -14,6 +14,7 @@ else
 
   # Start the X server that can run on machines with no real display
   # using Xvfb instead of Xdummy
+  echo "Will start Xvfb with DISPLAY=${DISPLAY} screen=${SCREEN_NUM} geometry=${GEOMETRY}"
   Xvfb ${DISPLAY} -screen ${SCREEN_NUM} ${GEOMETRY} -ac -r -cc 4 -accessx \
     -xinerama +extension Composite -extension RANDR
 fi

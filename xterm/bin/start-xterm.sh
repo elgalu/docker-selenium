@@ -29,14 +29,22 @@ shutdown () {
 #  http://www.gnu.org/software/coreutils/manual/coreutils.html#timeout-invocation
 
 # Wait for everyone to be done
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || shutdown \
+  "Failed while waiting for Xvfb to start!"
 #TODO: wait-xmanager.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh || shutdown
-timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh || shutdown \
+  "Failed while waiting for VNC to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || shutdown \
+  "Failed while waiting for noVNC to start!"
 #TODO: wait-sshd.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || shutdown
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || shutdown
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || shutdown
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || shutdown \
+  "Failed while waiting for selenium hub to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || shutdown \
+  "Failed while waiting for selenium node chrome to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || shutdown \
+  "Failed while waiting for selenium node firefox to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || shutdown \
+  "Failed while waiting for video recording to start!"
 
 # Help at http://supervisord.org/subprocess.html#process-states
 if supervisorctl -c /etc/supervisor/supervisord.conf status \
@@ -53,13 +61,6 @@ x-terminal-emulator -ls  \
   -geometry 120x40+10+10 \
   -title "x-terminal-emulator" \
   &
-
-# If video recording on start, then wait that
-if [ "$VIDEO" = "true" ]; then
-  start-video-rec.sh || shutdown "Failed to start video recording!"
-  timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || shutdown \
-    "Failed while waiting for video recording to start!"
-fi
 
 # Join them in 1 bash line to avoid supervisor split them in debug output
 echo "" \

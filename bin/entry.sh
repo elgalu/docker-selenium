@@ -6,7 +6,13 @@ set -e
 #---------------------
 # Fix/extend ENV vars
 #---------------------
+export PATH="${PATH}:${BIN_UTILS}"
+export DISPLAY=":${DISP_N}"
+export XEPHYR_DISPLAY=":${DISP_N}"
+export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"
+export VIDEO_PIDFILE="${RUN_DIR}/video.pid"
 # We recalculate screen dimensions because docker run supports changing them
+export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
 export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
 # These values are only available when the container started
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
@@ -23,6 +29,15 @@ export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
 # Video
 export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+# Extend required services depending on what the user needs
+[ "${GRID}" = "true" ] && export \
+  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-hub"
+[ "${CHROME}" = "true" ] && export \
+  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-chrome"
+[ "${FIREFOX}" = "true" ] && export \
+  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-firefox"
+[ "${VIDEO}" = "true" ] && export \
+  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|video-rec"
 
 #--------------------------------
 # Improve etc/hosts and fix dirs
