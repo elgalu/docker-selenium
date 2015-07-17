@@ -134,7 +134,7 @@ There are also additional steps you can take to ensure you're using the correct 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag v2.46.0-02
-    export SHA=TBD
+    export SHA=939b5ede408a85c38384af794bcfa335f4e253fe446bfd612bfdaa904b1ffab4
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
@@ -142,7 +142,7 @@ Given docker.io currently allows to push the same tag image twice this represent
 Verify that image id is indeed correct
 
     # e.g. full image id for tag v2.46.0-02
-    export IMGID=TBD
+    export IMGID=ef0decd768c36075904192d0b306f1de9cf859a7472c8dba040dcc368ea4894b
     if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-02 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
