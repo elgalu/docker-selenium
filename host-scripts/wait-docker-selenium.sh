@@ -32,12 +32,19 @@ if [ ! -f "${LOOP_SCRIPT_PATH}" ]; then
 fi
 
 # Avoid waiting forever using the `timeout` command
-timeout --foreground ${WAIT_TIMEOUT} \
-  ${LOOP_SCRIPT_PATH} ${CONTAINER_ID} || die \
-  "
-   Your docker-selenium didn't start properly.
-   Start it next time with -e DISABLE_ROLLBACK=true"
+if timeout --foreground ${WAIT_TIMEOUT} \
+     ${LOOP_SCRIPT_PATH} ${CONTAINER_ID}; then
+  echo ""
+  docker exec ${CONTAINER_ID} grep 'IP:' /var/log/sele/xterm-stdout.log
+  docker exec ${CONTAINER_ID} grep 'password' /var/log/sele/vnc-stdout.log
+else
+  docker exec ${CONTAINER_ID} bash -c 'tail /var/log/sele/*'
+  echo "" && echo "" && echo "==> errors <=="
+  docker exec ${CONTAINER_ID} bash -c '/bin-utils/selenium-grep.sh'
 
-echo ""
-docker exec ${CONTAINER_ID} grep 'IP:' /var/log/sele/xterm-stdout.log
-docker exec ${CONTAINER_ID} grep 'password' /var/log/sele/vnc-stdout.log
+  die "
+   Your docker-selenium didn't start properly.
+   Start it next time with -e DISABLE_ROLLBACK=true
+  "
+fi
+
