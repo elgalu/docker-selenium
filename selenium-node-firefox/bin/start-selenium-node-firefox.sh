@@ -39,6 +39,3 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 #  2>&1 | tee $SELENIUM_LOG
 # But is no longer required because individual logs are maintained by
 # supervisord right now.
-
-# tells bash to wait until child processes have exited
-# wait

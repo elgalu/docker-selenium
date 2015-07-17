@@ -18,6 +18,8 @@ die () {
 
 # ensures supervisord dies too
 shutdown () {
+  # communication: we are failing
+  echo "failed" > ${DOCKER_SELENIUM_STATUS}
   # optionallly prints error message
   [ ! -z "$1" ] && echoerr "ERROR: $1"
   killall supervisord

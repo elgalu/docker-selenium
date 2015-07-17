@@ -644,10 +644,10 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   #  docs at https://code.google.com/p/selenium/wiki/Grid2
   MAX_INSTANCES=1 \
   MAX_SESSIONS=1 \
-  SEL_RELEASE_TIMEOUT_SECS=9000 \
-  SEL_BROWSER_TIMEOUT_SECS=6000 \
-  SEL_CLEANUPCYCLE_MS=70000 \
-  SEL_NODEPOLLING_MS=60000 \
+  SEL_RELEASE_TIMEOUT_SECS=19000 \
+  SEL_BROWSER_TIMEOUT_SECS=16000 \
+  SEL_CLEANUPCYCLE_MS=90000 \
+  SEL_NODEPOLLING_MS=80000 \
   # Vnc
   VNC_PORT=25900 \
   NOVNC_PORT=26080 \
@@ -662,6 +662,10 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   # Supervisor loglevel and also general docker log level
   # can be: debug, warn, trace, info
   LOG_LEVEL=info \
+  # when DISABLE_ROLLBACK=true it will:
+  #  - output logs
+  #  - exec bash to permit troubleshooting
+  DISABLE_ROLLBACK=false \
   LOGFILE_MAXBYTES=10MB \
   LOGFILE_BACKUPS=5 \
   # Logs are now managed by supervisord.conf, see
