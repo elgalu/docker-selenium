@@ -25,8 +25,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Digest: sha256:TBD
-  + Image ID: TBD
+  + Digest: sha256:6f525fa015e3b815da968a998c58757892955f195cee286b4c39fe15035d01d3
+  + Image ID: e7ceeaf7ab0adf758a1f2f5e21fe53db9aa2eff7b55b01af1c7fe2620a9f309b
 
 ## v2.46.0-02 (2015-07-17)
  + Add DISABLE_ROLLBACK so when true users can troubleshoot. (Leo Gallucci)

@@ -133,24 +133,25 @@ cat scm-source.json #=> { "url": "https://github.com/elgalu/docker-selenium",
 
 There are also additional steps you can take to ensure you're using the correct image:
 
-### Option 1 - Use immutable image digests
-Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
+### Option 1 - Check the Full Image Id
 
-    # e.g. sha256 for tag v2.46.0-04
-    export SHA=TBD
-    docker pull elgalu/selenium@sha256:${SHA}
-
-### Option 2 - Check the Full Image Id
-
-Verify that image id is indeed correct
+You can simply verify that image id is indeed the correct one.
 
     # e.g. full image id for tag v2.46.0-04
-    export IMGID=TBD
+    export IMGID=e7ceeaf7ab0adf758a1f2f5e21fe53db9aa2eff7b55b01af1c7fe2620a9f309b
     if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-04 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
     fi
+
+### Option 2 - Use immutable image digests
+
+Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
+
+    # e.g. sha256 for tag v2.46.0-04
+    export SHA=6f525fa015e3b815da968a998c58757892955f195cee286b4c39fe15035d01d3
+    docker pull elgalu/selenium@sha256:${SHA}
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
 
