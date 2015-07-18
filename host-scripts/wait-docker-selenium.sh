@@ -35,12 +35,14 @@ fi
 if timeout --foreground ${WAIT_TIMEOUT} \
      ${LOOP_SCRIPT_PATH} ${CONTAINER_ID}; then
   echo ""
-  docker exec ${CONTAINER_ID} grep 'IP:' /var/log/sele/xterm-stdout.log
-  docker exec ${CONTAINER_ID} grep 'password' /var/log/sele/vnc-stdout.log
+  docker exec ${CONTAINER_ID} \
+    grep 'password' /var/log/sele/vnc-stdout.log || true
+  docker exec ${CONTAINER_ID} \
+    grep 'IP:' /var/log/sele/xterm-stdout.log || die "Failed to grep IP:"
 else
-  docker exec ${CONTAINER_ID} bash -c 'tail /var/log/sele/*'
+  docker exec ${CONTAINER_ID} bash -c 'tail /var/log/sele/*' || true
   echo "" && echo "" && echo "==> errors <=="
-  docker exec ${CONTAINER_ID} bash -c '/bin-utils/selenium-grep.sh'
+  docker exec ${CONTAINER_ID} bash -c '/bin-utils/selenium-grep.sh' || true
 
   die "
    Your docker-selenium didn't start properly.
