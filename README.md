@@ -72,10 +72,13 @@ Once your tests are done you can either manually stop the recording via `docker 
 
 Relevant environment variables to customize it are:
 
-    FFMPEG_FRAME_RATE=30
+    FFMPEG_FRAME_RATE=25
     VIDEO_FILE_NAME="test"
-    VIDEO_FILE_EXTENSION="mkv"
+    VIDEO_FILE_EXTENSION=mkv
     FFMPEG_CODEC_ARGS=""
+
+It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mkv* is selected. You may want to delegate video recording through `vnc2swf-start.sh` to a separate server process and even delegate compression to a further step or to a cloud service like Youtube.
+
 
 ### noVNC
 
@@ -134,7 +137,7 @@ There are also additional steps you can take to ensure you're using the correct 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag v2.46.0-03
-    export SHA=TBD
+    export SHA=7839b7e1a84471352f135815d55f4f9835c54e23e9555c2e5d5d818910c429fb
     docker pull elgalu/selenium@sha256:${SHA}
 
 ### Option 2 - Check the Full Image Id
@@ -142,7 +145,7 @@ Given docker.io currently allows to push the same tag image twice this represent
 Verify that image id is indeed correct
 
     # e.g. full image id for tag v2.46.0-03
-    export IMGID=TBD
+    export IMGID=6763523b770c6504b381231b499e4e71fccd440c86bc83aff1e207c23a5327a3
     if docker inspect -f='{{.Id}}' elgalu/selenium:v2.46.0-03 |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else

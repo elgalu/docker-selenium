@@ -1,7 +1,7 @@
 ## Build
 
     time (docker build -t="elgalu/selenium:v2.46.0-03" . ;echo $?;beep)
-    docker run --rm -ti --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v $(pwd)/videos:/videos -e DISABLE_ROLLBACK=true elgalu/selenium:v2.46.0-03
+    docker run --rm -ti --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v $(pwd)/videos:/videos -e DISABLE_ROLLBACK=true -e CHROME_FLAVOR=unstable -e FIREFOX_VERSION=38.0.6 -e VIDEO=true -e VIDEO_FILE_NAME=hola elgalu/selenium:v2.46.0-03
 
 See logs
 
