@@ -28,10 +28,10 @@ VID_TOOL_PID=$!
 function shutdown {
   echo "Trapped SIGTERM or SIGINT so shutting down ffmpeg gracefully..."
   sudo kill -SIGINT ${VID_TOOL_PID}
-  sleep 0.7 #wait so the file is flushed
+  sleep ${FLUSH_VIDEO_SECS}
   # sudo killall -SIGINT avconv
   sudo killall -SIGINT ffmpeg
-  sleep 0.3 #wait so the file is flushed
+  sleep ${FLUSH_VIDEO_SECS}
   echo "ffmpeg shutdown complete."
   exit 0
 }

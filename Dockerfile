@@ -704,6 +704,7 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="test" \
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
+  FLUSH_VIDEO_SECS="0.5" \
   # You can choose what X manager to use
   XMANAGER="fluxbox" \
   #===============================

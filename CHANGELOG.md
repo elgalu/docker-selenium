@@ -4,10 +4,12 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
-## v2.46.0-03 (2015-07-18)
+## v2.46.0-04 (2015-07-18)
  + Fix bug openbox X manager not waiting for Xvfb. (Leo Gallucci)
  + Fix entry.sh exiting immediately and not checking DISABLE_ROLLBACK.
  + Allow to choose X manager flavor via `-e XMANAGER=openbox|fluxbox`
+ + Fix bug in wait-docker-selenium.sh
+ + Fix bug while docker stop $NAME; supervisor not getting SIGINT properly.
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
   + Chrome stable:   43.0.2357.134
@@ -23,8 +25,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Digest: sha256:7839b7e1a84471352f135815d55f4f9835c54e23e9555c2e5d5d818910c429fb
-  + Image ID: 6763523b770c6504b381231b499e4e71fccd440c86bc83aff1e207c23a5327a3
+  + Digest: sha256:TBD
+  + Image ID: TBD
 
 ## v2.46.0-02 (2015-07-17)
  + Add DISABLE_ROLLBACK so when true users can troubleshoot. (Leo Gallucci)

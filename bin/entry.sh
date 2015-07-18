@@ -69,41 +69,20 @@ if [ $WHOAMI_EXIT_CODE != 0 ]; then
     echo "-- INFO: Will try to fix uid before continuing"
     # TODO: fix it ...
     echo "-- now will try to use NORMAL_USER: '$NORMAL_USER' to continue"
-    ${RUN_PREFIX} run-supervisord.sh
+    exec ${RUN_PREFIX} run-supervisord.sh
   else
     echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
     echo "-- will try to use NORMAL_USER: '$NORMAL_USER' instead."
-    ${RUN_PREFIX} run-supervisord.sh
+    exec ${RUN_PREFIX} run-supervisord.sh
   fi
 elif [ "$WHOAMI" = "root" ]; then
   echo "-- WARN: Container running user is 'root' so switching to less privileged one"
   echo "-- will use NORMAL_USER: '$NORMAL_USER' instead."
-  ${RUN_PREFIX} run-supervisord.sh
+  exec ${RUN_PREFIX} run-supervisord.sh
 else
   echo "-- INFO: Will use \$USER '$USER' and \$(whoami) is '$WHOAMI'"
-  run-supervisord.sh
+  exec run-supervisord.sh
 fi
-
-# when DISABLE_ROLLBACK=true it will:
-#  - output logs
-#  - exec bash to permit troubleshooting
-if [ "$(cat ${DOCKER_SELENIUM_STATUS})" = "failed" ]; then
-  tail /var/log/sele/*
-  echo "" && echo "" && echo "==> errors <=="
-  selenium-grep.sh
-
-  if [ "${DISABLE_ROLLBACK}" = "true" ]; then
-    echo ""
-    echo "DEBUGGING: to find out what happened please analyze logs or run"
-    echo "  selenium-grep.sh"
-    echo ""
-
-    exec bash
-  fi
-fi
-
-# tells bash to wait until child processes have exited
-# wait
 
 # Note: sudo -i creates a login shell for someUser, which implies the following:
 # - someUser's user-specific shell profile, if defined, is loaded.
