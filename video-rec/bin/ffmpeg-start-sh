@@ -14,7 +14,8 @@
 #  -y             overwrite output files
 #  -i             display and pos
 #  https://www.ffmpeg.org/ffmpeg-codecs.html
-sudo avconv -an -y -f x11grab \
+# sudo avconv -an -y -f x11grab \
+sudo ffmpeg -an -y -f x11grab \
   -framerate ${FFMPEG_FRAME_RATE} \
   -video_size ${FFMPEG_FRAME_SIZE} ${FFMPEG_CODEC_ARGS} \
   -i "${DISPLAY}.0+0,0" \

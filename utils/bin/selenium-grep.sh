@@ -2,4 +2,4 @@
 
 grep -v "webSocketsHandshake" /var/log/sele/* | \
   grep -v "errors, etc) it may be disabled" | \
-  grep "rror" -B 3 -A 5
+  grep -i "error" -B 3 -A 3

@@ -3,8 +3,8 @@
 ###################################################
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-# FROM ubuntu:wily-20150708
-# ENV UBUNTU_FLAVOR wily
+FROM ubuntu:wily-20150708
+ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
@@ -16,8 +16,8 @@
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 #                    http://cloud-images.ubuntu.com/releases/14.04/
-FROM ubuntu:trusty-20150630
-ENV UBUNTU_FLAVOR trusty
+# FROM ubuntu:trusty-20150630
+# ENV UBUNTU_FLAVOR trusty
 
 #== Ubuntu precise is 12.04.x, i.e. FROM ubuntu:12.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
@@ -48,6 +48,7 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 # pwgen: generates random, meaningless but pronounceable passwords
 # ts from moreutils will prepend a timestamp to every line of input you give it
 # grc is a terminal colorizer that works nice with tail https://github.com/garabik/grc
+# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     apt-utils \
@@ -64,6 +65,8 @@ RUN apt-get update -qqy \
     bc \
     grc \
     moreutils \
+    tree \
+    dbus-x11 \
   && rm -rf /var/lib/apt/lists/*
 
 #==============================
@@ -117,14 +120,14 @@ RUN echo $TZ | tee /etc/timezone \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     openjdk-8-jre-headless \
-#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-#        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-#        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-#   && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    openjdk-8-jre-headless \
+  && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+       /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
+  && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+       /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
+  && rm -rf /var/lib/apt/lists/*
 
 #==================
 # Java8 - Oracle
@@ -132,22 +135,22 @@ RUN echo $TZ | tee /etc/timezone \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    software-properties-common \
-  && echo debconf shared/accepted-oracle-license-v1-1 \
-      select true | debconf-set-selections \
-  && echo debconf shared/accepted-oracle-license-v1-1 \
-      seen true | debconf-set-selections \
-  && add-apt-repository ppa:webupd8team/java \
-  && apt-get update -qqy \
-  && apt-get -qqy install \
-    oracle-java8-installer \
-  && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-  && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     software-properties-common \
+#   && echo debconf shared/accepted-oracle-license-v1-1 \
+#       select true | debconf-set-selections \
+#   && echo debconf shared/accepted-oracle-license-v1-1 \
+#       seen true | debconf-set-selections \
+#   && add-apt-repository ppa:webupd8team/java \
+#   && apt-get update -qqy \
+#   && apt-get -qqy install \
+#     oracle-java8-installer \
+#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
+#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
+#   && rm -rf /var/lib/apt/lists/*
 
 #==============================================================================
 # java blocks until kernel have enough entropy to generate the /dev/random seed
@@ -159,30 +162,6 @@ RUN apt-get update -qqy \
 #     haveged rng-tools \
 #   && service haveged start \
 #   && update-rc.d haveged defaults
-
-#=========================================
-# Python2 for Firefox, Supervisor, others
-#=========================================
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    python2.7 \
-    python-pip \
-    python2.7-dev \
-    python-openssl \
-    libssl-dev libffi-dev \
-  && easy_install -U pip \
-  && rm -rf /var/lib/apt/lists/*
-# Python3 fails installing mozInstall==1.12 with
-#  NameError: name 'file' is not defined
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     python3.4 \
-#     python3-pip \
-#     python3.4-dev \
-#     python3-openssl \
-#     libssl-dev libffi-dev \
-#   && easy_install3 -U pip \
-#   && rm -rf /var/lib/apt/lists/*
 
 #=======
 # Fonts
@@ -208,64 +187,6 @@ RUN apt-get update -qqy \
     openbox obconf menu \
   && rm -rf /var/lib/apt/lists/*
 
-#=========
-# fluxbox
-# A fast, lightweight and responsive window manager
-#=========
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     fluxbox \
-#   && rm -rf /var/lib/apt/lists/*
-
-#=========
-# GNOME Shell provides core interface functions like switching windows,
-# launching applications or see your notifications
-#=========
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     gnome-shell \
-#   && rm -rf /var/lib/apt/lists/*
-
-#=========
-# LXDE lxde/lubuntu-desktop
-# A Lightweight X11 Desktop Environment
-#=========
-# NOT working! TODO: see https://github.com/dockerfile/ubuntu-desktop/blob/master/Dockerfile#L13
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     lxde \
-#   && mkdir -p /usr/share/backgrounds \
-#   && rm -rf /var/lib/apt/lists/*
-
-#=========
-# LightDM is the display manager running in Ubuntu
-# A fat and full featured windows manager
-#=========
-# allowed_users=anybody fixes X: user not authorized to run the X server, aborting
-#  http://karuppuswamy.com/wordpress/2010/09/26/how-to-fix-x-user-not-authorized-to-run-the-x-server-aborting/
-# The issue can be recreated with "ami-ed7c149a" and maybe in CentOS
-# ENV XAUTH_DIR /var/lib/lightdm
-# ENV XAUTHORITY ${XAUTH_DIR}/.Xauthority
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     lightdm dbus-x11 x11-common \
-#   && dpkg-reconfigure --frontend noninteractive lightdm x11-common \
-#   && sed -i 's/allowed_users=console/allowed_users=anybody/g' \
-#             /etc/X11/Xwrapper.config \
-#   && touch ${XAUTHORITY} \
-#   && chmod 666 ${XAUTHORITY} \
-#   && chown -R ${NORMAL_USER}:${NORMAL_USER} ${XAUTH_DIR} \
-#   && rm -rf /var/lib/apt/lists/*
-
-#======================
-# GNOME ubuntu-desktop
-# The fat and full featured windows manager
-#======================
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     ubuntu-desktop \
-#   && rm -rf /var/lib/apt/lists/*
-
 #========================================
 # Add normal user with passwordless sudo
 #========================================
@@ -281,20 +202,6 @@ RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
   && gpasswd -a ${NORMAL_USER} video \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 ENV NORMAL_USER_HOME /home/${NORMAL_USER}
-
-#====================
-# Supervisor install
-#====================
-# https://github.com/Supervisor/supervisor
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     supervisor \
-# 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
-#  https://github.com/Supervisor/supervisor/commit/b3ad59703b554fcf61639ca922e
-# TODO: Upgrade to supervisor stable 4.0 as soon as is released
-RUN pip install --upgrade \
-      https://github.com/Supervisor/supervisor/zipball/b3ad59703b554f \
-  && rm -rf /var/lib/apt/lists/*
 
 #=====================
 # Use Normal User now
@@ -335,33 +242,6 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && chmod 755 ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
   && ln -s ${SEL_HOME}/chromedriver-${CHROME_DRIVER_VERSION} \
            ${SEL_HOME}/chromedriver
-
-#========================================
-# Google chrome flavor to use during run
-#========================================
-# Default chrome flavor: stable, but all are installed:
-#  stable, beta, unstable
-ENV CHROME_FLAVOR stable
-
-#==========================================================
-# Google Chrome - Keep chrome versions as they delete them
-#==========================================================
-# How to get notified of latest version of chrome:
-#  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
-# TODO: Use Google fingerprint to verify downloads
-#  http://www.google.de/linuxrepositories/
-# Also fix .deb file names with correct version
-RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
-  && export CHROME_URL="https://dl.google.com/linux/direct" \
-  && wget --no-verbose -O \
-    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
-    "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
-  && wget --no-verbose -O \
-    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-beta_current_amd64.deb \
-    "${CHROME_URL}/google-chrome-beta_current_amd64.deb" \
-  && wget --no-verbose -O \
-    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
-    "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
 
 #==============
 # Back to sudo
@@ -465,76 +345,106 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && mv websockify-${WEBSOCKIFY_SHA} \
        ${NORMAL_USER_HOME}/noVNC/utils/websockify
 
-#=========================
-# ffmpeg and video codecs
-#=========================
-# ffmpeg: Is a better alternative to Pyvnc2swf
-# Use ffmpeg or libav-tools depending on the Ubuntu dist
+#===============================
+# ffmpeg/libav and video codecs
+#===============================
+# ffmpeg (ffmpeg): Is a better alternative to Pyvnc2swf
+#   (use in Ubuntu >= 15) packages: ffmpeg
+# libav-tools (avconv): Is a fork of ffmpeg
+#   (use in Ubuntu <= 14) packages: libav-tools libx264-142
 RUN apt-get update -qqy \
   && apt-get -qqy install \
-    libx264-142 \
     libx264-dev \
     libvorbis-dev \
     libx11-dev \
-    libav-tools \
-  && rm -rf /var/lib/apt/lists/*
-
-#======================
-# Chrome, Chromedriver
-#======================
-ENV CHROME_BASE_DEB_PATH "${NORMAL_USER_HOME}/chrome-deb/google-chrome"
-ENV GREP_ONLY_NUMS_VER "[0-9.]{2,20}"
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    gdebi \
-  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
-  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
-  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
-  && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && export CH_BETA_VER=$(/usr/bin/google-chrome-beta --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && export CH_UNSTABLE_VER=$(/usr/bin/google-chrome-unstable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && mv ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
-     ${CHROME_BASE_DEB_PATH}-stable_${CH_STABLE_VER}_amd64.deb \
-  && mv ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
-     ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
-  && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
-     ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
-  && ln -s ${SEL_HOME}/chromedriver /usr/bin \
-  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+    ffmpeg \
   && rm -rf /var/lib/apt/lists/*
 
 #==========================
 # Mozilla Firefox - Latest
 #==========================
-# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     firefox \
-#     dbus-x11 \
 #   && rm -rf /var/lib/apt/lists/*
 
-#=======================
-# Mozilla Firefox - All
-#=======================
+#=========================================
+# Python2 for Firefox, Supervisor, others
+#=========================================
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    python2.7 \
+    python-pip \
+    python2.7-dev \
+    python-openssl \
+    libssl-dev libffi-dev \
+  && easy_install --upgrade pip \
+  && rm -rf /var/lib/apt/lists/*
+
+#=========================================
+# Python3 for Firefox, Supervisor, others
+#=========================================
+# Python3 fails installing mozInstall==1.12 with
+#  NameError: name 'file' is not defined
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     python3.4 \
+#     python3-pip \
+#     python3.4-dev \
+#     python3-openssl \
+#     libssl-dev libffi-dev \
+#   && easy_install3 --upgrade pip \
+#   && rm -rf /var/lib/apt/lists/*
+
+#===============================
+# Mozilla Firefox install tools
+#===============================
 # Where to find latest version:
 #  http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
-# dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
 ENV FF_LANG "en-US"
 # Browser language/locale
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    dbus-x11 \
-  && rm -rf /var/lib/apt/lists/* \
-  && pip install --upgrade mozInstall==1.12 \
-  # Always safer to install for git specific commit, in this case
-  #  commit 191a3e6bc700a28f3d62 dated 2015-06-02 is version 1.15
-  # && pip install --upgrade mozdownload==1.15 \
-  && pip install --upgrade \
-      "https://github.com/mozilla/mozdownload/zipball/191a3e6bc700a28f3d62" \
-  && mkdir -p ${NORMAL_USER_HOME}/firefox-src
+# Using mozlog==2.10 to avoid
+#  AttributeError: 'module' object has no attribute 'getLogger'
+RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+  && pip install mozlog==2.10 \
+  && export MOZ_DOWN_SHA="7f2680cd75fbd3937630d896aefec3f8a061c10b" \
+  && pip install \
+      "https://github.com/elgalu/mozdownload/zipball/${MOZ_DOWN_SHA}" \
+  && pip install mozInstall==1.12 \
+  && echo ""
+
+# Some forks:
+# RUN  export MOZ_INST_SHA="163e711efb751a80d03d9fb6e2ac0e011902c9df" \
+#   && export MOZ_DOWN_SHA="028ae444426b6e7691138e88ac306c6f8e6dfd74" \
+#   && pip install --upgrade requests==2.6.0 \
+#   && pip install --upgrade \
+#       "https://github.com/elgalu/mozinstall/zipball/${MOZ_INST_SHA}" \
+#   && pip install --upgrade \
+#       "https://github.com/mozilla/mozdownload/zipball/${MOZ_DOWN_SHA}" \
+#   && mkdir -p ${NORMAL_USER_HOME}/firefox-src
+# Notes:
+#  Always safer to install for git specific commit, in this case
+#   mozInstall  commit 163e711ef dated 2015-06-11 is version 1.12
+#  && pip install --upgrade mozInstall==1.12 \
+#   mozdownload commit 028ae4444 dated 2015-03-05 is version 1.14
+#  && pip install --upgrade mozdownload==1.14 \
+
+#====================
+# Supervisor install
+#====================
+# https://github.com/Supervisor/supervisor
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     supervisor \
+# 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
+#  https://github.com/Supervisor/supervisor/commit/b3ad59703b554fcf61639ca92
+# TODO: Upgrade to supervisor stable 4.0 as soon as is released
+RUN pip install --upgrade \
+      "https://github.com/Supervisor/supervisor/zipball/b3ad59703b554f" \
+  && rm -rf /var/lib/apt/lists/*
 
 #-------------------#
 # FIREFOX_VERSIONS1 #
@@ -577,8 +487,7 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 #-------------------#
 # Latest available firefox version
 # ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_LATEST_VERSION 39.0
-ENV FIREFOX_VERSIONS3 "36.0.4, 37.0.2, 38.0.6, ${FIREFOX_LATEST_VERSION}"
+ENV FIREFOX_VERSIONS3 "36.0.4, 37.0.2, 38.0.6, 39.0"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -592,6 +501,108 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME}
+
+#=========
+# fluxbox
+# A fast, lightweight and responsive window manager
+#=========
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    fluxbox \
+  && rm -rf /var/lib/apt/lists/*
+
+#==========================================================
+# Google Chrome - Keep chrome versions as they delete them
+#==========================================================
+# How to get notified of latest version of chrome:
+#  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
+# TODO: Use Google fingerprint to verify downloads
+#  http://www.google.de/linuxrepositories/
+# Also fix .deb file names with correct version
+RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
+  && export CHROME_URL="https://dl.google.com/linux/direct" \
+  && wget --no-verbose -O \
+    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
+    "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
+  && wget --no-verbose -O \
+    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-beta_current_amd64.deb \
+    "${CHROME_URL}/google-chrome-beta_current_amd64.deb" \
+  && wget --no-verbose -O \
+    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
+    "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
+
+#======================
+# Chrome, Chromedriver
+#======================
+ENV CHROME_BASE_DEB_PATH "${NORMAL_USER_HOME}/chrome-deb/google-chrome"
+ENV GREP_ONLY_NUMS_VER "[0-9.]{2,20}"
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    gdebi \
+  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
+  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
+  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
+  && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  && export CH_BETA_VER=$(/usr/bin/google-chrome-beta --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  && export CH_UNSTABLE_VER=$(/usr/bin/google-chrome-unstable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  && mv ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
+     ${CHROME_BASE_DEB_PATH}-stable_${CH_STABLE_VER}_amd64.deb \
+  && mv ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
+     ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
+  && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
+     ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
+  && ln -s ${SEL_HOME}/chromedriver /usr/bin \
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+  && rm -rf /var/lib/apt/lists/*
+
+#=========
+# GNOME Shell provides core interface functions like switching windows,
+# launching applications or see your notifications
+#=========
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     gnome-shell \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=========
+# LXDE lxde/lubuntu-desktop
+# A Lightweight X11 Desktop Environment
+#=========
+# NOT working! TODO: see https://github.com/dockerfile/ubuntu-desktop/blob/master/Dockerfile#L13
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     lxde \
+#   && mkdir -p /usr/share/backgrounds \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=========
+# LightDM is the display manager running in Ubuntu
+# A fat and full featured windows manager
+#=========
+# allowed_users=anybody fixes X: user not authorized to run the X server, aborting
+#  http://karuppuswamy.com/wordpress/2010/09/26/how-to-fix-x-user-not-authorized-to-run-the-x-server-aborting/
+# The issue can be recreated with "ami-ed7c149a" and maybe in CentOS
+# ENV XAUTH_DIR /var/lib/lightdm
+# ENV XAUTHORITY ${XAUTH_DIR}/.Xauthority
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     lightdm dbus-x11 x11-common \
+#   && dpkg-reconfigure --frontend noninteractive lightdm x11-common \
+#   && sed -i 's/allowed_users=console/allowed_users=anybody/g' \
+#             /etc/X11/Xwrapper.config \
+#   && touch ${XAUTHORITY} \
+#   && chmod 666 ${XAUTHORITY} \
+#   && chown -R ${NORMAL_USER}:${NORMAL_USER} ${XAUTH_DIR} \
+#   && rm -rf /var/lib/apt/lists/*
+
+#======================
+# GNOME ubuntu-desktop
+# The fat and full featured windows manager
+#======================
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     ubuntu-desktop \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=================
 # Supervisor conf
@@ -610,7 +621,9 @@ USER ${NORMAL_USER}
 ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION=${FIREFOX_LATEST_VERSION} \
+  FIREFOX_VERSION="39.0" \
+  # Default chrome flavor, options: stable|beta|unstable
+  CHROME_FLAVOR="stable" \
   # User and home
   USER="${NORMAL_USER}" \
   HOME="${NORMAL_USER_HOME}" \
@@ -691,6 +704,8 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="test" \
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
+  # You can choose what X manager to use
+  XMANAGER="fluxbox" \
   #===============================
   # Run docker from inside docker
   # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock

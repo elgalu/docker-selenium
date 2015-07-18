@@ -1,14 +1,33 @@
 #!/usr/bin/env bash
 
-#----------------
-# Alternative 1.
-# Openbox is a lightweight window manager using freedesktop standards
-openbox-session
+# Exit immediately if a command exits with a non-zero status
+set -e
 
-#----------------
-# Alternative 2.
-# Fluxbox is a fast, lightweight and responsive window manager
-# fluxbox -display ${DISPLAY}
+# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
+echoerr() {
+  cat <<< "$@" 1>&2;
+}
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
+  errnum=${2-110}
+  exit $errnum
+}
+
+# Wait for this process dependencies
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
+
+if [ "${XMANAGER}" = "openbox" ]; then
+  # Openbox is a lightweight window manager using freedesktop standards
+  exec openbox-session
+elif [ "${XMANAGER}" = "fluxbox" ]; then
+  # Fluxbox is a fast, lightweight and responsive window manager
+  exec fluxbox -display ${DISPLAY}
+else
+  die "The chosen X manager is not supported: '${XMANAGER}'"
+fi
 
 #----------------
 # Alternative 3.
@@ -31,8 +50,3 @@ openbox-session
 # Alternative 6.
 # lightdm is a fat and full featured windows manager
 # lightdm-session
-
-# Note to double pipe output and keep this process logs add at the end:
-#  2>&1 | tee $XMANAGER_LOG
-# But is no longer required because individual logs are maintained by
-# supervisord right now.
