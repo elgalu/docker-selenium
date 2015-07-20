@@ -4,12 +4,13 @@
 function shutdown {
   echo "Trapped SIGTERM/SIGINT/x so shutting down supervisord gracefully..."
   # First stop video recording because it needs some time to flush it
-  (supervisorctl -c /etc/supervisor/supervisord.conf stop \
-    video-rec && sleep ${FLUSH_VIDEO_SECS}) || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop all
   # kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
   kill -SIGTERM ${SUPERVISOR_PID}
   wait
+  # sleep ${SLEEP_SECS_AFTER_KILLING_SUPERVISORD}
+  # sudo kill -9 ${SUPERVISOR_PID} || true
 
   # when DISABLE_ROLLBACK=true it will:
   #  - output logs

@@ -1,6 +1,3 @@
 #!/usr/bin/env bash
 
-# Old:
-# start-stop-daemon --stop --pidfile ${VIDEO_PIDFILE}
-
 supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec

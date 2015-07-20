@@ -22,7 +22,10 @@ shutdown () {
   echo "failed" > ${DOCKER_SELENIUM_STATUS}
   # optionallly prints error message
   [ ! -z "$1" ] && echoerr "ERROR: $1"
-  killall supervisord
+  # First stop video recording because it needs some time to flush it
+  supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop all
+  kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
   die "ERROR: Some processes failed to start so quitting."
 }
 

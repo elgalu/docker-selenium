@@ -357,7 +357,7 @@ RUN apt-get update -qqy \
     libx264-dev \
     libvorbis-dev \
     libx11-dev \
-    ffmpeg \
+    libav-tools \
   && rm -rf /var/lib/apt/lists/*
 
 #==========================
@@ -672,6 +672,7 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SUPERVISOR_HTTP_USERNAME=supervisorweb \
   SUPERVISOR_HTTP_PASSWORD=somehttpbasicauthpwd \
   SUPERVISOR_REQUIRED_SRV_LIST="vnc|novnc|sshd|xmanager|xvfb" \
+  SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \
   # Supervisor loglevel and also general docker log level
   # can be: debug, warn, trace, info
   LOG_LEVEL=info \
@@ -692,9 +693,10 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   # sometimes helps reducing the movie size.
   VNC2SWF_FRAMERATE=25 \
   # ffmpeg encoding options
-  FFMPEG_FRAME_RATE=25 \
-  # ENV FFMPEG_CODEC_ARGS "-vcodec libx264 -vpre lossless_ultrafast -threads 0"
-  FFMPEG_CODEC_ARGS="" \
+  FFMPEG_FRAME_RATE=15 \
+  # Video size can be lowered down via re-encoding, see
+  #  http://askubuntu.com/a/365221/134645
+  FFMPEG_CODEC_ARGS="-vcodec libx264 -crf 0 -preset ultrafast" \
   # Services to start by default; true/false
   VIDEO=false \
   GRID=true \
@@ -703,8 +705,10 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   # Video file and extension, e.g. swf, mp4, mkv, flv
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="test" \
+  VIDEO_FLUSH_SECS="0.5" \
+  VIDEO_CHUNK_SECS="00:05:00" \
+  VIDEO_CHUNKS_MAX=999 \
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
-  FLUSH_VIDEO_SECS="0.5" \
   # You can choose what X manager to use
   XMANAGER="fluxbox" \
   #===============================

@@ -17,7 +17,7 @@ if [ "${VIDEO}" = "true" ]; then
     echo -n '.'
     sleep 0.2;
   done
-  echo "Video ${VIDEO_PATH} started to be recorded! (wait-video-rec.sh)"
+  echo "Videos at ${VIDEO_PATH}* started to be recorded! (wait-video-rec.sh)"
 else
   echo "Won't start video recording due to VIDEO env var false"
 fi
