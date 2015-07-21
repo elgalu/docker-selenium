@@ -20,9 +20,9 @@ die () {
 [ -z "${1}" ] && die "Need at least 1 port number argument!"
 MYAPP_PORTS=$@
 
-[ -z "${SSH_HOME}" ] && die "Need environment variable \$SSH_HOME set!"
 [ -z "${CONTAINER_IP}" ] && die "Need environment variable \$CONTAINER_IP set!"
 [ -z "${SSHD_PORT}" ] && die "Need environment variable \$SSHD_PORT set!"
+[ -z "${KNOWN_HOSTS_PATH}" ] && die "Need env var \$KNOWN_HOSTS_PATH set!"
 BASE_SSH_CMD="-p ${SSHD_PORT} -o StrictHostKeyChecking=no -N -fn application@${CONTAINER_IP}"
 
 ## convert space separated string into a bash array
@@ -33,6 +33,6 @@ declare -a MYAPP_PORTS=${MYAPP_PORTS}
 # then set them up in the background
 for i in "${MYAPP_PORTS[@]}"; do
   kill $(lsof -i tcp:${i} -F p | cut -b 2-) >/dev/null 2>&1 || true
-  ssh-keygen -f "${SSH_HOME}/.ssh/known_hosts" -R [${CONTAINER_IP}]:${SSHD_PORT} >/dev/null 2>&1 || true
+  ssh-keygen -f "${KNOWN_HOSTS_PATH}" -R [${CONTAINER_IP}]:${SSHD_PORT} >/dev/null 2>&1 || true
   ssh ${BASE_SSH_CMD} -R localhost:${i}:localhost:${i} &
 done
