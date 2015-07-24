@@ -519,7 +519,8 @@ RUN apt-get update -qqy \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
+RUN  latest_chrome_version_trigger="44.0.2403.89" \
+  && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
     ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \

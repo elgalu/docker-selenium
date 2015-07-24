@@ -16,7 +16,7 @@ else
   # using Xvfb instead of Xdummy
   echo "Will start Xvfb with DISPLAY=${DISPLAY} screen=${SCREEN_NUM} geometry=${GEOMETRY}"
   Xvfb ${DISPLAY} -screen ${SCREEN_NUM} ${GEOMETRY} -ac -r -cc 4 -accessx \
-    -xinerama +extension Composite -extension RANDR
+    -xinerama +extension Composite -extension RANDR +extension GLX
 fi
 
 # Note to double pipe output and keep this process logs add at the end:
