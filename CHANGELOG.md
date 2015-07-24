@@ -23,8 +23,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 7d6df22491ed41ec6474b5bf9a48f453dc0d835ce257f39e02cd5fe356a2c1bb
+  + Digest: sha256:fe49be13887bb390ca4f6d3617fd8f34c6a84bc08319bb4f18555ed7d6045f08
 
 ## v2.46.0-05 (2015-07-20)
  + Split video files through `-e VIDEO_CHUNK_SECS="00:10:00"`. (Leo Gallucci)

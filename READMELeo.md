@@ -14,7 +14,8 @@ Testing in ssh lgallucci@10.160.26.62
 ## Transfer used browser source artifacts to keep them in the cloud
 
     SSHCMD="-o StrictHostKeyChecking=no -q -P 2222 application@localhost"
-    scp ${SSHCMD}:/home/application/chrome-deb/google*.deb binaries/
+    cd binaries
+    scp ${SSHCMD}:/home/application/chrome-deb/google*.deb .
 
 List chrome versions via docker exec
 
