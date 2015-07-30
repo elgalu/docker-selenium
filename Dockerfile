@@ -152,17 +152,6 @@ RUN apt-get update -qqy \
 #        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
 #   && rm -rf /var/lib/apt/lists/*
 
-#==============================================================================
-# java blocks until kernel have enough entropy to generate the /dev/random seed
-#==============================================================================
-# This fix is not working so commented out.
-#  SeleniumHQ/docker-selenium/issues/14
-# RUN apt-get update -qqy \
-#   && apt-get -qqy install \
-#     haveged rng-tools \
-#   && service haveged start \
-#   && update-rc.d haveged defaults
-
 #=======
 # Fonts
 #=======
@@ -211,8 +200,8 @@ USER ${NORMAL_USER}
 #==========
 # Selenium
 #==========
-ENV SEL_MAJOR_MINOR_VER 2.46
-ENV SEL_PATCH_LEVEL_VER 0
+ENV SEL_MAJOR_MINOR_VER 2.47
+ENV SEL_PATCH_LEVEL_VER 1
 ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
@@ -519,7 +508,7 @@ RUN apt-get update -qqy \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="44.0.2403.89" \
+RUN  latest_chrome_version_trigger="44.0.2403.107" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -610,6 +599,18 @@ RUN apt-get update -qqy \
 #=================
 ADD supervisor/etc/supervisor/supervisord.conf /etc/supervisor/
 ADD **/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
+
+#==============================================
+# Java blocks until kernel have enough entropy
+# to generate the /dev/random seed
+#==============================================
+# See: SeleniumHQ/docker-selenium/issues/14
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    haveged rng-tools \
+  && service haveged start \
+  && update-rc.d haveged defaults \
+  && rm -rf /var/lib/apt/lists/*
 
 #======
 # User
@@ -712,6 +713,8 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
   # You can choose what X manager to use
   XMANAGER="fluxbox" \
+  # Java stuff
+  # MEM_JAVA="1024m" \
   #===============================
   # Run docker from inside docker
   # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock

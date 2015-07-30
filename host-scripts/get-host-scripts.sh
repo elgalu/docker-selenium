@@ -4,7 +4,7 @@
 set -e
 
 BASEURL="https://github.com/elgalu/docker-selenium"
-CURVERSION="2.46.0-06"
+CURVERSION="2.47.1a"
 HSVERDIR="docker-selenium-${CURVERSION}/host-scripts"
 
 if [ ! -f "${CURVERSION}.zip" ]; then
@@ -21,17 +21,16 @@ if [ -f "${CURVERSION}.zip" ]; then
   rm ${CURVERSION}.zip
 fi
 
-for i in $(seq 0 3); do
-  FILENAME="${CURVERSION}.tar--part0${i}"
-  DOWNPART="${BASEURL}/releases/download/${CURVERSION}/${FILENAME}"
-  if [ ! -f "${FILENAME}" ]; then
-    echo "Downloading '${FILENAME}' ..."
-    wget -nv "${DOWNPART}"
-  fi
-done
-
-# Join
-if [ ! -f "${CURVERSION}.tar" ]; then
-  echo "Joining ${CURVERSION}.tar parts..."
-  cat ${CURVERSION}.tar--part* > ${CURVERSION}.tar
-fi
+# for i in $(seq 0 3); do
+#   FILENAME="${CURVERSION}.tar--part0${i}"
+#   DOWNPART="${BASEURL}/releases/download/${CURVERSION}/${FILENAME}"
+#   if [ ! -f "${FILENAME}" ]; then
+#     echo "Downloading '${FILENAME}' ..."
+#     wget -nv "${DOWNPART}"
+#   fi
+# done
+# # Join
+# if [ ! -f "${CURVERSION}.tar" ]; then
+#   echo "Joining ${CURVERSION}.tar parts..."
+#   cat ${CURVERSION}.tar--part* > ${CURVERSION}.tar
+# fi
