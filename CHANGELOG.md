@@ -23,8 +23,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 7189525fdd0bd4cc4492559f3fee1e58b7cd8c59eb6b692798cf537f2e084ef4
+  + Digest: sha256:5df46e24ff6358d9f047adeae5e298a508011dd13baf9cd8093026d2a9357ee0
 
 ## 2.46.0-06 (2015-07-24)
  + Upgrade chrome stable to 44.0.2403.89. (Leo Gallucci)

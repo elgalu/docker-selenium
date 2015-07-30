@@ -1,7 +1,7 @@
 ## Build
 
     time (docker build -t="elgalu/selenium:2.47.1a" . ;echo $?;beep)
-    docker run --rm -ti --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v $(pwd)/videos:/videos -e DISABLE_ROLLBACK=true -e VIDEO=true -e VIDEO_FILE_NAME=hola elgalu/selenium:2.47.1a
+    docker run --rm -ti -m 2000M --cpu-quota=90000 --name=ch -p=4470:24444 -p=5920:25900 -p=2222:22222 -p=6080:26080 -p=29001:29001 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v $(pwd)/videos:/videos -e DISABLE_ROLLBACK=true -e VIDEO=true -e VIDEO_FILE_NAME=hola -e MEM_JAVA="1024m" -e WAIT_TIMEOUT="20s" elgalu/selenium:2.47.1a
 
 See logs
 
