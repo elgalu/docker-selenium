@@ -4,10 +4,10 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
-## 2.47.1b (2015-08-03)
+## 2.47.1c (2015-08-03)
  + Upgrade chromedriver from 2.16 to 2.17 (Leo Gallucci)
  + Upgrade chrome unstable from 45 to 46.0.2467.2
- + Include host-scripts inside the docker iamge
+ + Include and improve host-scripts inside the docker image
  + Reorganize packages installation order
  + Image tag details:
   + Selenium: v2.47.1 (411b314)
@@ -24,8 +24,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: eb7175aa47fac34f1f29ffc372cd9e6f52d3a3fe6218f2f760cef7e5047705a0
-  + Digest: sha256:ca7b8c9d1a8df59974b3dcb81499339cd3f46b5cda1934ba14c3b5f95c1ecba2
+  + Image ID: TBD
+  + Digest: sha256:TBD
 
 ## 2.47.1a (2015-07-30)
  + Upgrade selenium from 2.46.0 to 2.47.1 (Leo Gallucci)
