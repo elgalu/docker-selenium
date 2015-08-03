@@ -24,8 +24,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: eb7175aa47fac34f1f29ffc372cd9e6f52d3a3fe6218f2f760cef7e5047705a0
+  + Digest: sha256:ca7b8c9d1a8df59974b3dcb81499339cd3f46b5cda1934ba14c3b5f95c1ecba2
 
 ## 2.47.1a (2015-07-30)
  + Upgrade selenium from 2.46.0 to 2.47.1 (Leo Gallucci)
