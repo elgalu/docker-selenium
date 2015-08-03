@@ -192,46 +192,6 @@ RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 ENV NORMAL_USER_HOME /home/${NORMAL_USER}
 
-#=====================
-# Use Normal User now
-#=====================
-USER ${NORMAL_USER}
-
-#==========
-# Selenium
-#==========
-ENV SEL_MAJOR_MINOR_VER 2.47
-ENV SEL_PATCH_LEVEL_VER 1
-ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
-RUN  mkdir -p ${SEL_HOME} \
-  && export SELBASE="http://selenium-release.storage.googleapis.com" \
-  && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
-  && wget --no-verbose ${SELBASE}/${SELPATH} \
-      -O ${SEL_HOME}/selenium-server-standalone.jar
-
-#==================
-# Chrome webdriver
-#==================
-# How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ENV CPU_ARCH 64
-ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
-ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
-# Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
-RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-  # && CHROME_DRIVER_VERSION=2.15 \
-  && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
-  && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
-  && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
-  && cd ${SEL_HOME} \
-  && rm -rf chromedriver \
-  && unzip ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
-  && rm ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
-  && mv ${SEL_HOME}/chromedriver \
-        ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
-  && chmod 755 ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
-  && ln -s ${SEL_HOME}/chromedriver-${CHROME_DRIVER_VERSION} \
-           ${SEL_HOME}/chromedriver
-
 #==============
 # Back to sudo
 #==============
@@ -310,11 +270,6 @@ RUN apt-get update -qqy \
 # https://github.com/selendroid/selendroid
 # http://selendroid.io/scale.html
 
-#===================
-# DNS & hosts stuff
-#===================
-COPY ./dns/etc/hosts /tmp/hosts
-
 ########################################
 # noVNC to expose VNC via an html page #
 ########################################
@@ -385,6 +340,9 @@ RUN apt-get update -qqy \
 #   && easy_install3 --upgrade pip \
 #   && rm -rf /var/lib/apt/lists/*
 
+ENV CPU_ARCH 64
+ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
+
 #===============================
 # Mozilla Firefox install tools
 #===============================
@@ -397,7 +355,8 @@ ENV FF_LANG "en-US"
 # Browser language/locale
 # Using mozlog==2.10 to avoid
 #  AttributeError: 'module' object has no attribute 'getLogger'
-RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+RUN  mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+  && mkdir -p ${SEL_HOME} \
   && pip install mozlog==2.10 \
   && export MOZ_DOWN_SHA="7f2680cd75fbd3937630d896aefec3f8a061c10b" \
   && pip install \
@@ -489,7 +448,8 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
           --destination=${FIREFOX_DEST} \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done \
-  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME}
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${NORMAL_USER_HOME}
 
 #=========
 # fluxbox
@@ -499,6 +459,45 @@ RUN apt-get update -qqy \
   && apt-get -qqy install \
     fluxbox \
   && rm -rf /var/lib/apt/lists/*
+
+#=====================
+# Use Normal User now
+#=====================
+USER ${NORMAL_USER}
+
+#==========
+# Selenium
+#==========
+ENV SEL_MAJOR_MINOR_VER 2.47
+ENV SEL_PATCH_LEVEL_VER 1
+RUN  mkdir -p ${SEL_HOME} \
+  && export SELBASE="http://selenium-release.storage.googleapis.com" \
+  && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
+  && wget --no-verbose ${SELBASE}/${SELPATH} \
+      -O ${SEL_HOME}/selenium-server-standalone.jar
+
+#==================
+# Chrome webdriver
+#==================
+# How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
+ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
+ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
+# Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
+RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
+  # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
+  && CHROME_DRIVER_VERSION=2.17 \
+  # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
+  && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
+  && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
+  && cd ${SEL_HOME} \
+  && rm -rf chromedriver \
+  && unzip ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
+  && rm ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
+  && mv ${SEL_HOME}/chromedriver \
+        ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
+  && chmod 755 ${SEL_HOME}/chromedriver-$CHROME_DRIVER_VERSION \
+  && ln -s ${SEL_HOME}/chromedriver-${CHROME_DRIVER_VERSION} \
+           ${SEL_HOME}/chromedriver
 
 #==========================================================
 # Google Chrome - Keep chrome versions as they delete them
@@ -520,6 +519,8 @@ RUN  latest_chrome_version_trigger="44.0.2403.107" \
   && wget --no-verbose -O \
     ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
     "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
+
+USER root
 
 #======================
 # Chrome, Chromedriver
@@ -616,6 +617,11 @@ RUN apt-get update -qqy \
 # User
 #======
 USER ${NORMAL_USER}
+
+#===================
+# DNS & hosts stuff
+#===================
+COPY ./dns/etc/hosts /tmp/hosts
 
 #======
 # Envs
@@ -736,6 +742,7 @@ EXPOSE ${SSHD_PORT}
 #================
 ADD bin/* ${BIN_UTILS}/
 ADD **/bin/* ${BIN_UTILS}/
+ADD host-scripts/* /host-scripts/
 
 #==========
 # Fix dirs
@@ -752,6 +759,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
   # Create and fix directories perms
   && sudo mkdir -p ${LOGS_DIR} \
   && sudo mkdir -p ${RUN_DIR} \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${NORMAL_USER_HOME} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${LOGS_DIR} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${RUN_DIR} \
