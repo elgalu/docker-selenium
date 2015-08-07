@@ -4,6 +4,30 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
+## 2.47.1d (2015-08-07)
+ + Upgrade from wily-20150708 to 20150731 (Leo Gallucci)
+ + Upgrade Firefox from 39.0 to 39.0.3
+ + Upgrade Chrome stable patch level from 125 to 130
+ + Upgrade Java from 1.8.0_60 to 1.8.0_66
+ + Include missed Firefox version 36.0.4
+ + Image tag details:
+  + Selenium: v2.47.1 (411b314)
+  + Chrome stable:    44.0.2403.130
+  + Chrome beta:      45.0.2454.26
+  + Chrome dev:       46.0.2471.2
+  + Firefox versions in this image:
+                      39.0.3  38.0.6  37.0.2  36.0.4
+      35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
+      29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
+  + chromedriver: 2.17.340116 (2557bebb9de060c37c1a5d8d51ef72bb91106af6)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.7.1, build 786b29d
+  + FROM ubuntu:wily-20150731
+  + Python: 2.7.10
+  + Image ID: TBD
+  + Digest: sha256:TBD
+
 ## 2.47.1c (2015-08-03)
  + Upgrade chromedriver from 2.16 to 2.17 (Leo Gallucci)
  + Upgrade chrome unstable from 45 to 46.0.2467.2
@@ -15,7 +39,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      45.0.2454.15
   + Chrome dev:       46.0.2467.2
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.17.340116 (2557bebb9de060c37c1a5d8d51ef72bb91106af6)
@@ -37,7 +61,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      45.0.2454.15
   + Chrome dev:       45.0.2454.15
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
@@ -59,7 +83,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      44.0.2403.89
   + Chrome dev:       45.0.2454.7
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
@@ -80,7 +104,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      44.0.2403.89
   + Chrome dev:       45.0.2454.7
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
@@ -104,7 +128,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      44.0.2403.89
   + Chrome dev:       45.0.2454.7
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
@@ -126,7 +150,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      44.0.2403.81
   + Chrome dev:       45.0.2454.6
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
@@ -147,7 +171,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      44.0.2403.81
   + Chrome dev:       45.0.2454.6
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
@@ -172,7 +196,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Chrome beta:      44.0.2403.81
   + Chrome dev:       45.0.2454.6
   + Firefox versions in this image:
-                      39.0    38.0.6  37.0.2  36.0.4
+                      39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)

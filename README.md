@@ -19,7 +19,7 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
 
     sudo docker run --privileged -p 4444:24444 -p 5920:25900 \
-        -e VNC_PASSWORD=hola elgalu/selenium:2.47.1c
+        -e VNC_PASSWORD=hola elgalu/selenium:2.47.1d
 
 ### Non-privileged
 ### Run
@@ -31,7 +31,7 @@ If your setup is correct, privileged mode and sudo should not be necessary:
         -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
         -e VNC_PASSWORD=hola \
         -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-        elgalu/selenium:2.47.1c
+        elgalu/selenium:2.47.1d
 
 Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `ch` is the name of the container:
 
@@ -96,7 +96,7 @@ You can lunch a grid only container via environment variables:
 
     docker run --rm --name=hub -p 4444:24444 -p 5930:25900 -p 2223:22222 \
       -p=6081:26080 -e CHROME=false -e FIREFOX=false \
-      elgalu/selenium:2.47.1c
+      elgalu/selenium:2.47.1d
 
 The important part above is `-e CHROME=false -e FIREFOX=false` which tells the docker image not run run default chorme and firefox nodes turning the container into a grid-only one.
 
@@ -112,7 +112,7 @@ You can lunch a node only container via environment variables:
       -p 25550:25550 -p 25551:25551 \
       -e GRID=false -e CHROME=true -e FIREFOX=true \
       -v $(pwd)/videos:/videos \
-      elgalu/selenium:2.47.1c
+      elgalu/selenium:2.47.1d
 
 The important part above is `-e GRID=false` which tells the container to be a node-only node, this this case with 2 browsers `-e CHROME=true -e FIREFOX=true` but could be just 1.
 
@@ -137,9 +137,9 @@ There are also additional steps you can take to ensure you're using the correct 
 
 You can simply verify that image id is indeed the correct one.
 
-    # e.g. full image id for tag 2.47.1c
-    export IMGID=c627036423aa4fa4baea37b24a8ab6fa08e713935ff771f3e3a45881f4319b21
-    if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1c |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag 2.47.1d
+    export IMGID=TBD
+    if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1d |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -149,8 +149,8 @@ You can simply verify that image id is indeed the correct one.
 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag 2.47.1c
-    export SHA=9a0df41fb5228ae6bf184c97b706aec33a453e3190a546cbb9e9fe00ac73128c
+    # e.g. sha256 for tag 2.47.1d
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
@@ -169,7 +169,7 @@ Host machine, terminal 2:
     docker run --rm --name=ch -p=4470:24444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:2.47.1c
+      elgalu/selenium:2.47.1d
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -191,7 +191,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.47.1c
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.47.1d
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -201,7 +201,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:2.47.1c
+    elgalu/selenium:2.47.1d
 
 # -- Common: Wait for the container to start
 ./host-scripts/wait-docker-selenium.sh ch 7s
@@ -272,7 +272,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:2.47.1c
+    docker pull elgalu/selenium:2.47.1d
 
 #### 2. Use this image
 

@@ -3,7 +3,8 @@
 ###################################################
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:wily-20150708
+# next:     wily-TBD
+FROM ubuntu:wily-20150731
 ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
@@ -174,6 +175,15 @@ RUN apt-get update -qqy \
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     openbox obconf menu \
+  && rm -rf /var/lib/apt/lists/*
+
+#=========
+# fluxbox
+# A fast, lightweight and responsive window manager
+#=========
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    fluxbox \
   && rm -rf /var/lib/apt/lists/*
 
 #========================================
@@ -394,9 +404,9 @@ RUN pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/b3ad59703b554f" \
   && rm -rf /var/lib/apt/lists/*
 
-#-------------------#
-# FIREFOX_VERSIONS1 #
-#-------------------#
+#----------------------------#
+# FIREFOX_VERSIONS: 24 to 29 #
+#----------------------------#
 # Will split firefox versions in smaller chunks so the layers are smaller
 # All firefox versions we provide from oldes to newest
 ENV FIREFOX_VERSIONS1 "24.0, 25.0.1, 26.0, 27.0.1, 28.0, 29.0.1"
@@ -413,10 +423,10 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done
 
-#-------------------#
-# FIREFOX_VERSIONS2 #
-#-------------------#
-ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3, 33.0.3, 34.0.5, 35.0.1"
+#----------------------------#
+# FIREFOX_VERSIONS: 30 to 34 #
+#----------------------------#
+ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3, 33.0.3, 34.0.5"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -430,12 +440,31 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done
 
-#-------------------#
-# FIREFOX_VERSIONS3 #
-#-------------------#
+#----------------------------#
+# FIREFOX_VERSIONS: 35 to 38 #
+#----------------------------#
 # Latest available firefox version
 # ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "36.0.4, 37.0.2, 38.0.6, 39.0"
+ENV FIREFOX_VERSIONS3 "35.0.1, 36.0.4, 37.0.2, 38.0.6"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+     ;done
+
+#---------------------#
+# FIREFOX_VERSIONS 39 #
+#---------------------#
+# Latest available firefox version
+# ENV FIREFOX_LATEST_VERSION latest #this also wors
+ENV FIREFOX_VERSIONS3 "39.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -450,15 +479,6 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
      ;done \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${NORMAL_USER_HOME}
-
-#=========
-# fluxbox
-# A fast, lightweight and responsive window manager
-#=========
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    fluxbox \
-  && rm -rf /var/lib/apt/lists/*
 
 #=====================
 # Use Normal User now
@@ -629,7 +649,7 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="39.0" \
+  FIREFOX_VERSION="39.0.3" \
   # Default chrome flavor, options: stable|beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
