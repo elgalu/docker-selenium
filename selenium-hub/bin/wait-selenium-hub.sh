@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SEL_STATUS_URL="http://localhost:${SELENIUM_HUB_PORT}/wd/hub/status"
+
 # Exit immediately if a command exits with a non-zero status
 set -e
 
@@ -8,8 +10,7 @@ if [ "${GRID}" = "true" ]; then
   # This is annoying but json endpoint /wd/hub/status returns different things
   #  - on grid/hub .status should be 13
   #  - on node .state should be "success"
-  while ! curl -s "http://localhost:${SELENIUM_HUB_PORT}/wd/hub/status" \
-           | jq '.status' | grep "13"; do
+  while ! curl -s "${SEL_STATUS_URL}" | jq '.status' | grep "13"; do
     echo -n '.'
     sleep 0.1
   done

@@ -4,6 +4,37 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
+How to get container versions
+
+    java -version && python --version && firefox -version
+    chromedriver --version
+    google-chrome-stable --version
+    google-chrome-beta --version
+    google-chrome-unstable --version
+
+## 2.47.1e (2015-08-14)
+ + Upgrade from wily-20150731 to 20150807 (Leo Gallucci)
+ + Add Firefox 40.0 and upgrade Chrome patch levels.
+ + Include Sauce Connect tunneling support.
+ + Include BrowserStack tunneling support.
+ + Image tag details:
+  + Selenium: v2.47.1 (411b314)
+  + Chrome stable:         44.0.2403.155
+  + Chrome beta:           45.0.2454.37
+  + Chrome dev (unstable): 46.0.2478.0
+  + Firefox versions in this image:
+              40.0    39.0.3  38.0.6  37.0.2  36.0.4
+      35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
+      29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
+  + chromedriver: 2.17.340116 (2557bebb9de060c37c1a5d8d51ef72bb91106af6)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.8.1, build d12ea79
+  + FROM ubuntu:wily-20150807
+  + Python: 2.7.10
+  + Image ID: TBD
+  + Digest: sha256:TBD
+
 ## 2.47.1d (2015-08-07)
  + Upgrade from wily-20150708 to 20150731 (Leo Gallucci)
  + Upgrade Firefox from 39.0 to 39.0.3
@@ -12,9 +43,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Include missed Firefox version 36.0.4
  + Image tag details:
   + Selenium: v2.47.1 (411b314)
-  + Chrome stable:    44.0.2403.130
-  + Chrome beta:      45.0.2454.26
-  + Chrome dev:       46.0.2471.2
+  + Chrome stable:         44.0.2403.130
+  + Chrome beta:           45.0.2454.26
+  + Chrome dev (unstable): 46.0.2471.2
   + Firefox versions in this image:
                       39.0.3  38.0.6  37.0.2  36.0.4
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -35,9 +66,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Reorganize packages installation order
  + Image tag details:
   + Selenium: v2.47.1 (411b314)
-  + Chrome stable:    44.0.2403.125
-  + Chrome beta:      45.0.2454.15
-  + Chrome dev:       46.0.2467.2
+  + Chrome stable:         44.0.2403.125
+  + Chrome beta:           45.0.2454.15
+  + Chrome dev (unstable): 46.0.2467.2
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -57,9 +88,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add -e MEM_JAVA to allow to pass custom values like "1024m".
  + Image tag details:
   + Selenium: v2.47.1 (411b314)
-  + Chrome stable:    44.0.2403.125
-  + Chrome beta:      45.0.2454.15
-  + Chrome dev:       45.0.2454.15
+  + Chrome stable:         44.0.2403.125
+  + Chrome beta:           45.0.2454.15
+  + Chrome dev (unstable): 45.0.2454.15
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -79,9 +110,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add +extension GLX to Xvfb in preparation for android emulators.
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
-  + Chrome stable:    44.0.2403.89
-  + Chrome beta:      44.0.2403.89
-  + Chrome dev:       45.0.2454.7
+  + Chrome stable:         44.0.2403.89
+  + Chrome beta:           44.0.2403.89
+  + Chrome dev (unstable): 45.0.2454.7
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -100,9 +131,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Lower down ffmpeg CPU usage considerable by using libx264 ultrafast.
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
-  + Chrome stable:    43.0.2357.134
-  + Chrome beta:      44.0.2403.89
-  + Chrome dev:       45.0.2454.7
+  + Chrome stable:         43.0.2357.134
+  + Chrome beta:           44.0.2403.89
+  + Chrome dev (unstable): 45.0.2454.7
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -124,9 +155,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Fix bug while docker stop $NAME; supervisor not getting SIGINT properly.
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
-  + Chrome stable:    43.0.2357.134
-  + Chrome beta:      44.0.2403.89
-  + Chrome dev:       45.0.2454.7
+  + Chrome stable:         43.0.2357.134
+  + Chrome beta:           44.0.2403.89
+  + Chrome dev (unstable): 45.0.2454.7
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -146,9 +177,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Improve log output when container startup fails.
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
-  + Chrome stable:    43.0.2357.134
-  + Chrome beta:      44.0.2403.81
-  + Chrome dev:       45.0.2454.6
+  + Chrome stable:         43.0.2357.134
+  + Chrome beta:           44.0.2403.81
+  + Chrome dev (unstable): 45.0.2454.6
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -167,9 +198,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Start services via env vars VIDEO=false GRID=true CHROME=true FIREFOX=true
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
-  + Chrome stable:    43.0.2357.134
-  + Chrome beta:      44.0.2403.81
-  + Chrome dev:       45.0.2454.6
+  + Chrome stable:         43.0.2357.134
+  + Chrome beta:           44.0.2403.81
+  + Chrome dev (unstable): 45.0.2454.6
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
@@ -192,9 +223,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Record videos via `-e VIDEO=true` or start-video/stop-video scripts.
  + Image tag details:
   + Selenium: v2.46.0 (87c69e2)
-  + Chrome stable:    43.0.2357.134
-  + Chrome beta:      44.0.2403.81
-  + Chrome dev:       45.0.2454.6
+  + Chrome stable:         43.0.2357.134
+  + Chrome beta:           44.0.2403.81
+  + Chrome dev (unstable): 45.0.2454.6
   + Firefox versions in this image:
                       39.0    38.0.6  37.0.2
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0

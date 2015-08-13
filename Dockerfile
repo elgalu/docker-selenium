@@ -4,7 +4,7 @@
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     wily-TBD
-FROM ubuntu:wily-20150731
+FROM ubuntu:wily-20150807
 ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
@@ -220,7 +220,7 @@ USER root
 # - try /opt/google/chrome/chrome-sandbox see: https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L66
 # Package libnss3-1d might help with issue 20
 #     libnss3-1d \
-# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+# RUN wget --no-verbose -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
 #   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 #   && apt-get update -qqy \
 #   && apt-get -qqy install \
@@ -286,14 +286,14 @@ RUN apt-get update -qqy \
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
   && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
-  && wget -O noVNC.zip \
+  && wget --no-verbose -O noVNC.zip \
       "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
   && unzip -x noVNC.zip \
   && mv noVNC-${NOVNC_SHA} \
        ${NORMAL_USER_HOME}/noVNC \
   # Download websockify commit 558a6439f dated 2015-06-02
   && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
-  && wget -O websockify.zip \
+  && wget --no-verbose -O websockify.zip \
       "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
   && unzip -x websockify.zip \
   && mv websockify-${WEBSOCKIFY_SHA} \
@@ -423,10 +423,10 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done
 
-#----------------------------#
-# FIREFOX_VERSIONS: 30 to 34 #
-#----------------------------#
-ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3, 33.0.3, 34.0.5"
+#------------------------------#
+# FIREFOX_VERSIONS: 30, 31, 32 #
+#------------------------------#
+ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -440,12 +440,29 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done
 
-#----------------------------#
-# FIREFOX_VERSIONS: 35 to 38 #
-#----------------------------#
+#------------------------------#
+# FIREFOX_VERSIONS: 33, 34, 35 #
+#------------------------------#
+ENV FIREFOX_VERSIONS2 "33.0.3, 34.0.5, 35.0.1"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+     ;done
+
+#------------------------------#
+# FIREFOX_VERSIONS: 36, 37, 38 #
+#------------------------------#
 # Latest available firefox version
 # ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "35.0.1, 36.0.4, 37.0.2, 38.0.6"
+ENV FIREFOX_VERSIONS3 "36.0.4, 37.0.2, 38.0.6"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -462,8 +479,6 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 #---------------------#
 # FIREFOX_VERSIONS 39 #
 #---------------------#
-# Latest available firefox version
-# ENV FIREFOX_LATEST_VERSION latest #this also wors
 ENV FIREFOX_VERSIONS3 "39.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
@@ -476,8 +491,58 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
           --destination=${FIREFOX_DEST} \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done \
-  && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
+     ;done
+
+# ------------------------#
+# Sauce Connect Tunneling #
+# ------------------------#
+# https://docs.saucelabs.com/reference/sauce-connect/
+ENV SAUCE_CONN_VER="sc-4.3-linux" \
+    SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
+RUN cd /tmp \
+  && wget --no-verbose "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
+  && tar -zxf ${SAUCE_CONN_VER}.tar.gz \
+  && mv ${SAUCE_CONN_VER} /usr/local \
+  && ln -sf /usr/local/${SAUCE_CONN_VER}/bin/sc /usr/local/bin/sc \
+  && sc | grep build
+
+# -----------------------#
+# BrowserStack Tunneling #
+# -----------------------#
+# https://www.browserstack.com/local-testing
+ENV BSTACK_TUNNEL_URL="https://www.browserstack.com/browserstack-local" \
+    BSTACK_TUNNEL_ZIP="BrowserStackLocal-linux-x64.zip"
+RUN cd /tmp \
+  && wget --no-verbose "${BSTACK_TUNNEL_URL}/${BSTACK_TUNNEL_ZIP}" \
+  && unzip ${BSTACK_TUNNEL_ZIP} \
+  && chmod 755 BrowserStackLocal \
+  && rm ${BSTACK_TUNNEL_ZIP} \
+  && mv BrowserStackLocal /usr/local/bin \
+  && BrowserStackLocal -version
+
+#---------------------#
+# FIREFOX_VERSIONS 40 #
+#---------------------#
+# Latest available firefox version
+# ENV FIREFOX_LATEST_VERSION latest #this also wors
+ENV FIREFOX_VERSIONS3 "40.0"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+     ;done
+
+#-----------#
+# Fix perms #
+#-----------#
+RUN  chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${NORMAL_USER_HOME}
 
 #=====================
@@ -505,7 +570,7 @@ ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION=2.17 \
+  && CHROME_DRIVER_VERSION="2.17" \
   # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -527,7 +592,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="44.0.2403.107" \
+RUN  latest_chrome_version_trigger="TBD" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -649,7 +714,7 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="39.0.3" \
+  FIREFOX_VERSION="40.0" \
   # Default chrome flavor, options: stable|beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
@@ -739,6 +804,18 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
   # You can choose what X manager to use
   XMANAGER="fluxbox" \
+  # Sauce Labs tunneling. Naming is required: SAUCE_TUNNEL_ID
+  SAUCE_TUNNEL="false" \
+  SAUCE_USER_NAME="" \
+  SAUCE_API_KEY="" \
+  SAUCE_TUNNEL_ID="docker-selenium" \
+  SAUCE_TUNNEL_READY_FILE="/tmp/sauce-connect-ready" \
+  SAUCE_LOCAL_SEL_PORT="4445" \
+  # BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
+  BSTACK_TUNNEL="false" \
+  BSTACK_ACCESS_KEY="" \
+  BSTACK_TUNNEL_ID="docker-selenium" \
+  BSTACK_TUNNEL_OPTS="-skipCheck -v -forcelocal" \
   # Java stuff
   # MEM_JAVA="1024m" \
   #===============================
@@ -764,9 +841,9 @@ ADD bin/* ${BIN_UTILS}/
 ADD **/bin/* ${BIN_UTILS}/
 ADD host-scripts/* /host-scripts/
 
-#==========
-# Fix dirs
-#==========
+#==================
+# Fix dirs (again)
+#==================
 RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
   # Videos
   && mkdir -p ${VIDEOS_DIR} \

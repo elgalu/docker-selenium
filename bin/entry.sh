@@ -11,6 +11,7 @@ export DISPLAY=":${DISP_N}"
 export XEPHYR_DISPLAY=":${DISP_N}"
 export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"
 export VIDEO_PIDFILE="${RUN_DIR}/video.pid"
+export BSTACK_LOG_FILE="${LOGS_DIR}/browserstack-stdout.log"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
 export DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log"
 touch ${DOCKER_SELENIUM_STATUS}
@@ -41,6 +42,8 @@ export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
   SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-firefox"
 [ "${VIDEO}" = "true" ] && export \
   SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|video-rec"
+[ "${BSTACK_TUNNEL}" = "true" ] && export \
+  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|browserstack"
 
 #--------------------------------
 # Improve etc/hosts and fix dirs
