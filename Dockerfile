@@ -766,6 +766,7 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SUPERVISOR_HTTP_PASSWORD=somehttpbasicauthpwd \
   SUPERVISOR_REQUIRED_SRV_LIST="vnc|novnc|sshd|xmanager|xvfb" \
   SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \
+  SUPERVISOR_STOPWAITSECS=20 \
   # Supervisor loglevel and also general docker log level
   # can be: debug, warn, trace, info
   LOG_LEVEL=info \
@@ -811,11 +812,13 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SAUCE_TUNNEL_ID="docker-selenium" \
   SAUCE_TUNNEL_READY_FILE="/tmp/sauce-connect-ready" \
   SAUCE_LOCAL_SEL_PORT="4445" \
+  SAUCE_WAIT_TIMEOUT="100s" \
   # BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
   BSTACK_TUNNEL="false" \
   BSTACK_ACCESS_KEY="" \
   BSTACK_TUNNEL_ID="docker-selenium" \
   BSTACK_TUNNEL_OPTS="-skipCheck -v -forcelocal" \
+  BSTACK_WAIT_TIMEOUT="70s" \
   # Java stuff
   # MEM_JAVA="1024m" \
   #===============================

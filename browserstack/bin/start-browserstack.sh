@@ -40,12 +40,8 @@ function shutdown {
   exit 0
 }
 
-# Wait for the file to exists (Sauce Labs only)
-# echo "Waiting for file ${SAUCE_TUNNEL_READY_FILE} to be created..."
-# while ! ls -l "${SAUCE_TUNNEL_READY_FILE}"* >/dev/null 2>&1; do sleep 0.1; done
-
 # Now wait for the tunnel to finish starting
-timeout --foreground ${WAIT_TIMEOUT} wait-browserstack.sh
+timeout --foreground ${BSTACK_WAIT_TIMEOUT} wait-browserstack.sh
 
 # Run function shutdown() when this process a killer signal
 trap shutdown SIGTERM SIGINT SIGKILL

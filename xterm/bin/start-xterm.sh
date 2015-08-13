@@ -50,7 +50,9 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || shutdown \
   "Failed while waiting for selenium node firefox to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || shutdown \
   "Failed while waiting for video recording to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-browserstack.sh || shutdown \
+timeout --foreground ${SAUCE_WAIT_TIMEOUT} wait-saucelabs.sh || shutdown \
+  "Failed while waiting for Sauce Labs tunnel to start!"
+timeout --foreground ${BSTACK_WAIT_TIMEOUT} wait-browserstack.sh || shutdown \
   "Failed while waiting for BrowserStack tunnel to start!"
 
 # Help at http://supervisord.org/subprocess.html#process-states
