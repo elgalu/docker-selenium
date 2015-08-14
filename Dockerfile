@@ -497,14 +497,15 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 # Sauce Connect Tunneling #
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
-ENV SAUCE_CONN_VER="sc-4.3-linux" \
+ENV SAUCE_CONN_VER="sc-4.3.10-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
   && wget --no-verbose "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
   && tar -zxf ${SAUCE_CONN_VER}.tar.gz \
+  && rm -rf /usr/local/${SAUCE_CONN_VER} \
   && mv ${SAUCE_CONN_VER} /usr/local \
   && ln -sf /usr/local/${SAUCE_CONN_VER}/bin/sc /usr/local/bin/sc \
-  && sc | grep build
+  && which sc
 
 # -----------------------#
 # BrowserStack Tunneling #
@@ -518,14 +519,14 @@ RUN cd /tmp \
   && chmod 755 BrowserStackLocal \
   && rm ${BSTACK_TUNNEL_ZIP} \
   && mv BrowserStackLocal /usr/local/bin \
-  && BrowserStackLocal -version
+  && which BrowserStackLocal
 
 #---------------------#
 # FIREFOX_VERSIONS 40 #
 #---------------------#
 # Latest available firefox version
 # ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "40.0"
+ENV FIREFOX_VERSIONS3 "40.0.2"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -714,7 +715,7 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="40.0" \
+  FIREFOX_VERSION="40.0.2" \
   # Default chrome flavor, options: stable|beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home

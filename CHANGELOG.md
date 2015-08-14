@@ -7,14 +7,15 @@ Note image ids also change after scm-source.json has being updated which trigger
 How to get container versions
 
     java -version && python --version && firefox -version
-    chromedriver --version
-    google-chrome-stable --version
-    google-chrome-beta --version
-    google-chrome-unstable --version
+    chromedriver --version && echo "\n"
+    google-chrome-stable --version && echo "\n"
+    google-chrome-beta --version && echo "\n"
+    google-chrome-unstable --version && echo "\n"
+    sc | grep build && BrowserStackLocal -version
 
 ## 2.47.1e (2015-08-14)
  + Upgrade from wily-20150731 to 20150807 (Leo Gallucci)
- + Add Firefox 40.0 and upgrade Chrome patch levels.
+ + Add Firefox 40.0.2 and upgrade Chrome patch levels.
  + Include Sauce Connect tunneling support.
  + Include BrowserStack tunneling support.
  + Image tag details:
@@ -23,7 +24,7 @@ How to get container versions
   + Chrome beta:           45.0.2454.37
   + Chrome dev (unstable): 46.0.2478.0
   + Firefox versions in this image:
-              40.0    39.0.3  38.0.6  37.0.2  36.0.4
+              40.0.2  39.0.3  38.0.6  37.0.2  36.0.4
       35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
       29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
   + chromedriver: 2.17.340116 (2557bebb9de060c37c1a5d8d51ef72bb91106af6)
@@ -32,8 +33,10 @@ How to get container versions
   + Built with: Docker version 1.8.1, build d12ea79
   + FROM ubuntu:wily-20150807
   + Python: 2.7.10
-  + Image ID: 6f267b9a571466c2bdca32b096d6f3704f1e729d5346eccbcb22071719a776e6
-  + Digest: sha256:22d35c93fbef588d1941ea880c19d2d6f93becefa07f9dfe2d3acf9906458116
+  + Sauce Connect 4.3.10, build 1731 2bab8b6
+  + BrowserStack Local version 3.7
+  + Image ID: TBD
+  + Digest: sha256:TBD
 
 ## 2.47.1d (2015-08-07)
  + Upgrade from wily-20150708 to 20150731 (Leo Gallucci)

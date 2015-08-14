@@ -16,7 +16,7 @@ die () {
   exit $errnum
 }
 
-export DONE_MSG="Connection established."
+export DONE_MSG="Sauce Connect is up, you may start your tests."
 
 if [ "${SAUCE_TUNNEL}" = "true" ]; then
   echo "Waiting for Sauce Labs tunnel to start..."
