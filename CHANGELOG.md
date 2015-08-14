@@ -32,8 +32,8 @@ How to get container versions
   + Built with: Docker version 1.8.1, build d12ea79
   + FROM ubuntu:wily-20150807
   + Python: 2.7.10
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 6f267b9a571466c2bdca32b096d6f3704f1e729d5346eccbcb22071719a776e6
+  + Digest: sha256:22d35c93fbef588d1941ea880c19d2d6f93becefa07f9dfe2d3acf9906458116
 
 ## 2.47.1d (2015-08-07)
  + Upgrade from wily-20150708 to 20150731 (Leo Gallucci)
