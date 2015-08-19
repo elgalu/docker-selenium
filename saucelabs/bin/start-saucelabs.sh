@@ -17,6 +17,7 @@ die () {
 }
 
 # Required params
+[ -z "${SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS}" ] && die "Required SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS"
 [ -z "${SAUCE_LOCAL_SEL_PORT}" ] && die "Required SAUCE_LOCAL_SEL_PORT"
 [ -z "${SAUCE_USER_NAME}" ] && die "Required env var SAUCE_USER_NAME"
 [ -z "${SAUCE_API_KEY}" ] && die "Required env var SAUCE_API_KEY"
@@ -27,13 +28,37 @@ die () {
 # - none, the tunnel has no dependencies
 # timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 
-# Start tunnel
-sc --se-port ${SAUCE_LOCAL_SEL_PORT} \
+# Do a smoke doctor run to make sure everything is ok and too keep
+# for the logs
+sc --doctor \
    --user "${SAUCE_USER_NAME}" \
-   --api-key "${SAUCE_API_KEY}" \
-   --readyfile "${SAUCE_TUNNEL_READY_FILE}" \
-   --tunnel-identifier "${SAUCE_TUNNEL_ID}" &
-SAUCE_TUNNEL_PID=$!
+   --api-key "${SAUCE_API_KEY}"
+
+# Start tunnel
+i=0
+set +e
+# for i in 1 2 3 4 5; do
+until [ $i -ge $SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS ]; do
+  if [ $i -ge 1 ]; then
+    echo "Failed attempt $i to start Sauce tunnel, will retry..."
+    sleep 1
+  fi
+  sc --se-port ${SAUCE_LOCAL_SEL_PORT} \
+     --user "${SAUCE_USER_NAME}" \
+     --api-key "${SAUCE_API_KEY}" \
+     --readyfile "${SAUCE_TUNNEL_READY_FILE}" \
+     --tunnel-identifier "${SAUCE_TUNNEL_ID}" &
+  SAUCE_TUNNEL_PID=$!
+  (timeout --foreground ${SAUCE_WAIT_TIMEOUT} wait-saucelabs.sh) && break
+  i=$[$i+1]
+done
+set -e #restore
+if [ $i -ge $SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS ]; then
+  echo "Failed attempt $i to start Sauce tunnel for the last time!"
+  kill -SIGINT ${SAUCE_TUNNEL_PID}
+  wait ${SAUCE_TUNNEL_PID}
+  exit 1
+fi
 
 function shutdown {
   echo "Trapped SIGTERM/SIGINT so shutting down Sauce Labs gracefully..."

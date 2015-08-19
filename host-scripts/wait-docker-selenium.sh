@@ -23,6 +23,9 @@ CONTAINER_ID=${1}
 # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "7s"
 WAIT_TIMEOUT=${2-7s}
 
+# default $TAIL_LOG_LINES when not provided
+TAIL_LOG_LINES=${TAIL_LOG_LINES-10}
+
 # Full directory name of the script no matter where it is being called from
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 LOOP_SCRIPT_PATH="${DIR}/loop-wait-docker.sh"
@@ -40,9 +43,11 @@ if timeout --foreground ${WAIT_TIMEOUT} \
   docker exec ${CONTAINER_ID} \
     grep 'IP:' /var/log/sele/xterm-stdout.log || die "Failed to grep IP:"
 else
-  docker exec ${CONTAINER_ID} bash -c 'tail /var/log/sele/*' || true
+  docker exec ${CONTAINER_ID} \
+    bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/sele/*' || true
   echo "" && echo "" && echo "==> errors <=="
-  docker exec ${CONTAINER_ID} bash -c '/bin-utils/selenium-grep.sh' || true
+  docker exec ${CONTAINER_ID} \
+    bash -c '/bin-utils/selenium-grep.sh' || true
 
   die "
    Your docker-selenium didn't start properly.

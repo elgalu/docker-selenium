@@ -34,26 +34,26 @@ shutdown () {
 #  http://www.gnu.org/software/coreutils/manual/coreutils.html#timeout-invocation
 
 # Wait for everyone to be done
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || shutdown \
-  "Failed while waiting for Xvfb to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
+  shutdown "Failed while waiting for Xvfb to start!"
 #TODO: wait-xmanager.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh || shutdown \
-  "Failed while waiting for VNC to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || shutdown \
-  "Failed while waiting for noVNC to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh || \
+  shutdown "Failed while waiting for VNC to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || \
+  shutdown "Failed while waiting for noVNC to start!"
 #TODO: wait-sshd.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || shutdown \
-  "Failed while waiting for selenium hub to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || shutdown \
-  "Failed while waiting for selenium node chrome to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || shutdown \
-  "Failed while waiting for selenium node firefox to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || shutdown \
-  "Failed while waiting for video recording to start!"
-timeout --foreground ${SAUCE_WAIT_TIMEOUT} wait-saucelabs.sh || shutdown \
-  "Failed while waiting for Sauce Labs tunnel to start!"
-timeout --foreground ${BSTACK_WAIT_TIMEOUT} wait-browserstack.sh || shutdown \
-  "Failed while waiting for BrowserStack tunnel to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || \
+  shutdown "Failed while waiting for selenium hub to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \
+  shutdown "Failed while waiting for selenium node chrome to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || \
+  shutdown "Failed while waiting for selenium node firefox to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || \
+  shutdown "Failed while waiting for video recording to start!"
+timeout --foreground ${SAUCE_WAIT_RETRY_TIMEOUT} wait-saucelabs.sh || \
+  shutdown "Failed while waiting for Sauce Labs tunnel to start!"
+timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
+  shutdown "Failed while waiting for BrowserStack tunnel to start!"
 
 # Help at http://supervisord.org/subprocess.html#process-states
 if supervisorctl -c /etc/supervisor/supervisord.conf status \

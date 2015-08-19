@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
+echoerr() {
+  cat <<< "$@" 1>&2;
+}
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "3"
+  errnum=${2-3}
+  exit $errnum
+}
+
+# Required params
+[ -z "${TAIL_LOG_LINES}" ] && die "Required TAIL_LOG_LINES"
+
 # Exit all child processes properly
 function shutdown {
   echo "Trapped SIGTERM/SIGINT/x so shutting down supervisord gracefully..."
@@ -16,7 +32,7 @@ function shutdown {
   #  - output logs
   #  - exec bash to permit troubleshooting
   if [ "$(cat ${DOCKER_SELENIUM_STATUS})" = "failed" ]; then
-    tail /var/log/sele/*
+    tail --lines=${TAIL_LOG_LINES} /var/log/sele/*
     echo "" && echo "" && echo "==> errors <=="
     selenium-grep.sh
 

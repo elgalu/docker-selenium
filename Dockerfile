@@ -497,7 +497,7 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 # Sauce Connect Tunneling #
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
-ENV SAUCE_CONN_VER="sc-4.3.10-linux" \
+ENV SAUCE_CONN_VER="sc-4.3.11-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
   && wget --no-verbose "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
@@ -571,7 +571,7 @@ ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.17" \
+  && CHROME_DRIVER_VERSION="2.18" \
   # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -814,12 +814,17 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SAUCE_TUNNEL_READY_FILE="/tmp/sauce-connect-ready" \
   SAUCE_LOCAL_SEL_PORT="4445" \
   SAUCE_WAIT_TIMEOUT="100s" \
+  SAUCE_WAIT_RETRY_TIMEOUT="210s" \
+  SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS="1" \
   # BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
   BSTACK_TUNNEL="false" \
   BSTACK_ACCESS_KEY="" \
   BSTACK_TUNNEL_ID="docker-selenium" \
   BSTACK_TUNNEL_OPTS="-skipCheck -v -forcelocal" \
   BSTACK_WAIT_TIMEOUT="70s" \
+  BSTACK_WAIT_RETRY_TIMEOUT="150s" \
+  # Amount of lines to display when startup errors
+  TAIL_LOG_LINES="15" \
   # Java stuff
   # MEM_JAVA="1024m" \
   #===============================

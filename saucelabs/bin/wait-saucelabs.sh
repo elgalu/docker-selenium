@@ -17,12 +17,16 @@ die () {
 }
 
 export DONE_MSG="Sauce Connect is up, you may start your tests."
+export GOODBYE_MSG="Goodbye."
 
 if [ "${SAUCE_TUNNEL}" = "true" ]; then
   echo "Waiting for Sauce Labs tunnel to start..."
   # Required params
   [ -z "${SAUCE_LOG_FILE}" ] && die "Required env var SAUCE_LOG_FILE"
   while ! grep "${DONE_MSG}" ${SAUCE_LOG_FILE} >/dev/null; do
+    if grep "${GOODBYE_MSG}" ${SAUCE_LOG_FILE} >/dev/null; then
+      die "Found GOODBYE_MSG '${GOODBYE_MSG}' in output so quitting."
+    fi
     echo -n '.'
     sleep 0.2;
   done

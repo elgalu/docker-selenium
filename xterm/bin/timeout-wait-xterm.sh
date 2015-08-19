@@ -20,6 +20,9 @@ die () {
 WAIT_TIMEOUT=${1-7s}
 LOOP_SCRIPT_PATH="/bin-utils/wait-xterm.sh"
 
+# default $TAIL_LOG_LINES when not provided
+TAIL_LOG_LINES=${TAIL_LOG_LINES-10}
+
 if [ ! -f "${LOOP_SCRIPT_PATH}" ]; then
   die "Need '${LOOP_SCRIPT_PATH}' to exist!"
 fi
@@ -31,7 +34,7 @@ if timeout --foreground ${WAIT_TIMEOUT} \
   grep 'password' /var/log/sele/vnc-stdout.log || true
   grep 'IP:' /var/log/sele/xterm-stdout.log || die "Failed to grep IP:"
 else
-  bash -c 'tail /var/log/sele/*' || true
+  bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/sele/*' || true
   echo "" && echo "" && echo "==> errors <=="
   bash -c '/bin-utils/selenium-grep.sh' || true
 
