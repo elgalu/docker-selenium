@@ -93,7 +93,7 @@ If the VNC password was randomly generated find out with
 ## Grid
 ## Hub
 
-You can lunch a grid only container via environment variables:
+You can launch a grid only container via environment variables:
 
     docker run --rm --name=hub -p 4444:24444 -p 5930:25900 -p 2223:22222 \
       -p=6081:26080 -e CHROME=false -e FIREFOX=false \
