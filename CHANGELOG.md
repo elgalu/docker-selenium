@@ -13,6 +13,30 @@ How to get container versions
     google-chrome-unstable --version && echo "\n"
     sc | grep build && BrowserStackLocal -version
 
+## 2.47.1g (2015-08-24)
+ + Optionally do `sc --doctor` via SAUCE_TUNNEL_DOCTOR_TEST (Leo Gallucci)
+ + Fix small tiny 64mb shm issue via SHM_SIZE and `--privileged` mode.
+ + Upgrade Chrome stable to 44.0.2403.157 and also beta patch level.
+ + Image tag details:
+  + Selenium: v2.47.1 (411b314)
+  + Chrome stable:         44.0.2403.157
+  + Chrome beta:           45.0.2454.46
+  + Chrome dev (unstable): 46.0.2486.0
+  + Firefox versions in this image:
+              40.0.2  39.0.3  38.0.6  37.0.2  36.0.4
+      35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
+      29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
+  + chromedriver: 2.18.343837 (52eb4041461e46a6b73308ebb19e85787ced4281)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.8.1, build d12ea79
+  + FROM ubuntu:wily-20150807
+  + Python: 2.7.10
+  + Sauce Connect 4.3.11, build 1757 2b421bb
+  + BrowserStack Local version 3.7
+  + Image ID: TBD
+  + Digest: sha256:TBD
+
 ## 2.47.1f (2015-08-19)
  + Upgrade chromedriver from 2.17 to 2.18 (Leo Gallucci)
  + Upgrade Sauce Connect version and add `sc --doctor`

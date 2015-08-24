@@ -1,3 +1,5 @@
-10.0.2.2   my_internal_web_server
-10.0.2.2   my_internal_web_server.dev
 10.0.2.2   my_internal_web_server.local
+# This entries help to avoid DNS resolve issue with Sauce Connect
+162.222.73.28  saucelabs.com
+162.222.76.100 maki76100.miso.saucelabs.com
+23.55.155.27   g.symcd.com

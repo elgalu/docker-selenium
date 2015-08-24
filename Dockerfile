@@ -593,7 +593,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="TBD" \
+RUN  latest_chrome_version_trigger="44.0.2403.157" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -810,21 +810,24 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SAUCE_TUNNEL="false" \
   SAUCE_USER_NAME="" \
   SAUCE_API_KEY="" \
+  SAUCE_TUNNEL_DOCTOR_TEST="false" \
   SAUCE_TUNNEL_ID="docker-selenium" \
   SAUCE_TUNNEL_READY_FILE="/tmp/sauce-connect-ready" \
   SAUCE_LOCAL_SEL_PORT="4445" \
-  SAUCE_WAIT_TIMEOUT="100s" \
-  SAUCE_WAIT_RETRY_TIMEOUT="210s" \
+  SAUCE_WAIT_TIMEOUT="140s" \
+  SAUCE_WAIT_RETRY_TIMEOUT="290s" \
   SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS="1" \
   # BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
   BSTACK_TUNNEL="false" \
   BSTACK_ACCESS_KEY="" \
   BSTACK_TUNNEL_ID="docker-selenium" \
   BSTACK_TUNNEL_OPTS="-skipCheck -v -forcelocal" \
-  BSTACK_WAIT_TIMEOUT="70s" \
-  BSTACK_WAIT_RETRY_TIMEOUT="150s" \
+  BSTACK_WAIT_TIMEOUT="100s" \
+  BSTACK_WAIT_RETRY_TIMEOUT="220s" \
   # Amount of lines to display when startup errors
   TAIL_LOG_LINES="15" \
+  # Fix small tiny 64mb shm issue
+  SHM_SIZE="512M" \
   # Java stuff
   # MEM_JAVA="1024m" \
   #===============================
@@ -885,8 +888,8 @@ COPY scm-source.json /
 # Ensure the file is up-to-date else you should update it by running
 #  ./host-scripts/gen-scm-source.sh
 # on the host
-RUN [ $(find ./ -mtime -1 -type f -name "scm-source.json" 2>/dev/null) ] \
-    || please_update_scm-source_json
+# RUN [ $(find ./ -mtime -1 -type f -name "scm-source.json" 2>/dev/null) ] \
+#     || please_update_scm-source_json
 
 #===================
 # CMD or ENTRYPOINT

@@ -30,9 +30,9 @@ die () {
 
 # Do a smoke doctor run to make sure everything is ok and too keep
 # for the logs
-sc --doctor \
-   --user "${SAUCE_USER_NAME}" \
-   --api-key "${SAUCE_API_KEY}"
+if [ "${SAUCE_TUNNEL_DOCTOR_TEST}" = "true" ]; then
+  sc --doctor --user "${SAUCE_USER_NAME}" --api-key "${SAUCE_API_KEY}"
+fi
 
 # Start tunnel
 i=0
@@ -41,6 +41,7 @@ set +e
 until [ $i -ge $SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS ]; do
   if [ $i -ge 1 ]; then
     echo "Failed attempt $i to start Sauce tunnel, will retry..."
+    killall -SIGINT sc || true
     sleep 1
   fi
   sc --se-port ${SAUCE_LOCAL_SEL_PORT} \
@@ -54,9 +55,12 @@ until [ $i -ge $SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS ]; do
 done
 set -e #restore
 if [ $i -ge $SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS ]; then
-  echo "Failed attempt $i to start Sauce tunnel for the last time!"
+  echo "Failed to start Sauce tunnel after $i attempts"
   kill -SIGINT ${SAUCE_TUNNEL_PID}
+  killall -SIGINT sc || true
   wait ${SAUCE_TUNNEL_PID}
+  echo "Will run in doctor mode to get more feedback on why it failed"
+  sc --doctor --user "${SAUCE_USER_NAME}" --api-key "${SAUCE_API_KEY}"
   exit 1
 fi
 

@@ -66,6 +66,15 @@ WHOAMI=$(whoami)
 WHOAMI_EXIT_CODE=$?
 echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID is '$UID'"
 
+#-------------------------------
+# Fix small tiny 64mb shm issue
+#-------------------------------
+# https://github.com/elgalu/docker-selenium/issues/20
+if sudo umount /dev/shm; then
+  sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=${SHM_SIZE} \
+    tmpfs /dev/shm || true
+fi
+
 #------
 # exec
 #------

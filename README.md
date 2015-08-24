@@ -17,28 +17,24 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 ### One-liner Install & Usage
 
-In general: add `sudo` only if needed in your environment and `--privileged` if you really need it.
+In general: add `sudo` only if needed in your environment and `--privileged` if you really need it like when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
 
-    sudo docker run --privileged -p 4444:24444 -p 5920:25900 \
-        -e VNC_PASSWORD=hola elgalu/selenium:2.47.1f
+    docker run --privileged -p 4444:24444 -p 5920:25900 \
+        -e VNC_PASSWORD=hola elgalu/selenium:2.47.1g
 
 ### Non-privileged
 ### Run
 
 If your setup is correct, privileged mode and sudo should not be necessary:
 
-    docker run --rm --name=ch -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 \
-                              -p=0.0.0.0:2222:22222 -p=0.0.0.0:6080:26080 \
-        -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1080 \
-        -e VNC_PASSWORD=hola \
-        -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
+    docker run --rm --name=ch -p=4444:24444 -p=5920:25900 \
         elgalu/selenium:2.47.1f
 
 Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `ch` is the name of the container:
 
-    while ! docker exec ch grep 'all done and ready for testing' /var/log/sele/xterm-stdout.log > /dev/null 2>&1; do sleep 0.2; done
+    docker exec ch /bin-utils/timeout-wait-xterm.sh 1m
 
-Selenium should be up and running at http://localhost:4470/wd/hub open the web page to confirm is running.
+Selenium should be up and running at http://localhost:4444/wd/hub open the web page to confirm is running.
 
 You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
 
@@ -117,6 +113,18 @@ You can lunch a node only container via environment variables:
 
 The important part above is `-e GRID=false` which tells the container to be a node-only node, this this case with 2 browsers `-e CHROME=true -e FIREFOX=true` but could be just 1.
 
+## Chrome crashed
+
+If your tests crashes in Chrome you may need to increase shm size:
+
+1. start docker in privileged mode: `docker run --privileged`
+2. increase shm size from default 64mb to something bigger:
+
+```sh
+docker exec ch sudo umount /dev/shm
+docker exec ch sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=512M tmpfs /dev/shm
+```
+
 ## Security
 
 A file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
@@ -139,7 +147,7 @@ There are also additional steps you can take to ensure you're using the correct 
 You can simply verify that image id is indeed the correct one.
 
     # e.g. full image id for tag 2.47.1f
-    export IMGID=fe93086c831942e4aac6f916db7a9221bcb205e654628a0421fed0ee725ff9de
+    export IMGID=TBD
     if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1f |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
@@ -151,7 +159,7 @@ You can simply verify that image id is indeed the correct one.
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag 2.47.1f
-    export SHA=9a21a268f6badecbba9033bb7eba50b9f6dc77c59370dec29f3fc6d3f38fd70d
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
@@ -173,7 +181,7 @@ Host machine, terminal 1:
 
 Host machine, terminal 2:
 
-    docker run --rm --name=ch -p=4470:24444 \
+    docker run --rm --name=ch -p=4444:24444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
       elgalu/selenium:2.47.1f
