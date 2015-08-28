@@ -15,20 +15,12 @@ See: https://github.com/SeleniumHQ/docker-selenium
 
 Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone selenium servers that you should `docker stop` as soon as your tests finishes. It also focuses on debugging via VNC which can be difficult on a Selenium Grid given you can't know in advance in which node will your test end up running and therefore can't know to which node to connect via VNC to actually see the test running.
 
-### One-liner Install & Usage
+### Run
 
-In general: add `sudo` only if needed in your environment and `--privileged` or `-v /dev/shm:/dev/shm` if you really need it like when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
+In general add `sudo` only if needed in your environment and `--privileged` or `-v /dev/shm:/dev/shm` if you really need it like when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
 
     docker run -p 4444:24444 -p 5920:25900 -v /dev/shm:/dev/shm \
         -e VNC_PASSWORD=hola elgalu/selenium:2.47.1h
-
-### Non-privileged
-### Run
-
-If your setup is correct, privileged mode and sudo should not be necessary:
-
-    docker run --rm --name=ch -p=4444:24444 -p=5920:25900 \
-        elgalu/selenium:2.47.1h
 
 Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `ch` is the name of the container:
 
