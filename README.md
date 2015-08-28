@@ -339,7 +339,7 @@ This command line is the same as for Chrome, remember that the selenium running 
 
 ### Who is using docker-selenium?
 
-    * [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
+* [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
 
 ### Troubleshooting
 
