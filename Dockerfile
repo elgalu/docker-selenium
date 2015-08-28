@@ -526,7 +526,7 @@ RUN cd /tmp \
 #---------------------#
 # Latest available firefox version
 # ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "40.0.2"
+ENV FIREFOX_VERSIONS3 "40.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -571,7 +571,7 @@ ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.18" \
+  && CHROME_DRIVER_VERSION="2.19" \
   # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -715,7 +715,7 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="40.0.2" \
+  FIREFOX_VERSION="40.0.3" \
   # Default chrome flavor, options: stable|beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
