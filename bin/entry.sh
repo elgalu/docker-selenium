@@ -21,7 +21,7 @@ export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
 export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
 # These values are only available when the container started
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
-export CONTAINER_IP=$(ip addr show dev eth0 | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
+export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
 export COMMON_CAPS="maxInstances=${MAX_INSTANCES},platform=LINUX,acceptSslCerts=true"
 export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
 export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
@@ -70,7 +70,8 @@ echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID
 # Fix small tiny 64mb shm issue
 #-------------------------------
 # https://github.com/elgalu/docker-selenium/issues/20
-if sudo umount /dev/shm; then
+if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ]; then
+  sudo umount /dev/shm || true
   sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=${SHM_SIZE} \
     tmpfs /dev/shm || true
 fi

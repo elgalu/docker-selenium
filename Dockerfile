@@ -593,7 +593,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="44.0.2403.157" \
+RUN  latest_chrome_version_trigger="45.0.2454.85" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -827,7 +827,10 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   # Amount of lines to display when startup errors
   TAIL_LOG_LINES="15" \
   # Fix small tiny 64mb shm issue
+  SHM_TRY_MOUNT_UNMOUNT="false" \
   SHM_SIZE="512M" \
+  # When docker run --net=host the network name may be different
+  ETHERNET_DEVICE_NAME="eth0" \
   # Java stuff
   # MEM_JAVA="1024m" \
   #===============================
