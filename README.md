@@ -143,7 +143,7 @@ There are also additional steps you can take to ensure you're using the correct 
 You can simply verify that image id is indeed the correct one.
 
     # e.g. full image id for tag 2.47.1i
-    export IMGID=TBD
+    export IMGID=66be67ad7da61893b2341b03afd34bc18da9031fa70df823375cab680a28c2a5
     if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1i |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
@@ -155,7 +155,7 @@ You can simply verify that image id is indeed the correct one.
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag 2.47.1i
-    export SHA=TBD
+    export SHA=d3e6b627463598bd59cc9b6201d1f471df122632f9413f69fa5dcd9c7f03c0cc
     docker pull elgalu/selenium@sha256:${SHA}
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
@@ -332,6 +332,22 @@ This command line is the same as for Chrome, remember that the selenium running 
     REPOSITORY               TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
     elgalu/docker-selenium   local               eab41ff50f72        About an hour ago   931.1 MB
     ubuntu                   14.04.2             d0955f21bf24        4 weeks ago         188.3 MB
+
+#### DNS
+
+##### How to share the host DNS
+
+By default `docker run` sets the DNS to Google ones *8.8.8.8 and 8.8.4.4* however you may need to use your own.
+
+First attempt to to use --dns option, e.g.
+
+    docker run --dns=1.1.1.1 --dns=1.1.1.2 <args...>
+
+However this may not work for you and simply want to share the same DNS name resolution that the docker host machine, in which case you should use:
+
+    docker run --net=host --pid=host <args...>
+
+So `--pid=host` is included to avoid `sudo: unable to send audit message: Operation not permitted`
 
 ### Who is using docker-selenium?
 
