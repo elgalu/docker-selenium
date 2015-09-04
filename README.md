@@ -339,15 +339,15 @@ This command line is the same as for Chrome, remember that the selenium running 
 
 By default `docker run` sets the DNS to Google ones *8.8.8.8 and 8.8.4.4* however you may need to use your own.
 
-First attempt to to use --dns option, e.g.
+First attempt is to use `--dns` option, e.g.
 
     docker run --dns=1.1.1.1 --dns=1.1.1.2 <args...>
 
-However this may not work for you and simply want to share the same DNS name resolution that the docker host machine, in which case you should use:
+However this may not work for you and simply want to share the same DNS name resolution than the docker host machine, in which case you should use `--net=host` along with `--pid=host`
 
     docker run --net=host --pid=host <args...>
 
-So `--pid=host` is included to avoid `sudo: unable to send audit message: Operation not permitted`
+So `--pid=host` is included to avoid https://github.com/docker/docker/issues/5899 `sudo: unable to send audit message: Operation not permitted`
 
 ### Who is using docker-selenium?
 
