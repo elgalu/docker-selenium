@@ -3,7 +3,7 @@
     time (docker build -t="elgalu/selenium:2.47.1j" . ;echo $?;beep)
     docker run --rm -ti -m 4000M --cpu-quota=0 --name=grid -p=4470:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v $(pwd)/videos:/videos -e DISABLE_ROLLBACK=true -e VIDEO=true -e MEM_JAVA="1024m" elgalu/selenium:2.47.1j
 
-Extra nodes
+Build a grid with extra nodes
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.47.1j
 

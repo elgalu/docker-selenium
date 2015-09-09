@@ -37,8 +37,8 @@ How to get container versions
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.7
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 07d8bd8ca179de2125f27113bdcebf969c250b150150d2977c637c64c15ef936
+  + Digest: sha256:3a1cda55d920a64d1ad892c65b543b48a8a86fac572e3f2eefce11862107579a
 
 ## 2.47.1i (2015-09-04)
  + Upgrade Chrome stable to 45.0.2454.85 and beta/dev (Leo Gallucci)
