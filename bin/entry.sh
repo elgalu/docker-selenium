@@ -34,19 +34,41 @@ export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
 # Video
 export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+
+#----------------------------------------------------------
 # Extend required services depending on what the user needs
-[ "${GRID}" = "true" ] && export \
-  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-hub"
-[ "${CHROME}" = "true" ] && export \
-  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-chrome"
-[ "${FIREFOX}" = "true" ] && export \
-  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-firefox"
-[ "${VIDEO}" = "true" ] && export \
-  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|video-rec"
-[ "${SAUCE_TUNNEL}" = "true" ] && export \
-  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|saucelabs"
-[ "${BSTACK_TUNNEL}" = "true" ] && export \
-  SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|browserstack"
+if [ "${VIDEO}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|video-rec"
+else
+  export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
+fi
+
+if [ "${NOVNC}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|novnc"
+else
+  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="novnc"
+fi
+
+if [ "${GRID}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-hub"
+fi
+
+if [ "${CHROME}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-chrome"
+fi
+
+if [ "${FIREFOX}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-firefox"
+fi
+
+if [ "${SAUCE_TUNNEL}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|saucelabs"
+fi
+
+if [ "${BSTACK_TUNNEL}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|browserstack"
+fi
+
 
 #--------------------------------
 # Improve etc/hosts and fix dirs

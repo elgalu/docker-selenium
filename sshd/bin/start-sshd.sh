@@ -7,7 +7,7 @@ auth_keys_path="${HOME}/.ssh/authorized_keys"
 
 # Authorize ssh user if $SSH_AUTH_KEYS was provided
 [ -z "${HOME}" ] && die "Need (\$HOME) to be set" 6
-if [ ! -z "${HOME}" ];then
+if [ ! -z "${SSH_AUTH_KEYS}" ];then
   echo "INFO: \$SSH_AUTH_KEYS detected! will add to ${auth_keys_path}"
   echo ${SSH_AUTH_KEYS} >> ${auth_keys_path}
 fi

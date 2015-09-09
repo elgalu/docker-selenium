@@ -56,7 +56,10 @@ timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
   shutdown "Failed while waiting for BrowserStack tunnel to start!"
 
 # Help at http://supervisord.org/subprocess.html#process-states
-if supervisorctl -c /etc/supervisor/supervisord.conf status \
+echo "Checking process-states through supervisorctl status"
+if supervisorctl -c /etc/supervisor/supervisord.conf status 2>&1  \
+    | grep -v "${SUPERVISOR_NOT_REQUIRED_SRV_LIST1}" \
+    | grep -v "${SUPERVISOR_NOT_REQUIRED_SRV_LIST2}" \
     | grep -E "${SUPERVISOR_REQUIRED_SRV_LIST}" \
     | grep -E "STOPPED|STOPPING|EXITED|FATAL|UNKNOWN"; then
   supervisorctl -c /etc/supervisor/supervisord.conf status 1>&2

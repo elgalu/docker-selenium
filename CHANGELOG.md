@@ -13,6 +13,32 @@ How to get container versions
     google-chrome-unstable --version && echo "\n"
     sc | grep build && BrowserStackLocal -version
 
+## 2.47.1j (2015-09-09)
+ + Upgrade from wily-20150807 to wily-20150829 (Leo Gallucci)
+ + Make noVNC service only start with `-e NOVNC=true`
+ + Upgrade supervisor 4.0.0.dev0 from 2015-06-24 commit to 2015-08-24.
+ + Fix race condition after docker pull and run the image the first time.
+ + Fix SSH_AUTH_KEYS detected issue
+ + Image tag details:
+  + Selenium: v2.47.1 (411b314)
+  + Chrome stable:         45.0.2454.85
+  + Chrome beta:           46.0.2490.13
+  + Chrome dev (unstable): 47.0.2503.0
+  + Firefox versions in this image:
+              40.0.3  39.0.3  38.0.6  37.0.2  36.0.4
+      35.0.1  34.0.5  33.0.3  32.0.3  31.0    30.0
+      29.0.1  28.0    27.0.1  26.0    25.0.1  24.0
+  + Chromedriver: 2.19.346067 (6abd8652f8bc7a1d825962003ac88ec6a37a82f1)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.8.1, build d12ea79
+  + FROM ubuntu:wily-20150829
+  + Python: 2.7.10
+  + Sauce Connect 4.3.11, build 1757 2b421bb
+  + BrowserStack Local version 3.7
+  + Image ID: TBD
+  + Digest: sha256:TBD
+
 ## 2.47.1i (2015-09-04)
  + Upgrade Chrome stable to 45.0.2454.85 and beta/dev (Leo Gallucci)
  + Document how to share the host dns via --net=host --pid=host

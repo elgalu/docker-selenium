@@ -4,7 +4,7 @@
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     wily-TBD
-FROM ubuntu:wily-20150807
+FROM ubuntu:wily-20150829
 ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
@@ -398,10 +398,12 @@ RUN  mkdir -p ${NORMAL_USER_HOME}/firefox-src \
 #   && apt-get -qqy install \
 #     supervisor \
 # 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
+# 2015-08-24 commit: 304b4f388d3e3f, supervisor/version.txt: 4.0.0.dev0
 #  https://github.com/Supervisor/supervisor/commit/b3ad59703b554fcf61639ca92
+#  https://github.com/Supervisor/supervisor/commit/304b4f388d3e3f
 # TODO: Upgrade to supervisor stable 4.0 as soon as is released
 RUN pip install --upgrade \
-      "https://github.com/Supervisor/supervisor/zipball/b3ad59703b554f" \
+      "https://github.com/Supervisor/supervisor/zipball/304b4f388d3e3f" \
   && rm -rf /var/lib/apt/lists/*
 
 #----------------------------#
@@ -758,6 +760,7 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   # Vnc
   VNC_PORT=25900 \
   NOVNC_PORT=26080 \
+  NOVNC=false \
   # You can set the VNC password or leave null so a random password is generated:
   # ENV VNC_PASSWORD topsecret
   SSHD_PORT=22222 \
@@ -765,7 +768,9 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SUPERVISOR_HTTP_PORT=29001 \
   SUPERVISOR_HTTP_USERNAME=supervisorweb \
   SUPERVISOR_HTTP_PASSWORD=somehttpbasicauthpwd \
-  SUPERVISOR_REQUIRED_SRV_LIST="vnc|novnc|sshd|xmanager|xvfb" \
+  SUPERVISOR_REQUIRED_SRV_LIST="vnc|sshd|xmanager|xvfb" \
+  SUPERVISOR_NOT_REQUIRED_SRV_LIST1="ignoreMe" \
+  SUPERVISOR_NOT_REQUIRED_SRV_LIST2="ignoreMe" \
   SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \
   SUPERVISOR_STOPWAITSECS=20 \
   # Supervisor loglevel and also general docker log level
@@ -854,6 +859,8 @@ EXPOSE ${SSHD_PORT}
 #================
 ADD bin/* ${BIN_UTILS}/
 ADD **/bin/* ${BIN_UTILS}/
+ADD utils/bin/selenium-grep.sh /usr/bin/errors
+ADD xterm/bin/timeout-wait-xterm.sh /usr/bin/wait_all_done
 ADD host-scripts/* /host-scripts/
 
 #==================

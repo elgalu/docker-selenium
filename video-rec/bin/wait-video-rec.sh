@@ -18,15 +18,16 @@ die () {
 
 export DONE_MSG="Stream mapping:"
 
-if [ "${VIDEO}" = "true" ]; then
-  echo "Waiting for ffmpeg video recording to start..."
-  # Required params
-  [ -z "${VIDEO_LOG_FILE}" ] && die "Required env var VIDEO_LOG_FILE"
-  while ! grep "${DONE_MSG}" ${VIDEO_LOG_FILE} >/dev/null; do
-    echo -n '.'
-    sleep 0.2;
-  done
-  echo "Videos at ${VIDEO_PATH}* started to be recorded! (wait-video-rec.sh)"
-else
+if [ "${VIDEO}" != "true" ]; then
   echo "Won't start video recording due to VIDEO env var false"
+  exit 0
 fi
+
+echo "Waiting for ffmpeg video recording to start..."
+# Required params
+[ -z "${VIDEO_LOG_FILE}" ] && die "Required env var VIDEO_LOG_FILE"
+while ! grep "${DONE_MSG}" ${VIDEO_LOG_FILE} >/dev/null; do
+  echo -n '.'
+  sleep 0.2;
+done
+echo "Videos at ${VIDEO_PATH}* started to be recorded! (wait-video-rec.sh)"
