@@ -105,17 +105,17 @@ The important part above is `-e CHROME=false -e FIREFOX=false` which tells the d
 
 You can lunch a node only container via environment variables:
 
-    docker run --rm --name=node -p=5940:25900 -p=2224:22222 -p=6082:26080 \
-      -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -e VIDEO=true \
-      -e SELENIUM_HUB_HOST=10.161.128.170 \
-      -e SELENIUM_HUB_PORT=4444 \
-      -e SELENIUM_NODE_HOST=10.161.131.6 \
+    docker run --rm --name=node -p=5940:25900 \
       -p 25550:25550 -p 25551:25551 \
+      -e SELENIUM_HUB_HOST=docker.host \
+      -e SELENIUM_HUB_PORT=4444 \
+      -e SELENIUM_NODE_HOST=docker.host \
       -e GRID=false -e CHROME=true -e FIREFOX=true \
-      -v $(pwd)/videos:/videos \
       elgalu/selenium:2.47.1j
 
 The important part above is `-e GRID=false` which tells the container to be a node-only node, this this case with 2 browsers `-e CHROME=true -e FIREFOX=true` but could be just 1.
+
+Note `SELENIUM_HUB_HOST` and `SELENIUM_NODE_HOST` represent a network firewall config challenge when running on different machines and should be changed to the proper host names or IP addresses of those.
 
 ## Chrome crashed
 

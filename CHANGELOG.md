@@ -19,6 +19,7 @@ How to get container versions
  + Upgrade supervisor 4.0.0.dev0 from 2015-06-24 commit to 2015-08-24.
  + Fix race condition after docker pull and run the image the first time.
  + Fix SSH_AUTH_KEYS detected issue
+ + Fix grid-hub registration issues
  + Image tag details:
   + Selenium: v2.47.1 (411b314)
   + Chrome stable:         45.0.2454.85
