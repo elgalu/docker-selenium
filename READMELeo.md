@@ -7,7 +7,7 @@ Build a grid with extra nodes
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.47.1j
 
-    docker run --rm --name=node -p=5940:25900 -e SELENIUM_HUB_HOST=docker.host -e SELENIUM_HUB_PORT=4444 -e SELENIUM_NODE_HOST=docker.host -p 25550:25550 -p 25551:25551 -e GRID=false -e CHROME=true -e FIREFOX=true elgalu/selenium:2.47.1j
+    docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container:grid elgalu/selenium:2.47.1j
 
 See logs
 

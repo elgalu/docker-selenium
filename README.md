@@ -95,9 +95,8 @@ If the VNC password was randomly generated find out with
 
 You can launch a grid only container via environment variables:
 
-    docker run --rm --name=hub -p 4444:24444 -p 5930:25900 -p 2223:22222 \
-      -p=6081:26080 -e CHROME=false -e FIREFOX=false \
-      elgalu/selenium:2.47.1j
+    docker run --rm --name=hub -p 4444:24444 -p 5930:25900 \
+      -e CHROME=false -e FIREFOX=false elgalu/selenium:2.47.1j
 
 The important part above is `-e CHROME=false -e FIREFOX=false` which tells the docker image not run run default chorme and firefox nodes turning the container into a grid-only one.
 
@@ -116,6 +115,36 @@ You can lunch a node only container via environment variables:
 The important part above is `-e GRID=false` which tells the container to be a node-only node, this this case with 2 browsers `-e CHROME=true -e FIREFOX=true` but could be just 1.
 
 Note `SELENIUM_HUB_HOST` and `SELENIUM_NODE_HOST` represent a network firewall config challenge when running on different machines and should be changed to the proper host names or IP addresses of those.
+
+### Grid and Nodes on the same network interface
+Start the grid with Chrome and Firefox
+
+    docker run -d --name=grid \
+      -p 4444:24444 -p 5810:5810 -p 5820:5820 -p 5830:5830 \
+      -e SELENIUM_NODE_CH_PORT=25010 -e SELENIUM_NODE_FF_PORT=26010 \
+      -e GRID=true -e CHROME=true -e FIREFOX=true \
+      -e VNC_PASSWORD=hola -e VNC_PORT=5810 \
+      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1j
+
+Add another docker container node with 2 more browsers:
+
+    docker run -d --name=node1 --net=container:grid \
+      -e DISP_N=20 -e SSHD_PORT=22220 \
+      -e SUPERVISOR_HTTP_PORT=29020 \
+      -e SELENIUM_NODE_CH_PORT=25020 -e SELENIUM_NODE_FF_PORT=26020 \
+      -e GRID=false -e CHROME=true -e FIREFOX=true \
+      -e VNC_PASSWORD=hola -e VNC_PORT=5820 \
+      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1j
+
+And another
+
+    docker run -d --name=node2 --net=container:grid \
+      -e DISP_N=30 -e SSHD_PORT=22230 \
+      -e SUPERVISOR_HTTP_PORT=29030 \
+      -e SELENIUM_NODE_CH_PORT=25030 -e SELENIUM_NODE_FF_PORT=26030 \
+      -e GRID=false -e CHROME=true -e FIREFOX=true \
+      -e VNC_PASSWORD=hola -e VNC_PORT=5830 \
+      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1j
 
 ## Chrome crashed
 
