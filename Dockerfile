@@ -595,7 +595,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="45.0.2454.85" \
+RUN  latest_chrome_version_trigger="45.0.2454.93" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
