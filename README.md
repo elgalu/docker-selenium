@@ -184,7 +184,7 @@ There are also additional steps you can take to ensure you're using the correct 
 You can simply verify that image id is indeed the correct one.
 
     # e.g. full image id for tag 2.47.1l
-    export IMGID=TBD
+    export IMGID=c8be1422d08f6a84f78f866a4c0827c2efd5d88efe11dfbd245bc3ca21288e84
     if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1l |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
@@ -196,7 +196,7 @@ You can simply verify that image id is indeed the correct one.
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
     # e.g. sha256 for tag 2.47.1l
-    export SHA=TBD
+    export SHA=158b215f055011d9de0d5783de08e111a3fec9acdbf4a9f75570eb60d92a9a44
     docker pull elgalu/selenium@sha256:${SHA}
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
