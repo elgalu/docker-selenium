@@ -1,1 +1,10 @@
-.gitignore
+tmp/
+*_image/
+binaries/
+READMEBS.md
+READMEZala.sh
+.python-version
+videos/
+android/
+binaries
+*.md

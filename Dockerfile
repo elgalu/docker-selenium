@@ -542,6 +542,25 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
      ;done
 
+#---------------------#
+# FIREFOX_VERSIONS 41 #
+#---------------------#
+# Latest available firefox version
+# ENV FIREFOX_LATEST_VERSION latest #this also wors
+ENV FIREFOX_VERSIONS3 "41.0"
+RUN cd ${NORMAL_USER_HOME}/firefox-src \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+         mozdownload --application=firefox \
+           --locale=${FF_LANG} --retry-attempts=1 \
+           --platform=linux64 --log-level=WARN --version=${FF_VER} \
+      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+      && mkdir -p ${FIREFOX_DEST} \
+      && mozinstall --app=firefox \
+          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+          --destination=${FIREFOX_DEST} \
+      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+     ;done
+
 #-----------#
 # Fix perms #
 #-----------#
@@ -595,7 +614,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="45.0.2454.93" \
+RUN  latest_chrome_version_trigger="latest" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -717,7 +736,7 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="40.0.3" \
+  FIREFOX_VERSION="41.0" \
   # Default chrome flavor, options: stable|beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
