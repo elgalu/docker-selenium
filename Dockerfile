@@ -445,9 +445,9 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 #------------------------------#
 # FIREFOX_VERSIONS: 33, 34, 35 #
 #------------------------------#
-ENV FIREFOX_VERSIONS2 "33.0.3, 34.0.5, 35.0.1"
+ENV FIREFOX_VERSIONS3 "33.0.3, 34.0.5, 35.0.1"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
          mozdownload --application=firefox \
            --locale=${FF_LANG} --retry-attempts=1 \
            --platform=linux64 --log-level=WARN --version=${FF_VER} \
@@ -462,11 +462,9 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 #------------------------------#
 # FIREFOX_VERSIONS: 36, 37, 38 #
 #------------------------------#
-# Latest available firefox version
-# ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "36.0.4, 37.0.2, 38.0.6"
+ENV FIREFOX_VERSIONS4 "36.0.4, 37.0.2, 38.0.6"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS4} | tr "," "\n"); do \
          mozdownload --application=firefox \
            --locale=${FF_LANG} --retry-attempts=1 \
            --platform=linux64 --log-level=WARN --version=${FF_VER} \
@@ -481,9 +479,9 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 #---------------------#
 # FIREFOX_VERSIONS 39 #
 #---------------------#
-ENV FIREFOX_VERSIONS3 "39.0.3"
+ENV FIREFOX_VERSIONS5 "39.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS5} | tr "," "\n"); do \
          mozdownload --application=firefox \
            --locale=${FF_LANG} --retry-attempts=1 \
            --platform=linux64 --log-level=WARN --version=${FF_VER} \
@@ -526,11 +524,9 @@ RUN cd /tmp \
 #---------------------#
 # FIREFOX_VERSIONS 40 #
 #---------------------#
-# Latest available firefox version
-# ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "40.0.3"
+ENV FIREFOX_VERSIONS6 "40.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS6} | tr "," "\n"); do \
          mozdownload --application=firefox \
            --locale=${FF_LANG} --retry-attempts=1 \
            --platform=linux64 --log-level=WARN --version=${FF_VER} \
@@ -546,10 +542,10 @@ RUN cd ${NORMAL_USER_HOME}/firefox-src \
 # FIREFOX_VERSIONS 41 #
 #---------------------#
 # Latest available firefox version
-# ENV FIREFOX_LATEST_VERSION latest #this also wors
-ENV FIREFOX_VERSIONS3 "41.0"
+# this also works: ENV FIREFOX_LATEST_VERSION latest
+ENV FIREFOX_VERSIONS7 "41.0.1"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+  && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
          mozdownload --application=firefox \
            --locale=${FF_LANG} --retry-attempts=1 \
            --platform=linux64 --log-level=WARN --version=${FF_VER} \
@@ -733,10 +729,10 @@ COPY ./dns/etc/hosts /tmp/hosts
 #======
 # Envs
 #======
-ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}" \
+ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS7}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="41.0" \
+  FIREFOX_VERSION="${FIREFOX_VERSIONS7}" \
   # Default chrome flavor, options: stable|beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
@@ -855,6 +851,19 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERS
   SHM_SIZE="512M" \
   # When docker run --net=host the network name may be different
   ETHERNET_DEVICE_NAME="eth0" \
+  # Supervisord stop signals
+  SSHD_STOP_SIGNAL="TERM" \
+  XMANAGER_STOP_SIGNAL="TERM" \
+  XVFB_STOP_SIGNAL="TERM" \
+  XTERM_STOP_SIGNAL="INT" \
+  SELENIUM_NODE_FIREFOX_STOP_SIGNAL="TERM" \
+  SELENIUM_NODE_CHROME_STOP_SIGNAL="TERM" \
+  SELENIUM_HUB_STOP_SIGNAL="TERM" \
+  VNC_STOP_SIGNAL="TERM" \
+  NOVNC_STOP_SIGNAL="TERM" \
+  VIDEO_REC_STOP_SIGNAL="INT" \
+  BROWSERSTACK_STOP_SIGNAL="INT" \
+  SAUCELABS_STOP_SIGNAL="INT" \
   # Java stuff
   # MEM_JAVA="1024m" \
   #===============================

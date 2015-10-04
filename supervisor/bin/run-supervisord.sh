@@ -23,7 +23,7 @@ function shutdown {
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop all
   # kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
-  kill -SIGTERM ${SUPERVISOR_PID}
+  kill -SIGTERM ${SUPERVISOR_PID} >/dev/null 2>&1 || true
   wait
   # sleep ${SLEEP_SECS_AFTER_KILLING_SUPERVISORD}
   # sudo kill -9 ${SUPERVISOR_PID} || true
