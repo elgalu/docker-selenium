@@ -3,9 +3,10 @@
 
 * selenium server grid with 2 nodes (chrome & firefox)
 * google-chrome-stable
-* google-chrome-beta
+* google-chrome-beta: no longer provided but [can still be found here][2.47.1m]
 * google-chrome-unstable
-* firefox stable latest 18 versions
+* firefox stable latest
+* firefox stable [last 18 versions can be found here][2.47.1m]
 * VNC access (useful for debugging the container)
 * mkv video recording
 * fluxbox or openbox (lightweight window managers)
@@ -19,8 +20,10 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 In general add `sudo` only if needed in your environment and `--privileged` or `-v /dev/shm:/dev/shm` if you really need it like when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
 
+    docker pull elgalu/selenium:latest
+
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
-      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.47.1m
+      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:latest
 
 Make sure `docker run` finishes with **selenium all done and ready for testing** else you won't be able to start your tests. To perform this check programatically please use this command where `grid` is the name of the container:
 
@@ -45,12 +48,29 @@ Supervisor exposes an http server but is not enough to bind the ports via `docke
 
     ssh -p 2222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
 
+### Screen size
+You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` and `SCREEN_HEIGHT` environment variables:
+
+    docker pull elgalu/selenium:2.47.1n
+
+    docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
+      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
+      -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
+      elgalu/selenium:2.47.1n
+
+    docker exec grid wait_all_done 10s
+
+    open vnc://:hola@localhost:5920
+
+
 ### Chrome flavor
 
+This feature was available in previous versions, please go [check here][[2.47.1m]] and:
 To configure which Chrome flavor (stable, beta, unstable) you want to use just pass for example `-e CHROME_FLAVOR=beta` to `docker run`. Default is `stable`.
 
 ### Firefox version
 
+This feature was available in previous versions, please go [check here][[2.47.1m]] and:
 To configure which Firefox version to use first check available versions in the [CHANGELOG](./CHANGELOG.md) then pass for example `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
 
 ### Record Videos
@@ -75,6 +95,10 @@ When you don't specify a VNC password a random one will be generated. That passw
     docker exec grid grep "was generated for you:" /var/log/sele/vnc-stdout.log
     #=> a VNC password was generated for you: ooGhai0aesaesh
 
+You can connect to see what's happening
+
+    open vnc://:ooGhai0aesaesh@localhost:5920
+
 ### noVNC
 
 We are now using https://github.com/kanaka/noVNC instead of guacamole so you can open a browser at [localhost:6080](http://localhost:6080/vnc.html) if you don't want to use your own vnc client. Note Safari Browser comes with a built-in one, just navigate to vnc://localhost:5920
@@ -83,7 +107,7 @@ You need to pass the environment variable `-e NOVNC=true` in order to start the 
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
       -e NOVNC=true \
-      elgalu/selenium:2.47.1m
+      elgalu/selenium:2.47.1n
 
 If the VNC password was randomly generated find out with
 
@@ -96,7 +120,7 @@ If the VNC password was randomly generated find out with
 You can launch a grid only container via environment variables:
 
     docker run --rm --name=hub -p 4444:24444 -p 5930:25900 \
-      -e CHROME=false -e FIREFOX=false elgalu/selenium:2.47.1m
+      -e CHROME=false -e FIREFOX=false elgalu/selenium:2.47.1n
 
 The important part above is `-e CHROME=false -e FIREFOX=false` which tells the docker image not run run default chorme and firefox nodes turning the container into a grid-only one.
 
@@ -110,7 +134,7 @@ You can lunch a node only container via environment variables:
       -e SELENIUM_HUB_PORT=4444 \
       -e SELENIUM_NODE_HOST=docker.host \
       -e GRID=false -e CHROME=true -e FIREFOX=true \
-      elgalu/selenium:2.47.1m
+      elgalu/selenium:2.47.1n
 
 The important part above is `-e GRID=false` which tells the container to be a node-only node, this this case with 2 browsers `-e CHROME=true -e FIREFOX=true` but could be just 1.
 
@@ -124,7 +148,7 @@ Start the grid with Chrome and Firefox
       -e SELENIUM_NODE_CH_PORT=25010 -e SELENIUM_NODE_FF_PORT=26010 \
       -e GRID=true -e CHROME=true -e FIREFOX=true \
       -e VNC_PASSWORD=hola -e VNC_PORT=5810 \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1m
+      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1n
 
 Add another docker container node with 2 more browsers:
 
@@ -134,7 +158,7 @@ Add another docker container node with 2 more browsers:
       -e SELENIUM_NODE_CH_PORT=25020 -e SELENIUM_NODE_FF_PORT=26020 \
       -e GRID=false -e CHROME=true -e FIREFOX=true \
       -e VNC_PASSWORD=hola -e VNC_PORT=5820 \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1m
+      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1n
 
 And another
 
@@ -144,7 +168,7 @@ And another
       -e SELENIUM_NODE_CH_PORT=25030 -e SELENIUM_NODE_FF_PORT=26030 \
       -e GRID=false -e CHROME=true -e FIREFOX=true \
       -e VNC_PASSWORD=hola -e VNC_PORT=5830 \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1m
+      -v /dev/shm:/dev/shm elgalu/selenium:2.47.1n
 
 ## Chrome crashed
 
@@ -183,9 +207,9 @@ There are also additional steps you can take to ensure you're using the correct 
 
 You can simply verify that image id is indeed the correct one.
 
-    # e.g. full image id for tag 2.47.1m
-    export IMGID=e24f8fa942c6d9fcdcd4c0ee8a263d70550dd71d8c5ab5ef967fe3aeca89582e
-    if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1m |grep ${IMGID} &> /dev/null; then
+    # e.g. full image id for tag 2.47.1n
+    export IMGID=TBD
+    if docker inspect -f='{{.Id}}' elgalu/selenium:2.47.1n |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -195,8 +219,8 @@ You can simply verify that image id is indeed the correct one.
 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag 2.47.1m
-    export SHA=a863819c0b0754c849a09e7d3704c6ccd286da141f4bc8dfc58f79bcdd2a5014
+    # e.g. sha256 for tag 2.47.1n
+    export SHA=TBD
     docker pull elgalu/selenium@sha256:${SHA}
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
@@ -221,7 +245,7 @@ Host machine, terminal 2:
     docker run --rm --name=ch -p=4444:24444 \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:2.47.1m
+      elgalu/selenium:2.47.1n
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -243,7 +267,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.47.1m
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.47.1n
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -253,7 +277,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:2.47.1m
+    elgalu/selenium:2.47.1n
 
 # -- Common: Wait for the container to start
 ./host-scripts/wait-docker-selenium.sh grid 7s
@@ -324,7 +348,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:2.47.1m
+    docker pull elgalu/selenium:2.47.1n
 
 #### 2. Use this image
 
@@ -426,3 +450,6 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/sele/xterm-stdout.log
     /var/log/sele/xvfb-stderr.log
     /var/log/sele/xvfb-stdout.log
+
+
+[2.47.1m]: https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m

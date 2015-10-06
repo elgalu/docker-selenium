@@ -9,9 +9,25 @@ How to get container versions
     java -version && python --version && firefox -version
     chromedriver --version && echo "\n"
     google-chrome-stable --version && echo "\n"
-    google-chrome-beta --version && echo "\n"
-    google-chrome-unstable --version && echo "\n"
     sc | grep build && BrowserStackLocal -version
+
+## 2.47.1n (2015-10-06)
+ + Remove older Firefox and Chrome beta/dev as they are not being used.
+ + Upgrade BrowserStack Local version 3.9
+ + Image tag details:
+  + Selenium: v2.47.1 (411b314)
+  + Chrome stable:  45.0.2454.101
+  + Firefox stable: 41.0.1
+  + Chromedriver: 2.19.346067 (6abd8652f8bc7a1d825962003ac88ec6a37a82f1)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.8.2, build 0a8c2e3
+  + FROM ubuntu:wily-20150829
+  + Python: 2.7.10
+  + Sauce Connect 4.3.11, build 1757 2b421bb
+  + BrowserStack Local version 3.9
+  + Image ID: TBD
+  + Digest: sha256:TBD
 
 ## 2.47.1m (2015-10-04)
  + Upgrade Firefox to 41.0.1, Chrome 45.0.2454.101 and other flavors.

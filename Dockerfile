@@ -411,87 +411,97 @@ RUN pip install --upgrade \
 #----------------------------#
 # Will split firefox versions in smaller chunks so the layers are smaller
 # All firefox versions we provide from oldes to newest
-ENV FIREFOX_VERSIONS1 "24.0, 25.0.1, 26.0, 27.0.1, 28.0, 29.0.1"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS1} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS1 "24.0, 25.0.1, 26.0, 27.0.1, 28.0, 29.0.1"
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS1} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 #------------------------------#
 # FIREFOX_VERSIONS: 30, 31, 32 #
 #------------------------------#
-ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS2 "30.0, 31.0, 32.0.3"
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS2} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 #------------------------------#
 # FIREFOX_VERSIONS: 33, 34, 35 #
 #------------------------------#
-ENV FIREFOX_VERSIONS3 "33.0.3, 34.0.5, 35.0.1"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS3 "33.0.3, 34.0.5, 35.0.1"
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS3} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 #------------------------------#
 # FIREFOX_VERSIONS: 36, 37, 38 #
 #------------------------------#
-ENV FIREFOX_VERSIONS4 "36.0.4, 37.0.2, 38.0.6"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS4} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS4 "36.0.4, 37.0.2, 38.0.6"
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS4} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 #---------------------#
 # FIREFOX_VERSIONS 39 #
 #---------------------#
-ENV FIREFOX_VERSIONS5 "39.0.3"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS5} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS5 "39.0.3"
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS5} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 # ------------------------#
 # Sauce Connect Tunneling #
@@ -524,19 +534,21 @@ RUN cd /tmp \
 #---------------------#
 # FIREFOX_VERSIONS 40 #
 #---------------------#
-ENV FIREFOX_VERSIONS6 "40.0.3"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS6} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS6 "40.0.3"
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS6} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 #---------------------#
 # FIREFOX_VERSIONS 41 #
@@ -615,13 +627,14 @@ RUN  latest_chrome_version_trigger="latest" \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
     ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
-    "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
-  && wget --no-verbose -O \
-    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-beta_current_amd64.deb \
-    "${CHROME_URL}/google-chrome-beta_current_amd64.deb" \
-  && wget --no-verbose -O \
-    ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
-    "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
+    "${CHROME_URL}/google-chrome-stable_current_amd64.deb"
+# Other chrome flavors are commented now since they were not being used:
+  # && wget --no-verbose -O \
+  #   ${NORMAL_USER_HOME}/chrome-deb/google-chrome-beta_current_amd64.deb \
+  #   "${CHROME_URL}/google-chrome-beta_current_amd64.deb" \
+  # && wget --no-verbose -O \
+  #   ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
+  #   "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
 
 USER root
 
@@ -634,17 +647,18 @@ RUN apt-get update -qqy \
   && apt-get -qqy install \
     gdebi \
   && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
-  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
-  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
+# Other chrome flavors are commented now since they were not being used:
+  # && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
+  # && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
   && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && export CH_BETA_VER=$(/usr/bin/google-chrome-beta --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && export CH_UNSTABLE_VER=$(/usr/bin/google-chrome-unstable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  # && export CH_BETA_VER=$(/usr/bin/google-chrome-beta --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
+  # && export CH_UNSTABLE_VER=$(/usr/bin/google-chrome-unstable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
   && mv ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
      ${CHROME_BASE_DEB_PATH}-stable_${CH_STABLE_VER}_amd64.deb \
-  && mv ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
-     ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
-  && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
-     ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
+  # && mv ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
+  #    ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
+  # && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
+  #    ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
   && ln -s ${SEL_HOME}/chromedriver /usr/bin \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && rm -rf /var/lib/apt/lists/*
@@ -729,11 +743,14 @@ COPY ./dns/etc/hosts /tmp/hosts
 #======
 # Envs
 #======
-ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS7}" \
+# Commented for now; all these versions are still available at
+#   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
+# ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS7}" \
+ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS7}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
   FIREFOX_VERSION="${FIREFOX_VERSIONS7}" \
-  # Default chrome flavor, options: stable|beta|unstable
+  # Default chrome flavor, options no longer avariable: beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
   USER="${NORMAL_USER}" \
