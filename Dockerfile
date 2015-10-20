@@ -4,7 +4,7 @@
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     wily-TBD
-FROM ubuntu:wily-20150829
+FROM ubuntu:wily-20151009
 ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
@@ -555,7 +555,7 @@ RUN cd /tmp \
 #---------------------#
 # Latest available firefox version
 # this also works: ENV FIREFOX_LATEST_VERSION latest
-ENV FIREFOX_VERSIONS7 "41.0.1"
+ENV FIREFOX_VERSIONS7 "41.0.2"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -583,8 +583,8 @@ USER ${NORMAL_USER}
 #==========
 # Selenium
 #==========
-ENV SEL_MAJOR_MINOR_VER 2.47
-ENV SEL_PATCH_LEVEL_VER 1
+ENV SEL_MAJOR_MINOR_VER 2.48
+ENV SEL_PATCH_LEVEL_VER 2
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
@@ -600,7 +600,7 @@ ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.19" \
+  && CHROME_DRIVER_VERSION="2.20" \
   # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
