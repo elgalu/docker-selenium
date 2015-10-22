@@ -74,6 +74,7 @@ This feature was available in previous versions, please go [check here][[2.47.1m
 To configure which Firefox version to use first check available versions in the [CHANGELOG](./CHANGELOG.md) then pass for example `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
 
 ### Record Videos
+Step by step guide at [docs/videos.md](./docs/videos.md)
 
 If you create the container with `-e VIDEO=true` it will start recording a video through the vnc connection run upon start but first create a local folder `videos` in your current directory and mount the videos directory for an easy transfer with `-v $(pwd)/videos:/videos`
 
