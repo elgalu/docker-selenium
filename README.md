@@ -4,7 +4,7 @@
 * selenium server grid with 2 nodes (chrome & firefox)
 * google-chrome-stable
 * google-chrome-beta: no longer provided but [can still be found here][2.47.1m]
-* google-chrome-unstable
+* google-chrome-unstable: no longer provided but [can still be found here][2.47.1m]
 * firefox stable latest
 * firefox stable [last 18 versions can be found here][2.47.1m]
 * VNC access (useful for debugging the container)
