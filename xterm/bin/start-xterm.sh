@@ -57,7 +57,7 @@ timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
 
 # Help at http://supervisord.org/subprocess.html#process-states
 echo "Checking process-states through supervisorctl status"
-if supervisorctl -c /etc/supervisor/supervisord.conf status 2>&1  \
+if supervisorctl -c /etc/supervisor/supervisord.conf status 2>&1 \
     | grep -v "${SUPERVISOR_NOT_REQUIRED_SRV_LIST1}" \
     | grep -v "${SUPERVISOR_NOT_REQUIRED_SRV_LIST2}" \
     | grep -E "${SUPERVISOR_REQUIRED_SRV_LIST}" \

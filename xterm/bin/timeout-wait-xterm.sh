@@ -18,7 +18,7 @@ die () {
 
 # if $1 is defined AND NOT EMPTY, use $1; otherwise, set to "7s"
 WAIT_TIMEOUT=${1-7s}
-LOOP_SCRIPT_PATH="/bin-utils/wait-xterm.sh"
+LOOP_SCRIPT_PATH="${BIN_UTILS}/wait-xterm.sh"
 
 # default $TAIL_LOG_LINES when not provided
 TAIL_LOG_LINES=${TAIL_LOG_LINES-10}
@@ -36,7 +36,7 @@ if timeout --foreground ${WAIT_TIMEOUT} \
 else
   bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/sele/*' || true
   echo "" && echo "" && echo "==> errors <=="
-  bash -c '/bin-utils/selenium-grep.sh' || true
+  bash -c 'selenium-grep.sh' || true
 
   die "
    Your docker-selenium didn't start properly.

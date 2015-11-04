@@ -28,7 +28,7 @@ function shutdown {
   echo "Trapped SIGTERM or SIGINT so shutting down ffmpeg gracefully..."
   kill -SIGTERM ${VID_TOOL_PID}
   wait ${VID_TOOL_PID}
-  /bin-utils/fix_video_perms.sh
+  fix_video_perms.sh
   echo "ffmpeg shutdown complete."
   exit 0
 }

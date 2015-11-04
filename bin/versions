@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+java -version
+python --version
+firefox -version
+chromedriver --version
+google-chrome-stable --version
+sc | grep build
+BrowserStackLocal -version

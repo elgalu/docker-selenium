@@ -4,14 +4,28 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
-How to get container versions
+Get container versions run `docker exec grid versions`
 
-    java -version && python --version && firefox -version
-    chromedriver --version && echo "\n"
-    google-chrome-stable --version && echo "\n"
-    sc | grep build && BrowserStackLocal -version
+## 2.48.2c (2015-11-11)
+ + Upgrade to Chrome to 46.0.2490.86
+ + Increase wait timeout and other minor chores
+ + Improve video transfer artifacts through `docker cp`
+ + Image tag details:
+  + Selenium: v2.48.2 (41bccdd)
+  + Chrome stable:  46.0.2490.86
+  + Firefox stable: 42.0
+  + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.9.0, build 76d6bc9
+  + FROM ubuntu:wily-20151019
+  + Python: 2.7.10
+  + Sauce Connect 4.3.11, build 1757 2b421bb
+  + BrowserStack Local version 4
+  + Image ID: TBD
+  + Digest: sha256:TBD
 
-## 2.48.2b (2015-10-TBD)
+## 2.48.2b (2015-11-04)
  + Upgrade to Chrome to 46.0.2490.80
  + Upgrade to Firefox to 42.0 and fix mozilla.org => firefox ftp links
  + Upgrade to ubuntu:wily-20151019
@@ -27,8 +41,8 @@ How to get container versions
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 4
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 4e3f3d0129a13bef199e336493bc1edaf321a4d388acac3abbc33600f70471d6
+  + Digest: sha256:156b394b944203b95d7d813e1f82022c8cf7714da3c8196fd6833033e10ac13f
 
 ## 2.48.2a (2015-10-20)
  + Upgrade to Selenium 2.48.2

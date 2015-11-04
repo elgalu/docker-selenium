@@ -8,7 +8,7 @@ echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSIONS}"
 #---------------------
 # Fix/extend ENV vars
 #---------------------
-export PATH="${PATH}:${BIN_UTILS}"
+# export PATH="${PATH}:${BIN_UTILS}"
 export DISPLAY=":${DISP_N}"
 export XEPHYR_DISPLAY=":${DISP_N}"
 export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"

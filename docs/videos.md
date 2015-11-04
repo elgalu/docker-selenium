@@ -1,33 +1,47 @@
 # Video Recording
-Step by step
 
-1) Pull image
+## Step by step
+
+### Pull
+Pull image
 
     docker pull elgalu/selenium:latest
 
-2) Run a new grid
+### Run
+Run a new grid
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
       -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
-      -e VIDEO=true -v $(pwd)/videos:/videos elgalu/selenium:latest
+      -e VIDEO=true elgalu/selenium:latest
 
-3) Wait for the grid to start
+### Wait
+Wait for the grid to start
 
     docker exec grid wait_all_done 30s
 
-4) Check your grid has Chrome and Firefox
+## Check
+Check your grid has Chrome and Firefox
 
     open http://localhost:4444/grid/console
 
-5) Run your tests
+### Test
+Run your tests
 
     #at http://localhost:4444/wd/hub
 
-6) Stop the grid so video recording also stops and the file is properly closed
+### Stop
+Stopping the grid will also stop video recording and close the file properly.
+However is better to stop the video service first then copy the videos to the host machine.
 
+    docker exec grid stop-video
+    mkdir -p ./videos
+    docker cp grid:/videos/. videos
+
+### Finalize
     docker stop grid
 
-7) Check your video, note it may be splitted in many files if is too long
+### View
+Check your video, note it may be splitted in many files if is too long
 
     vlc videos/test.mkv
 

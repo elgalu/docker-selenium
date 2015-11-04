@@ -629,7 +629,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="46.0.2490.80" \
+RUN  latest_chrome_version_trigger="46.0.2490.86" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -764,11 +764,11 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS7}" \
   HOME="${NORMAL_USER_HOME}" \
   # Vnc password file
   VNC_STORE_PWD_FILE="${NORMAL_USER_HOME}/.vnc/passwd" \
-  BIN_UTILS="/bin-utils" \
+  BIN_UTILS="/usr/bin" \
   # JVM uses only 1/4 of system memory by default
   MEM_JAVA_PERCENT=80 \
   # Max amount of time to wait for other processes dependencies
-  WAIT_TIMEOUT="5s" \
+  WAIT_TIMEOUT="15s" \
   SCREEN_WIDTH=1900 \
   SCREEN_HEIGHT=1480 \
   SCREEN_MAIN_DEPTH=24 \
@@ -956,4 +956,4 @@ COPY scm-source.json /
 #===================
 # ENTRYPOINT ["entry.sh"]
 # CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-CMD ["/bin-utils/entry.sh"]
+CMD entry.sh
