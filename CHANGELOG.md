@@ -11,6 +11,25 @@ How to get container versions
     google-chrome-stable --version && echo "\n"
     sc | grep build && BrowserStackLocal -version
 
+## 2.48.2b (2015-10-TBD)
+ + Upgrade to Chrome to 46.0.2490.80
+ + Upgrade to Firefox to 42.0 and fix mozilla.org => firefox ftp links
+ + Upgrade to ubuntu:wily-20151019
+ + Image tag details:
+  + Selenium: v2.48.2 (41bccdd)
+  + Chrome stable:  46.0.2490.80
+  + Firefox stable: 42.0
+  + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.9.0, build 76d6bc9
+  + FROM ubuntu:wily-20151019
+  + Python: 2.7.10
+  + Sauce Connect 4.3.11, build 1757 2b421bb
+  + BrowserStack Local version 4
+  + Image ID: TBD
+  + Digest: sha256:TBD
+
 ## 2.48.2a (2015-10-20)
  + Upgrade to Selenium 2.48.2
  + Upgrade to chromedriver 2.20

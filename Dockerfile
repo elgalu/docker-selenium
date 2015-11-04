@@ -4,7 +4,7 @@
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     wily-TBD
-FROM ubuntu:wily-20151009
+FROM ubuntu:wily-20151019
 ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
@@ -357,7 +357,9 @@ ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
 # Mozilla Firefox install tools
 #===============================
 # Where to find latest version:
-#  http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+#  https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+# e.g. 42.0 instead of latest
+#  https://ftp.mozilla.org/pub/firefox/releases/42.0/linux-x86_64/en-US/firefox-42.0.tar.bz2
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
@@ -368,13 +370,18 @@ ENV FF_LANG "en-US"
 RUN  mkdir -p ${NORMAL_USER_HOME}/firefox-src \
   && mkdir -p ${SEL_HOME} \
   && pip install mozlog==2.10 \
-  && export MOZ_DOWN_SHA="7f2680cd75fbd3937630d896aefec3f8a061c10b" \
+  && export MOZ_DOWN_SHA="894e579b8de6a0ec05e98ccae8d4c2c730657c19" \
   && pip install \
-      "https://github.com/elgalu/mozdownload/zipball/${MOZ_DOWN_SHA}" \
+      "https://github.com/mozilla/mozdownload/zipball/${MOZ_DOWN_SHA}" \
   && pip install mozInstall==1.12 \
   && echo ""
 
-# Some forks:
+# elgalu fork (no longer working since s3 mozilla changes)
+  # && export MOZ_DOWN_SHA="aaf77cdbe15e6283654883afcd41d2acaeea7a24" \
+  # && pip install \
+  #     "https://github.com/elgalu/mozdownload/zipball/${MOZ_DOWN_SHA}" \
+
+# more forks:
 # RUN  export MOZ_INST_SHA="163e711efb751a80d03d9fb6e2ac0e011902c9df" \
 #   && export MOZ_DOWN_SHA="028ae444426b6e7691138e88ac306c6f8e6dfd74" \
 #   && pip install --upgrade requests==2.6.0 \
@@ -555,7 +562,7 @@ RUN cd /tmp \
 #---------------------#
 # Latest available firefox version
 # this also works: ENV FIREFOX_LATEST_VERSION latest
-ENV FIREFOX_VERSIONS7 "41.0.2"
+ENV FIREFOX_VERSIONS7 "42.0"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -622,7 +629,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="latest" \
+RUN  latest_chrome_version_trigger="46.0.2490.80" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -942,9 +949,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
 COPY scm-source.json /
 # Ensure the file is up-to-date else you should update it by running
 #  ./host-scripts/gen-scm-source.sh
-# on the host
-# RUN [ $(find ./ -mtime -1 -type f -name "scm-source.json" 2>/dev/null) ] \
-#     || please_update_scm-source_json
+# on the host machine
 
 #===================
 # CMD or ENTRYPOINT
