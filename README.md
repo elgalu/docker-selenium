@@ -1,20 +1,20 @@
-# Docker repo to spawn selenium standalone servers with Chrome and Firefox with VNC support
+# Selenium in Docker solution with Chrome and Firefox
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * selenium server grid with 2 nodes (chrome & firefox)
+* mkv video recording
+* VNC access (useful for debugging the container)
 * google-chrome-stable
 * google-chrome-beta: no longer provided but [can still be found here][2.47.1m]
 * google-chrome-unstable: no longer provided but [can still be found here][2.47.1m]
 * firefox stable latest
 * firefox stable [last 18 versions can be found here][2.47.1m]
-* VNC access (useful for debugging the container)
-* mkv video recording
 * fluxbox or openbox (lightweight window managers)
 
 ## Note this repo evolved into SeleniumHQ/docker-selenium
 See: https://github.com/SeleniumHQ/docker-selenium
 
-Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone selenium servers that you should `docker stop` as soon as your tests finishes. It also focuses on debugging via VNC which can be difficult on a Selenium Grid given you can't know in advance in which node will your test end up running and therefore can't know to which node to connect via VNC to actually see the test running.
+Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone seleniums with [video recording support](./docs/videos.md) and both browsers on the same container. It also adds some other features like [customizing the screen size](#screen-size) and [ssh access](#ssh) that can be particularly useful for tunneling support.
 
 ### Run
 
@@ -30,6 +30,8 @@ Make sure `docker run` finishes with **selenium all done and ready for testing**
     docker exec grid wait_all_done 30s
 
 Selenium should be up and running at http://localhost:4444/wd/hub open the web page to confirm is running.
+
+### SSH
 
 You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
 
@@ -102,12 +104,14 @@ You can connect to see what's happening
 
 ### noVNC
 
-We are now using https://github.com/kanaka/noVNC instead of guacamole so you can open a browser at [localhost:6080](http://localhost:6080/vnc.html) if you don't want to use your own vnc client. Note Safari Browser comes with a built-in one, just navigate to vnc://localhost:5920
+Disabled by default, [noVNC](https://github.com/kanaka/noVNC) provides a browser VNC client so you don't need to install a vnc viewer if you choose so. Note we were using guacamole before.
 
-You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service.
+Safari Browser already comes with a built-in vnc viewer so this feature is overkill and is disabled by default, just navigate to vnc://localhost:5920 in your Safari browser.
+
+You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
-      -e NOVNC=true \
+      -p 6080:26080 -e NOVNC=true \
       elgalu/selenium:2.48.2c
 
 If the VNC password was randomly generated find out with
