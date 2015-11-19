@@ -1,4 +1,4 @@
-# Selenium in Docker solution with Chrome and Firefox
+# Selenium in Docker with Chrome and Firefox
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * selenium server grid with 2 nodes (chrome & firefox)
@@ -10,6 +10,8 @@
 * firefox stable latest
 * firefox stable [last 18 versions can be found here][2.47.1m]
 * fluxbox or openbox (lightweight window managers)
+
+![docker-selenium-grid](https://cloud.githubusercontent.com/assets/111569/11272356/81e6594c-8ecc-11e5-9d33-6dc89b81030f.png)
 
 ## Note this repo evolved into SeleniumHQ/docker-selenium
 See: https://github.com/SeleniumHQ/docker-selenium
