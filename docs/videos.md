@@ -20,7 +20,8 @@ Wait for the grid to start
     docker exec grid wait_all_done 30s
 
 ## Check
-Check your grid has Chrome and Firefox
+Check your grid has Chrome and Firefox.
+OSX: replace `localhost` with `boot2docker ip` or `docker-machine ip default`.
 
     open http://localhost:4444/grid/console
 

@@ -21,8 +21,8 @@ Get container versions run `docker exec grid versions`
   + Python: 2.7.10
   + Sauce Connect 4.3.12, build 1788 abd6986
   + BrowserStack Local version 4.1
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: e88ea57afb7cde1d64f439fc69b044704f0ee0b14a1c094ce7eb2cf980e58a29
+  + Digest: sha256:0635e19d4e97e862451c5f7efaf421027f039aeb825d88f105da602755556a56
 
 ## 2.48.2c (2015-11-11)
  + Upgrade to Chrome to 46.0.2490.86
