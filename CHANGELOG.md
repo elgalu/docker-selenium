@@ -4,7 +4,25 @@ Note sha256 digests are generated after pushing the image to the registry theref
 
 Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [release][] page by navigating into any release tag.
 
-Get container versions run `docker exec grid versions`
+###### To get container versions
+    docker exec grid versions
+
+## 2.48.2e (2015-12-02)
+ + Upgrade Chrome to 47.0.2526.73
+ + Image tag details:
+  + Selenium: v2.48.2 (41bccdd)
+  + Chrome stable:  47.0.2526.73
+  + Firefox stable: 42.0
+  + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
+  + Java: 1.8.0_66-internal OpenJDK 64-Bit 1.8.0_66-b01
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.9.1, build a34a1d5
+  + FROM ubuntu:wily-20151019
+  + Python: 2.7.10
+  + Sauce Connect 4.3.12, build 1788 abd6986
+  + BrowserStack Local version 4.1
+  + Image ID: TBD
+  + Digest: sha256:TBD
 
 ## 2.48.2d (2015-11-27)
  + Upgrade Sauce Connect to 4.3.12
