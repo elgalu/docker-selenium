@@ -4,7 +4,7 @@
 #== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     wily-TBD
-FROM ubuntu:wily-20151019
+FROM ubuntu:wily-20151208
 ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
@@ -629,7 +629,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="latest" \
+RUN  latest_chrome_version_trigger="47.0.2526.80" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
