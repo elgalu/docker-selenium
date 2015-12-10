@@ -3,9 +3,10 @@
     time (docker build -t="elgalu/selenium:2.48.2f" . ;echo $?;beep)
     docker run --rm -ti -m 4000M --cpu-quota=0 --name=grid -p=4444:24444 -p=5920:25900 -p=2222:22222 -e DISABLE_ROLLBACK=true -e VIDEO=true -e MEM_JAVA="1024m" -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v /dev/shm:/dev/shm elgalu/selenium:2.48.2f
 
-Wait
+Wait and id
 
     docker exec grid wait_all_done 30s
+    docker inspect -f='{{.Id}}' elgalu/selenium:2.48.2f
 
 Copy
 
