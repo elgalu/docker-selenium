@@ -514,7 +514,7 @@ RUN pip install --upgrade \
 # Sauce Connect Tunneling #
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
-ENV SAUCE_CONN_VER="sc-4.3.12-linux" \
+ENV SAUCE_CONN_VER="sc-4.3.13-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
   && wget --no-verbose "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
@@ -562,7 +562,7 @@ RUN cd /tmp \
 #---------------------#
 # Latest available firefox version
 # this also works: ENV FIREFOX_LATEST_VERSION latest
-ENV FIREFOX_VERSIONS7 "42.0"
+ENV FIREFOX_VERSIONS7 "43.0.1"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
          mozdownload --application=firefox \
