@@ -1,28 +1,29 @@
 ###################################################
 # Selenium standalone docker for Chrome & Firefox #
 ###################################################
-#== Ubuntu wily is 15.10.x, i.e. FROM ubuntu:15.10
+#== Ubuntu xenial is 16.04, i.e. FROM ubuntu:15.10
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-# next:     wily-TBD
-FROM ubuntu:wily-20151208
-ENV UBUNTU_FLAVOR wily
+# next:     xenial-TBD
+FROM ubuntu:xenial-20151218.1
+ENV UBUNTU_FLAVOR xenial
 
-#== Ubuntu vivid is 15.04.x, i.e. FROM ubuntu:15.04
-# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
+#== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
+# FROM ubuntu:wily-20151208
+# ENV UBUNTU_FLAVOR wily
+
+#== Ubuntu vivid is 15.04, i.e. FROM ubuntu:15.04
 #                    http://cloud-images.ubuntu.com/releases/15.04/
 # FROM ubuntu:vivid-20150611
 # ENV UBUNTU_FLAVOR vivid
 
-#== Ubuntu trusty is 14.04.x, i.e. FROM ubuntu:14.04
+#== Ubuntu trusty is 14.04, i.e. FROM ubuntu:14.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
-# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 #                    http://cloud-images.ubuntu.com/releases/14.04/
 # FROM ubuntu:trusty-20150630
 # ENV UBUNTU_FLAVOR trusty
 
-#== Ubuntu precise is 12.04.x, i.e. FROM ubuntu:12.04
+#== Ubuntu precise is 12.04, i.e. FROM ubuntu:12.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
-# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 #                    http://cloud-images.ubuntu.com/releases/12.04/
 # FROM ubuntu:precise-20150612
 # ENV UBUNTU_FLAVOR precise
@@ -629,7 +630,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="47.0.2526.80" \
+RUN  latest_chrome_version_trigger="latest" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
