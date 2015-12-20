@@ -16,17 +16,19 @@ Location, e.g.
 
     /home/user/oss/docker/binaries
 
-## Push setup
-
-    docker login
-    cp ~/.docker/config.json ~/.docker/config.pub.json
-
 ## Push
 
     rm -f ~/.docker/config.json && cp ~/.docker/config.pub.json ~/.docker/config.json
     docker push elgalu/selenium:2.48.2h ;echo $?;beep
     docker tag -f elgalu/selenium:2.48.2h elgalu/selenium:latest
     docker push elgalu/selenium:latest
+
+Push setup, first time only:
+
+    docker login
+    cp ~/.docker/config.json ~/.docker/config.pub.json
+
+## Build hub
 
 Build a grid with extra nodes
 
