@@ -643,6 +643,9 @@ RUN  latest_chrome_version_trigger="latest" \
   # && wget --no-verbose -O \
   #   ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
   #   "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
+# Where to find old versions of chrome:
+#   43, 44, 45, 46 -- https://github.com/elgalu/docker-selenium/releases/tag/2.48.2f
+#   47 -- https://github.com/elgalu/docker-selenium/releases/tag/latest
 
 USER root
 

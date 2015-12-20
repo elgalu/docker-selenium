@@ -20,8 +20,11 @@ Location, e.g.
 
     rm -f ~/.docker/config.json && cp ~/.docker/config.pub.json ~/.docker/config.json
     docker push elgalu/selenium:2.48.2h ;echo $?;beep
+    # grab digest and update CHANGELOG.md
+    git add CHANGELOG.md && gci "2.48.2h: Update image id and digest"
     docker tag -f elgalu/selenium:2.48.2h elgalu/selenium:latest
     docker push elgalu/selenium:latest
+    git tag 2.48.2h && git tag latest && git push && git push --tags
 
 Push setup, first time only:
 
@@ -144,11 +147,7 @@ Check it works
 
     http://localhost:4470/wd/hub/static/resource/hub.html
 
-## TODO: Fix:
-> UnknownError: unknown error: session deleted because of page crash from tab crashed
-
- This only made pass a few tests but others keeps crashing the page:
-
+## Chrome options
     capabilities: {
         browserName: 'chrome',
         chromeOptions: {
@@ -308,7 +307,7 @@ Inspired from: http://stackoverflow.com/a/21378425/511069
       die "Failed to start Selenium!" 3 true
     fi
 
-## TODO R&D
+## More notes on Xephyr and friends
 
 - This comes handy when testing things without disturbing your normal awesome desktop:
 https://awesome.naquadah.org/wiki/Using_Xephyr
@@ -329,19 +328,3 @@ https://github.com/bencawkwell/dockerfile-xpra/blob/master/Dockerfile#L18
 cd ~/oss/docker-desktop/
 https://github.com/rogaha/docker-desktop/blob/master/startup.sh#L7
 https://github.com/rogaha/docker-desktop/blob/master/Dockerfile#L38
-
-## TODO docker NodeJS client for Protractor
-https://github.com/apocas/dockerode#creating-a-container
-https://github.com/apocas/dockerode/blob/master/examples/run_stdin.js
-https://github.com/apocas/dockerode/blob/master/examples/external_volume.js#L14
-https://github.com/apocas/dockerode/blob/master/test/docker.js#L182
-
-### TODO A docker image that runs more dockers
-https://www.happycloudsolutions.com.au/blog/amazon-container-service-preview-docker-on-aws/
-
-#### TODO Taupage - understand policies
-https://github.com/zalando/spilo/blob/master/etcd-cluster-appliance/etcd-cluster.yaml#L42
-Report issue to enable configure reverse ssh tunneling options
-https://github.com/zalando-stups/taupage/blob/master/runtime/opt/zalando/bin/configure-ssh
-https://github.com/zalando-stups/taupage/blob/master/test-userdata.yaml
-
