@@ -5,14 +5,14 @@
 ### Pull
 Pull image
 
-    docker pull elgalu/selenium:2.48.2h
+    docker pull elgalu/selenium:2.48.2i
 
 ### Run
 Run a new grid
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
       -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
-      -e VIDEO=true elgalu/selenium:2.48.2h
+      -e VIDEO=true elgalu/selenium:2.48.2i
 
 ### Wait
 Wait for the grid to start

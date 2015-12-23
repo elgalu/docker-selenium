@@ -1,12 +1,12 @@
 ## Build
 
-    time (docker build -t="elgalu/selenium:2.48.2h" . ;echo $?;beep)
-    docker run --rm -ti -m 4000M --cpu-quota=0 --name=grid -p=4444:24444 -p=5920:25900 -p=2222:22222 -e DISABLE_ROLLBACK=true -e VIDEO=true -e MEM_JAVA="1024m" -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v /dev/shm:/dev/shm elgalu/selenium:2.48.2h
+    time (docker build -t="elgalu/selenium:2.48.2i" . ;echo $?;beep)
+    docker run --rm -ti -m 4000M --cpu-quota=0 --name=grid -p=4444:24444 -p=5920:25900 -p=2222:22222 -e DISABLE_ROLLBACK=true -e VIDEO=true -e MEM_JAVA="1024m" -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" -v /dev/shm:/dev/shm elgalu/selenium:2.48.2i
 
 Wait and id
 
     docker exec grid wait_all_done 30s
-    docker inspect -f='{{.Id}}' elgalu/selenium:2.48.2h
+    docker inspect -f='{{.Id}}' elgalu/selenium:2.48.2i
 
 Copy
 
@@ -19,12 +19,12 @@ Location, e.g.
 ## Push
 
     rm -f ~/.docker/config.json && cp ~/.docker/config.pub.json ~/.docker/config.json
-    docker push elgalu/selenium:2.48.2h ;echo $?;beep
+    docker push elgalu/selenium:2.48.2i ;echo $?;beep
     # grab digest and update CHANGELOG.md
-    git add CHANGELOG.md && gci "2.48.2h: Update image id and digest"
-    docker tag -f elgalu/selenium:2.48.2h elgalu/selenium:latest
+    git add CHANGELOG.md && gci "2.48.2i: Update image id and digest"
+    docker tag -f elgalu/selenium:2.48.2i elgalu/selenium:latest
     docker push elgalu/selenium:latest
-    git tag 2.48.2h && git tag latest && git push && git push --tags
+    git tag 2.48.2i && git tag latest && git push && git push --tags
 
 Push setup, first time only:
 
@@ -35,9 +35,9 @@ Push setup, first time only:
 
 Build a grid with extra nodes
 
-    docker run --rm --name=grid -p 4444:24444 -p 5920:25900 -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.48.2h
+    docker run --rm --name=grid -p 4444:24444 -p 5920:25900 -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.48.2i
 
-    docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container:grid elgalu/selenium:2.48.2h
+    docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container:grid elgalu/selenium:2.48.2i
 
 See logs
 
@@ -45,7 +45,7 @@ See logs
 
 Testing in ssh lgallucci@10.160.26.62
 
-    docker run --rm --name=grid -p=4444:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" -e VNC_PASSWORD=Hola3 os-registry.stups.zalan.do/tip/selenium:2.48.2h
+    docker run --rm --name=grid -p=4444:24444 -p=5920:25900 -p=2222:22222 -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" -e VNC_PASSWORD=Hola3 os-registry.stups.zalan.do/tip/selenium:2.48.2i
 
 ## Transfer used browser source artifacts to keep them in the cloud
 
@@ -68,18 +68,18 @@ List firefox versions via docker exe
 
 ## To update image id and digest
 
-    docker inspect -f='{{.Id}}' elgalu/selenium:2.48.2h
+    docker inspect -f='{{.Id}}' elgalu/selenium:2.48.2i
     docker images --digests
 
 ## Run with shared dir
 
     docker run --rm --name=grid -p=127.0.0.1:4460:24444 -p=127.0.0.1:5910:25900 \
-      -v /e2e/uploads:/e2e/uploads elgalu/selenium:2.48.2h
+      -v /e2e/uploads:/e2e/uploads elgalu/selenium:2.48.2i
     docker run --rm --name=grid -p=4460:24444 -p=5910:25900 \
-      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium:2.48.2h
+      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium:2.48.2i
 
 
-    docker run --rm --name=ff -p=127.0.0.1:4461:24444 -p=127.0.0.1:5911:25900 -v /e2e/uploads:/e2e/uploads elgalu/selenium:2.48.2h
+    docker run --rm --name=ff -p=127.0.0.1:4461:24444 -p=127.0.0.1:5911:25900 -v /e2e/uploads:/e2e/uploads elgalu/selenium:2.48.2i
 
 ## Run without shared dir and bind ports to all network interfaces
 
@@ -102,11 +102,11 @@ List firefox versions via docker exe
 ## Run without dir and bind to all interfaces
 Note anything after the image will be taken as arguments for the cmd/entrypoint
 
-    docker run --rm --name=grid -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.48.2h
+    docker run --rm --name=grid -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.48.2i
 
-    docker run --rm --name=grid -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola elgalu/selenium:2.48.2h
-    docker run --rm --name=grid -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:2.48.2h
-    docker run --rm --name=grid -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:2.48.2h
+    docker run --rm --name=grid -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola elgalu/selenium:2.48.2i
+    docker run --rm --name=grid -p=4470:24444 -p=5920:25900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium:2.48.2i
+    docker run --rm --name=grid -p=0.0.0.0:4470:24444 -p=0.0.0.0:5920:25900 --add-host myserver.dev:172.17.42.1 elgalu/selenium:2.48.2i
 
 However adding a custom host IP to server-selenium.local (e.g. bsele ssh config) is more work:
 
@@ -115,18 +115,18 @@ However adding a custom host IP to server-selenium.local (e.g. bsele ssh config)
 
     vncv localhost:5920 -Scaling=60%  &
 
-    docker run --rm --name=ff -p=0.0.0.0:4471:24444 -p=0.0.0.0:5921:25900 elgalu/selenium:2.48.2h
+    docker run --rm --name=ff -p=0.0.0.0:4471:24444 -p=0.0.0.0:5921:25900 elgalu/selenium:2.48.2i
 
 Automatic builds not working for me right now, maybe there is an issue with docker registry v1 vs v2
 https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
 
 ## Pulling
 
-    docker pull registry.hub.docker.com/elgalu/selenium:2.48.2h
+    docker pull registry.hub.docker.com/elgalu/selenium:2.48.2i
 
 ## Pull
 
-    docker run -d --name=max -p=0.0.0.0:4411:24444 -p=0.0.0.0:5911:25900 elgalu/selenium:2.48.2h
+    docker run -d --name=max -p=0.0.0.0:4411:24444 -p=0.0.0.0:5911:25900 elgalu/selenium:2.48.2i
 
 How to connect through vnc (need a vnc client)
 
