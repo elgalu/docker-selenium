@@ -563,7 +563,7 @@ RUN cd /tmp \
 #---------------------#
 # Latest available firefox version
 # this also works: ENV FIREFOX_LATEST_VERSION latest
-ENV FIREFOX_VERSIONS7 "43.0.2"
+ENV FIREFOX_VERSIONS7 "43.0.3"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
          mozdownload --application=firefox \
