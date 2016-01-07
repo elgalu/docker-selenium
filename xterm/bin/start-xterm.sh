@@ -75,10 +75,6 @@ x-terminal-emulator -ls  \
   &
 
 # Join them in 1 bash line to avoid supervisor split them in debug output
-echo "" \
-  && echo "Container docker internal IP: $CONTAINER_IP" \
-  && echo "Note if you're in Mac (OSX) 'boot2docker ip' will tell you the relevant IP" \
-  && echo "selenium all done and ready for testing" \
-  && echo ""
+echo -e "\nContainer docker internal IP: $CONTAINER_IP\n"
 
 wait

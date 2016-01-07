@@ -7,6 +7,24 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## 2.48.2k (2016-01-08)
+ + Upgrade Firefox to 43.0.4
+ + Upgrade BrowserStack to 4.3
+ + Image tag details:
+  + Selenium: v2.48.2 (41bccdd)
+  + Chrome stable:  47.0.2526.106
+  + Firefox stable: 43.0.4
+  + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
+  + Java: 1.8.0_72-internal OpenJDK 64-Bit 1.8.0_72-b05
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.9.1, build a34a1d5
+  + FROM ubuntu:xenial-20151218.1
+  + Python: 2.7.11
+  + Sauce Connect 4.3.13, build 1877 d9e5947
+  + BrowserStack Local version 4.3
+  + Image ID: TBD
+  + Digest: sha256:TBD
+
 ## 2.48.2j (2015-12-28)
  + Upgrade Firefox to 43.0.3
  + Image tag details:

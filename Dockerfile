@@ -329,11 +329,18 @@ RUN apt-get update -qqy \
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     python2.7 \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
     python-pip \
-    python2.7-dev \
+  && easy_install --upgrade pip \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
     python-openssl \
     libssl-dev libffi-dev \
-  && easy_install --upgrade pip \
   && rm -rf /var/lib/apt/lists/*
 
 #=========================================
@@ -563,7 +570,7 @@ RUN cd /tmp \
 #---------------------#
 # Latest available firefox version
 # this also works: ENV FIREFOX_LATEST_VERSION latest
-ENV FIREFOX_VERSIONS7 "43.0.3"
+ENV FIREFOX_VERSIONS7 "43.0.4"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
          mozdownload --application=firefox \
@@ -622,9 +629,12 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && ln -s ${SEL_HOME}/chromedriver-${CHROME_DRIVER_VERSION} \
            ${SEL_HOME}/chromedriver
 
-#==========================================================
-# Google Chrome - Keep chrome versions as they delete them
-#==========================================================
+#========================
+# Google Chrome download
+#========================
+# How to download chrome-deb locally to keep them
+#  wget --no-verbose -O /tmp/google-chrome-stable_current_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+
 # How to get notified of latest version of chrome:
 #  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
 # TODO: Use Google fingerprint to verify downloads
@@ -649,28 +659,38 @@ RUN  latest_chrome_version_trigger="latest" \
 
 USER root
 
-#======================
-# Chrome, Chromedriver
-#======================
-ENV CHROME_BASE_DEB_PATH "${NORMAL_USER_HOME}/chrome-deb/google-chrome"
-ENV GREP_ONLY_NUMS_VER "[0-9.]{2,20}"
+#=======
+# GDebi
+#=======
 RUN apt-get update -qqy \
   && apt-get -qqy install \
-    gdebi \
-  && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
+    gdebi
+
+#========
+# Chrome
+#========
+ENV CHROME_BASE_DEB_PATH "${NORMAL_USER_HOME}/chrome-deb/google-chrome"
+ENV GREP_ONLY_NUMS_VER "[0-9.]{2,20}"
+RUN gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
 # Other chrome flavors are commented now since they were not being used:
   # && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
   # && gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
   && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
   # && export CH_BETA_VER=$(/usr/bin/google-chrome-beta --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
   # && export CH_UNSTABLE_VER=$(/usr/bin/google-chrome-unstable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && mv ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
-     ${CHROME_BASE_DEB_PATH}-stable_${CH_STABLE_VER}_amd64.deb \
+  && echo "${CH_STABLE_VER}" \
+  && rm ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb
+  # && mv ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
+  #    ${CHROME_BASE_DEB_PATH}-stable_${CH_STABLE_VER}_amd64.deb \
   # && mv ${CHROME_BASE_DEB_PATH}-beta_current_amd64.deb \
   #    ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
   # && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
   #    ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
-  && ln -s ${SEL_HOME}/chromedriver /usr/bin \
+
+#==============
+# Chromedriver
+#==============
+RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && rm -rf /var/lib/apt/lists/*
 

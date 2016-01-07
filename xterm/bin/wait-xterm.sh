@@ -4,7 +4,7 @@
 set -e
 
 echo "Waiting for docker-selenium to finish starting..."
-while ! grep 'all done and ready for testing' \
+while ! grep 'Container docker internal IP' \
              /var/log/sele/xterm-stdout.log > /dev/null 2>&1; do
   echo -n '.'
   sleep 0.2;
