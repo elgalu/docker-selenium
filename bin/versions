@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 java -version
+java -jar ${SEL_HOME}/selenium-server-standalone.jar -port ${SELENIUM_HUB_PORT} 2>&1 | grep revision
 python --version
 firefox -version
 chromedriver --version
