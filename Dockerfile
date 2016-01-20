@@ -1,10 +1,10 @@
 ###################################################
 # Selenium standalone docker for Chrome & Firefox #
 ###################################################
-#== Ubuntu xenial is 16.04, i.e. FROM ubuntu:15.10
+#== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     xenial-TBD
-FROM ubuntu:xenial-20151218.1
+FROM ubuntu:xenial-20160119.1
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -34,8 +34,8 @@ RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n
 
 MAINTAINER Leo Gallucci <elgalu3@gmail.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV DEBCONF_NONINTERACTIVE_SEEN true
+ENV DEBIAN_FRONTEND=noninteractive \
+    DEBCONF_NONINTERACTIVE_SEEN=true
 
 #========================
 # Miscellaneous packages
@@ -918,7 +918,10 @@ ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS7}" \
   # Run docker from inside docker
   # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
   #                   -v $(which docker):$(which docker)
-  DOCKER_SOCK="/var/run/docker.sock"
+  DOCKER_SOCK="/var/run/docker.sock" \
+  # Restore
+  DEBIAN_FRONTEND="" \
+  DEBCONF_NONINTERACTIVE_SEEN=""
 
 #================================
 # Expose Container's Directories
