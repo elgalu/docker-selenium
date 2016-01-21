@@ -599,7 +599,7 @@ USER ${NORMAL_USER}
 # Selenium
 #==========
 ENV SEL_MAJOR_MINOR_VER 2.49
-ENV SEL_PATCH_LEVEL_VER 0
+ENV SEL_PATCH_LEVEL_VER 1
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
@@ -640,7 +640,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="47.0.2526.111" \
+RUN  latest_chrome_version_trigger="48.0.2564.82" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
