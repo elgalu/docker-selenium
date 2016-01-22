@@ -16,7 +16,7 @@ Chrome artifact
 
 Commit, rebuild, test and grab image Id
 
-    docker inspect -f='{{.Id}}' elgalu/selenium:2.49.1a
+    docker inspect -f='{{.Id}}' elgalu/selenium:2.49.1a | xclip -sel clip
 
 ## Push
 
