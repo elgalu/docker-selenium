@@ -4,7 +4,7 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     xenial-TBD
-FROM ubuntu:xenial-20160119.1
+FROM ubuntu:xenial-20160125
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -569,7 +569,7 @@ RUN cd /tmp \
 # FIREFOX_VERSIONS 41 #
 #---------------------#
 # Latest available firefox version
-# this also works: ENV FIREFOX_LATEST_VERSION latest
+# this also used to work: ENV FIREFOX_LATEST_VERSION latest
 ENV FIREFOX_VERSIONS7 "43.0.4"
 RUN cd ${NORMAL_USER_HOME}/firefox-src \
   && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
