@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 2.49.1b (2016-01-26)
- + Upgrade ubuntu:xenial-20160119.1 to 20160119
+ + Upgrade ubuntu:xenial-20160119.1 to 20160125
  + Upgrade OpenJDK 1.8.0_72-b05 to b15
  + Image tag details:
   + Selenium: v2.49.1 (7203e46)
@@ -18,7 +18,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Java: 1.8.0_72-internal OpenJDK 64-Bit 1.8.0_72-b15
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.9.1, build a34a1d5
-  + FROM ubuntu:xenial-20160119
+  + FROM ubuntu:xenial-20160125
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.4
