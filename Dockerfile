@@ -615,7 +615,7 @@ ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.20" \
+  && CHROME_DRIVER_VERSION="2.21" \
   # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
