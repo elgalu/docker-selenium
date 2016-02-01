@@ -324,7 +324,7 @@ RUN apt-get update -qqy \
 #   && rm -rf /var/lib/apt/lists/*
 
 #=========================================
-# Python2 for Firefox, Supervisor, others
+# Python2 for Supervisor and other stuff
 #=========================================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
@@ -344,18 +344,18 @@ RUN apt-get update -qqy \
   && rm -rf /var/lib/apt/lists/*
 
 #=========================================
-# Python3 for Firefox, Supervisor, others
+# Python3 for Supervisor, others
 #=========================================
-# Python3 fails installing mozInstall==1.12 with
+# Note Python3 fails installing mozInstall==1.12 with
 #  NameError: name 'file' is not defined
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
-#     python3.4 \
+#     python3.5 \
 #     python3-pip \
-#     python3.4-dev \
+#     python3.5-dev \
 #     python3-openssl \
 #     libssl-dev libffi-dev \
-#   && easy_install3 --upgrade pip \
+#   && pip3 install --upgrade pip \
 #   && rm -rf /var/lib/apt/lists/*
 
 ENV CPU_ARCH 64
@@ -364,25 +364,20 @@ ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
 #===============================
 # Mozilla Firefox install tools
 #===============================
-# Where to find latest version:
-#  https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
-# e.g. 42.0 instead of latest
-#  https://ftp.mozilla.org/pub/firefox/releases/42.0/linux-x86_64/en-US/firefox-42.0.tar.bz2
-# FF_LANG can be either en-US // de // fr and so on
-# Regarding the pip packages, see released versions at:
-#  https://github.com/mozilla/mozdownload/releases
-ENV FF_LANG "en-US"
+# ENV FF_LANG "en-US"
 # Browser language/locale
-# Using mozlog==2.10 to avoid
+# Using mozlog==2.10 or 3.1 to avoid
 #  AttributeError: 'module' object has no attribute 'getLogger'
-RUN  mkdir -p ${NORMAL_USER_HOME}/firefox-src \
-  && mkdir -p ${SEL_HOME} \
-  && pip install mozlog==2.10 \
-  && export MOZ_DOWN_SHA="894e579b8de6a0ec05e98ccae8d4c2c730657c19" \
-  && pip install \
-      "https://github.com/mozilla/mozdownload/zipball/${MOZ_DOWN_SHA}" \
-  && pip install mozInstall==1.12 \
-  && echo ""
+# Update BASE_URL
+#  MOZ_DOWN_SHA="894e579b8de6a0ec05e98ccae8d4c2c730657c19
+# RUN  mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+#   && mkdir -p ${SEL_HOME} \
+#   && pip install mozlog==3.1 \
+#   && export MOZ_DOWN_SHA="cc7aa3f0d7dee05e92dee0a894dd90cc982a91d8" \
+#   && pip install \
+#       "https://github.com/elgalu/mozdownload/zipball/${MOZ_DOWN_SHA}" \
+#   && pip install mozInstall==1.12 \
+#   && echo ""
 
 # elgalu fork (no longer working since s3 mozilla changes)
   # && export MOZ_DOWN_SHA="aaf77cdbe15e6283654883afcd41d2acaeea7a24" \
@@ -412,13 +407,15 @@ RUN  mkdir -p ${NORMAL_USER_HOME}/firefox-src \
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     supervisor \
+# 2016-02-01 commit: eb904ccdb3573e, version: supervisor-4.0.0.dev0
 # 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
 # 2015-08-24 commit: 304b4f388d3e3f, supervisor/version.txt: 4.0.0.dev0
 #  https://github.com/Supervisor/supervisor/commit/b3ad59703b554fcf61639ca92
 #  https://github.com/Supervisor/supervisor/commit/304b4f388d3e3f
 # TODO: Upgrade to supervisor stable 4.0 as soon as is released
-RUN pip install --upgrade \
-      "https://github.com/Supervisor/supervisor/zipball/304b4f388d3e3f" \
+RUN SHA="eb904ccdb3573e22784ad36fa81de3cbd718afea" \
+  && pip install --upgrade \
+      "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/*
 
 #----------------------------#
@@ -565,24 +562,50 @@ RUN cd /tmp \
 #       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
 #      ;done
 
-#---------------------#
-# FIREFOX_VERSIONS 41 #
-#---------------------#
-# Latest available firefox version
+#-------------------------#
+# FIREFOX_VERSIONS Latest #
+#-------------------------#
+# Install Latest available firefox version
 # this also used to work: ENV FIREFOX_LATEST_VERSION latest
-ENV FIREFOX_VERSIONS7 "43.0.4"
-RUN cd ${NORMAL_USER_HOME}/firefox-src \
-  && for FF_VER in $(echo ${FIREFOX_VERSIONS7} | tr "," "\n"); do \
-         mozdownload --application=firefox \
-           --locale=${FF_LANG} --retry-attempts=1 \
-           --platform=linux64 --log-level=WARN --version=${FF_VER} \
-      && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-      && mkdir -p ${FIREFOX_DEST} \
-      && mozinstall --app=firefox \
-          firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-          --destination=${FIREFOX_DEST} \
-      && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-     ;done
+#
+# Where to find latest version:
+#  https://archive.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+#  https://download-installer.cdn.mozilla.net/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+#  https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+# e.g. 44.0 instead of latest
+#  https://archive.mozilla.org/pub/firefox/releases/44.0/linux-x86_64/en-US/firefox-44.0.tar.bz2
+# FF_LANG can be either en-US // de // fr and so on
+# Regarding the pip packages, see released versions at:
+#  https://github.com/mozilla/mozdownload/releases
+ENV FF_VER="44.0" \
+    FF_LANG="en-US" \
+    FF_PLATFORM="linux-x86_64" \
+    FF_BASE_URL="https://archive.mozilla.org/pub" \
+    FF_DEST="${SEL_HOME}/firefox"
+ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
+ENV FF_URL "${FF_BASE_URL}/firefox/releases/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
+RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
+  && wget --no-verbose "${FF_URL}" -O "firefox.tar.bz2" \
+  && bzip2 -d "firefox.tar.bz2" \
+  && tar xf "firefox.tar" \
+  && rm "firefox.tar"
+
+  # && rm -rf ${NORMAL_USER_HOME}/firefox-src
+# RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \
+#   && cd ${NORMAL_USER_HOME}/firefox-src \
+  # && mkdir -p ${FIREFOX_DEST} && cd ${FIREFOX_DEST} \
+# RUN cd ${NORMAL_USER_HOME}/firefox-src \
+#   && for FF_VER in $(echo ${FIREFOX_VERSIONS_LAST} | tr "," "\n"); do \
+#          mozdownload --application=firefox \
+#            --locale=${FF_LANG} --retry-attempts=1 \
+#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
+#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
+#       && mkdir -p ${FIREFOX_DEST} \
+#       && mozinstall --app=firefox \
+#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#           --destination=${FIREFOX_DEST} \
+#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
+#      ;done
 
 #-----------#
 # Fix perms #
@@ -599,7 +622,7 @@ USER ${NORMAL_USER}
 # Selenium
 #==========
 ENV SEL_MAJOR_MINOR_VER 2.50
-ENV SEL_PATCH_LEVEL_VER 0
+ENV SEL_PATCH_LEVEL_VER 1
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
@@ -776,11 +799,11 @@ COPY ./dns/etc/hosts /tmp/hosts
 #======
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
-# ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS7}" \
-ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS7}" \
+# ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS_LAST}" \
+# ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS_LAST}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
-  FIREFOX_VERSION="${FIREFOX_VERSIONS7}" \
+ENV FIREFOX_VERSION="${FF_VER}" \
   # Default chrome flavor, options no longer avariable: beta|unstable
   CHROME_FLAVOR="stable" \
   # User and home
