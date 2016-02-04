@@ -21,8 +21,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.5
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 232aaf4662bb586aa7b7629231c7defbbd6dd60729f6c3891cdf2047745e2021
+  + Digest: sha256:8acb9184d340038aaef048a66238207bdff4e703868a7306864f7a338af52ab7
 
 ## 2.50.1a (2016-02-01)
  + Upgrade Selenium to 2.50.1
