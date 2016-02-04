@@ -663,7 +663,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="48.0.2564.97" \
+RUN  latest_chrome_version_trigger="48.0.2564.103" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget --no-verbose -O \
@@ -870,7 +870,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   LOGFILE_BACKUPS=5 \
   # Logs are now managed by supervisord.conf, see
   #  ${LOGS_DIR}/*.log
-  LOGS_DIR="/var/log/sele" \
+  LOGS_DIR="/var/log/cont" \
   # ENV VIDEO_FORMAT xxxx
   # Encoding movie type "flv", "swf5", "swf7", "mpeg" (PyMedia required)
   # or "vnc" more info at http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
@@ -1004,6 +1004,8 @@ COPY scm-source.json /
 #===================
 # CMD or ENTRYPOINT
 #===================
+# - default entrypoint is /bin/sh -c
+# - there is no default command CMD
 # ENTRYPOINT ["entry.sh"]
 # CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-CMD entry.sh
+CMD "entry.sh"

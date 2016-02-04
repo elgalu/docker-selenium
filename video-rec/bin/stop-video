@@ -34,7 +34,7 @@ if timeout --foreground ${WAIT_TIMEOUT} \
      ${LOOP_SCRIPT_PATH}; then
   echo "Video recording stopped"
 else
-  bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/sele/video-rec/*' || true
+  bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/cont/video-rec/*' || true
   echo "" && echo "" && echo "==> errors <=="
   bash -c 'selenium-grep.sh' || true
 

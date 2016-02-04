@@ -32,7 +32,7 @@ function shutdown {
   #  - output logs
   #  - exec bash to permit troubleshooting
   if [ "$(cat ${DOCKER_SELENIUM_STATUS})" = "failed" ]; then
-    tail --lines=${TAIL_LOG_LINES} /var/log/sele/*
+    tail --lines=${TAIL_LOG_LINES} /var/log/cont/*
     echo "" && echo "" && echo "==> errors <=="
     selenium-grep.sh
 
