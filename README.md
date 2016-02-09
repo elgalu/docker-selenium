@@ -10,6 +10,7 @@
 * firefox stable latest
 * firefox stable [last 18 versions can be found here][2.47.1m]
 * fluxbox or openbox (lightweight window managers)
+* support to docker-compose
 
 ![docker-selenium-grid](https://cloud.githubusercontent.com/assets/111569/12307661/68313aca-ba1f-11e5-9559-341e25ddb085.png)
 
@@ -32,6 +33,11 @@ Make sure `docker run` finishes via active wait with below command. Note `grid` 
     docker exec grid wait_all_done 30s
 
 Selenium should be up and running at http://localhost:4444/wd/hub open the web page to confirm is running but if you are using Mac (OSX) `localhost` won't work! find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
+
+#### Run w/ docker-compose
+ 
+ Copy the content of docker-compose.yml that are on this repo and save in your project, after this, run the command `docker-compose up` and access the selenium-grid on `http://192.168.99.100:4444/grid/console/`
+
 
 ### OSX
 Important, in Mac you need to gather the correct IP as localhost won't work unless you are in the Linux docker host machine:
