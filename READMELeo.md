@@ -14,14 +14,11 @@ Chrome artifact
     wget -nv --show-progress -O binaries/google-chrome-stable_${VER}_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     #old: docker cp grid:/home/application/chrome-deb/. binaries/
 
-Commit, rebuild, test and grab image Id
-
-    docker inspect -f='{{.Id}}' elgalu/selenium:2.51.0a | xclip -sel clip
-
 ## Push
 
     docker push elgalu/selenium:2.51.0a ;echo $?;beep
-    # grab digest and update CHANGELOG.md
+    docker inspect -f='{{.Id}}' elgalu/selenium:2.51.0a | xclip -sel clip
+    # also grab digest and update CHANGELOG.md
     git add CHANGELOG.md && gci "2.51.0a: Update image id and digest"
     docker tag -f elgalu/selenium:2.51.0a elgalu/selenium:latest
     docker push elgalu/selenium:latest
