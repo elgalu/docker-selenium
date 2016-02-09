@@ -1,0 +1,4 @@
+hub:
+  image: elgalu/selenium:2.50.1a
+  ports:
+    - 4444:24444
