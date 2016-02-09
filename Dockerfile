@@ -577,7 +577,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="44.0" \
+ENV FF_VER="44.0.1" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
@@ -621,8 +621,8 @@ USER ${NORMAL_USER}
 #==========
 # Selenium
 #==========
-ENV SEL_MAJOR_MINOR_VER 2.50
-ENV SEL_PATCH_LEVEL_VER 1
+ENV SEL_MAJOR_MINOR_VER 2.51
+ENV SEL_PATCH_LEVEL_VER 0
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
@@ -709,6 +709,10 @@ RUN gdebi --non-interactive ${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb \
   #    ${CHROME_BASE_DEB_PATH}-beta_${CH_BETA_VER}_amd64.deb \
   # && mv ${CHROME_BASE_DEB_PATH}-unstable_current_amd64.deb \
   #    ${CHROME_BASE_DEB_PATH}-unstable_${CH_UNSTABLE_VER}_amd64.deb \
+
+# Specifically to have a wrapper for /opt/google/chrome/google-chrome
+RUN mv /opt/google/chrome/google-chrome /opt/google/chrome/google-chrome-base
+ADD selenium-node-chrome/opt /opt
 
 #==============
 # Chromedriver
@@ -835,6 +839,10 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # Selenium additional params:
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
+  # To taggle issue #58 see https://goo.gl/fz6RTu
+  CHROME_ARGS="--no-sandbox" \
+  # SELENIUM_NODE_CHROME_PARAMS='-Dselenium.chrome.args="--no-sandbox"' \
+  # WEBDRIVER_NODE_CHROME_PARAMS='-Dwebdriver.chrome.args="--no-sandbox"' \
   # Selenium capabilities descriptive (to avoid opera/ie warnings)
   #  docs at https://code.google.com/p/selenium/wiki/Grid2
   MAX_INSTANCES=1 \

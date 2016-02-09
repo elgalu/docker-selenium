@@ -3,7 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 # set -e
 
-echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSIONS}"
+# echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSIONS}"
+echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSION}"
 
 #---------------------
 # Fix/extend ENV vars
