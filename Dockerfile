@@ -577,7 +577,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="44.0.1" \
+ENV FF_VER="44.0.2" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
@@ -621,7 +621,7 @@ USER ${NORMAL_USER}
 #==========
 # Selenium
 #==========
-ENV SEL_MAJOR_MINOR_VER 2.51
+ENV SEL_MAJOR_MINOR_VER 2.52
 ENV SEL_PATCH_LEVEL_VER 0
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
