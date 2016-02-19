@@ -22,8 +22,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.7
-  + Image ID: TBD
-  + Digest: sha256:TBD
+  + Image ID: 64d867660ad824c3cd3fb8263f173d5d15c0ba055cf6103d34e3003a6e90f791
+  + Digest: sha256:4bb9601402bf53ca4eba09b6e2e92fd31eb888c32cc37e26e0a6c4d5e036363c
 
 ## 2.52.0b (2016-02-18)
  + Upgrade Ubuntu xenial to 20160217.2
