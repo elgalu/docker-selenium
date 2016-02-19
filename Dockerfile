@@ -122,14 +122,30 @@ RUN echo $TZ | tee /etc/timezone \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    openjdk-8-jre-headless \
-  && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-  && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     openjdk-8-jre-headless \
+#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
+#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
+#   && rm -rf /var/lib/apt/lists/*
+
+#==============================
+# Java9 - OpenJDK JRE headless
+# Minimal runtime used for executing non GUI Java programs
+#==============================
+# Regarding urandom see
+#  http://stackoverflow.com/q/26021181/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     openjdk-9-jre-headless \
+#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /etc/java-9-openjdk/security/java.security \
+#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /etc/java-9-openjdk/security/java.security \
+#   && rm -rf /var/lib/apt/lists/*
 
 #==================
 # Java8 - Oracle
@@ -153,6 +169,29 @@ RUN apt-get update -qqy \
 #   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
 #        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
 #   && rm -rf /var/lib/apt/lists/*
+
+#==================
+# Java9 - Oracle
+#==================
+# Regarding urandom see
+#  http://stackoverflow.com/q/26021181/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    software-properties-common \
+  && echo debconf shared/accepted-oracle-license-v1-1 \
+      select true | debconf-set-selections \
+  && echo debconf shared/accepted-oracle-license-v1-1 \
+      seen true | debconf-set-selections \
+  && add-apt-repository ppa:webupd8team/java \
+  && apt-get update -qqy \
+  && apt-get -qqy install \
+    oracle-java9-installer \
+  && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+       /usr/lib/jvm/java-9-oracle/conf/security/java.security \
+  && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+       /usr/lib/jvm/java-9-oracle/conf/security/java.security \
+  && rm -rf /var/lib/apt/lists/*
 
 #=======
 # Fonts
