@@ -4,7 +4,7 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     xenial-TBD
-FROM ubuntu:xenial-20160217.2
+FROM ubuntu:xenial-20160226
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -373,7 +373,8 @@ RUN apt-get update -qqy \
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     python-pip \
-  && easy_install --upgrade pip \
+  && pip install --upgrade pip \
+  && pip install --upgrade setuptools \
   && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update -qqy \
@@ -989,6 +990,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
   #                   -v $(which docker):$(which docker)
   DOCKER_SOCK="/var/run/docker.sock" \
+  # https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187661259
+  DBUS_SESSION_BUS_ADDRESS=/dev/null \
   # Restore
   DEBIAN_FRONTEND="" \
   DEBCONF_NONINTERACTIVE_SEEN=""
@@ -1001,7 +1004,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
 # Only expose ssh port given the other services are not secured
 # forcing the user to open ssh tunnels or use docker run -p ports...
 # EXPOSE ${SELENIUM_HUB_PORT} ${VNC_PORT} ${SSHD_PORT} ${TOMCAT_PORT}
-EXPOSE ${SSHD_PORT}
+# Do not expose anything, pelase use `docker run -p`
+# EXPOSE ${SSHD_PORT}
 
 #================
 # Binary scripts
