@@ -86,7 +86,6 @@ docker_alongside_docker.sh
 # Fix running user
 #------------------
 RUN_PREFIX="sudo -E HOME=/home/$NORMAL_USER -u $NORMAL_USER"
-RUN_START="${RUN_PREFIX} $BIN_UTILS/start.sh"
 WHOAMI=$(whoami)
 WHOAMI_EXIT_CODE=$?
 echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID is '$UID'"
