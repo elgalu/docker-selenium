@@ -10,7 +10,7 @@ Wait and id
 
 Chrome artifact
 
-    VER="49.0.2623.75"
+    VER="49.0.2623.87"
     wget -nv --show-progress -O binaries/google-chrome-stable_${VER}_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     #old: docker cp grid:/home/application/chrome-deb/. binaries/
 
@@ -20,7 +20,7 @@ Chrome artifact
     docker inspect -f='{{.Id}}' elgalu/selenium:2.52.0g | xclip -sel clip
     # also grab digest and update CHANGELOG.md
     git add CHANGELOG.md && gci "2.52.0g: Update image id and digest"
-    docker tag elgalu/selenium:2.52.0g elgalu/selenium:latest
+    docker tag -f elgalu/selenium:2.52.0g elgalu/selenium:latest
     docker push elgalu/selenium:latest && git tag 2.52.0g && git tag -f latest && git push && git push --tags -f
 
 Location of binaries, e.g.

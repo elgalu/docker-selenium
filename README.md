@@ -380,7 +380,8 @@ However this may not work for you and simply want to share the same DNS name res
 
 So `--pid=host` is included to avoid https://github.com/docker/docker/issues/5899 `sudo: unable to send audit message: Operation not permitted`
 
-### Who is using docker-selenium?
+### Who
+Who is using docker-selenium?
 
 * [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
 * [smaato](http://blog.smaato.com/automated-end-to-end-testing-with-protractor-docker-jenkins)
