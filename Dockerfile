@@ -4,7 +4,7 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     xenial-TBD
-FROM ubuntu:xenial-20160226
+FROM ubuntu:xenial-20160303.1
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -260,7 +260,7 @@ USER root
 # - try /opt/google/chrome/chrome-sandbox see: https://github.com/web-animations/web-animations-js/blob/master/.travis-setup.sh#L66
 # Package libnss3-1d might help with issue 20
 #     libnss3-1d \
-# RUN wget --no-verbose -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+# RUN wget -nv -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
 #   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 #   && apt-get update -qqy \
 #   && apt-get -qqy install \
@@ -323,27 +323,38 @@ RUN apt-get update -qqy \
 ########################################
 # noVNC to expose VNC via an html page #
 ########################################
-RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-  # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
-  && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
-  && wget --no-verbose -O noVNC.zip \
-      "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
-  && unzip -x noVNC.zip \
-  && mv noVNC-${NOVNC_SHA} \
-       ${NORMAL_USER_HOME}/noVNC \
-  # Download websockify commit 558a6439f dated 2015-06-02
-  && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
-  && wget --no-verbose -O websockify.zip \
-      "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
-  && unzip -x websockify.zip \
-  && mv websockify-${WEBSOCKIFY_SHA} \
-       ${NORMAL_USER_HOME}/noVNC/utils/websockify
+# RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
+#   # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
+#   && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
+#   && wget -nv -O noVNC.zip \
+#       "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
+#   && unzip -x noVNC.zip \
+#   && mv noVNC-${NOVNC_SHA} \
+#        ${NORMAL_USER_HOME}/noVNC \
+#   # Download websockify commit 558a6439f dated 2015-06-02
+#   && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
+#   && wget -nv -O websockify.zip \
+#       "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
+#   && unzip -x websockify.zip \
+#   && mv websockify-${WEBSOCKIFY_SHA} \
+#        ${NORMAL_USER_HOME}/noVNC/utils/websockify
 
 #===============================
 # ffmpeg/libav and video codecs
 #===============================
 # ffmpeg (ffmpeg): Is a better alternative to Pyvnc2swf
 #   (use in Ubuntu >= 15) packages: ffmpeg
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     libx264-dev \
+#     libvorbis-dev \
+#     libx11-dev \
+#     ffmpeg \
+#   && rm -rf /var/lib/apt/lists/*
+
+#===============================
+# ffmpeg/libav and video codecs
+#===============================
 # libav-tools (avconv): Is a fork of ffmpeg
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
 RUN apt-get update -qqy \
@@ -353,6 +364,52 @@ RUN apt-get update -qqy \
     libx11-dev \
     libav-tools \
   && rm -rf /var/lib/apt/lists/*
+
+#=======================================================
+# video-to-animated-gifs with vvo/gifify and imagemagick
+#=======================================================
+# gifify: check elgalu/gifify-docker instead
+# imagemagick convert between image formats as well as transformations
+# RUN apt-get update -qqy \
+#   && apt-get -qqy install \
+#     imagemagick \
+#     fontconfig \
+#     libfontconfig1 \
+#     libfontconfig1-dev \
+#     libass5 \
+#     libass-dev \
+#   && rm -rf /var/lib/apt/lists/*
+
+#=====================
+# gifsicle for gifify
+#=====================
+# install fork of gifsicle with better lossless gif support
+# ENV GIFS_VER=1.82.1
+# RUN cd /usr/local/lib \
+#   && wget -nv "https://github.com/pornel/giflossy/releases/download/lossy%2F${GIFS_VER}/gifsicle-${GIFS_VER}-lossy.zip" \
+#   && unzip gifsicle-${GIFS_VER}-lossy.zip -d gifsicle \
+#   && rm gifsicle-${GIFS_VER}-lossy.zip \
+#   && mv gifsicle/linux/gifsicle-debian6 /usr/local/bin/gifsicle \
+#   && gifsicle --version
+
+#=================================
+# NodeJS so we can install gifify
+#=================================
+# See gifify options at https://github.com/vvo/gifify#command-line-usage
+# some possible versions: v4.3.2, v5.7.1
+# ENV NODE_VER="v5.7.1" \
+#     NODE_PLATFORM="linux-x64" \
+#     PATH=/usr/local/lib/node/bin:$PATH
+# RUN NODE_FIL="node-${NODE_VER}-${NODE_PLATFORM}" \
+#   && cd /usr/local/lib \
+#   && wget -nv "https://nodejs.org/dist/${NODE_VER}/${NODE_FIL}.tar.xz" \
+#   && tar xf ${NODE_FIL}.tar.xz \
+#   && rm ${NODE_FIL}.tar.* \
+#   && mv ${NODE_FIL} node \
+#   && node --version \
+#   && npm --version \
+#   && npm install -g gifify \
+#   && gifify --version
 
 #==========================
 # Mozilla Firefox - Latest
@@ -562,7 +619,7 @@ RUN SHA="eb904ccdb3573e22784ad36fa81de3cbd718afea" \
 ENV SAUCE_CONN_VER="sc-4.3.13-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
-  && wget --no-verbose "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
+  && wget -nv "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
   && tar -zxf ${SAUCE_CONN_VER}.tar.gz \
   && rm -rf /usr/local/${SAUCE_CONN_VER} \
   && mv ${SAUCE_CONN_VER} /usr/local \
@@ -576,7 +633,7 @@ RUN cd /tmp \
 ENV BSTACK_TUNNEL_URL="https://www.browserstack.com/browserstack-local" \
     BSTACK_TUNNEL_ZIP="BrowserStackLocal-linux-x64.zip"
 RUN cd /tmp \
-  && wget --no-verbose "${BSTACK_TUNNEL_URL}/${BSTACK_TUNNEL_ZIP}" \
+  && wget -nv "${BSTACK_TUNNEL_URL}/${BSTACK_TUNNEL_ZIP}" \
   && unzip ${BSTACK_TUNNEL_ZIP} \
   && chmod 755 BrowserStackLocal \
   && rm ${BSTACK_TUNNEL_ZIP} \
@@ -617,7 +674,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="44.0.2" \
+ENV FF_VER="45.0" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
@@ -625,7 +682,7 @@ ENV FF_VER="44.0.2" \
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL "${FF_BASE_URL}/firefox/releases/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
-  && wget --no-verbose "${FF_URL}" -O "firefox.tar.bz2" \
+  && wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && bzip2 -d "firefox.tar.bz2" \
   && tar xf "firefox.tar" \
   && rm "firefox.tar"
@@ -666,7 +723,7 @@ ENV SEL_PATCH_LEVEL_VER 0
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
-  && wget --no-verbose ${SELBASE}/${SELPATH} \
+  && wget -nv ${SELBASE}/${SELPATH} \
       -O ${SEL_HOME}/selenium-server-standalone.jar
 
 #==================
@@ -681,7 +738,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && CHROME_DRIVER_VERSION="2.21" \
   # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
-  && wget --no-verbose -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
+  && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && cd ${SEL_HOME} \
   && rm -rf chromedriver \
   && unzip ${NORMAL_USER_HOME}/tmp/chromedriver_linux${CPU_ARCH}.zip \
@@ -696,24 +753,24 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # Google Chrome download
 #========================
 # How to download chrome-deb locally to keep them
-#  wget --no-verbose -O /tmp/google-chrome-stable_current_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+#  wget -nv -O /tmp/google-chrome-stable_current_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
 # How to get notified of latest version of chrome:
 #  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
 # TODO: Use Google fingerprint to verify downloads
 #  http://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="49.0.2623.75" \
+RUN  latest_chrome_version_trigger="49.0.2623.87" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
-  && wget --no-verbose -O \
+  && wget -nv -O \
     ${NORMAL_USER_HOME}/chrome-deb/google-chrome-stable_current_amd64.deb \
     "${CHROME_URL}/google-chrome-stable_current_amd64.deb"
 # Other chrome flavors are commented now since they were not being used:
-  # && wget --no-verbose -O \
+  # && wget -nv -O \
   #   ${NORMAL_USER_HOME}/chrome-deb/google-chrome-beta_current_amd64.deb \
   #   "${CHROME_URL}/google-chrome-beta_current_amd64.deb" \
-  # && wget --no-verbose -O \
+  # && wget -nv -O \
   #   ${NORMAL_USER_HOME}/chrome-deb/google-chrome-unstable_current_amd64.deb \
   #   "${CHROME_URL}/google-chrome-unstable_current_amd64.deb"
 # Where to find old versions of chrome:

@@ -42,6 +42,7 @@ for i in $(seq -f "%03g" 0 ${VIDEO_CHUNKS_MAX}); do
   sudo touch "${video_path}"
   sudo chown ${NORMAL_USER_UID}:${NORMAL_USER_GID} "${video_path}"
 
+  # avconv or ffmpeg
   avconv -f x11grab \
     -framerate ${FFMPEG_FRAME_RATE} \
     -video_size ${FFMPEG_FRAME_SIZE} \
