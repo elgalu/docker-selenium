@@ -4,7 +4,7 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     xenial-TBD
-FROM ubuntu:xenial-20160303.1
+FROM ubuntu:xenial-20160314.4
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -504,13 +504,12 @@ ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     supervisor \
+# 2016-03-06 commit: e4a37c6f8d1cb6, version: supervisor-4.0.0.dev0
 # 2016-02-01 commit: eb904ccdb3573e, version: supervisor-4.0.0.dev0
 # 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
 # 2015-08-24 commit: 304b4f388d3e3f, supervisor/version.txt: 4.0.0.dev0
-#  https://github.com/Supervisor/supervisor/commit/b3ad59703b554fcf61639ca92
-#  https://github.com/Supervisor/supervisor/commit/304b4f388d3e3f
 # TODO: Upgrade to supervisor stable 4.0 as soon as is released
-RUN SHA="eb904ccdb3573e22784ad36fa81de3cbd718afea" \
+RUN SHA="e4a37c6f8d1cb68f3813c7fdbcfee9a929788a75" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/*
@@ -718,7 +717,7 @@ USER ${NORMAL_USER}
 #==========
 # Selenium
 #==========
-ENV SEL_MAJOR_MINOR_VER 2.52
+ENV SEL_MAJOR_MINOR_VER 2.53
 ENV SEL_PATCH_LEVEL_VER 0
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="http://selenium-release.storage.googleapis.com" \
@@ -964,6 +963,9 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST2="ignoreMe" \
   SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \
   SUPERVISOR_STOPWAITSECS=20 \
+  SUPERVISOR_STOPSIGNAL=TERM \
+  SUPERVISOR_KILLASGROUP=false \
+  SUPERVISOR_STOPASGROUP=false \
   # Supervisor loglevel and also general docker log level
   # can be: debug, warn, trace, info
   LOG_LEVEL=info \

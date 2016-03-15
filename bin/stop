@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# First stop video recording because it needs some time to flush it
+supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
+
+# Now stop the rest
+supervisorctl -c /etc/supervisor/supervisord.conf stop all
+
+# Finally kill supervisor
+killall supervisord

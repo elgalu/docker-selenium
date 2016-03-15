@@ -109,19 +109,19 @@ if [ $WHOAMI_EXIT_CODE != 0 ]; then
     echo "-- INFO: Will try to fix uid before continuing"
     # TODO: fix it ...
     echo "-- now will try to use NORMAL_USER: '$NORMAL_USER' to continue"
-    exec ${RUN_PREFIX} run-supervisord.sh
+    exec ${RUN_PREFIX} run-supervisord.sh --nodaemon
   else
     echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
     echo "-- will try to use NORMAL_USER: '$NORMAL_USER' instead."
-    exec ${RUN_PREFIX} run-supervisord.sh
+    exec ${RUN_PREFIX} run-supervisord.sh --nodaemon
   fi
 elif [ "$WHOAMI" = "root" ]; then
   echo "-- WARN: Container running user is 'root' so switching to less privileged one"
   echo "-- will use NORMAL_USER: '$NORMAL_USER' instead."
-  exec ${RUN_PREFIX} run-supervisord.sh
+  exec ${RUN_PREFIX} run-supervisord.sh --nodaemon
 else
   echo "-- INFO: Will use \$USER '$USER' and \$(whoami) is '$WHOAMI'"
-  exec run-supervisord.sh
+  exec run-supervisord.sh --nodaemon
 fi
 
 # Note: sudo -i creates a login shell for someUser, which implies the following:

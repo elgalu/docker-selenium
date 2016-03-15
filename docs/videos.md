@@ -5,14 +5,14 @@
 ### Pull
 Pull image
 
-    docker pull elgalu/selenium:2.52.0g
+    docker pull elgalu/selenium:2.53.0a
 
 ### Run
 Run a new grid
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
       -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
-      -e VIDEO=true elgalu/selenium:2.52.0g
+      -e VIDEO=true elgalu/selenium:2.53.0a
 
 ### Wait
 Wait for the grid to start
@@ -39,6 +39,7 @@ However is better to stop the video service first then copy the videos to the ho
     docker cp grid:/videos/. videos
 
 ### Finalize
+    docker exec grid stop
     docker stop grid
 
 ### View
