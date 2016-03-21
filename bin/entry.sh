@@ -73,6 +73,10 @@ if [ "${BSTACK_TUNNEL}" = "true" ]; then
 fi
 
 
+#----------------------------------------
+# Remove lock files, thanks @garagepoort
+clear_x_locks.sh
+
 #--------------------------------
 # Improve etc/hosts and fix dirs
 improve_etc_hosts.sh

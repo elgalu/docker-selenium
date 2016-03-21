@@ -4,7 +4,7 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 # next:     xenial-TBD
-FROM ubuntu:xenial-20160314.4
+FROM ubuntu:xenial-20160317
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -615,7 +615,7 @@ RUN SHA="e4a37c6f8d1cb68f3813c7fdbcfee9a929788a75" \
 # Sauce Connect Tunneling #
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
-ENV SAUCE_CONN_VER="sc-4.3.13-linux" \
+ENV SAUCE_CONN_VER="sc-4.3.14-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
   && wget -nv "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
@@ -673,7 +673,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="45.0" \
+ENV FF_VER="45.0.1" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
@@ -730,13 +730,13 @@ RUN  mkdir -p ${SEL_HOME} \
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
 ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
-ENV CHROME_DRIVER_BASE chromedriver.storage.googleapis.com
+ENV CHROME_DRIVER_BASE "chromedriver.storage.googleapis.com"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
   && CHROME_DRIVER_VERSION="2.21" \
-  # && CHROME_DRIVER_VERSION=$(curl 'http://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
-  && CHROME_DRIVER_URL="${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
+  # && CHROME_DRIVER_VERSION=$(curl 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
+  && CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && cd ${SEL_HOME} \
   && rm -rf chromedriver \
@@ -1049,7 +1049,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
   #                   -v $(which docker):$(which docker)
   DOCKER_SOCK="/var/run/docker.sock" \
-  # https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187661259
+  # DBUS hack thanks @pwaller
+  #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234
   DBUS_SESSION_BUS_ADDRESS=/dev/null \
   # Restore
   DEBIAN_FRONTEND="" \
