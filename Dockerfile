@@ -323,21 +323,21 @@ RUN apt-get update -qqy \
 ########################################
 # noVNC to expose VNC via an html page #
 ########################################
-# RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-#   # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
-#   && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
-#   && wget -nv -O noVNC.zip \
-#       "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
-#   && unzip -x noVNC.zip \
-#   && mv noVNC-${NOVNC_SHA} \
-#        ${NORMAL_USER_HOME}/noVNC \
-#   # Download websockify commit 558a6439f dated 2015-06-02
-#   && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
-#   && wget -nv -O websockify.zip \
-#       "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
-#   && unzip -x websockify.zip \
-#   && mv websockify-${WEBSOCKIFY_SHA} \
-#        ${NORMAL_USER_HOME}/noVNC/utils/websockify
+RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
+  # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
+  && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
+  && wget -nv -O noVNC.zip \
+      "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
+  && unzip -x noVNC.zip \
+  && mv noVNC-${NOVNC_SHA} \
+       ${NORMAL_USER_HOME}/noVNC \
+  # Download websockify commit 558a6439f dated 2015-06-02
+  && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
+  && wget -nv -O websockify.zip \
+      "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
+  && unzip -x websockify.zip \
+  && mv websockify-${WEBSOCKIFY_SHA} \
+       ${NORMAL_USER_HOME}/noVNC/utils/websockify
 
 #===============================
 # ffmpeg/libav and video codecs

@@ -7,6 +7,26 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## 2.53.0c (2016-03-22)
+ + Added noVNC back for @vvo
+ + Added Algolia and Nvidia to README.md#who
+ + Image tag details:
+  + Selenium: v2.53.0 (35ae25b)
+  + Chrome stable:  49.0.2623.87
+  + Firefox stable: 45.0.1
+  + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
+  + Java: Oracle Java 9 build 9-ea+110
+  + Timezone: Europe/Berlin
+  + Built with: Docker version 1.10.3, build 20f81dd
+  + Tested on kernel host: 4.2.0-35-generic x86_64 GNU/Linux
+  + Image size: 2.729 GB
+  + FROM ubuntu:xenial-20160317
+  + Python: 2.7.11+
+  + Sauce Connect 4.3.14, build 2010 d6099dc
+  + BrowserStack Local version 4.9
+  + Image ID: sha256:TBD
+  + Digest: sha256:TBD
+
 ## 2.53.0b (2016-03-21)
  + Upgrade Firefox to 45.0.1
  + Upgrade Ubuntu xenial to 20160317

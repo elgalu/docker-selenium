@@ -22,10 +22,10 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 In general add `sudo` only if needed in your environment and `--privileged` or `-v /dev/shm:/dev/shm` if you really need it like when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
 
-    docker pull elgalu/selenium:2.53.0b
+    docker pull elgalu/selenium:2.53.0c
 
-    docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
-      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0b
+    docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
+      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0c
 
 Make sure `docker run` finishes via active wait with below command. This is **mandatory** before start running your tests! Note `grid` is the name of the container:
 
@@ -70,12 +70,12 @@ Supervisor exposes an http server but is not enough to bind the ports via `docke
 ### Screen size
 You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` and `SCREEN_HEIGHT` environment variables:
 
-    docker pull elgalu/selenium:2.53.0b
+    docker pull elgalu/selenium:2.53.0c
 
     docker run -d --name=grid -p 4444:24444 -p 5920:25900 \
       -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
       -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
-      elgalu/selenium:2.53.0b
+      elgalu/selenium:2.53.0c
 
     docker exec grid wait_all_done 10s
 
@@ -112,12 +112,29 @@ It is important to note that `ffmpeg` video recording takes an important amount 
 
 When you don't specify a VNC password a random one will be generated. That password can be seeing by grepping the logs:
 
-    docker exec grid grep "was generated for you:" /var/log/cont/vnc-stdout.log
-    #=> a VNC password was generated for you: ooGhai0aesaesh
+    docker exec grid wait_all_done 30s
+    #=> ... a VNC password was generated for you: ooGhai0aesaesh
 
 You can connect to see what's happening
 
     open vnc://:ooGhai0aesaesh@localhost:5920
+
+### noVNC
+
+Disabled by default, [noVNC](https://github.com/kanaka/noVNC) provides a browser VNC client so you don't need to install a vnc viewer if you choose so. Note we were using guacamole before.
+
+Safari Browser already comes with a built-in vnc viewer so this feature is overkill and is disabled by default, just navigate to vnc://localhost:5920 in your Safari browser.
+
+You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
+
+    docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
+      -v /dev/shm:/dev/shm -p 6080:26080 -e NOVNC=true \
+      elgalu/selenium:2.53.0c
+
+If the VNC password was randomly generated find out with
+
+    docker exec grid wait_all_done 30s
+    #=> ... a VNC password was generated for you: ooGhai0aesaesh
 
 ## Chrome crashed
 
@@ -179,9 +196,9 @@ There are also additional steps you can take to ensure you're using the correct 
 
 You can simply verify that image id is indeed the correct one.
 
-    # e.g. full image id for tag 2.53.0b
+    # e.g. full image id for tag 2.53.0c
     export IMGID="<<Please see CHANGELOG.md>>"
-    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0b |grep ${IMGID} &> /dev/null; then
+    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0c |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -191,7 +208,7 @@ You can simply verify that image id is indeed the correct one.
 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag 2.53.0b
+    # e.g. sha256 for tag 2.53.0c
     export SHA=<<Please see CHANGELOG.md>>
     docker pull elgalu/selenium@sha256:${SHA}
 
@@ -215,9 +232,10 @@ Host machine, terminal 1:
 Host machine, terminal 2:
 
     docker run --rm --name=ch -p=4444:24444 \
+      -v /dev/shm:/dev/shm \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:2.53.0b
+      elgalu/selenium:2.53.0c
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -239,7 +257,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.53.0b
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.53.0c
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -249,7 +267,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:2.53.0b
+    elgalu/selenium:2.53.0c
 
 # -- Common: Wait for the container to start
 ./host-scripts/wait-docker-selenium.sh grid 7s
@@ -320,7 +338,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:2.53.0b
+    docker pull elgalu/selenium:2.53.0c
 
 #### 2. Use this image
 
@@ -391,6 +409,8 @@ Who is using docker-selenium?
 
 * [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
 * [smaato](http://blog.smaato.com/automated-end-to-end-testing-with-protractor-docker-jenkins)
+* [Algolia](https://github.com/algolia/instantsearch.js/#functional-tests)
+* [Nvidia](https://twitter.com/nvidia)
 * many more! please ping @elgalu to add you here
 
 ### Troubleshooting
