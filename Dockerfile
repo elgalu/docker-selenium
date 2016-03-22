@@ -12,19 +12,19 @@ ENV UBUNTU_FLAVOR xenial
 # ENV UBUNTU_FLAVOR wily
 
 #== Ubuntu vivid is 15.04, i.e. FROM ubuntu:15.04
-#                    http://cloud-images.ubuntu.com/releases/15.04/
+#                    https://cloud-images.ubuntu.com/releases/15.04/
 # FROM ubuntu:vivid-20150611
 # ENV UBUNTU_FLAVOR vivid
 
 #== Ubuntu trusty is 14.04, i.e. FROM ubuntu:14.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
-#                    http://cloud-images.ubuntu.com/releases/14.04/
+#                    https://cloud-images.ubuntu.com/releases/14.04/
 # FROM ubuntu:trusty-20150630
 # ENV UBUNTU_FLAVOR trusty
 
 #== Ubuntu precise is 12.04, i.e. FROM ubuntu:12.04
 #== Could also use ubuntu:latest but for the sake I replicating an precise env...
-#                    http://cloud-images.ubuntu.com/releases/12.04/
+#                    https://cloud-images.ubuntu.com/releases/12.04/
 # FROM ubuntu:precise-20150612
 # ENV UBUNTU_FLAVOR precise
 
@@ -91,7 +91,7 @@ RUN locale-gen ${LANGUAGE} \
 #===================
 # Timezone settings
 #===================
-# Full list at http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+# Full list at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #  e.g. "US/Pacific" for Los Angeles, California, USA
 # ENV TZ "US/Pacific"
 ENV TZ "Europe/Berlin"
@@ -261,7 +261,7 @@ USER root
 # Package libnss3-1d might help with issue 20
 #     libnss3-1d \
 # RUN wget -nv -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-#   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+#   && echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
 #   && apt-get update -qqy \
 #   && apt-get -qqy install \
 #     google-chrome-${CHROME_FLAVOR} \
@@ -302,8 +302,6 @@ RUN apt-get update -qqy \
   && apt-get -qqy install \
     openssh-server \
   && echo "PidFile ${RUN_DIR}/sshd.pid" >> /etc/ssh/sshd_config \
-  && echo "X11Forwarding yes" >> /etc/ssh/sshd_config \
-  && echo "GatewayPorts yes"  >> /etc/ssh/sshd_config \
   && rm -rf /var/lib/apt/lists/*
 
 #=========
@@ -324,8 +322,8 @@ RUN apt-get update -qqy \
 # noVNC to expose VNC via an html page #
 ########################################
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-  # Download noVNC commit 8f3c0f6b9 dated 2015-07-01
-  && export NOVNC_SHA="8f3c0f6b9b5e5c23a7dc7e90bd22901017ab4fc7" \
+  # Download noVNC commit b403cb92f date 2016-02-24
+  && export NOVNC_SHA="b403cb92fb8de82d04f305b4f14fa978003890d7" \
   && wget -nv -O noVNC.zip \
       "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
   && unzip -x noVNC.zip \
@@ -720,7 +718,7 @@ USER ${NORMAL_USER}
 ENV SEL_MAJOR_MINOR_VER 2.53
 ENV SEL_PATCH_LEVEL_VER 0
 RUN  mkdir -p ${SEL_HOME} \
-  && export SELBASE="http://selenium-release.storage.googleapis.com" \
+  && export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
       -O ${SEL_HOME}/selenium-server-standalone.jar
@@ -757,7 +755,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # How to get notified of latest version of chrome:
 #  https://chrome.google.com/webstore/detail/the-latest-versions-of-go/bibclkcoilbnbnppanidhimphmfbjaab
 # TODO: Use Google fingerprint to verify downloads
-#  http://www.google.de/linuxrepositories/
+#  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
 RUN  latest_chrome_version_trigger="49.0.2623.87" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
@@ -953,12 +951,17 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   NOVNC=false \
   # You can set the VNC password or leave null so a random password is generated:
   # ENV VNC_PASSWORD topsecret
+  SSHD=false \
   SSHD_PORT=22222 \
+  # Use SSHD_X11FORWARDING=yes to enable ssh -X
+  SSHD_X11FORWARDING="no" \
+  # Use SSHD_GATEWAYPORTS=yes for reverse ports tunneling
+  SSHD_GATEWAYPORTS="no" \
   # Supervisor (process management) http server
   SUPERVISOR_HTTP_PORT=29001 \
   SUPERVISOR_HTTP_USERNAME=supervisorweb \
   SUPERVISOR_HTTP_PASSWORD=somehttpbasicauthpwd \
-  SUPERVISOR_REQUIRED_SRV_LIST="vnc|sshd|xmanager|xvfb" \
+  SUPERVISOR_REQUIRED_SRV_LIST="vnc|xmanager|xvfb" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST1="ignoreMe" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST2="ignoreMe" \
   SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \

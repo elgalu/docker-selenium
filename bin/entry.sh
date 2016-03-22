@@ -46,6 +46,14 @@ else
   export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
 fi
 
+sudo sh -c "echo 'X11Forwarding ${SSHD_X11FORWARDING}' >> /etc/ssh/sshd_config"
+sudo sh -c "echo 'GatewayPorts ${SSHD_GATEWAYPORTS}'   >> /etc/ssh/sshd_config"
+if [ "${SSHD}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|sshd"
+else
+  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="sshd"
+fi
+
 if [ "${NOVNC}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|novnc"
 else
