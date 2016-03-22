@@ -19,13 +19,13 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Timezone: Europe/Berlin
   + Built with: Docker version 1.10.3, build 20f81dd
   + Tested on kernel host: 4.2.0-35-generic x86_64 GNU/Linux
-  + Image size: 2.729 GB
+  + Image size: 2.614 GB
   + FROM ubuntu:xenial-20160317
   + Python: 2.7.11+
   + Sauce Connect 4.3.14, build 2010 d6099dc
   + BrowserStack Local version 4.9
-  + Image ID: sha256:TBD
-  + Digest: sha256:TBD
+  + Digest: sha256:34192fcef49d763110e52316552808a4d812675210d0c9e3ad0d93597cf009c2
+  + Image ID: sha256:sha256:9e8ffad64276aa2130901946f24a853f48a8865fdcaf171b16c774424d3720ff
 
 ## 2.53.0b (2016-03-21)
  + Upgrade Firefox to 45.0.1
@@ -45,8 +45,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11+
   + Sauce Connect 4.3.14, build 2010 d6099dc
   + BrowserStack Local version 4.9
-  + Image ID: sha256:08f3de51344bd4c058fcc8bcd311565b3ab4301e3f39706362d598e73203a08c
   + Digest: sha256:730f39ec26caf28ecfc3c7ecec5e76f555d9335c0b8f890395a9a4e1460c87d6
+  + Image ID: sha256:08f3de51344bd4c058fcc8bcd311565b3ab4301e3f39706362d598e73203a08c
 
 ## 2.53.0a (2016-03-16)
  + Upgrade Selenium to 2.53.0
@@ -68,8 +68,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11+
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.9
-  + Image ID: sha256:e5c425e12e3eb65d0ae13aa0ac021d98942a05856c83b0428b68fd93f4cb589e
   + Digest: sha256:36fa83fb95ff31d80249a4f57a3e41c1c06d808f15c7a9917b2f40c187c237d1
+  + Image ID: sha256:e5c425e12e3eb65d0ae13aa0ac021d98942a05856c83b0428b68fd93f4cb589e
 
 ## 2.52.0g (2016-03-09)
  + Upgrade Ubuntu xenial to 20160303.1
@@ -90,8 +90,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11+
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.8
-  + Image ID: 15ad97dda77d426ccacaa37f5ae126010c90069cf6c61d0872b68e67b62d0595
   + Digest: sha256:f3e10e6719cc7ef2325d0286f475ee869afe390765f53f3dee53351ded53dde4
+  + Image ID: 15ad97dda77d426ccacaa37f5ae126010c90069cf6c61d0872b68e67b62d0595
 
 ## 2.52.0f (2016-03-02)
  + Upgrade Chrome to 49.0.2623.75
@@ -109,8 +109,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11+
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.8
-  + Image ID: 476b64f55b3949533be530297240c864864d72a82907214a5ab7aa6fcc651bbc
   + Digest: sha256:51f821e16cb8e629d22db582459a63c77edce67a3e726e78303a890f78ad242e
+  + Image ID: 476b64f55b3949533be530297240c864864d72a82907214a5ab7aa6fcc651bbc
 
 ## 2.52.0e (2016-02-29)
  + Upgrade Ubuntu xenial to 20160226
@@ -128,8 +128,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11+
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.8
-  + Image ID: 88168cb23dde90e9633bc7ac74bab7bae55e53880cd995908183410e77a23bc7
   + Digest: sha256:530e2740f1878323d1ade36bf3db53039eeb2edb501b24af9b6ef2f213c2164e
+  + Image ID: 88168cb23dde90e9633bc7ac74bab7bae55e53880cd995908183410e77a23bc7
 
 ## 2.52.0d (2016-02-20)
  + Switched OpenJDK 8 to Oracle Java 9
@@ -148,8 +148,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.8
-  + Image ID: 5bbcfb2f5d97013137717aa3a98f40e8e1ce407dc079a09bb8ef3811f74da78a
   + Digest: sha256:63d674ed8e11a2678d1f56b2b9e6c6e923447739dcec0cc6690d4a23261c9f0f
+  + Image ID: 5bbcfb2f5d97013137717aa3a98f40e8e1ce407dc079a09bb8ef3811f74da78a
 
 ## 2.52.0c (2016-02-19)
  + Upgrade Chrome to 48.0.2564.116
@@ -167,8 +167,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.7
-  + Image ID: 64d867660ad824c3cd3fb8263f173d5d15c0ba055cf6103d34e3003a6e90f791
   + Digest: sha256:4bb9601402bf53ca4eba09b6e2e92fd31eb888c32cc37e26e0a6c4d5e036363c
+  + Image ID: 64d867660ad824c3cd3fb8263f173d5d15c0ba055cf6103d34e3003a6e90f791
 
 ## 2.52.0b (2016-02-18)
  + Upgrade Ubuntu xenial to 20160217.2
@@ -185,8 +185,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.7
-  + Image ID: ff1b1567ab1cc8663c2bf88937b051f1527bb90413220c645fade9a6436d9b0b
   + Digest: sha256:05296caa1f1afeda8bafb0c14b8707eccb5a8b486d421e727bce6398360ecb10
+  + Image ID: ff1b1567ab1cc8663c2bf88937b051f1527bb90413220c645fade9a6436d9b0b
 
 ## 2.52.0a (2016-02-16)
  + Upgrade Firefox to 44.0.2
@@ -203,8 +203,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.7
-  + Image ID: sha256:0c9c729f25f13fc2d8efddd0552fe888bd489708a6c429b29039c833cb508377
   + Digest: sha256:d30709c36514d5fc92671f3c1f5aa0befdb84d84a05771fe76b68ee54492a482
+  + Image ID: sha256:0c9c729f25f13fc2d8efddd0552fe888bd489708a6c429b29039c833cb508377
 
 ## 2.51.0b (2016-02-10)
  + Upgrade Chrome to 48.0.2564.109
@@ -220,8 +220,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.7
-  + Image ID: sha256:c64a141e312e727e12a17ae2e2cac483be0a320106702beff086df511a6458de
   + Digest: sha256:5ae90e9da84c6e6fbcb4e65ed887b5ff374206407307e544a14b62ec09f695d6
+  + Image ID: sha256:c64a141e312e727e12a17ae2e2cac483be0a320106702beff086df511a6458de
 
 ## 2.51.0a (2016-02-09)
  + Upgrade Selenium to 2.51.0
@@ -240,8 +240,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.7
-  + Image ID: sha256:fe3401222d9f85cabae6c2e16b918d85f1887b213142c0953b3294e800cfd7f3
   + Digest: sha256:5df788eb6487b4f3b34fc4289b9838bccadd2d117e1f03659b6969f7d6adcc2a
+  + Image ID: sha256:fe3401222d9f85cabae6c2e16b918d85f1887b213142c0953b3294e800cfd7f3
 
 ## 2.50.1b (2016-02-04)
  + Upgrade Chrome to 48.0.2564.103 and log chores
@@ -257,8 +257,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.5
-  + Image ID: 232aaf4662bb586aa7b7629231c7defbbd6dd60729f6c3891cdf2047745e2021
   + Digest: sha256:8acb9184d340038aaef048a66238207bdff4e703868a7306864f7a338af52ab7
+  + Image ID: 232aaf4662bb586aa7b7629231c7defbbd6dd60729f6c3891cdf2047745e2021
 
 ## 2.50.1a (2016-02-01)
  + Upgrade Selenium to 2.50.1
@@ -277,8 +277,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.5
-  + Image ID: 1efc89f6c6f485f60afbdfbd565b8c8951e8acd3bec595d04ce0b45a6bbf39d0
   + Digest: sha256:bae990943a9864effce4cd45941bb87ad259f76594869cf869d4f47a7c2faa01
+  + Image ID: 1efc89f6c6f485f60afbdfbd565b8c8951e8acd3bec595d04ce0b45a6bbf39d0
 
 ## 2.50.0b (2016-01-29)
  + Upgrade Chromedriver from 2.20 to 2.21
@@ -294,8 +294,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.4
-  + Image ID: 42cfa329497e6c2346d0e67037ba8ac253a7babc5c6a211630ee5effcf9275da
   + Digest: sha256:dbb43ee4089a41de5fadd8dc07bd8d3ff91b194f194dd99a4d2f6a8723c024f0
+  + Image ID: 42cfa329497e6c2346d0e67037ba8ac253a7babc5c6a211630ee5effcf9275da
 
 ## 2.50.0a (2016-01-28)
  + Upgrade Selenium to 2.50.0
@@ -312,8 +312,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.4
-  + Image ID: fa1da96f1db1cd7aad504ffad10422caea95eba7a07e0542a2d3d3f393814c50
   + Digest: sha256:6da83608280a0f2331af13aa50c5987a69180b8bd5f21570d507e3b00462f51a
+  + Image ID: fa1da96f1db1cd7aad504ffad10422caea95eba7a07e0542a2d3d3f393814c50
 
 ## 2.49.1b (2016-01-26)
  + Upgrade ubuntu:xenial-20160119.1 to 20160125
@@ -330,8 +330,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.4
-  + Image ID: 58051b8f8d4088875459410730fe8cde86a301d699191cb85e0df8661761a8dd
   + Digest: sha256:eee029f4d890d7f70ed1ed195d2d027e312d5fb01cddde8087de5b1788889d65
+  + Image ID: 58051b8f8d4088875459410730fe8cde86a301d699191cb85e0df8661761a8dd
 
 ## 2.49.1a (2016-01-21)
  + Upgrade Selenium to 2.49.1
@@ -348,8 +348,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.4
-  + Image ID: 38a113670a468ec7daaca513140d1019a24925f3a3da0bd4e17d3169ba9239e0
   + Digest: sha256:fe5db3edb22bb9f55c57954b6c8ec8c809721cc439138cb21ec0145b58468181
+  + Image ID: 38a113670a468ec7daaca513140d1019a24925f3a3da0bd4e17d3169ba9239e0
 
 ## 2.49.0b (2016-01-20)
  + Upgrade from ubuntu:xenial-20151218.1 to 20160119.1
@@ -366,8 +366,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.4
-  + Image ID: 89f2fe717c0b4579adcf8fbe33a6fcfcb4100c64f59d905564bf2ae2c0ecd356
   + Digest: sha256:6e9ba524f771aebacd6399b936c01c52651daec9247fa9ead5b2d92c95a4740d
+  + Image ID: 89f2fe717c0b4579adcf8fbe33a6fcfcb4100c64f59d905564bf2ae2c0ecd356
 
 ## 2.49.0a (2016-01-13)
  + Upgrade Selenium to 2.49.0
@@ -384,8 +384,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.3
-  + Image ID: dffa647d4f05d6bcb976222795d23575b684de4fc0e48e1320e13fc73f4cad9d
   + Digest: sha256:3b1ee16d2e8b12cd6846f1ad07930cb4a72d60dac1b168d5b73e78436545422b
+  + Image ID: dffa647d4f05d6bcb976222795d23575b684de4fc0e48e1320e13fc73f4cad9d
 
 ## 2.48.2k (2016-01-08)
  + Upgrade Firefox to 43.0.4
@@ -402,8 +402,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.3
-  + Image ID: 46da8e57154b6c18915354cb391a4b9cba6d400eba20f68ed082d621cb3e883b
   + Digest: sha256:8954936340069f026a62926a102caf99ef627c526faf8339b2e75b229ed116e3
+  + Image ID: 46da8e57154b6c18915354cb391a4b9cba6d400eba20f68ed082d621cb3e883b
 
 ## 2.48.2j (2015-12-28)
  + Upgrade Firefox to 43.0.3
@@ -419,8 +419,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.2
-  + Image ID: 3df56d671c587ade181b17104998945142b932d85b1928ac6874b6310feb7b7c
   + Digest: sha256:4cf6f3beab1e339ee4c4add8eed4257148e7473247a42c63a84bf19cec7749d7
+  + Image ID: 3df56d671c587ade181b17104998945142b932d85b1928ac6874b6310feb7b7c
 
 ## 2.48.2i (2015-12-23)
  + Upgrade Firefox to 43.0.2
@@ -436,8 +436,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.2
-  + Image ID: 1b1313ca0b837c75cdd72773f6505c4fa6f9d83e365d8554256537539bee4862
   + Digest: sha256:36b94a0e70ff811adfb4371db3aaeb93854c51bc426545c280f52442d887e87c
+  + Image ID: 1b1313ca0b837c75cdd72773f6505c4fa6f9d83e365d8554256537539bee4862
 
 ## 2.48.2h (2015-12-20)
  + Upgrade Ubuntu from 15.10 (wily) to 16.04 (xenial)
@@ -455,8 +455,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.2
-  + Image ID: 0c4cd2c838997b5d97bc2d0e859a799560c09b3efe6e0057df4384a440293b18
   + Digest: sha256:8ea9f381839880a46524318b8fb97fc677bfc095c81efc79f85c47d0e7ee28a3
+  + Image ID: 0c4cd2c838997b5d97bc2d0e859a799560c09b3efe6e0057df4384a440293b18
 
 ## 2.48.2g (2015-12-19)
  + Upgrade Firefox to 43.0.1
@@ -475,8 +475,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.13, build 1877 d9e5947
   + BrowserStack Local version 4.2
-  + Image ID: 14efe64babd2b700b632f87b2872ded72fb0a6884fe5047a16a11fac8921a18f
   + Digest: sha256:6204c54673d29117b32f336fe10aec966c3046af90dfc25436fd44d9dc0c4341
+  + Image ID: 14efe64babd2b700b632f87b2872ded72fb0a6884fe5047a16a11fac8921a18f
 
 ## 2.48.2f (2015-12-09)
  + Upgrade Ubuntu wily from 20151019 to 20151208
@@ -493,8 +493,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.12, build 1788 abd6986
   + BrowserStack Local version 4.1
-  + Image ID: d0bc6966224236f74e8cdcbdf4ba24026bdf988083852ffa454778a3df9be98d
   + Digest: sha256:7315ec9539b27d158a7455d13c0425874a55eca00f5e125086ef46017a48607b
+  + Image ID: d0bc6966224236f74e8cdcbdf4ba24026bdf988083852ffa454778a3df9be98d
 
 ## 2.48.2e (2015-12-02)
  + Upgrade Chrome to 47.0.2526.73
@@ -510,8 +510,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.12, build 1788 abd6986
   + BrowserStack Local version 4.1
-  + Image ID: 830fb301e6fdac663bc56049ddcf84b8758e3643db9d82e65a951dac83065b0a
   + Digest: sha256:94a3cab15c784dafd3e915235d6b5369e7a6aeb1e99cf934002583bde12a5291
+  + Image ID: 830fb301e6fdac663bc56049ddcf84b8758e3643db9d82e65a951dac83065b0a
 
 ## 2.48.2d (2015-11-27)
  + Upgrade Sauce Connect to 4.3.12
@@ -528,8 +528,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.12, build 1788 abd6986
   + BrowserStack Local version 4.1
-  + Image ID: e88ea57afb7cde1d64f439fc69b044704f0ee0b14a1c094ce7eb2cf980e58a29
   + Digest: sha256:0635e19d4e97e862451c5f7efaf421027f039aeb825d88f105da602755556a56
+  + Image ID: e88ea57afb7cde1d64f439fc69b044704f0ee0b14a1c094ce7eb2cf980e58a29
 
 ## 2.48.2c (2015-11-11)
  + Upgrade to Chrome to 46.0.2490.86
@@ -547,8 +547,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 4
-  + Image ID: 838fd1a3e07bb1c38cb50bd5115100831863a0e53f382203d2736c5cb6f0175b
   + Digest: sha256:8640b744b4ce63a67081f3a74a094d5a2aa425b594cd83fbbcbc8e8aa2c8005c
+  + Image ID: 838fd1a3e07bb1c38cb50bd5115100831863a0e53f382203d2736c5cb6f0175b
 
 ## 2.48.2b (2015-11-04)
  + Upgrade to Chrome to 46.0.2490.80
@@ -566,8 +566,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 4
-  + Image ID: 4e3f3d0129a13bef199e336493bc1edaf321a4d388acac3abbc33600f70471d6
   + Digest: sha256:156b394b944203b95d7d813e1f82022c8cf7714da3c8196fd6833033e10ac13f
+  + Image ID: 4e3f3d0129a13bef199e336493bc1edaf321a4d388acac3abbc33600f70471d6
 
 ## 2.48.2a (2015-10-20)
  + Upgrade to Selenium 2.48.2
@@ -587,8 +587,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.9
-  + Image ID: 84caf3003c9471ec3103033cf2e9ccda8e30555e78f495e27187967312daf6d8
   + Digest: sha256:38897dc92e131bce6608316560f89567e884eb9d7bc115e8c64aaffac60ed0b6
+  + Image ID: 84caf3003c9471ec3103033cf2e9ccda8e30555e78f495e27187967312daf6d8
 
 ## 2.47.1n (2015-10-06)
  + Remove older Firefox and Chrome beta/dev as they are not being used.
@@ -605,8 +605,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.9
-  + Image ID: 3ae90ecda33f70fde3d8a89c1a229654a5c76b9bb9934b291f4e145a93347bcd
   + Digest: sha256:00e1f7f63c58bfe16ae5a1152c6a93efa5952044d66d6c067e06fed8a4572b02
+  + Image ID: 3ae90ecda33f70fde3d8a89c1a229654a5c76b9bb9934b291f4e145a93347bcd
 
 ## 2.47.1m (2015-10-04)
  + Upgrade Firefox to 41.0.1, Chrome 45.0.2454.101 and other flavors.
@@ -628,8 +628,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.8
-  + Image ID: e24f8fa942c6d9fcdcd4c0ee8a263d70550dd71d8c5ab5ef967fe3aeca89582e
   + Digest: sha256:a863819c0b0754c849a09e7d3704c6ccd286da141f4bc8dfc58f79bcdd2a5014
+  + Image ID: e24f8fa942c6d9fcdcd4c0ee8a263d70550dd71d8c5ab5ef967fe3aeca89582e
 
 ## 2.47.1l (2015-09-23)
  + Upgrade Firefox to 41.0, Chrome 45.0.2454.99 and other flavors.
@@ -650,8 +650,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.8
-  + Image ID: c8be1422d08f6a84f78f866a4c0827c2efd5d88efe11dfbd245bc3ca21288e84
   + Digest: sha256:158b215f055011d9de0d5783de08e111a3fec9acdbf4a9f75570eb60d92a9a44
+  + Image ID: c8be1422d08f6a84f78f866a4c0827c2efd5d88efe11dfbd245bc3ca21288e84
 
 ## 2.47.1k (2015-09-16)
  + Upgrade Chrome patch level to 45.0.2454.93 and other flavors.
@@ -672,8 +672,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.8
-  + Image ID: 2279fc0820b5a4d7c82f661b521916ba57da47efc13641205e90b5ffc4982c15
   + Digest: sha256:8d8a588e0bbc48b53e9fa159b74331eea4a5c7784c40d7562c3eb569b1bc1f24
+  + Image ID: 2279fc0820b5a4d7c82f661b521916ba57da47efc13641205e90b5ffc4982c15
 
 ## 2.47.1j (2015-09-09)
  + Upgrade from wily-20150807 to wily-20150829 (Leo Gallucci)
@@ -699,8 +699,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.7
-  + Image ID: 07d8bd8ca179de2125f27113bdcebf969c250b150150d2977c637c64c15ef936
   + Digest: sha256:3a1cda55d920a64d1ad892c65b543b48a8a86fac572e3f2eefce11862107579a
+  + Image ID: 07d8bd8ca179de2125f27113bdcebf969c250b150150d2977c637c64c15ef936
 
 ## 2.47.1i (2015-09-04)
  + Upgrade Chrome stable to 45.0.2454.85 and beta/dev (Leo Gallucci)
@@ -724,8 +724,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.7
-  + Image ID: 66be67ad7da61893b2341b03afd34bc18da9031fa70df823375cab680a28c2a5
   + Digest: sha256:d3e6b627463598bd59cc9b6201d1f471df122632f9413f69fa5dcd9c7f03c0cc
+  + Image ID: 66be67ad7da61893b2341b03afd34bc18da9031fa70df823375cab680a28c2a5
 
 ## 2.47.1h (2015-08-28)
  + Upgrade Firefox 40.0.3, Chrome flavors, chromedriver 2.19 (Leo Gallucci)
@@ -746,8 +746,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.7
-  + Image ID: 4c83c4d2b3261531ae874e873f56a32af7e9836db77d2b8020e7de25b2b21b66
   + Digest: sha256:b906385e2e14d2ff642de9c1c01e353fc50e0345d5f04c934586cc0c4951fd03
+  + Image ID: 4c83c4d2b3261531ae874e873f56a32af7e9836db77d2b8020e7de25b2b21b66
 
 ## 2.47.1g (2015-08-24)
  + Optionally do `sc --doctor` via SAUCE_TUNNEL_DOCTOR_TEST (Leo Gallucci)
@@ -770,8 +770,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.7
-  + Image ID: dfa1cbfe9932e651e32d60b360cecada4dde289163fe0570d5814af24830ab63
   + Digest: sha256:50c14f27c7447cb83cff38736dc2f76033198c94cd80f513a3216b41689c73dd
+  + Image ID: dfa1cbfe9932e651e32d60b360cecada4dde289163fe0570d5814af24830ab63
 
 ## 2.47.1f (2015-08-19)
  + Upgrade chromedriver from 2.17 to 2.18 (Leo Gallucci)
@@ -794,8 +794,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.11, build 1757 2b421bb
   + BrowserStack Local version 3.7
-  + Image ID: fe93086c831942e4aac6f916db7a9221bcb205e654628a0421fed0ee725ff9de
   + Digest: sha256:9a21a268f6badecbba9033bb7eba50b9f6dc77c59370dec29f3fc6d3f38fd70d
+  + Image ID: fe93086c831942e4aac6f916db7a9221bcb205e654628a0421fed0ee725ff9de
 
 ## 2.47.1e (2015-08-14)
  + Upgrade from wily-20150731 to 20150807 (Leo Gallucci)
@@ -819,8 +819,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.10
   + Sauce Connect 4.3.10, build 1731 2bab8b6
   + BrowserStack Local version 3.7
-  + Image ID: b7f6f616de9feb402c81e1940ca8a90fc8f4e74cd0163cb530ef46b1cb99b990
   + Digest: sha256:60bdb382f19cca7caf1d541839fc98a0dec7b58ede684d1d4c3b5a82b84b2e41
+  + Image ID: b7f6f616de9feb402c81e1940ca8a90fc8f4e74cd0163cb530ef46b1cb99b990
 
 ## 2.47.1d (2015-08-07)
  + Upgrade from wily-20150708 to 20150731 (Leo Gallucci)
@@ -843,8 +843,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150731
   + Python: 2.7.10
-  + Image ID: c59f0bd567cb40c4a97c9a7b040f2ecd25036a0eec4fe63bf2a8217ff9d0e6b9
   + Digest: sha256:cefeec6485e598f7ba8bde1533d4ecec79227fdd91a4de2823db1dd8996caa74
+  + Image ID: c59f0bd567cb40c4a97c9a7b040f2ecd25036a0eec4fe63bf2a8217ff9d0e6b9
 
 ## 2.47.1c (2015-08-03)
  + Upgrade chromedriver from 2.16 to 2.17 (Leo Gallucci)
@@ -866,8 +866,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: c627036423aa4fa4baea37b24a8ab6fa08e713935ff771f3e3a45881f4319b21
   + Digest: sha256:9a0df41fb5228ae6bf184c97b706aec33a453e3190a546cbb9e9fe00ac73128c
+  + Image ID: c627036423aa4fa4baea37b24a8ab6fa08e713935ff771f3e3a45881f4319b21
 
 ## 2.47.1a (2015-07-30)
  + Upgrade selenium from 2.46.0 to 2.47.1 (Leo Gallucci)
@@ -888,8 +888,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: 7189525fdd0bd4cc4492559f3fee1e58b7cd8c59eb6b692798cf537f2e084ef4
   + Digest: sha256:5df46e24ff6358d9f047adeae5e298a508011dd13baf9cd8093026d2a9357ee0
+  + Image ID: 7189525fdd0bd4cc4492559f3fee1e58b7cd8c59eb6b692798cf537f2e084ef4
 
 ## 2.46.0-06 (2015-07-24)
  + Upgrade chrome stable to 44.0.2403.89. (Leo Gallucci)
@@ -910,8 +910,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: 7d6df22491ed41ec6474b5bf9a48f453dc0d835ce257f39e02cd5fe356a2c1bb
   + Digest: sha256:fe49be13887bb390ca4f6d3617fd8f34c6a84bc08319bb4f18555ed7d6045f08
+  + Image ID: 7d6df22491ed41ec6474b5bf9a48f453dc0d835ce257f39e02cd5fe356a2c1bb
 
 ## v2.46.0-05 (2015-07-20)
  + Split video files through `-e VIDEO_CHUNK_SECS="00:10:00"`. (Leo Gallucci)
@@ -931,8 +931,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: 7c279c889b6c2007b292070324a9109bf3a12b299721af948cf806cac9d62cd7
   + Digest: sha256:9de7c1db421c4b813bca60d148495ed155595b8ee6371f8f600d51a1e42b5782
+  + Image ID: 7c279c889b6c2007b292070324a9109bf3a12b299721af948cf806cac9d62cd7
 
 ## v2.46.0-04 (2015-07-18)
  + Fix bug openbox X manager not waiting for Xvfb. (Leo Gallucci)
@@ -955,8 +955,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:wily-20150708
   + Python: 2.7.10
-  + Image ID: e7ceeaf7ab0adf758a1f2f5e21fe53db9aa2eff7b55b01af1c7fe2620a9f309b
   + Digest: sha256:6f525fa015e3b815da968a998c58757892955f195cee286b4c39fe15035d01d3
+  + Image ID: e7ceeaf7ab0adf758a1f2f5e21fe53db9aa2eff7b55b01af1c7fe2620a9f309b
 
 ## v2.46.0-02 (2015-07-17)
  + Add DISABLE_ROLLBACK so when true users can troubleshoot. (Leo Gallucci)
@@ -977,8 +977,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:trusty-20150630
   + Python: 2.7.6
-  + Image ID: ef0decd768c36075904192d0b306f1de9cf859a7472c8dba040dcc368ea4894b
   + Digest: sha256:939b5ede408a85c38384af794bcfa335f4e253fe446bfd612bfdaa904b1ffab4
+  + Image ID: ef0decd768c36075904192d0b306f1de9cf859a7472c8dba040dcc368ea4894b
 
 ## v2.46.0-01 (2015-07-16)
  + Launch as grid only, firefox node only, chrome node only. (Leo Gallucci)
@@ -998,8 +998,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:trusty-20150630
   + Python: 2.7.6
-  + Image ID: 049e6178f83f6abe4230211e0f1116ccdda92083b3f81038a1a7fc1d5325f26b
   + Digest: sha256:29766e276918fd39ec679fe9ad208d3aa04deeb7e22171aaaa5877ab6f732616
+  + Image ID: 049e6178f83f6abe4230211e0f1116ccdda92083b3f81038a1a7fc1d5325f26b
 
 ## v2.46.0-00 (2015-07-15)
  + Make selenium maxInstances & maxSession configurable. (Leo Gallucci)
@@ -1023,8 +1023,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Built with: Docker version 1.7.1, build 786b29d
   + FROM ubuntu:trusty-20150630
   + Python: 2.7.6
-  + Image ID: a8bc01890482646e82188ecd84b799fb2e7a1588f7627779b16735ed55d4f40c
   + Digest: sha256:94c0e3992501db24a5a07cba516d8e7e32ac419ea7accae915275eb58dd389d5
+  + Image ID: a8bc01890482646e82188ecd84b799fb2e7a1588f7627779b16735ed55d4f40c
 
 ## v2.46.0-sup (2015-07-13)
  + Switched to supervidord for process management, closes #24 (Leo Gallucci)
