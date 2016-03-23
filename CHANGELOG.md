@@ -26,8 +26,8 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11+
   + Sauce Connect 4.3.14, build 2010 d6099dc
   + BrowserStack Local version 4.9
-  + Image ID: sha256:TBD
-  + Digest: sha256:TBD
+  + Digest: sha256:b123425dea23fd3d74e03a17d45f3b20c7f882d4ae16a17871c1d94d2ff27d79
+  + Image ID: sha256:sha256:db32aef05b9e6ac893b5c84538f3dff9fed21fef44c4d4c8a8e6f5bd10e02833
 
 ## 2.53.0c (2016-03-22)
  + Added noVNC back for @vvo
