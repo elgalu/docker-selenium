@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
+echoerr() {
+  cat <<< "$@" 1>&2;
+}
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "160"
+  errnum=${2-160}
+  exit $errnum
+}
+
+# version_pattern="^\d+\.\d+\.\d+\w+$"
+if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then
+  echo "This is a pull request so no docker push"
+elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
+  docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  echo "Logged in to docker with user '${DOCKER_USERNAME}'"
+  echo "TRAVIS_TAG=${TRAVIS_TAG}"
+  docker tag selenium:latest elgalu/selenium:${TRAVIS_TAG}
+  docker tag selenium:latest elgalu/selenium:latest
+  docker push elgalu/selenium:${TRAVIS_TAG} | tee docker_push.log
+  docker push elgalu/selenium:latest
+  git config --global push.default simple
+  git config --global user.name "Leo Gallucci Bot"
+  git config --global user.email "elgalu3+bot@gmail.com"
+  git checkout -b travis-${TRAVIS_TAG}
+  git remote add github https://elgalubot:${GH_TOKEN}@github.com/elgalu/docker-selenium.git
+  git fetch github
+  git stash save || true
+  git checkout -t github/master -b github/master
+  echo "Will git merge into master"
+  git merge travis-${TRAVIS_TAG}
+  git stash pop || true
+  # + Built with: TBD_BUILT_WITH
+  # + Tested on kernel host: TBD_HOST_UNAME
+  # + Image size: TBD_IMAGE_SIZE
+  # + Digest: TBD_DIGEST
+  # + Image ID: TBD_IMAGE_ID
+  TBD_DIGEST=$(grep -Po '(?<=digest: )([a-z0-9:]+)' docker_push.log || true)
+  TBD_IMAGE_ID=$(docker inspect -f='{{.Id}}' elgalu/selenium:${TRAVIS_TAG} || true)
+  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium || true)
+  TBD_BUILT_WITH=$(docker --version || true)
+  TBD_HOST_UNAME=$(uname -rm || true)
+  sed -i -- "s/TBD_DIGEST/${TBD_DIGEST}/" CHANGELOG.md || true
+  sed -i -- "s/TBD_IMAGE_ID/${TBD_IMAGE_ID}/" CHANGELOG.md || true
+  sed -i -- "s/TBD_IMAGE_SIZE/${TBD_IMAGE_SIZE}/" CHANGELOG.md || true
+  sed -i -- "s/TBD_BUILT_WITH/${TBD_BUILT_WITH}/" CHANGELOG.md || true
+  sed -i -- "s/TBD_HOST_UNAME/${TBD_HOST_UNAME}/" CHANGELOG.md || true
+  git --no-pager diff --unified=0 CHANGELOG.md
+  git status
+  git add CHANGELOG.md
+  git add images/grid_console.png
+  git commit -m "${TRAVIS_TAG}: Update image id, digest & png [ci skip]"
+  git --no-pager log -n3
+  git branch
+
+  # other options:
+  #  git push github HEAD:master
+  #  git push github github/master:master
+  # Failed push commands (i.e. do not use)
+  #  git push
+  #  git push github master
+  #  git push github github/master
+  if git push -u github master 2>&1 >git_push_master.log; then \
+    failed=false; else failed=true; fi
+  # hide secrets
+  sed -i -- "s/${GH_TOKEN}/\[SECRET\]/g" git_push_master.log || true
+  if [ ${failed} == "true" ]; then
+    echoerr "Failed to git push to master!"
+    cat git_push_master.log 1>&2
+    exit 1
+  else
+    cat git_push_master.log
+  fi
+
+  git tag -f latest
+  if git push --tags -f 2>&1 >git_push_tags.log; then \
+    failed=false; else failed=true; fi
+  # hide secrets
+  sed -i -- "s/${GH_TOKEN}/\[SECRET\]/g" git_push_tags.log || true
+  if [ ${failed} == "true" ]; then
+    echoerr "Failed to push git tags!"
+    cat git_push_master.log 1>&2
+    exit 2
+  else
+    cat git_push_master.log
+  fi
+else
+	echo "This is not git tagged so no version push to docker"
+fi

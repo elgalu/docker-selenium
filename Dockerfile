@@ -3,8 +3,7 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-# next:     xenial-TBD
-FROM ubuntu:xenial-20160317
+FROM ubuntu:xenial-20160331.1
 ENV UBUNTU_FLAVOR xenial
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
@@ -602,6 +601,16 @@ RUN SHA="e4a37c6f8d1cb68f3813c7fdbcfee9a929788a75" \
 #       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
 #      ;done
 
+#-----------#
+# dumb-init #
+#-----------#
+# Use dumb-init to allow `docker stop` to end gracefully
+#  result: it didn't help
+# RUN export DUMB_VERS="1.0.1" \
+#   && wget -nv -O /tmp/dumb-init.deb \
+#      "https://github.com/Yelp/dumb-init/releases/download/v${DUMB_VERS}/dumb-init_${DUMB_VERS}_amd64.deb" \
+#   && dpkg -i /tmp/dumb-init.deb
+
 # ------------------------#
 # Sauce Connect Tunneling #
 # ------------------------#
@@ -1074,8 +1083,9 @@ ADD utils/bin/selenium-grep.sh /usr/bin/errors
 ADD xterm/bin/timeout-wait-xterm.sh /usr/bin/wait_all_done
 ADD host-scripts/* /host-scripts/
 ADD test/* /test/
-ADD test/hola.py /usr/bin/hola
-ADD test/test.sh /usr/bin/test
+ADD test/run_test.sh /usr/bin/run_test
+ADD test/selenium_test.sh /usr/bin/selenium_test
+ADD test/python_test.py /usr/bin/python_test
 
 #==================
 # Fix dirs (again)

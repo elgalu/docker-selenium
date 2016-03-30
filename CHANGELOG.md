@@ -7,6 +7,32 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## 2.53.0f
+ + Date: 2016-04-07
+ + Fix & chores to travis-ci build. Show Travis CI badges
+ + Fixing clear_x_locks.sh
+ + Upgrade Ubuntu xenial to 20160331.1
+ + Upgrade Java 9 build 9-ea+112 patch level
+ + Upgrade BrowserStack local to 5.2
+ + Upgrade Chrome patch to 49.0.2623.112
+ + Image tag details:
+  + Selenium: v2.53.0 (35ae25b)
+  + Chrome stable:  49.0.2623.112
+  + Firefox stable: 45.0.1
+  + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
+  + Java: Oracle Java 9 build 9-ea+112
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20160331.1
+  + Python: 2.7.11
+  + Sauce Connect 4.3.14, build 2010 d6099dc
+  + BrowserStack Local version 5.2
+  + Tested on kernel dev host..: 4.2.0-35-generic x86_64
+  + Tested on kernel CI host...: TBD_HOST_UNAME
+  + Built with: TBD_BUILT_WITH
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 2.53.0e
  + Date: 2016-03-30
  + Upgrade Chrome to 49.0.2623.110

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+docker --version
+
+sudo ./test/install_docker
+
+docker --version
