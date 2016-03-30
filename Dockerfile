@@ -417,25 +417,18 @@ RUN apt-get update -qqy \
 #     firefox \
 #   && rm -rf /var/lib/apt/lists/*
 
-#=========================================
-# Python2 for Supervisor and other stuff
-#=========================================
+#=========================================================
+# Python2 for Supervisor, selenium tests, and other stuff
+#=========================================================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     python2.7 \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
     python-pip \
-  && pip install --upgrade pip \
-  && pip install --upgrade setuptools \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
     python-openssl \
     libssl-dev libffi-dev \
+  && pip install --upgrade pip \
+  && pip install --upgrade setuptools \
+  && pip install --upgrade selenium \
   && rm -rf /var/lib/apt/lists/*
 
 #=========================================
@@ -757,7 +750,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="49.0.2623.87" \
+RUN  latest_chrome_version_trigger="49.0.2623.110" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -1055,6 +1048,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # DBUS hack thanks @pwaller
   #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234
   DBUS_SESSION_BUS_ADDRESS=/dev/null \
+  # Selenium test steps sleep
+  TEST_SLEEPS="0.5" \
   # Restore
   DEBIAN_FRONTEND="" \
   DEBCONF_NONINTERACTIVE_SEEN=""
@@ -1078,6 +1073,9 @@ ADD **/bin/* ${BIN_UTILS}/
 ADD utils/bin/selenium-grep.sh /usr/bin/errors
 ADD xterm/bin/timeout-wait-xterm.sh /usr/bin/wait_all_done
 ADD host-scripts/* /host-scripts/
+ADD test/* /test/
+ADD test/hola.py /usr/bin/hola
+ADD test/test.sh /usr/bin/test
 
 #==================
 # Fix dirs (again)
@@ -1099,6 +1097,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${LOGS_DIR} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${RUN_DIR} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /etc/supervisor \
+  && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /test \
   # This X11-unix is useful when using Xephyr
   && sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
   && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
