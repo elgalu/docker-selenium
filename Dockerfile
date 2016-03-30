@@ -602,6 +602,16 @@ RUN SHA="e4a37c6f8d1cb68f3813c7fdbcfee9a929788a75" \
 #       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
 #      ;done
 
+#-----------#
+# dumb-init #
+#-----------#
+# Use dumb-init to allow `docker stop` to end gracefully
+#  result: it didn't help
+# RUN export DUMB_VERS="1.0.1" \
+#   && wget -nv -O /tmp/dumb-init.deb \
+#      "https://github.com/Yelp/dumb-init/releases/download/v${DUMB_VERS}/dumb-init_${DUMB_VERS}_amd64.deb" \
+#   && dpkg -i /tmp/dumb-init.deb
+
 # ------------------------#
 # Sauce Connect Tunneling #
 # ------------------------#

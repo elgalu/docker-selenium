@@ -97,6 +97,7 @@ time.sleep(msleep)
 
 print ("Sending RETURN key")
 elem.send_keys(Keys.RETURN)
+time.sleep(msleep)
 
 print ("Ensure no results were found")
 assert "No results found." not in driver.page_source
@@ -106,4 +107,7 @@ driver.close()
 time.sleep(msleep)
 
 print ("All done. SUCCESS!")
-driver.quit()
+try:
+    driver.quit()
+except:
+    pass

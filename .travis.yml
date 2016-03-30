@@ -12,6 +12,7 @@ env:
 #   -p tcp -d 172.17.0.1 --dport 24444 -j ACCEPT:
 #   iptables: No chain/target/match by that name. (exit status 1)
 before_install:
+  - ./host-scripts/gen-scm-source.sh
   - docker build -t selenium .
 
 install:
