@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+echo "#========================================================="
+echo "# Scenario 1: Run tests right after the container started"
+echo "#========================================================="
+docker exec -ti grid run_test
+docker exec grid errors || true

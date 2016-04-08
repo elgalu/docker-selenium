@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+docker --version
+
+./host-scripts/gen-scm-source.sh
+
+docker build -t selenium .

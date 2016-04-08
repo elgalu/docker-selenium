@@ -4,11 +4,6 @@ Hello world selenium test.
 
 If you want to see this running inside a docker container visit [selenium-test-dockerized][] or scroll down to the *Docker* section.
 
-## Clone
-
-    git clone https://github.com/elgalu/selenium-test.git
-    cd selenium-test
-
 ## Requisistes
 Add `sudo` only if you get permission denied.
 
@@ -23,7 +18,7 @@ It needs a selenium server, for example [docker-selenium][]
 
 ## Run
 
-    python hola.py
+    python python_test.py
 
 Sample output
 

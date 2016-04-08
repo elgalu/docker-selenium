@@ -3,6 +3,12 @@ sudo: required
 services:
   - docker
 
+# Even though we run everything inside docker Travis require us to pick a
+# language else it will pick Ruby by default
+language: python
+python:
+  - "2.7"
+
 env:
   - TEST_SLEEPS="0.7"
 
@@ -12,26 +18,22 @@ env:
 #   -p tcp -d 172.17.0.1 --dport 24444 -j ACCEPT:
 #   iptables: No chain/target/match by that name. (exit status 1)
 before_install:
-  - ./host-scripts/gen-scm-source.sh
-  - docker build -t selenium .
+  - ./test/before_install_setup
+  - travis_retry ./test/before_install_build
 
 install:
-  - docker run --name=grid -d -e VIDEO=true -v /dev/shm:/dev/shm selenium
-  - docker exec -ti grid wait_all_done 40s
-  - docker exec grid versions
-  - docker exec grid errors || true
-  - docker logs grid
+  - ./test/install
 
 # Note: If we try to use `--net` Travis fails with System error: permission denied
 # Note: If we try to use `--link` Selenium fails with ConnectionRefusedError after
 #  connect to selenium at http://172.17.0.4:24444/wd/hub
 # Unless, we use `--privileged` trick by Hiro Asari from Travis Corp.
 script:
-  - docker exec -ti grid test
-  - docker cp grid:/test/console.png images/grid_console.png
+  - ./test/script_scenario_1
+  - ./test/script_scenario_2
+  - ./test/script_archive
+  - ./test/script_push
 
 # cleanup though doesn't seem to be necessary in Travis infra
 after_script:
-  - docker exec grid stop || true
-  - docker stop grid || true
-  - docker rm grid || true
+  - ./test/after_script

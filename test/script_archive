@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+echo "#============================"
+echo "# Archive artifacts (pending)"
+echo "#============================"
+docker cp grid:/test/console.png ./images/grid_console.png
+ls -la ./images
+mkdir -p ./videos
+docker cp grid:/test/videos/chrome ./videos/
+docker cp grid:/test/videos/firefox ./videos/
+ls -la ./videos/chrome
+ls -la ./videos/firefox

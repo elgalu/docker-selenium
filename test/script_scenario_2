@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+echo "#=============================================================="
+echo "# Scenario 2: Forced quick container restart + run tests again"
+echo "#=============================================================="
+docker restart --time=1 grid #forced quick restart
+docker exec -ti grid wait_all_done 40s
+docker exec grid errors || true
+docker exec -ti grid run_test
+docker logs grid
