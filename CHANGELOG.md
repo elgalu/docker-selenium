@@ -24,11 +24,11 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Sauce Connect 4.3.14, build 2010 d6099dc
   + BrowserStack Local version 5.3
   + Tested on kernel dev host..: 4.2.0-35-generic x86_64
-  + Tested on kernel CI host...: TBD_HOST_UNAME
-  + Built with: TBD_BUILT_WITH
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Tested on kernel CI host...: 3.19.0-30-generic x86_64
+  + Built with: Docker version 1.10.3, build 20f81dd
+  + Image size: 2.823 GB
+  + Digest: sha256:074de644f4284809258f0c2a1f515f9ef2fbc4fb7d0b17c3cea5e55ed2e04d5d
+  + Image ID: sha256:5cbb206f212033f3a01b8afbceecea72d2e98c74fd28dd7f8566498caab6eefe
 
 ## 2.53.0f
  + Date: 2016-04-08
