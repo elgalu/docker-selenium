@@ -23,18 +23,14 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 1. Pull the image and run the container
 
-```sh
-    docker pull elgalu/selenium:2.53.0g
+        docker pull elgalu/selenium:2.53.0g
 
-    docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
-      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0g
-```
+        docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
+            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0g
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
-```sh
-    docker exec grid wait_all_done 30s
-```
+        docker exec grid wait_all_done 30s
 
 After this, Selenium should be up and running at `http://localhost:4444/wd/hub`. Open the url in your browser to confirm it is running.
 If you are using Mac (OSX) `localhost` won't work! Find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
