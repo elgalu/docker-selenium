@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Example:
+#  chromedriver --version 2>&1
+#=> ChromeDriver 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
+
+# Example:
+#=> 2.21.371461
+chromedriver --version 2>&1 | grep -Po '(?<=ChromeDriver )([a-z0-9\.]+)'

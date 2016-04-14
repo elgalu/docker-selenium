@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Example:
+#=> 633e689b520b25f3e264a2ede6b74ccc23cb636a
+chromedriver --version 2>&1 | grep -Po '(?<=\s\()([a-z0-9]+)'

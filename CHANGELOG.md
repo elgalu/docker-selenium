@@ -7,11 +7,34 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + Upgrade Chrome major to TBD_CHROME_STABLE
+ + Chore: modularize script_push a bit
+ + Chore: Update more changelog versions from Travis
+ + Image tag details:
+  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox stable: TBD_FIREFOX_STABLE
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
+  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Tested on kernel dev host: 4.2.0-35-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 1.11.0, build 4dc5990
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 2.53.0g
  + Date: 2016-04-12
  + Upgrade Firefox to 45.0.2
  + Upgrade BrowserStack local to 5.3
- + Updates
  + Image tag details:
   + Selenium: v2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.112

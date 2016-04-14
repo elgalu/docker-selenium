@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Example:
+#  google-chrome-stable --version 2>&1
+#=> Google Chrome 50.0.2661.75
+
+# Example:
+#=> 50.0.2661.75
+google-chrome-stable --version 2>&1 | grep -Po '(?<=Google Chrome )([a-z0-9\.]+)'

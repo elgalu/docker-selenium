@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Example:
+#  BrowserStackLocal -version 2>&1
+#=> BrowserStack Local version 5.3
+
+# Example:
+#=> 5.3
+BrowserStackLocal -version 2>&1 | grep -Po '(?<=BrowserStack Local version )([a-z0-9\.]+)'
