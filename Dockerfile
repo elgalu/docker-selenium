@@ -415,6 +415,8 @@ RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     firefox \
 #   && rm -rf /var/lib/apt/lists/*
+# If we are not installing latest from apt sources then remove (purge) default
+RUN apt-get -qqy purge firefox
 
 #=========================================================
 # Python2 for Supervisor, selenium tests, and other stuff
@@ -673,7 +675,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="45.0.1" \
+ENV FF_VER="45.0.2" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \

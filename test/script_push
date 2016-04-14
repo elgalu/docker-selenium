@@ -62,13 +62,13 @@ elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
   git branch
 
   # other options:
-  #  git push github HEAD:master
   #  git push github github/master:master
   # Failed push commands (i.e. do not use)
   #  git push
   #  git push github master
   #  git push github github/master
-  if git push -u github master 2>&1 >git_push_master.log; then \
+  #  git push -u github master
+  if git push github HEAD:master >git_push_master.log 2>&1; then \
     failed=false; else failed=true; fi
   # hide secrets
   sed -i -- "s/${GH_TOKEN}/\[SECRET\]/g" git_push_master.log || true
@@ -81,7 +81,7 @@ elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
   fi
 
   git tag -f latest
-  if git push --tags -f 2>&1 >git_push_tags.log; then \
+  if git push --tags -f >git_push_tags.log 2>&1; then \
     failed=false; else failed=true; fi
   # hide secrets
   sed -i -- "s/${GH_TOKEN}/\[SECRET\]/g" git_push_tags.log || true
