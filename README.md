@@ -21,18 +21,23 @@ Note SeleniumHQ/docker-selenium project is more useful for building selenium gri
 
 ### Run
 
-In general add `sudo` only if needed in your environment and `--privileged` or `-v /dev/shm:/dev/shm` if you really need it like when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
+1. Pull the image and run the container
 
-    docker pull elgalu/selenium:2.53.0g
+        docker pull elgalu/selenium:2.53.0g
 
-    docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
-      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0g
+        docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
+            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0g
 
-Make sure `docker run` finishes via active wait with below command. This is **mandatory** before start running your tests! Note `grid` is the name of the container:
+2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
-    docker exec grid wait_all_done 30s
+        docker exec grid wait_all_done 30s
 
-Selenium should be up and running at http://localhost:4444/wd/hub open the web page to confirm is running but if you are using Mac (OSX) `localhost` won't work! find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
+After this, Selenium should be up and running at `http://localhost:4444/wd/hub`. Open the url in your browser to confirm it is running.
+If you are using Mac (OSX) `localhost` won't work! Find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
+
+**Notes:**
+ * Add `sudo` only if needed in your environment
+ * Add `--privileged` or `-v /dev/shm:/dev/shm` if you really need it. For example when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
 
 #### Stop
 Shutdown gracefully
@@ -41,11 +46,11 @@ Shutdown gracefully
     docker stop grid
 
 ### OSX
-Important, in Mac you need to gather the correct IP as localhost won't work unless you are in the Linux docker host machine:
+If you are in Mac, you need to get the correct IP of the docker machine. One of these two commands should work to get it:
 
     docker-machine ip default
 
-Or former:
+or former:
 
     boot2docker ip
 
@@ -74,11 +79,11 @@ Then
     ssh -X -p 22222 -o StrictHostKeyChecking=no application@localhost
     echo $DISPLAY #=> localhost:10.0
 
-That's is useful for tunneling else you can stick with `docker exec` to get into the instance with a shell:
+That's is useful for tunneling, or else you can stick with `docker exec` to get into the instance with a shell:
 
     docker exec -ti grid bash
 
-Supervisor exposes an http server but is not enough to bind the ports via `docker run -p` so in this case you need to FWD ports with `ssh -L`
+Supervisor exposes an http server but is not enough to bind the ports via `docker run -p`, so in this case you need to FWD ports with `ssh -L`
 
     ssh -p 22222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
 
@@ -98,20 +103,24 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
 
 ### Chrome flavor
 
-This feature was available in previous versions, please go [check here][[2.47.1m]] and:
-To configure which Chrome flavor (stable, beta, unstable) you want to use just pass for example `-e CHROME_FLAVOR=beta` to `docker run`. Default is `stable`.
+This feature was available in previous versions, please go to [2.47.1m] to use it.
+
+To configure which Chrome flavor you want to use (stable, beta, unstable), just pass `-e CHROME_FLAVOR=beta` to `docker run`. Default is `stable`.
 
 ### Firefox version
 
-This feature was available in previous versions, please go [check here][[2.47.1m]] and:
-To configure which Firefox version to use first check available versions in the [CHANGELOG](./CHANGELOG.md) then pass for example `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
+This feature was available in previous versions, please go to [2.47.1m] to use it.
+To configure which Firefox version to use, first check available versions in the [CHANGELOG](./CHANGELOG.md). Then pass `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
 
 ### Record Videos
 Step by step guide at [docs/videos.md](./docs/videos.md)
 
-If you create the container with `-e VIDEO=true` it will start recording a video through the vnc connection run upon start but first create a local folder `videos` in your current directory and mount the videos directory for an easy transfer with `-v $(pwd)/videos:/videos`
+If you create the container with `-e VIDEO=true` it will start recording a video through the vnc connection run upon start.
+It is recommended to create first a local folder `videos` in your current directory, and mount the videos directory for
+an easy transfer with `-v $(pwd)/videos:/videos`.
 
-Once your tests are done you can either manually stop the recording via `docker exec grid /bin-utils/stop-video` where *ch* is just the arbitrary container chosen name in `docker run` command. Or simply stop the container and that will stop the video recording automatically.
+Once your tests are done you can either manually stop the recording via `docker exec grid /bin-utils/stop-video` where
+*grid* is just the arbitrary container chosen name in `docker run` command. Or simply stop the container and that will stop the video recording automatically.
 
 Relevant environment variables to customize it are:
 
@@ -120,11 +129,11 @@ Relevant environment variables to customize it are:
     VIDEO_FILE_EXTENSION=mkv
     FFMPEG_CODEC_ARGS=""
 
-It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mkv* is selected. You may want to delegate video recording through `vnc2swf-start.sh` to a separate server process and even delegate compression to a further step or to a cloud service like Youtube.
+It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mkv* is selected. You may want to delegate video recording through `vnc2swf-start.sh` to a separate server process and even delegate compression to a further step or to a cloud service like YouTube.
 
 ### VNC
 
-When you don't specify a VNC password a random one will be generated. That password can be seeing by grepping the logs:
+When you don't specify a VNC password, a random one will be generated. That password can be seeing by grepping the logs:
 
     docker exec grid wait_all_done 30s
     #=> ... a VNC password was generated for you: ooGhai0aesaesh
@@ -135,11 +144,11 @@ You can connect to see what's happening
 
 ### noVNC
 
-Disabled by default, [noVNC](https://github.com/kanaka/noVNC) provides a browser VNC client so you don't need to install a vnc viewer if you choose so. Note we were using guacamole before.
+Disabled by default, [noVNC](https://github.com/kanaka/noVNC) provides a browser VNC client so you don't need to install a vnc viewer if you choose so. *Note:* we were using guacamole before.
 
 Safari Browser already comes with a built-in vnc viewer so this feature is overkill and is disabled by default, just navigate to vnc://localhost:5920 in your Safari browser.
 
-You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
+You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and you will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
       -v /dev/shm:/dev/shm -p 6080:26080 -e NOVNC=true \
@@ -150,7 +159,9 @@ If the VNC password was randomly generated find out with
     docker exec grid wait_all_done 30s
     #=> ... a VNC password was generated for you: ooGhai0aesaesh
 
-## Chrome crashed
+## Issues with Chrome
+
+### Chrome crashed
 
 If your tests crashes in Chrome you may need to increase shm size or simply start your container by sharing `-v /dev/shm:/dev/shm`
 
@@ -166,14 +177,14 @@ docker exec grid sudo umount /dev/shm
 docker exec grid sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=512M tmpfs /dev/shm
 ```
 
-## Chrome not reachable or timeout after 60 secs
+### Chrome not reachable or timeout after 60 secs
 In CentOS and apparently since docker 1.10.0 is necessary to disable [sandbox mode](http://www.chromium.org/developers/design-documents/sandbox) through [--no-sandbox](http://peter.sh/experiments/chromium-command-line-switches/#no-sandbox) example client implementation.
 
 The error comes along with this message while starting Chrome:
 
 > Failed to move to new namespace: PID namespaces supported. Network namespace supported, but failed: errno = Operation not permitted
 
-### No Sandbox
+#### No Sandbox
 
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--no-sandbox");
@@ -191,7 +202,7 @@ However this is now the default of this image, see `CHROME_ARGS="--no-sandbox"` 
 
 ## Security
 
-Do **NOT** expose your selenium grid to the outside world, e.g. in AWS as selenium doesn't provide auth so if the ports are not firewalled malicious users will use [your selenium grid as a bot net](https://github.com/SeleniumHQ/docker-selenium/issues/147).
+Do **NOT** expose your selenium grid to the outside world (e.g. in AWS), because Selenium does not provide auth. Therefore, if the ports are not firewalled malicious users will use [your selenium grid as a bot net](https://github.com/SeleniumHQ/docker-selenium/issues/147).
 
 Put that firewall stuff aside, a file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
 
@@ -230,14 +241,19 @@ Given docker.io currently allows to push the same tag image twice this represent
 
 You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
 
+## Cloud Testing Platforms
+
 ### Sauce Labs
 To open the Sauce Labs tunnel while starting the docker container pass in the arguments `-e SAUCE_TUNNEL=true -e SAUCE_USER_NAME=leo -e SAUCE_API_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
 
 ### BrowserStack
 To open the BrowserStack tunnel while starting the docker container pass in the arguments `-e BSTACK_TUNNEL=true -e BSTACK_ACCESS_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
 
+## Additional Uses
+
 ### Using Xephyr to redirect X to the docker host
 Note the below method gives full access to the docker container to the host machine.
+
 Host machine, terminal 1:
 
     sudo apt-get install xserver-xephyr
@@ -344,9 +360,9 @@ docker stop ${CONTAINER}
 docker rm ${CONTAINER}
 ```
 
-### Step by step build
+## Step by step build
 
-#### 1. Build this image
+### 1. Build this image
 
 If you git clone this repo locally, i.e. cd into where the Dockerfile is, you can:
 
@@ -356,20 +372,20 @@ If you prefer to download the final built image from docker you can pull it, per
 
     docker pull elgalu/selenium:2.53.0g
 
-#### 2. Use this image
+### 2. Use this image
 
-##### e.g. Spawn a container for Chrome testing:
+#### e.g. Spawn a container for Chrome testing:
 
-    CH=$(docker run --rm --name=ch -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
+    CH=$(docker run --rm --name=CH -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
         -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
 
-Note `-v /e2e/uploads:/e2e/uploads` is optional in case you are testing browser uploads on your webapp you'll probably need to share a directory for this.
+*Note:* `-v /e2e/uploads:/e2e/uploads` is optional in case you are testing browser uploads on your WebApp, you'll probably need to share a directory for this.
 
 The `127.0.0.1::` part is to avoid binding to all network interfaces, most of the time you don't need to expose the docker container like that so just *localhost* for now.
 
-I like to remove the containers after each e2e test with `--rm` since this docker container is not meant to preserve state, spawning a new one is less than 3 seconds. You need to think of your docker container as processes, not as running virtual machines if case you are familiar with vagrant.
+I like to remove the containers after each e2e test with `--rm` since this docker container is not meant to preserve state, spawning a new one is less than 3 seconds. You need to think of your docker container as processes, not as running virtual machines in case you are familiar with vagrant.
 
-A dynamic port will be binded to the container ones, i.e.
+A dynamic port will be bound to the container ones, i.e.
 
     # Obtain the selenium port you'll connect to:
     docker port $CH 4444
@@ -383,19 +399,19 @@ In case you have RealVNC binary `vnc` in your path, you can always take a look, 
 
     ./bin/vncview.sh 127.0.0.1:49160
 
-##### e.g. Spawn a container for Firefox testing:
+#### e.g. Spawn a container for Firefox testing:
 
-This command line is the same as for Chrome, remember that the selenium running container is able to launch either Chrome or Firefox, the idea around having 2 separate containers, one for each browser is for convenience plus avoid certain `:focus` issues you web app may encounter during e2e automation.
+This command line is the same as for Chrome, remember that the selenium running container is able to launch either Chrome or Firefox, the idea around having 2 separate containers, one for each browser is for convenience, plus avoid certain `:focus` issues your WebApp may encounter during e2e automation.
 
     FF=$(docker run --rm --name=ff -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
         -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
 
-##### How to get docker internal IP through logs
+#### How to get docker internal IP through logs
 
     CONTAINER_IP=$(docker logs sele10 2>&1 | grep "Container docker internal IP: " | sed -e 's/.*IP: //' -e 's/<.*$//')
     echo ${CONTAINER_IP} #=> 172.17.0.34
 
-##### Look around
+#### Look around
 
     docker images
     #=>
@@ -404,9 +420,9 @@ This command line is the same as for Chrome, remember that the selenium running 
     elgalu/docker-selenium   local               eab41ff50f72        About an hour ago   931.1 MB
     ubuntu                   14.04.2             d0955f21bf24        4 weeks ago         188.3 MB
 
-#### DNS
+### DNS
 
-##### How to share the host DNS
+#### How to share the host DNS
 
 By default `docker run` sets the DNS to Google ones *8.8.8.8 and 8.8.4.4* however you may need to use your own.
 
@@ -420,16 +436,16 @@ However this may not work for you and simply want to share the same DNS name res
 
 So `--pid=host` is included to avoid https://github.com/docker/docker/issues/5899 `sudo: unable to send audit message: Operation not permitted`
 
-### Who
-Who is using docker-selenium?
+## Who is using docker-selenium?
 
 * [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
 * [smaato](http://blog.smaato.com/automated-end-to-end-testing-with-protractor-docker-jenkins)
 * [Algolia](https://github.com/algolia/instantsearch.js/#functional-tests)
 * [Nvidia](https://twitter.com/nvidia)
-* many more! please ping @elgalu to add you here
+* And many more! Please ping @elgalu to add you here.
 
-### Troubleshooting
+
+## Troubleshooting
 
 All output is sent to stdout so it can be inspected by running:
 
