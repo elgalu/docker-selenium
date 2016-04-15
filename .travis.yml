@@ -19,6 +19,7 @@ env:
 #   iptables: No chain/target/match by that name. (exit status 1)
 before_install:
   - ./test/before_install_setup
+  - echo "travis pen test 1 ${DOCKER_EMAIL}"
   - travis_retry ./test/before_install_build
 
 install:

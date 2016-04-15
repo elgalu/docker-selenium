@@ -3,6 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+echo "travis pen test 2 ${DOCKER_EMAIL}"
+
 docker run --name=grid -d -e VIDEO=true -v /dev/shm:/dev/shm selenium
 docker exec -ti grid wait_all_done 40s
 docker exec grid versions
