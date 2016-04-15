@@ -29,7 +29,7 @@ install:
 #  connect to selenium at http://172.17.0.4:24444/wd/hub
 # Unless, we use `--privileged` trick by Hiro Asari from Travis Corp.
 script:
-  - echo $DOCKER_EMAIL
+  - echo "tricking travis ${DOCKER_EMAIL}"
   - travis_retry ./test/script_scenario_1
   - ./test/script_scenario_2
   - ./test/script_archive
