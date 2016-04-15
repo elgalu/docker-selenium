@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Example OpenJDK 8:
+#  java -version 2>&1
+#=> openjdk version "1.8.0_66-internal"
+#=> OpenJDK Runtime Environment (build 1.8.0_66-internal-b17)
+#=> OpenJDK 64-Bit Server VM (build 25.66-b17, mixed mode)
+
+# Example Oracle 9:
+#  java -version 2>&1
+#=> java version "9-ea"
+#=> Java(TM) SE Runtime Environment (build 9-ea+112)
+#=> Java HotSpot(TM) 64-Bit Server VM (build 9-ea+112, mixed mode)
+
+# Example OpenJDK 8:
+#=> 1.8.0_66-internal-b17
+# Example Oracle 9:
+#=> 9-ea+112
+java -version 2>&1 | grep -Po '(?<=Environment \(build )([a-z0-9\._\-\+]+)'

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+
+# Example:
+#  java -jar .../selenium-server-standalone.jar ... grep revision
+#=> 15:19:03.625 INFO - v2.53.0, with Core v2.53.0. Built from revision 35ae25b
+
+# Example:
+#=> 2.53.0
+java -jar ${SEL_HOME}/selenium-server-standalone.jar -port ${SELENIUM_HUB_PORT} 2>&1 \
+  | grep revision \
+  | grep -Po '(?<=Core v)([a-z0-9\.]+)' \
+  | sed 's/\.$//'

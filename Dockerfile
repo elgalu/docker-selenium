@@ -4,7 +4,8 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
 FROM ubuntu:xenial-20160331.1
-ENV UBUNTU_FLAVOR xenial
+ENV UBUNTU_FLAVOR="xenial" \
+    UBUNTU_DATE="20160331.1"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208
@@ -92,10 +93,11 @@ RUN locale-gen ${LANGUAGE} \
 #===================
 # Full list at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #  e.g. "US/Pacific" for Los Angeles, California, USA
-# ENV TZ "US/Pacific"
+# e.g. ENV TZ "US/Pacific"
 ENV TZ "Europe/Berlin"
 # Apply TimeZone
-RUN echo $TZ | tee /etc/timezone \
+RUN echo "Setting time zone to '${TZ}'" \
+  && echo ${TZ} > /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
 #==============================
@@ -761,7 +763,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="49.0.2623.110" \
+RUN  latest_chrome_version_trigger="50.0.2661.75" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \

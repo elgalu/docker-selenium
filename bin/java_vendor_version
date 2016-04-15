@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if java -version 2>&1 | grep "OpenJ" >/dev/null; then
+  JAVA_VENDOR="OpenJDK"
+else
+  JAVA_VENDOR="Oracle"
+fi
+
+echo "${JAVA_VENDOR}"

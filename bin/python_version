@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Example:
+#  python --version 2>&1
+#=> Python 2.7.11+
+
+# Example:
+#=> 2.7.11
+python --version 2>&1 | grep -Po '(?<=Python )([a-z0-9\.]+)'

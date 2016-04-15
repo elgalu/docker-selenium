@@ -30,7 +30,7 @@ install:
 # Unless, we use `--privileged` trick by Hiro Asari from Travis Corp.
 script:
   - echo $DOCKER_EMAIL
-  - ./test/script_scenario_1
+  - travis_retry ./test/script_scenario_1
   - ./test/script_scenario_2
   - ./test/script_archive
   - ./test/script_push
