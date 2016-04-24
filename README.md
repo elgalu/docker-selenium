@@ -1,4 +1,5 @@
-# Selenium in Docker with Chrome and Firefox
+<<h1 id="h1">Selenium in Docker with Chrome and Firefox</h1>
+
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -14,26 +15,25 @@
 
 ![docker-selenium-grid](./images/grid_console.png)
 
-## Notes on similar repo: SeleniumHQ/docker-selenium
-See: https://github.com/SeleniumHQ/docker-selenium
+<h2 id="official">Notes on similar repo: SeleniumHQ/docker-selenium</h2>
 
-Note SeleniumHQ/docker-selenium project is more useful for building selenium grids while this one focuses on building disposable standalone seleniums with [video recording support](./docs/videos.md) and both browsers on the same container. It also adds some other features like [customizing the screen size](#screen-size) and [ssh access](#ssh) that can be particularly useful for tunneling support.
+Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) project is more useful for building selenium grids while this one focuses on building disposable standalone seleniums with [video recording support](./docs/videos.md) and both browsers on the same container. It also adds some other features like [customizing the screen size](#screen-size) and [ssh access](#ssh) that can be particularly useful for tunneling support.
 
 ### Run
 
 1. Pull the image and run the container
 
-        docker pull elgalu/selenium:2.53.0h
+        docker pull elgalu/selenium:2.53.0i
 
-        docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
-            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0h
+        docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
+            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0i
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
         docker exec grid wait_all_done 30s
 
 After this, Selenium should be up and running at `http://localhost:4444/wd/hub`. Open the url in your browser to confirm it is running.
-If you are using Mac (OSX) `localhost` won't work! Find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
+If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine/installation/windows/) `localhost` won't work! Find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
 
 **Notes:**
  * Add `sudo` only if needed in your environment
@@ -58,10 +58,10 @@ or former:
 
 You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
 
-    docker run --rm -ti --name=grid -p=4444:24444 -p=5920:25900 -p=22222:22222 \
+    docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
       -e SSHD=true \
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0h
+      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0i
 
 Then
 
@@ -69,10 +69,10 @@ Then
 
 Include `-X` in ssh command if you want to redirect the started GUI programs to your host, but for that you also need to pass `-e SSHD_X11FORWARDING=yes`
 
-    docker run --rm -ti --name=grid -p=4444:24444 -p=5920:25900 -p=22222:22222 \
+    docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
       -e SSHD=true -e SSHD_X11FORWARDING=yes \
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0h
+      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0i
 
 Then
 
@@ -90,16 +90,16 @@ Supervisor exposes an http server but is not enough to bind the ports via `docke
 ### Screen size
 You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` and `SCREEN_HEIGHT` environment variables:
 
-    docker pull elgalu/selenium:2.53.0h
+    docker pull elgalu/selenium:2.53.0i
 
-    docker run -d --name=grid -p 4444:24444 -p 5920:25900 \
+    docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
       -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
       -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
-      elgalu/selenium:2.53.0h
+      elgalu/selenium:2.53.0i
 
     docker exec grid wait_all_done 10s
 
-    open vnc://:hola@localhost:5920
+    open vnc://:hola@localhost:5900
 
 ### Chrome flavor
 
@@ -112,7 +112,8 @@ To configure which Chrome flavor you want to use (stable, beta, unstable), just 
 This feature was available in previous versions, please go to [2.47.1m] to use it.
 To configure which Firefox version to use, first check available versions in the [CHANGELOG](./CHANGELOG.md). Then pass `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
 
-### Record Videos
+<<h3 id="video">Record Videos</h3>
+
 Step by step guide at [docs/videos.md](./docs/videos.md)
 
 If you create the container with `-e VIDEO=true` it will start recording a video through the vnc connection run upon start.
@@ -140,19 +141,19 @@ When you don't specify a VNC password, a random one will be generated. That pass
 
 You can connect to see what's happening
 
-    open vnc://:ooGhai0aesaesh@localhost:5920
+    open vnc://:ooGhai0aesaesh@localhost:5900
 
 ### noVNC
 
 Disabled by default, [noVNC](https://github.com/kanaka/noVNC) provides a browser VNC client so you don't need to install a vnc viewer if you choose so. *Note:* we were using guacamole before.
 
-Safari Browser already comes with a built-in vnc viewer so this feature is overkill and is disabled by default, just navigate to vnc://localhost:5920 in your Safari browser.
+Safari Browser already comes with a built-in vnc viewer so this feature is overkill and is disabled by default, just navigate to vnc://localhost:5900 in your Safari browser.
 
 You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and you will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
 
-    docker run --rm -ti --name=grid -p 4444:24444 -p 5920:25900 \
+    docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
       -v /dev/shm:/dev/shm -p 6080:26080 -e NOVNC=true \
-      elgalu/selenium:2.53.0h
+      elgalu/selenium:2.53.0i
 
 If the VNC password was randomly generated find out with
 
@@ -202,6 +203,8 @@ However this is now the default of this image, see `CHROME_ARGS="--no-sandbox"` 
 
 ## Security
 
+The docker images are built and pushed from [TravisCI](https://travis-ci.org/elgalu/docker-selenium/builds/123103275) for full traceability.
+
 Do **NOT** expose your selenium grid to the outside world (e.g. in AWS), because Selenium does not provide auth. Therefore, if the ports are not firewalled malicious users will use [your selenium grid as a bot net](https://github.com/SeleniumHQ/docker-selenium/issues/147).
 
 Put that firewall stuff aside, a file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
@@ -223,9 +226,9 @@ There are also additional steps you can take to ensure you're using the correct 
 
 You can simply verify that image id is indeed the correct one.
 
-    # e.g. full image id for tag 2.53.0h
+    # e.g. full image id for tag 2.53.0i
     export IMGID="<<Please see CHANGELOG.md>>"
-    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0h |grep ${IMGID} &> /dev/null; then
+    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0i |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -235,7 +238,7 @@ You can simply verify that image id is indeed the correct one.
 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag 2.53.0h
+    # e.g. sha256 for tag 2.53.0i
     export SHA=<<Please see CHANGELOG.md>>
     docker pull elgalu/selenium@sha256:${SHA}
 
@@ -267,7 +270,7 @@ Host machine, terminal 2:
       -v /dev/shm:/dev/shm \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:2.53.0h
+      elgalu/selenium:2.53.0i
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -289,7 +292,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.53.0h
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.53.0i
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -299,7 +302,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:2.53.0h
+    elgalu/selenium:2.53.0i
 
 # -- Common: Wait for the container to start
 ./host-scripts/wait-docker-selenium.sh grid 7s
@@ -370,7 +373,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:2.53.0h
+    docker pull elgalu/selenium:2.53.0i
 
 ### 2. Use this image
 
@@ -438,6 +441,7 @@ So `--pid=host` is included to avoid https://github.com/docker/docker/issues/589
 
 ## Who is using docker-selenium?
 
+* [Zalando](https://tech.zalando.com/blog/)
 * [Shoov](http://www.gizra.com/content/phantomjs-chrome-docker-selenium-standalone/)
 * [smaato](http://blog.smaato.com/automated-end-to-end-testing-with-protractor-docker-jenkins)
 * [Algolia](https://github.com/algolia/instantsearch.js/#functional-tests)

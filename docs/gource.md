@@ -1,7 +1,7 @@
 # Grouce.io
 From a git repository history to [video visualization](https://youtu.be/OU7IdCSB_0E).
 
-[![video visualization](https://i.ytimg.com/vi/OU7IdCSB_0E/hqdefault.jpg)](https://youtu.be/OU7IdCSB_0E)
+[![video visualization](../images/gource.md)](https://youtu.be/OU7IdCSB_0E)
 
 ## Requirements
 Tested on Ubuntu 15.10
@@ -20,7 +20,7 @@ Tested on Ubuntu 15.10
 ## Install
 
     sudo make install
-    
+
 ## Usage
 
     gource -s 1 -c 2.0 -1280x720 -o gource.ppm

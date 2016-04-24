@@ -3,8 +3,8 @@ sudo: required
 services:
   - docker
 
-# Even though we run everything inside docker Travis require us to pick a
-# language else it will pick Ruby by default
+# Even though we run everything inside docker Travis require
+# us to pick a language else it will pick Ruby by default
 language: python
 python:
   - "2.7"
@@ -12,22 +12,13 @@ python:
 env:
   - TEST_SLEEPS="0.7"
 
-# Note: When I try to map ports `-p ${SELENIUM_HUB_PORT}:${SELENIUM_HUB_PORT}`
-#   I get Error response from daemon: Cannot start container 9da9d7a1176:
-#   failed: iptables --wait -t filter -A DOCKER ! -i docker0 -o docker0
-#   -p tcp -d 172.17.0.1 --dport 24444 -j ACCEPT:
-#   iptables: No chain/target/match by that name. (exit status 1)
 before_install:
-  - ./test/before_install_setup
+  - travis_retry ./test/before_install_setup
   - travis_retry ./test/before_install_build
 
 install:
   - ./test/install
 
-# Note: If we try to use `--net` Travis fails with System error: permission denied
-# Note: If we try to use `--link` Selenium fails with ConnectionRefusedError after
-#  connect to selenium at http://172.17.0.4:24444/wd/hub
-# Unless, we use `--privileged` trick by Hiro Asari from Travis Corp.
 script:
   - travis_retry ./test/script_scenario_1
   - ./test/script_scenario_2
