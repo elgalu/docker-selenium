@@ -25,7 +25,8 @@ die () {
 # Docker login, tag and push selenium #
 #######################################
 docker_login_tag_push() {
-  docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  # -e="$DOCKER_EMAIL"
+  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   echo "Logged in to docker with user '${DOCKER_USERNAME}'"
   echo "docker tag and docker push using TRAVIS_TAG=${TRAVIS_TAG}"
   docker tag selenium:latest elgalu/selenium:${TRAVIS_TAG}

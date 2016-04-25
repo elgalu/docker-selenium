@@ -14,7 +14,8 @@ For pull requests:
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome major to 50.0.2661.86"
+    git commit -m "Upgrade Chrome patch to 50.0.2661.86"
+    git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.0i && git push origin tmp-2.53.0i && git push --tags
 
 -- Wait for Travis to pass OK

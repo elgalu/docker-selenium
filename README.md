@@ -1,4 +1,4 @@
-<<h1 id="h1">Selenium in Docker with Chrome and Firefox</h1>
+<h1 id="h1">Selenium in Docker with Chrome and Firefox</h1>
 
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -15,7 +15,7 @@
 
 ![docker-selenium-grid](./images/grid_console.png)
 
-<h2 id="official">Notes on similar repo: SeleniumHQ/docker-selenium</h2>
+<h2 id="official">Notes on the official repo</h2>
 
 Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) project is more useful for building selenium grids while this one focuses on building disposable standalone seleniums with [video recording support](./docs/videos.md) and both browsers on the same container. It also adds some other features like [customizing the screen size](#screen-size) and [ssh access](#ssh) that can be particularly useful for tunneling support.
 
