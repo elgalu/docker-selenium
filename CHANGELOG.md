@@ -9,7 +9,10 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
- + TBD_COMMIT_MSG
+ + Upgrade Firefox major to 46.0
+ + Upgrade Ubuntu xenial date to 20160422
+ + Fix bug #83 on `docker restart`
+ + Bump supervisor commit
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE
@@ -21,7 +24,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: TBD_PYTHON_VERSION
   + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
   + BrowserStack Local version TBD_BROWSER_STACK_VERSION
-  + Tested on kernel dev host: 4.4.0-21-generic x86_64
+  + Tested on kernel dev host: 4.4.0-22-generic x86_64
   + Tested on kernel CI  host: TBD_HOST_UNAME
   + Built at dev host with: Docker version 1.11.0, build 4dc5990
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD

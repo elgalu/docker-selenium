@@ -26,7 +26,7 @@ shutdown () {
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop all
   kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
-  die "ERROR: Some processes failed to start so quitting."
+  die "Some processes failed to start so quitting."
 }
 
 # timeout runs the given command and kills it if it is still running
@@ -57,6 +57,11 @@ timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
 
 # Help at http://supervisord.org/subprocess.html#process-states
 echo "Checking process-states through supervisorctl status"
+if ! supervisorctl -c /etc/supervisor/supervisord.conf \
+    status | grep "RUNNING"; then
+  die "FATAL! supervisorctl status failed in $0"
+fi
+
 if supervisorctl -c /etc/supervisor/supervisord.conf status 2>&1 \
     | grep -v "${SUPERVISOR_NOT_REQUIRED_SRV_LIST1}" \
     | grep -v "${SUPERVISOR_NOT_REQUIRED_SRV_LIST2}" \
@@ -75,6 +80,7 @@ x-terminal-emulator -ls  \
   &
 
 # Join them in 1 bash line to avoid supervisor split them in debug output
+# this output is used to signal docker-selenium is ready for testing
 echo -e "\nContainer docker internal IP: $CONTAINER_IP\n"
 
 wait

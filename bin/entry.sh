@@ -3,6 +3,12 @@
 # Exit immediately if a command exits with a non-zero status
 # set -e
 
+#-----------------------------------------------
+# Perform cleanup to support `docker restart`
+stop 2>&1 >/dev/null || true
+rm -f ${LOGS_DIR}/*
+rm -f ${RUN_DIR}/*
+
 # echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSIONS}"
 echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSION}"
 
@@ -79,7 +85,6 @@ fi
 if [ "${BSTACK_TUNNEL}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|browserstack"
 fi
-
 
 #----------------------------------------
 # Remove lock files, thanks @garagepoort

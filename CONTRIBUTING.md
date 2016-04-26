@@ -3,26 +3,28 @@
 ## Local
 For pull requests:
 
-    ./test/before_install_build && ./test/install && ./test/script_scenario_1
-    ./test/script_scenario_2 && ./test/script_archive && ./test/script_push
-     ./test/after_script
+    ./test/before_install_build && ./test/install
+    #or: ./test/script
+     ./test/script_scenario_1 && ./test/script_scenario_2
+     ./test/script_archive && ./test/script_push
+    ./test/after_script #or: docker exec grid versions
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.0i #name your branch according to your changes
+    git checkout -b tmp-2.53.0j #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome patch to 50.0.2661.86"
+    git commit -m "Upgrade Firefox 46 & Ubuntu 20160422. Fixes #83"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.0i && git push origin tmp-2.53.0i && git push --tags
+    git tag 2.53.0j && git push origin tmp-2.53.0j && git push --tags
 
 -- Wait for Travis to pass OK
--- Make shure changes got merged into master by elgalubot
+-- Make sure changes got merged into master by elgalubot
 -- Duplicate section in CHANGELOG.md starting with TBD_DOCKER_TAG
 
-    git checkout master && git pull && git branch -d tmp-2.53.0i && git push origin --delete tmp-2.53.0i
+    git checkout master && git pull && git branch -d tmp-2.53.0j && git push origin --delete tmp-2.53.0j
 
 -- Upgrade release tag in github.com with latest CHANGELOG.md
 -- If Chrome version changed upload:
@@ -38,9 +40,9 @@ Keep certain bins if chrome version changed for example:
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.0i && git push origin :2.53.0i
+    git tag -d 2.53.0j && git push origin :2.53.0j
     #git add ...
-    git commit --amend && git tag 2.53.0i && git push --force origin tmp-2.53.0i && git push --tags
+    git commit --amend && git tag 2.53.0j && git push --force origin tmp-2.53.0j && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

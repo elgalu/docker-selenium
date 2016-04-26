@@ -3,9 +3,9 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:xenial-20160331.1
+FROM ubuntu:xenial-20160422
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20160331.1"
+    UBUNTU_DATE="20160422"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208
@@ -498,12 +498,13 @@ ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
 # RUN apt-get update -qqy \
 #   && apt-get -qqy install \
 #     supervisor \
+# 2016-04-11 commit: 3e541a34a4ab74, version: supervisor-4.0.0.dev0
 # 2016-03-06 commit: e4a37c6f8d1cb6, version: supervisor-4.0.0.dev0
 # 2016-02-01 commit: eb904ccdb3573e, version: supervisor-4.0.0.dev0
 # 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
 # 2015-08-24 commit: 304b4f388d3e3f, supervisor/version.txt: 4.0.0.dev0
 # TODO: Upgrade to supervisor stable 4.0 as soon as is released
-RUN SHA="e4a37c6f8d1cb68f3813c7fdbcfee9a929788a75" \
+RUN SHA="3e541a34a4ab741e67ff4406eb2727599903c6e3" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/*
@@ -677,7 +678,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="45.0.2" \
+ENV FF_VER="46.0" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \

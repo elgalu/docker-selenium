@@ -3,8 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-docker --version
+docker --version || echo "INFO: No docker installed yet"
 
 sudo ./test/install_docker
 
-docker --version
+docker --version || (echo "FATAL: No docker installed" && exit 1)

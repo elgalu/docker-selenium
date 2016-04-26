@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+./test/script_scenario_1
+./test/script_scenario_2
+./test/script_archive
+./test/script_push
