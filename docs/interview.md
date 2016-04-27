@@ -132,5 +132,5 @@ Right now people tend to build long running selenium grids by using the [stock][
 [@vvo]: https://github.com/vvo
 [auto-builds]: https://docs.docker.com/docker-hub/builds
 [CI]: https://en.wikipedia.org/wiki/Continuous_integration
-[stock-208][https://github.com/SeleniumHQ/docker-selenium/issues/208]
+[stock-208]: https://github.com/SeleniumHQ/docker-selenium/issues/208
 [tests]: https://github.com/elgalu/docker-selenium/tree/master/test
