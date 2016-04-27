@@ -7,30 +7,30 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 2.53.0j
+ + Date: 2016-04-27
  + Upgrade Firefox major to 46.0
  + Upgrade Ubuntu xenial date to 20160422
  + Fix bug #83 on `docker restart`
  + Bump supervisor commit
  + Image tag details:
-  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox stable: TBD_FIREFOX_STABLE
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Selenium: v2.53.0 (35ae25b)
+  + Chrome stable:  50.0.2661.86
+  + Firefox stable: 46.0
+  + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
+  + Java: Oracle Java 9-ea+114
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20160422
+  + Python: 2.7.11
+  + Sauce Connect 4.3.14, build 2010 d6099dc
+  + BrowserStack Local version 5.4
   + Tested on kernel dev host: 4.4.0-22-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 3.19.0-30-generic x86_64
   + Built at dev host with: Docker version 1.11.0, build 4dc5990
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker version 1.11.1, build 5604cbe
+  + Image size: 2.814 GB
+  + Digest: sha256:7b1e9ac1455df6d10b8ddda1447fbc81a039dc0e55d3bf88b39948792bba7b0f
+  + Image ID: sha256:7f4e566de70d43047ab249e4a6e73624e0880e6547742adc33721fef9bfec48e
 
 ## 2.53.0i
  + Date: 2016-04-24
