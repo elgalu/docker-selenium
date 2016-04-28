@@ -16,7 +16,7 @@ With [Selenium][], you can always run your tests locally but as soon as your tes
 
 You can also configure a [headless Xvfb selenium][xvfb-sel] as it is a common use case in Jenkins CI but, again, why going into the trouble now [docker][] exists.
 
-So back in 2014 the first thing I did was googling "selenium in docker", looked around 2 o 3 projects that were floating around but not well maintained so decided to create my own.
+So back in 2014 the first thing I did was googling "selenium in docker", looked around 2 to 3 projects that were floating around but not well maintained so decided to create my own.
 
 <h4 id="LONG">How long has it been around?</h4>
 
