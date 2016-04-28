@@ -36,7 +36,7 @@ Automation testers probably Google 2 words: *selenium* and *docker* then the top
 
 <h4 id="PITCH">How did you get some of our Zalando teams to use it? How did you make the pitch?</h4>
 
-When I started at [Zalando][] in March 2015 we didn't have [Sauce Labs][sauce] yet, only a centralized [Selenium Grid][grid] in our data center which acted as a kind of [SPOF][] (Single Point of Failure) for our [Zalando teams][zal-teams] let alone the fact you couldn't see the tests running nor have recorded video results which are 2 features of this project.
+When I started at [Zalando][] in March 2015 we didn't have [Sauce Labs][sauce], only a centralized [Selenium Grid][grid] in our data center which acted as a kind of [SPOF][] (Single Point of Failure) for our [Zalando teams][zal-teams] let alone the fact you couldn't see the tests running nor have recorded video results which are 2 features of this project.
 
 My team, in charge of the Test Infrastructure, later on managed to acquire [Sauce Labs][sauce] enterprise which has all these features and support hundreds of browsers combinations so is the natural preferred way of getting a front-end testing infrastructure these days but [elgalu/selenium][] still keeps 3 advantages:
 
