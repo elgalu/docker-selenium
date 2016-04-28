@@ -8,7 +8,7 @@ The project aims to provide [Selenium][] inside a [docker][] container.
 
 <h4 id="HOW">How did the project get started? Under what conditions/after what happened?</h4>
 
-Started while I was in charge of building and maintaining the test automation suite of an [AngularJS][] project at [AppNexus][]. Was also doing DevOps tasks related to the test infrastructure.
+The project started while I was in charge of building and maintaining the test automation suite of an [AngularJS][] project at [AppNexus][]. I was also doing DevOps tasks related to the test infrastructure.
 
 The objective was to run the tests headless, different solutions existed for that and there is [PhantomJS][] for example but we needed real browsers like Chrome or Firefox to run our tests on, one reason was to get better test confidence and the other was that [Protractor][] doesn't [play nice][prot-browser-support] with [PhantomJS][].
 
