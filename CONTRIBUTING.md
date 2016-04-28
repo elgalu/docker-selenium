@@ -22,10 +22,10 @@ For repository owners only:
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
--- Duplicate section in CHANGELOG.md starting with TBD_DOCKER_TAG
 
     git checkout master && git pull && git branch -d tmp-2.53.0j && git push origin --delete tmp-2.53.0j
 
+-- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- Upgrade release tag in github.com with latest CHANGELOG.md
 -- If Chrome version changed upload:
 

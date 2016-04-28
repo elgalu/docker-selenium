@@ -116,7 +116,7 @@ To configure which Chrome flavor you want to use (stable, beta, unstable), just 
 This feature was available in previous versions, please go to [2.47.1m] to use it.
 To configure which Firefox version to use, first check available versions in the [CHANGELOG](./CHANGELOG.md). Then pass `-e FIREFOX_VERSION=38.0.6` to `docker run`. Default is the latest number of the available list.
 
-<<h3 id="video">Record Videos</h3>
+<h3 id="video">Record Videos</h3>
 
 Step by step guide at [docs/videos.md](./docs/videos.md)
 
