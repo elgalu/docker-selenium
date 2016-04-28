@@ -73,7 +73,7 @@ I can understand that in a huge widely used project like [AngularJS][] you get t
 
 ##### Working with contributors
 
-When [Matthew Smith][mtscout6] aka @mtscout6 jumped into the project, 4 months after it started, great things happened. He made a few interesting [improvements][matt-improv] but moreover we started conversations about moving [elgalu/selenium][] to the official [SeleniumHQ][] organization, Matt pushed this, contacted Mozilla guys and what not so it [happened][] and for a while we were maintaining only that one but I decided to continue maintaining mine with differentiated [features][] and that's why 2 project for the same purpose exist today.
+When [Matthew Smith][mtscout6] aka @mtscout6 jumped into the project, 4 months after it started, great things happened. He made a few interesting [improvements][matt-improv] but moreover we started conversations about moving [docker-selenium][] to the official [SeleniumHQ][] organization, Matt pushed this, contacted Mozilla guys and what not so it [happened][] and for a while we were maintaining only that one but I decided to continue maintaining mine with differentiated [features][] and that's why 2 project for the same purpose exist today.
 
 ##### Technical debt
 
