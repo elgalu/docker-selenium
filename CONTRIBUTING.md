@@ -11,19 +11,19 @@ For pull requests:
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.0j #name your branch according to your changes
+    git checkout -b tmp-2.53.0k #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Firefox 46 & Ubuntu 20160422. Fixes #83"
+    git commit -m "Upgrade Chrome patch to 50.0.2661.94"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.0j && git push origin tmp-2.53.0j && git push --tags
+    git tag 2.53.0k && git push origin tmp-2.53.0k && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.0j && git push origin --delete tmp-2.53.0j
+    git checkout master && git pull && git branch -d tmp-2.53.0k && git push origin --delete tmp-2.53.0k
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- Upgrade release tag in github.com with latest CHANGELOG.md
@@ -34,15 +34,15 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    VER="50.0.2661.86"
+    VER="50.0.2661.94"
     wget -nv --show-progress -O binaries/google-chrome-stable_${VER}_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.0j && git push origin :2.53.0j
+    git tag -d 2.53.0k && git push origin :2.53.0k
     #git add ...
-    git commit --amend && git tag 2.53.0j && git push --force origin tmp-2.53.0j && git push --tags
+    git commit --amend && git tag 2.53.0k && git push --force origin tmp-2.53.0k && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

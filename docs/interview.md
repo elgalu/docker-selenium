@@ -11,6 +11,7 @@ The project aims to provide [Selenium][] inside a [docker][] container.
 The project started while I was in charge of building and maintaining the test automation suite of an [AngularJS][] project at [AppNexus][]. I was also doing DevOps tasks related to the test infrastructure.
 
 The objective was to run the tests headless, different solutions existed for that and there is [PhantomJS][] for example but we needed real browsers like Chrome or Firefox to run our tests on, one reason was to get better test confidence and the other was that [Protractor][] doesn't [play nice][prot-browser-support] with [PhantomJS][].
+Recently [Wallaby.js][] announced they will support [Electron][] as an alternative to [PhantomJS][] because it allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however I haven't looked into that yet.
 
 With [Selenium][], you can always run your tests locally but as soon as your tests runs the browser popping up in your main display can be annoying, you could configure your windows manager to move it automatically to another workspace for example and similar solutions exists but why going into all those troubles if you can just `docker run selenium`.
 
@@ -20,7 +21,7 @@ So back in 2014 the first thing I did was googling "selenium in docker", looked 
 
 <h4 id="LONG">How long has it been around?</h4>
 
-It started mid 2014 so almost 2 years, it wasn't maintained consistently all these time but yes lately thanks to my role here at [Zalando][] and the fact that some teams here are using it.
+It started mid 2014 so almost 2 years, it [wasn't maintained consistently][gource] all these time but yes lately thanks to my role here at [Zalando][] and the fact that some teams here are using it.
 
 <h4 id="TESTED">How is it tested? How is being built/deployed?</h4>
 
@@ -69,7 +70,7 @@ Good extensive documentation helps gain users for sure but should always include
 ##### Getting users
 
 A couple of users wrote me they preferred my project because it was well maintained, up to date and issues were addressed quickly (no more than 3 days).
-I can understand that in a huge widely used project like [AngularJS][] you get to see hundreds of [open issues without comments][angular-issues] nor assignee nor labels or 36 issues unattended like I see today [in docker][docker-issues] but some projects that have that huge amount of incoming opened issues and yet you still see them not even labeled, like the author not caring at all, ever.
+I can understand that in a huge widely used project like [AngularJS][] you get to see hundreds of [open issues without comments][angular-issues] nor assignee nor labels or 36 issues unattended like I see today [in docker][docker-issues] but some projects that have that huge amount of incoming opened issues and yet you still see them not even labeled, like the author not caring enough.
 
 ##### Working with contributors
 
@@ -134,3 +135,6 @@ Right now people tend to build long running selenium grids by using the [stock][
 [CI]: https://en.wikipedia.org/wiki/Continuous_integration
 [stock-208]: https://github.com/SeleniumHQ/docker-selenium/issues/208
 [tests]: https://github.com/elgalu/docker-selenium/tree/master/test
+[Wallaby.js]: https://wallabyjs.com
+[Electron]: https://wallabyjs.com/docs/integration/electron.html
+[gource]: ./gource.md
