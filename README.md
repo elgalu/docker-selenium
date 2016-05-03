@@ -1,4 +1,5 @@
-<h1 id="h1">Selenium in Docker with Chrome and Firefox</h1>
+<img id="header" width="760" src="./images/icons/logo_wide.jpg" />
+# Selenium in Docker with Chrome and Firefox
 
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -23,7 +24,7 @@ Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium)
 
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
 
-### Run
+<h2 id="run"><img width="24" src="./images/icons/logo.png" /> Run</h2>
 
 1. Pull the image and run the container
 
