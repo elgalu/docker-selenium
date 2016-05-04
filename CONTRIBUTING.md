@@ -4,26 +4,24 @@
 For pull requests:
 
     ./test/before_install_build && ./test/install
-    #or: ./test/script
-     ./test/script_scenario_1 && ./test/script_scenario_2
-     ./test/script_archive && ./test/script_push
+    ./test/script
     ./test/after_script #or: docker exec grid versions
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.0k #name your branch according to your changes
+    git checkout -b tmp-2.53.0l #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome patch to 50.0.2661.94"
+    git commit -m "Upgrade Firefox 46.0.1 & Ubuntu 20160503"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.0k && git push origin tmp-2.53.0k && git push --tags
+    git tag 2.53.0l && git push origin tmp-2.53.0l && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.0k && git push origin --delete tmp-2.53.0k
+    git checkout master && git pull && git branch -d tmp-2.53.0l && git push origin --delete tmp-2.53.0l
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- Upgrade release tag in github.com with latest CHANGELOG.md
@@ -40,9 +38,9 @@ Keep certain bins if chrome version changed for example:
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.0k && git push origin :2.53.0k
+    git tag -d 2.53.0l && git push origin :2.53.0l
     #git add ...
-    git commit --amend && git tag 2.53.0k && git push --force origin tmp-2.53.0k && git push --tags
+    git commit --amend && git tag 2.53.0l && git push --force origin tmp-2.53.0l && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

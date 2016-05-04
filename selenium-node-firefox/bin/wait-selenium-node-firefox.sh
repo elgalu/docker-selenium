@@ -2,7 +2,7 @@
 
 SEL_STATUS_URL="http://localhost:${SELENIUM_NODE_CH_PORT}/wd/hub/status"
 
-# Exit immediately if a command exits with a non-zero status
+# set -e: exit asap if a command exits with a non-zero status
 set -e
 
 if [ "${FIREFOX}" != "true" ]; then

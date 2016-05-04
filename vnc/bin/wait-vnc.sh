@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status
+# set -e: exit asap if a command exits with a non-zero status
 set -e
 
 # Note this active wait provokes below error, so ignore it

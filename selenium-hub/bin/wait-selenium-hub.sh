@@ -2,7 +2,7 @@
 
 SEL_STATUS_URL="http://localhost:${SELENIUM_HUB_PORT}/wd/hub/status"
 
-# Exit immediately if a command exits with a non-zero status
+# set -e: exit asap if a command exits with a non-zero status
 set -e
 
 if [ "${GRID}" != "true" ]; then

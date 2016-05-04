@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status
-# set -e
-
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`
 stop 2>&1 >/dev/null || true

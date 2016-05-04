@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status
+# set -e: exit asap if a command exits with a non-zero status
 set -e
 
-docker run --name=grid -d -e VIDEO=true -v /dev/shm:/dev/shm selenium
-docker exec grid wait_all_done 40s
-docker exec grid versions
-docker exec grid errors || true
-docker logs grid
+./test/install_bats
+./test/install_grid

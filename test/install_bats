@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+set +e
+
+which bats >/dev/null 2>&1
+if [ $? -ne 0 ] ; then
+  echo "Install bats for testing shell scripts."
+  git clone https://github.com/sstephenson/bats.git && cd bats && sudo ./install.sh /usr/local
+fi

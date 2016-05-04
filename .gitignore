@@ -10,3 +10,4 @@ binaries
 scm-source.json
 TODO.md
 docker_push.log
+bats/

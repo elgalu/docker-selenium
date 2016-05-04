@@ -28,10 +28,10 @@ The purpose of this project is to have [Selenium][] running as simple and as fas
 
 1. Pull the image and run the container
 
-        docker pull elgalu/selenium:2.53.0k
+        docker pull elgalu/selenium:2.53.0l
 
         docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
-            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0k
+            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0l
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
@@ -66,7 +66,7 @@ You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa
     docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
       -e SSHD=true \
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0k
+      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0l
 
 Then
 
@@ -77,7 +77,7 @@ Include `-X` in ssh command if you want to redirect the started GUI programs to 
     docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
       -e SSHD=true -e SSHD_X11FORWARDING=yes \
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0k
+      -v /dev/shm:/dev/shm elgalu/selenium:2.53.0l
 
 Then
 
@@ -95,12 +95,12 @@ Supervisor exposes an http server but is not enough to bind the ports via `docke
 ### Screen size
 You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` and `SCREEN_HEIGHT` environment variables:
 
-    docker pull elgalu/selenium:2.53.0k
+    docker pull elgalu/selenium:2.53.0l
 
     docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
       -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
       -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
-      elgalu/selenium:2.53.0k
+      elgalu/selenium:2.53.0l
 
     docker exec grid wait_all_done 10s
 
@@ -158,7 +158,7 @@ You need to pass the environment variable `-e NOVNC=true` in order to start the 
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
       -v /dev/shm:/dev/shm -p 6080:26080 -e NOVNC=true \
-      elgalu/selenium:2.53.0k
+      elgalu/selenium:2.53.0l
 
 If the VNC password was randomly generated find out with
 
@@ -231,9 +231,9 @@ There are also additional steps you can take to ensure you're using the correct 
 
 You can simply verify that image id is indeed the correct one.
 
-    # e.g. full image id for tag 2.53.0k
+    # e.g. full image id for tag 2.53.0l
     export IMGID="<<Please see CHANGELOG.md>>"
-    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0k |grep ${IMGID} &> /dev/null; then
+    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0l |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -243,7 +243,7 @@ You can simply verify that image id is indeed the correct one.
 
 Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
 
-    # e.g. sha256 for tag 2.53.0k
+    # e.g. sha256 for tag 2.53.0l
     export SHA=<<Please see CHANGELOG.md>>
     docker pull elgalu/selenium@sha256:${SHA}
 
@@ -275,7 +275,7 @@ Host machine, terminal 2:
       -v /dev/shm:/dev/shm \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
-      elgalu/selenium:2.53.0k
+      elgalu/selenium:2.53.0l
 
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
@@ -297,7 +297,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.53.0k
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium:2.53.0l
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -307,7 +307,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium:2.53.0k
+    elgalu/selenium:2.53.0l
 
 # -- Common: Wait for the container to start
 ./host-scripts/wait-docker-selenium.sh grid 7s
@@ -378,7 +378,7 @@ If you git clone this repo locally, i.e. cd into where the Dockerfile is, you ca
 
 If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
 
-    docker pull elgalu/selenium:2.53.0k
+    docker pull elgalu/selenium:2.53.0l
 
 ### 2. Use this image
 

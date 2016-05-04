@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status
+# set -e: exit asap if a command exits with a non-zero status
 set -e
 
 docker --version || echo "INFO: No docker installed yet"
 
-sudo ./test/install_docker
+sudo ./test/before_install_docker
 
 docker --version || (echo "FATAL: No docker installed" && exit 1)
