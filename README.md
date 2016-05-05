@@ -21,10 +21,16 @@
 Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) project is more useful for building selenium grids while this one focuses on building disposable standalone seleniums with [video recording support](./docs/videos.md) and both browsers on the same container. It also adds some other features like [customizing the screen size](#screen-size) and [ssh access](#ssh) that can be particularly useful for tunneling support.
 
 ### Purpose
-
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
 
-<h2 id="run"><img width="24" src="./images/icons/logo.png" /> Run</h2>
+### Alternatives
+If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
+[Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however I haven't looked into that yet. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
+You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
+
+### Usage
+
+<h4 id="run"><img width="24" src="./images/icons/logo.png" /> Run</h4>
 
 1. Pull the image and run the container
 
@@ -58,7 +64,9 @@ This image is designed to run one test on each docker container but if you still
             -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
             elgalu/selenium:2.53.0l
 
-The drawback is that all tests will run on the same desktop meaning the video recording will only capture the browser in the foreground but it's in the roadmap to make all this transparent, see issues #77 and #78.
+The drawback is that all tests will run on the same desktop meaning the video recording will only capture the browser in the foreground but it's in the roadmap to make all this transparent, see issues [#78](https://github.com/elgalu/docker-selenium/issues/78) and [#77](https://github.com/elgalu/docker-selenium/issues/77).
+
+Another problem with increasing `MAX_INSTANCES` & `MAX_SESSIONS` is focus issues. So if you don't need video recording you can use the official docker selenium grid to scale up/down via docker-compose, see for example [this blog post](http://carlosbecker.com/posts/selenium-grid-docker-compose)
 
 ### OSX
 If you are in Mac, you need to get the correct IP of the docker machine. One of these two commands should work to get it:
@@ -262,10 +270,10 @@ You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANG
 ## Cloud Testing Platforms
 
 ### Sauce Labs
-To open the Sauce Labs tunnel while starting the docker container pass in the arguments `-e SAUCE_TUNNEL=true -e SAUCE_USER_NAME=leo -e SAUCE_API_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
+To open the [Sauce Labs][] tunnel while starting the docker container pass in the arguments `-e SAUCE_TUNNEL=true -e SAUCE_USER_NAME=leo -e SAUCE_API_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
 
 ### BrowserStack
-To open the BrowserStack tunnel while starting the docker container pass in the arguments `-e BSTACK_TUNNEL=true -e BSTACK_ACCESS_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
+To open the [BrowserStack][] tunnel while starting the docker container pass in the arguments `-e BSTACK_TUNNEL=true -e BSTACK_ACCESS_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
 
 ## Additional Uses
 
@@ -498,3 +506,5 @@ Powered by Supervisor, the container leaves many logs;
 
 [2.47.1m]: https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
 [Selenium]: https://github.com/SeleniumHQ/selenium
+[sauce]: https://saucelabs.com/selenium/selenium-grid
+[BrowserStack]: https://www.browserstack.com/automate
