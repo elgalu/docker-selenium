@@ -3,6 +3,11 @@ sudo: required
 services:
   - docker
 
+# Omit running tests on temporal branches
+branches:
+  except:
+    - /^tmp/
+
 # Even though we run everything inside docker Travis require
 # us to pick a language else it will pick Ruby by default
 language: python

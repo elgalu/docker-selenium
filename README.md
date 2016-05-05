@@ -50,6 +50,14 @@ Shutdown gracefully
     docker exec grid stop
     docker stop grid
 
+### Parallel
+This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel on the same container you can still do so by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.0k/Dockerfile#L949) to 1.
+
+        docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
+            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
+            -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
+            elgalu/selenium:2.53.0l
+
 ### OSX
 If you are in Mac, you need to get the correct IP of the docker machine. One of these two commands should work to get it:
 
