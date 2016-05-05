@@ -58,6 +58,8 @@ This image is designed to run one test on each docker container but if you still
             -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
             elgalu/selenium:2.53.0l
 
+The drawback is that all tests will run on the same desktop meaning the video recording will only capture the browser in the foreground but it's in the roadmap to make all this transparent, see issues #77 and #78.
+
 ### OSX
 If you are in Mac, you need to get the correct IP of the docker machine. One of these two commands should work to get it:
 
