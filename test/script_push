@@ -143,13 +143,6 @@ git_diff_add_commit() {
 # Git push changes, tag #
 #########################
 git_push_tag_push() {
-  # other options:
-  #  git push github github/master:master
-  # Failed push commands (i.e. do not use)
-  #  git push
-  #  git push github master
-  #  git push github github/master
-  #  git push -u github master
   if git push github HEAD:master >git_push_master.log 2>&1; then \
     failed=false; else failed=true; fi
   # hide secrets

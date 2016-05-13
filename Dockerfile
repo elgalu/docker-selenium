@@ -194,9 +194,9 @@ RUN apt-get update -qqy \
        /usr/lib/jvm/java-9-oracle/conf/security/java.security \
   && rm -rf /var/lib/apt/lists/*
 
-#=======
-# Fonts
-#=======
+#=========================
+# Fonts & video libraries
+#=========================
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     fonts-ipafont-gothic \
@@ -207,6 +207,7 @@ RUN apt-get update -qqy \
     ttf-ubuntu-font-family \
     libfreetype6 \
     libfontconfig \
+    gstreamer1.0-libav \
   && rm -rf /var/lib/apt/lists/*
 
 #=========
@@ -764,7 +765,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="50.0.2661.94" \
+RUN  latest_chrome_version_trigger="50.0.2661.102" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
