@@ -136,7 +136,7 @@ Examples:
 
     docker run ... -e TZ="US/Pacific" ...
         docker exec grid date
-    Fri May 20 06:04:58 PDT 2016```
+    Fri May 20 06:04:58 PDT 2016
 
     docker run ... -e TZ="America/Argentina/Buenos_Aires" ...
         docker exec grid date
