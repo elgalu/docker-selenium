@@ -124,6 +124,28 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
 
     open vnc://:hola@localhost:5900
 
+### TimeZone 
+
+Browser/app purportedly considers the container's timezone, you can control and modify the timezone on a container by using TZ environment variable
+
+    docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
+        -e TZ="America/Argentina/Salta" \
+        -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0o```
+
+Examples:
+
+    docker run ... -e TZ="US/Pacific" ...
+        docker exec grid date
+    Fri May 20 06:04:58 PDT 2016```
+
+    docker run ... -e TZ="America/Argentina/Buenos_Aires" ...
+        docker exec grid date
+    Fri May 20 10:04:58 ART 2016`
+
+    docker run ... -e TZ="Europe/Berlin" ...
+        docker exec grid date
+    Fri May 20 15:04:58 CEST 2016`
+
 ### Chrome flavor
 
 This feature was available in previous versions, please go to [2.47.1m] to use it.
