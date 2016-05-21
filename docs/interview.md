@@ -11,7 +11,7 @@ The project aims to provide [Selenium][] inside a [docker][] container.
 The project started while I was in charge of building and maintaining the test automation suite of an [AngularJS][] project at [AppNexus][]. I was also doing DevOps tasks related to the test infrastructure.
 
 The objective was to run the tests headless, different solutions existed for that and there is [PhantomJS][] for example but we needed real browsers like Chrome or Firefox to run our tests on, one reason was to get better test confidence and the other was that [Protractor][] doesn't [play nice][prot-browser-support] with [PhantomJS][].
-Recently [Wallaby.js][] announced they will support [Electron][] as an alternative to [PhantomJS][] because it allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however I haven't looked into that yet.
+Recently [Wallaby.js][] announced they will support [Electron][] as an alternative to [PhantomJS][] because it allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however it sill needs a display so [xvfb][xvfb-electron] is needed.
 
 With [Selenium][], you can always run your tests locally but as soon as your tests runs the browser popping up in your main display can be annoying, you could configure your windows manager to move it automatically to another workspace for example and similar solutions exists but why going into all those troubles if you can just `docker run selenium`.
 
@@ -95,6 +95,8 @@ Right now people tend to build long running selenium grids by using the [stock][
 [stock]: https://github.com/SeleniumHQ/docker-selenium
 [AppNexus]: https://en.wikipedia.org/wiki/AppNexus
 [xvfb-sel]: http://elementalselenium.com/tips/38-headless
+[xvfb-travis]: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
+[xvfb-electron]: http://electron.atom.io/docs/tutorial/testing-on-headless-ci
 [PhantomJS]: https://github.com/ariya/phantomjs
 [Protractor]: https://github.com/angular/protractor
 [prot-browser-support]: https://angular.github.io/protractor/#/browser-support

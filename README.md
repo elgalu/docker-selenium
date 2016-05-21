@@ -25,7 +25,7 @@ The purpose of this project is to have [Selenium][] running as simple and as fas
 
 ### Alternatives
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
-[Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however I haven't looked into that yet. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
+[Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however it sill needs a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
 You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
 
 ### Usage
@@ -37,7 +37,8 @@ You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-b
         docker pull elgalu/selenium:2.53.0o
 
         docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
-            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0o
+            -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
+            -v /dev/shm:/dev/shm elgalu/selenium:2.53.0o
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
@@ -49,6 +50,7 @@ If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine
 **Notes:**
  * Add `sudo` only if needed in your environment
  * Add `--privileged` or `-v /dev/shm:/dev/shm` if you really need it. For example when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
+ * Once this [docker feature](https://github.com/docker/docker/pull/22719) is in place `wait_all_done` won't be necessary anymore.
 
 #### Stop
 Shutdown gracefully
@@ -124,27 +126,26 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
 
     open vnc://:hola@localhost:5900
 
-### TimeZone 
-
-Browser/app purportedly considers the container's timezone, you can control and modify the timezone on a container by using TZ environment variable
+### TimeZone
+You can control and modify the timezone on a container by using the [TZ](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) environment variable through the `docker run` command, e.g. by adding `-e TZ="US/Pacific"`
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
-        -e TZ="America/Argentina/Salta" \
-        -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium:2.53.0o```
+        -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
+        -v /dev/shm:/dev/shm elgalu/selenium:2.53.0o
 
 Examples:
 
     docker run ... -e TZ="US/Pacific" ...
-        docker exec grid date
-    Fri May 20 06:04:58 PDT 2016```
+    docker exec grid date
+    #=> Fri May 20 06:04:58 PDT 2016
 
     docker run ... -e TZ="America/Argentina/Buenos_Aires" ...
-        docker exec grid date
-    Fri May 20 10:04:58 ART 2016`
+    docker exec grid date
+    #=> Fri May 20 10:04:58 ART 2016
 
     docker run ... -e TZ="Europe/Berlin" ...
-        docker exec grid date
-    Fri May 20 15:04:58 CEST 2016`
+    docker exec grid date
+    #=> Fri May 20 15:04:58 CEST 2016
 
 ### Chrome flavor
 
@@ -530,3 +531,4 @@ Powered by Supervisor, the container leaves many logs;
 [Selenium]: https://github.com/SeleniumHQ/selenium
 [sauce]: https://saucelabs.com/selenium/selenium-grid
 [BrowserStack]: https://www.browserstack.com/automate
+[xvfb-electron]: http://electron.atom.io/docs/tutorial/testing-on-headless-ci
