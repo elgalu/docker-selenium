@@ -7,28 +7,28 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 2.53.0p
+ + Date: 2016-05-26
  + Upgrade Chrome stable major 51.0.2704.63
  + Upgrade Sauce Connect to 4.3.15
  + Image tag details:
-  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox stable: TBD_FIREFOX_STABLE
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Selenium: v2.53.0 (35ae25b)
+  + Chrome stable:  51.0.2704.63
+  + Firefox stable: 46.0.1
+  + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
+  + Java: Oracle Java 9-ea+119
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20160503
+  + Python: 2.7.11
+  + Sauce Connect 4.3.15, build 2346 f0b0656
+  + BrowserStack Local version 5.5
   + Tested on kernel dev host: 4.4.0-23-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 3.19.0-30-generic x86_64
   + Built at dev host with: Docker version 1.11.0, build 4dc5990
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker version 1.11.1, build 5604cbe
+  + Image size: 2.522 GB
+  + Digest: sha256:d7211a572db239e5091e94c544c2265ce8552f6b4dfd04021223d13132cba50e
+  + Image ID: sha256:f52546cbc14ed9488cc0e41d84f585ee1ba59ccbd2614a9016bd31e22da651c1
 
 ## 2.53.0o
  + Date: 2016-05-13
