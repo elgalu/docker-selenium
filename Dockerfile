@@ -197,6 +197,7 @@ RUN apt-get update -qqy \
 #=========================
 # Fonts & video libraries
 #=========================
+# and gstreamer for mp4 & html5 support
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     fonts-ipafont-gothic \
@@ -621,7 +622,7 @@ RUN SHA="3e541a34a4ab741e67ff4406eb2727599903c6e3" \
 # Sauce Connect Tunneling #
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
-ENV SAUCE_CONN_VER="sc-4.3.14-linux" \
+ENV SAUCE_CONN_VER="sc-4.3.15-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
   && wget -nv "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
@@ -765,7 +766,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="50.0.2661.102" \
+RUN  latest_chrome_version_trigger="51.0.2704.63" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
