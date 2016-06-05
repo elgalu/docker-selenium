@@ -16,17 +16,28 @@
 
 ![docker-selenium-grid](./images/grid_console.png)
 
-<h2 id="official">Official repo</h2>
-
-Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) project is more useful for building selenium grids while this one focuses on building disposable standalone seleniums with [video recording support](./docs/videos.md) and both browsers on the same container. It also adds some other features like [customizing the screen size](#screen-size) and [ssh access](#ssh) that can be particularly useful for tunneling support.
-
 ### Purpose
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
 
+<h2 id="official">Official repo</h2>
+
+Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) and this one share the same purpose however both projects have diverged considerably in the last two years, some major differences are:
+
+* both browsers and also the grid are on the same container in this repo
+* support for [video recording](./docs/videos.md)
+* support for [customizing the screen size](#screen-size)
+* support for [ssh access](#ssh) that can be particularly useful for tunneling support
+* this image size is considerably larger (around 2.5GB) than the official one which is around 300MB
+* process manager: this image uses [supervisord](http://supervisord.org) while the official [uses bash](https://github.com/SeleniumHQ/docker-selenium/blob/master/StandaloneChromeDebug/entry_point.sh)
+* release flow: TravisCI docker pushes vs docker.com automated builds in the official repo
+
+Even though both projects share the same purpose is good to have alternatives. Letting both projects grow and learn from each other's success or failures ultimately impacts the final users positively. This doesn't discard that at some point all selenium maintainers will sit together a sprint to coordinate some major changes and cleanup open issues and perhaps we might merge both projects again in the future also.
+
 ### Alternatives
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
-[Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however it sill needs a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
+[Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however still requires a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
 You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
+A [new chromium headless project](https://github.com/electron/electron/issues/228#issuecomment-223797342) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox of course.
 
 ### Usage
 
@@ -36,7 +47,7 @@ You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-b
 
         docker pull elgalu/selenium:2.53.0q
 
-        docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
+        docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
             -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
             -v /dev/shm:/dev/shm elgalu/selenium:2.53.0q
 
