@@ -741,7 +741,7 @@ ENV CHROME_DRIVER_BASE "chromedriver.storage.googleapis.com"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.21" \
+  && CHROME_DRIVER_VERSION="2.22" \
   # && CHROME_DRIVER_VERSION=$(curl 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -766,7 +766,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="51.0.2704.79" \
+RUN  latest_chrome_version_trigger="51.0.2704.84" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -944,6 +944,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_NODE_PARAMS="" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
+  # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \
   # SELENIUM_NODE_CHROME_PARAMS='-Dselenium.chrome.args="--no-sandbox"' \
   # WEBDRIVER_NODE_CHROME_PARAMS='-Dwebdriver.chrome.args="--no-sandbox"' \
   # Selenium capabilities descriptive (to avoid opera/ie warnings)
@@ -954,6 +955,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SEL_BROWSER_TIMEOUT_SECS=16000 \
   SEL_CLEANUPCYCLE_MS=90000 \
   SEL_NODEPOLLING_MS=80000 \
+  # Docker for Mac beta - containers do not start #227
+  no_proxy=localhost \
   # Vnc
   VNC_PORT=25900 \
   NOVNC_PORT=26080 \
