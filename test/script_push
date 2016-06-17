@@ -77,7 +77,7 @@ update_changelog() {
   TBD_DOCKER_TAG=${TRAVIS_TAG}
   TBD_DIGEST=$(grep -Po '(?<=digest: )([a-z0-9:]+)' docker_push.log)
   TBD_IMAGE_ID=$(docker inspect -f='{{.Id}}' elgalu/selenium:${TRAVIS_TAG})
-  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium)
+  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium:${TRAVIS_TAG})
   TBD_DOCKER_VERS=$(docker --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)')
   TBD_DOCKER_BUILD=$(docker --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)')
   uname -rm 2>&1 >uname_rm.log || true
@@ -93,7 +93,7 @@ update_changelog() {
   TBD_PYTHON_VERSION=$(docker exec grid python_version)
   TBD_JAVA_BUILD=$(docker exec grid java_build_version)
   TBD_JAVA_VENDOR=$(docker exec grid java_vendor_version)
-  TBD_TIME_ZONE=$(docker exec grid printenv TZ | sed -r 's/[\/]+/\\\//g')
+  TBD_TIME_ZONE="$(docker exec grid printenv TZ | sed -r 's/[\/]+/\\\//g')"
   UBUNTU_FLAVOR=$(docker exec grid printenv UBUNTU_FLAVOR)
   UBUNTU_DATE=$(docker exec grid printenv UBUNTU_DATE)
   TBD_BROWSER_STACK_VERSION=$(docker exec grid browser_stack_version)
@@ -169,6 +169,9 @@ git_push_tag_push() {
   fi
 }
 
+########
+# Main #
+########
 if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then
   echo "This is a pull request so no docker push"
 elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then

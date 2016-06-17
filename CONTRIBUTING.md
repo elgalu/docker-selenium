@@ -9,19 +9,19 @@ For pull requests or local commits:
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.0r #name your branch according to your changes
+    git checkout -b tmp-2.53.0s #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome patch & Chromedriver 2.22"
+    git commit -m "Upgrade Chrome stable patch 51.0.2704.103"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.0r && git push origin tmp-2.53.0r && git push --tags
+    git tag 2.53.0s && git push origin tmp-2.53.0s && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.0r && git push origin --delete tmp-2.53.0r
+    git checkout master && git pull && git branch -d tmp-2.53.0s && git push origin --delete tmp-2.53.0s
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- Upgrade release tag in github.com with latest CHANGELOG.md
@@ -32,15 +32,15 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    VER="51.0.2704.84"
+    VER="51.0.2704.103"
     wget -nv --show-progress -O binaries/google-chrome-stable_${VER}_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.0r && git push origin :2.53.0r
+    git tag -d 2.53.0s && git push origin :2.53.0s
     #git add ...
-    git commit --amend && git tag 2.53.0r && git push --force origin tmp-2.53.0r && git push --tags
+    git commit --amend && git tag 2.53.0s && git push --force origin tmp-2.53.0s && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.
@@ -57,3 +57,17 @@ Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to
     travis env set DOCKER_USERNAME elgalubot
      travis env set DOCKER_PASSWORD secretsecret #1st space in purpose
      travis env set GH_TOKEN secretsecret
+
+### Bot setup
+#### github.com
+- bot: Fork the repo
+- owner: Add bot as collaborator
+- bot: Accept collaborator invitation
+- bot: Generate personal token
+
+#### hub.docker
+- owner: Add bot as collaborator
+
+#### travis-ci.org
+- owner: Enable the project
+- owner: Run all the required `travis env set`

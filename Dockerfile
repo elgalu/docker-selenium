@@ -766,7 +766,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="51.0.2704.84" \
+RUN  latest_chrome_version_trigger="51.0.2704.103" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -957,6 +957,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SEL_NODEPOLLING_MS=80000 \
   # Docker for Mac beta - containers do not start #227
   no_proxy=localhost \
+  HUB_ENV_no_proxy=localhost \
   # Vnc
   VNC_PORT=25900 \
   NOVNC_PORT=26080 \
