@@ -77,7 +77,7 @@ update_changelog() {
   TBD_DOCKER_TAG=${TRAVIS_TAG}
   TBD_DIGEST=$(grep -Po '(?<=digest: )([a-z0-9:]+)' docker_push.log)
   TBD_IMAGE_ID=$(docker inspect -f='{{.Id}}' elgalu/selenium:${TRAVIS_TAG})
-  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium:${TRAVIS_TAG})
+  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium)
   TBD_DOCKER_VERS=$(docker --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)')
   TBD_DOCKER_BUILD=$(docker --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)')
   uname -rm 2>&1 >uname_rm.log || true

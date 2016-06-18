@@ -21,11 +21,11 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: 2.7.11
   + Sauce Connect 4.3.16, build 2396 39e807b
   + BrowserStack Local version 5.6
-  + Tested on kernel dev host: 4.4.0-23-generic x86_64
+  + Tested on kernel dev host: 4.4.0-25-generic x86_64
   + Tested on kernel CI  host: 3.19.0-30-generic x86_64
   + Built at dev host with: Docker version 1.11.2, build b9f10c9
   + Built at CI  host with: Docker version 1.11.2, build b9f10c9
-  + Image size: 
+  + Image size: 2.578 GB
   + Digest: sha256:32492e553b0cf7cdde156e8344e3080c4877a0d4376e4dcc2f878f6a4b3028d1
   + Image ID: sha256:4640c1947342c4d7d7e5cca892a55c0638388adb466407bddf3f94b7c74da2a9
 

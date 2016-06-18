@@ -496,6 +496,15 @@ However this may not work for you and simply want to share the same DNS name res
 
 So `--pid=host` is included to avoid https://github.com/docker/docker/issues/5899 `sudo: unable to send audit message: Operation not permitted`
 
+##### Pid
+Full example using `--net=host` and `--pid=host` but for this to work in OSX you need the latest docker mac package, upgrade if you haven't done so in the last month.
+
+    docker run -d --name=grid --net=host --pid=host \
+      -v /dev/shm:/dev/shm -e SELENIUM_HUB_PORT=4444 \
+      elgalu/selenium
+    docker exec grid wait_all_done 30s
+    ./test/python_test.py
+
 #### DNS example
 
     docker run -d --net=host --pid=host --name=grid -v /dev/shm:/dev/shm elgalu/selenium
