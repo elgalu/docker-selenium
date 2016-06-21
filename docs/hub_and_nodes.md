@@ -37,6 +37,8 @@ Note `SELENIUM_HUB_HOST` and `SELENIUM_NODE_HOST` represent a network firewall c
 ![docker-selenium-chrome-node](../images/chrome_grid_console.png)
 
 ### Firefox
+**NOT WORKING** due to a bug, please wait for the next release at 2016-06-24
+
 Port numbers are completely arbitrary, VNC port will be `5940` and Selenium node port will be `25550` in this example.
 
     docker run -d --name=node_ff -e GRID=false -e CHROME=false -e FIREFOX=true \
