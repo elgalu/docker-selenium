@@ -45,7 +45,7 @@ A [new chromium headless project](https://github.com/electron/electron/issues/22
 
 1. Pull the image and run the container
 
-        docker pull elgalu/selenium
+        docker pull elgalu/selenium #upgrades to latest if available
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
             -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
