@@ -13,8 +13,6 @@ echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSION}"
 # Fix/extend ENV vars
 #---------------------
 # export PATH="${PATH}:${BIN_UTILS}"
-export DISPLAY=":${DISP_N}"
-export XEPHYR_DISPLAY=":${DISP_N}"
 export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"
 export VIDEO_PIDFILE="${RUN_DIR}/video.pid"
 export SAUCE_LOG_FILE="${LOGS_DIR}/saucelabs-stdout.log"
@@ -57,6 +55,12 @@ else
   export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="sshd"
 fi
 
+if [ "${VNC_START}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|vnc"
+else
+  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="vnc"
+fi
+
 if [ "${NOVNC}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|novnc"
 else
@@ -81,6 +85,142 @@ fi
 
 if [ "${BSTACK_TUNNEL}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|browserstack"
+fi
+
+#----------------------------------------
+# Fix autoassigned ports
+#----------------------------------------
+# Open a new file descriptor that redirects to stdout:
+exec 3>&1
+
+function get_free_display() {
+  local get_random_disp_num=false
+  local selected_disp_num=${DISP_N}
+  local find_display_num=0
+
+  if [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] && [ "${selected_disp_num}" = "${DEFAULT_DISP_N}" ]; then
+    get_random_disp_num=true
+  fi
+
+  if [ "${selected_disp_num}" = "-1" ] || [ "${get_random_disp_num}" = "true" ]; then
+    selected_disp_num="-1"
+    # Get a list of socket DISPLAYs already used
+    netstat -nlp | grep -Po '(?<=\/tmp\/\.X11-unix\/X)([0-9]+)' | sort -u > /tmp/netstatX11.log
+    #DEBUG: cat /tmp/netstatX11.log 1>&3
+
+    # -s  file is not zero size
+    if [ -s /tmp/netstatX11.log ]; then
+      # important: while loops are executed in a subshell
+      # var assignments will be lost unless using <<<
+      while true ; do
+        let find_display_num=${find_display_num}+1
+        # read -r Do not treat a backslash character in any special way.
+        #         Consider each backslash to be part of the input line.
+        while read read_disp_num ; do
+          if [ "${read_disp_num}" = "${find_display_num}" ]; then
+            echo "-- WARN: DISPLAY=${find_display_num} is taken, searching for another..." 1>&3
+            selected_disp_num="-1"
+            break
+          elif [ "${selected_disp_num}" = "-1" ]; then
+            selected_disp_num="${find_display_num}"
+            echo "-- INFO: Possible free DISPLAY=${find_display_num}" 1>&3
+            # echo "-- DEBUG: Updated selected_disp_num=$selected_disp_num" 1>&3
+            # echo "-- DEBUG: WAS read_disp_num=$read_disp_num" 1>&3
+          fi
+        done <<< "$(cat /tmp/netstatX11.log)"
+        # echo "-- DEBUG: selected_disp_num=$selected_disp_num" 1>&3
+        [ "${selected_disp_num}" != "-1" ] && break
+        # echo "-- DEBUG: find_display_num=$find_display_num" 1>&3
+        if [ ${find_display_num} -gt ${MAX_DISPLAY_SEARCH} ]; then
+          echo "-- ERROR: Entered in an infinite loop at $0 after netstat" 1>&2 1>&3
+          break
+        fi
+      done
+    else
+      echo "-- INFO: Emtpy file /tmp/netstatX11.log" 1>&3
+      selected_disp_num="${DEFAULT_DISP_N}"
+    fi
+    [ "${selected_disp_num}" = "-1" ] || echo "-- INFO: Found free DISPLAY=${selected_disp_num}" 1>&3
+  fi
+
+  echo ${selected_disp_num}
+}
+
+export DISP_N=$(get_free_display)
+export DISPLAY=":${DISP_N}"
+export XEPHYR_DISPLAY=":${DISP_N}"
+
+# TODO: Remove this duplicated logic
+if [ "${SELENIUM_HUB_PORT}" = "0" ]; then
+  export SELENIUM_HUB_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SELENIUM_HUB_PORT}" = "${DEFAULT_SELENIUM_HUB_PORT}" ]; then
+    export SELENIUM_HUB_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SELENIUM_NODE_CH_PORT}" = "0" ]; then
+  export SELENIUM_NODE_CH_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SELENIUM_NODE_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_CH_PORT}" ]; then
+    export SELENIUM_NODE_CH_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SELENIUM_NODE_FF_PORT}" = "0" ]; then
+  export SELENIUM_NODE_FF_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SELENIUM_NODE_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
+    export SELENIUM_NODE_FF_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${VNC_PORT}" = "0" ]; then
+  export VNC_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${VNC_PORT}" = "${DEFAULT_VNC_PORT}" ]; then
+    export VNC_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${NOVNC_PORT}" = "0" ]; then
+  export NOVNC_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${NOVNC_PORT}" = "${DEFAULT_NOVNC_PORT}" ]; then
+    export NOVNC_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SSHD_PORT}" = "0" ]; then
+  export SSHD_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SSHD_PORT}" = "${DEFAULT_SSHD_PORT}" ]; then
+    export SSHD_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SAUCE_LOCAL_SEL_PORT}" = "0" ]; then
+  export SAUCE_LOCAL_SEL_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SAUCE_LOCAL_SEL_PORT}" = "${DEFAULT_SAUCE_LOCAL_SEL_PORT}" ]; then
+    export SAUCE_LOCAL_SEL_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SUPERVISOR_HTTP_PORT}" = "0" ]; then
+  export SUPERVISOR_HTTP_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SUPERVISOR_HTTP_PORT}" = "${DEFAULT_SUPERVISOR_HTTP_PORT}" ]; then
+    export SUPERVISOR_HTTP_PORT=$(get_unused_port)
+  fi
 fi
 
 #----------------------------------------

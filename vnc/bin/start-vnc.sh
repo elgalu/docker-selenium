@@ -42,8 +42,8 @@ if [ -z "${XE_DISP_NUM}" ]; then
   # -clear_all  As -clear_keys, except try to release any CapsLock, NumLock ...
   #
   # Redirecting to >/dev/null until https://github.com/LibVNC/x11vnc/issues/14
-  x11vnc -rfbport ${VNC_PORT} -display ${DISPLAY} \
-      -rfbauth ${VNC_STORE_PWD_FILE} -forever -shared
+  x11vnc ${VNC_CLI_OPTS} -rfbport ${VNC_PORT} -rfbportv6 ${VNC_PORT} -display ${DISPLAY} \
+      -rfbauth ${VNC_STORE_PWD_FILE}
 
   # Note to double pipe output and keep this process logs add at the end:
   #  2>&1 | tee $VNC_LOG

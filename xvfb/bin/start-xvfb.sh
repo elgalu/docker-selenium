@@ -14,9 +14,13 @@ else
 
   # Start the X server that can run on machines with no real display
   # using Xvfb instead of Xdummy
-  echo "Will start Xvfb with DISPLAY=${DISPLAY} screen=${SCREEN_NUM} geometry=${GEOMETRY}"
-  Xvfb ${DISPLAY} -screen ${SCREEN_NUM} ${GEOMETRY} -ac -r -cc 4 -accessx \
-    -xinerama +extension Composite -extension RANDR +extension GLX
+  echo "Will start Xvfb with DISPLAY=${DISPLAY}"
+  echo "Will start Xvfb with screen=${SCREEN_NUM} geometry=${GEOMETRY}"
+  echo "Will start Xvfb with XVFB_CLI_OPTS_TCP=${XVFB_CLI_OPTS_TCP}"
+  echo "Will start Xvfb with XVFB_CLI_OPTS_BASE=${XVFB_CLI_OPTS_BASE}"
+  echo "Will start Xvfb with XVFB_CLI_OPTS_EXT=${XVFB_CLI_OPTS_EXT}"
+  Xvfb ${DISPLAY} -screen ${SCREEN_NUM} ${GEOMETRY} \
+    ${XVFB_CLI_OPTS_TCP} ${XVFB_CLI_OPTS_BASE} ${XVFB_CLI_OPTS_EXT}
 fi
 
 # Note to double pipe output and keep this process logs add at the end:

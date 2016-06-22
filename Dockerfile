@@ -904,6 +904,16 @@ COPY ./dns/etc/hosts /tmp/hosts
 #======
 # Envs
 #======
+ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
+    DEFAULT_SELENIUM_NODE_CH_PORT="25550" \
+    DEFAULT_SELENIUM_NODE_FF_PORT="25551" \
+    DEFAULT_VNC_PORT="25900" \
+    DEFAULT_NOVNC_PORT="26080" \
+    DEFAULT_SSHD_PORT="22222" \
+    DEFAULT_SAUCE_LOCAL_SEL_PORT="4445" \
+    DEFAULT_SUPERVISOR_HTTP_PORT="29001" \
+    DEFAULT_DISP_N="10"
+
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
 # ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS_LAST}" \
@@ -913,6 +923,8 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV FIREFOX_VERSION="${FF_VER}" \
   # Default chrome flavor, options no longer avariable: beta|unstable
   CHROME_FLAVOR="stable" \
+  # Randomize all ports, i.e. pick unused unprivileged ones
+  PICK_ALL_RANDMON_PORTS="false" \
   # User and home
   USER="${NORMAL_USER}" \
   HOME="${NORMAL_USER_HOME}" \
@@ -928,17 +940,19 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SCREEN_MAIN_DEPTH=24 \
   SCREEN_SUB_DEPTH=32 \
   # Display number; see entry.sh for $DISPLAY
-  DISP_N=10 \
+  DISP_N="${DEFAULT_DISP_N}" \
+  # Maximum searches for a free DISPLAY number
+  MAX_DISPLAY_SEARCH=99 \
   SCREEN_NUM=0 \
   # ENV XEPHYR_SCREEN_SIZE "${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}"""
   # Even though you can change them below, don't worry too much about container
   # internal ports since you can map them to the host via `docker run -p`
-  SELENIUM_HUB_PORT=24444 \
+  SELENIUM_HUB_PORT="${DEFAULT_SELENIUM_HUB_PORT}" \
   # You may want to connect to another hub
   SELENIUM_HUB_HOST="127.0.0.1" \
   SELENIUM_NODE_HOST="127.0.0.1" \
-  SELENIUM_NODE_CH_PORT=25550 \
-  SELENIUM_NODE_FF_PORT=25551 \
+  SELENIUM_NODE_CH_PORT="${DEFAULT_SELENIUM_NODE_CH_PORT}" \
+  SELENIUM_NODE_FF_PORT="${DEFAULT_SELENIUM_NODE_FF_PORT}" \
   # Selenium additional params:
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
@@ -958,37 +972,44 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # Docker for Mac beta - containers do not start #227
   no_proxy=localhost \
   HUB_ENV_no_proxy=localhost \
+  # Xvfb
+  XVFB_CLI_OPTS_TCP="-nolisten tcp -nolisten inet6" \
+  XVFB_CLI_OPTS_BASE="-ac -r -cc 4 -accessx -xinerama" \
+  XVFB_CLI_OPTS_EXT="+extension Composite -extension RANDR +extension GLX" \
   # Vnc
-  VNC_PORT=25900 \
-  NOVNC_PORT=26080 \
-  NOVNC=false \
+  VNC_START="true" \
+  VNC_PORT="${DEFAULT_VNC_PORT}" \
+  # VNC_CLI_OPTS="-noipv6 -no6 -forever -shared" \
+  VNC_CLI_OPTS="-forever -shared" \
   # You can set the VNC password or leave null so a random password is generated:
   # ENV VNC_PASSWORD topsecret
-  SSHD=false \
-  SSHD_PORT=22222 \
+  NOVNC_PORT="${DEFAULT_NOVNC_PORT}" \
+  NOVNC="false" \
+  SSHD="false" \
+  SSHD_PORT="${DEFAULT_SSHD_PORT}" \
   # Use SSHD_X11FORWARDING=yes to enable ssh -X
   SSHD_X11FORWARDING="no" \
   # Use SSHD_GATEWAYPORTS=yes for reverse ports tunneling
   SSHD_GATEWAYPORTS="no" \
   # Supervisor (process management) http server
-  SUPERVISOR_HTTP_PORT=29001 \
-  SUPERVISOR_HTTP_USERNAME=supervisorweb \
-  SUPERVISOR_HTTP_PASSWORD=somehttpbasicauthpwd \
-  SUPERVISOR_REQUIRED_SRV_LIST="vnc|xmanager|xvfb" \
+  SUPERVISOR_HTTP_PORT="${DEFAULT_SUPERVISOR_HTTP_PORT}" \
+  SUPERVISOR_HTTP_USERNAME="supervisorweb" \
+  SUPERVISOR_HTTP_PASSWORD="somehttpbasicauthpwd" \
+  SUPERVISOR_REQUIRED_SRV_LIST="xmanager|xvfb" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST1="ignoreMe" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST2="ignoreMe" \
   SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \
   SUPERVISOR_STOPWAITSECS=20 \
   SUPERVISOR_STOPSIGNAL=TERM \
-  SUPERVISOR_KILLASGROUP=false \
-  SUPERVISOR_STOPASGROUP=false \
+  SUPERVISOR_KILLASGROUP="false" \
+  SUPERVISOR_STOPASGROUP="false" \
   # Supervisor loglevel and also general docker log level
   # can be: debug, warn, trace, info
   LOG_LEVEL=info \
   # when DISABLE_ROLLBACK=true it will:
   #  - output logs
   #  - exec bash to permit troubleshooting
-  DISABLE_ROLLBACK=false \
+  DISABLE_ROLLBACK="false" \
   LOGFILE_MAXBYTES=10MB \
   LOGFILE_BACKUPS=5 \
   # Logs are now managed by supervisord.conf, see
@@ -1007,10 +1028,10 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   #  http://askubuntu.com/a/365221/134645
   FFMPEG_CODEC_ARGS="-vcodec libx264 -crf 0 -preset ultrafast" \
   # Services to start by default; true/false
-  VIDEO=false \
-  GRID=true \
-  CHROME=true \
-  FIREFOX=true \
+  VIDEO="false" \
+  GRID="true" \
+  CHROME="true" \
+  FIREFOX="true" \
   # Video file and extension, e.g. swf, mp4, mkv, flv
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="test" \
@@ -1027,7 +1048,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SAUCE_TUNNEL_DOCTOR_TEST="false" \
   SAUCE_TUNNEL_ID="docker-selenium" \
   SAUCE_TUNNEL_READY_FILE="/tmp/sauce-connect-ready" \
-  SAUCE_LOCAL_SEL_PORT="4445" \
+  SAUCE_LOCAL_SEL_PORT="${DEFAULT_SAUCE_LOCAL_SEL_PORT}" \
   SAUCE_WAIT_TIMEOUT="140s" \
   SAUCE_WAIT_RETRY_TIMEOUT="290s" \
   SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS="1" \

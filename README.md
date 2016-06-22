@@ -119,7 +119,7 @@ That's is useful for tunneling, or else you can stick with `docker exec` to get 
 
     docker exec -ti grid bash
 
-Supervisor exposes an http server but is not enough to bind the ports via `docker run -p`, so in this case you need to FWD ports with `ssh -L`
+Supervisor can expose an HTTP server but is not enough to bind the ports via `docker run -p`, so in this case you need to FWD ports with `ssh -L`
 
     ssh -p 22222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
 
