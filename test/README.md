@@ -47,7 +47,7 @@ Works in Sauce Labs via http basic auth:
 ## Docker
 ### Build
 
-    docker build -t="elgalu/selenium-test" .
+    docker build -t elgalu/selenium-test .
 
 ### Run
 

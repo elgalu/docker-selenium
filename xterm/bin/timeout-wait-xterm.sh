@@ -31,7 +31,9 @@ fi
 if timeout --foreground ${WAIT_TIMEOUT} \
      ${LOOP_SCRIPT_PATH}; then
   echo ""
-  grep 'password' /var/log/cont/vnc-stdout.log || true
+  if [ -f /var/log/cont/vnc-stdout.log ]; then
+    grep 'password' /var/log/cont/vnc-stdout.log || true
+  fi
   grep 'IP:' /var/log/cont/xterm-stdout.log || die "Failed to grep IP:"
   echo "Note if you are in Mac (OSX) 'boot2docker ip' or 'docker-machine ip default' will tell you the relevant IP"
   echo -e "\nSelenium all done and ready for testing!"

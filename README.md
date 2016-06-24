@@ -37,7 +37,7 @@ Even though both projects share the same purpose is good to have alternatives. L
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
 [Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however still requires a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
 You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
-A [new chromium headless project](https://github.com/electron/electron/issues/228#issuecomment-223797342) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox of course.
+A [new chromium headless project](https://github.com/electron/electron/issues/228#issuecomment-223797342) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
 
 ### Usage
 
@@ -45,7 +45,7 @@ A [new chromium headless project](https://github.com/electron/electron/issues/22
 
 1. Pull the image and run the container
 
-        docker pull elgalu/selenium #upgrades to latest if available
+        docker pull elgalu/selenium #upgrades to latest if a newer version is available
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
             -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
@@ -285,7 +285,7 @@ You can simply verify that image id is indeed the correct one.
 
     # e.g. full image id for some specific tag version
     export IMGID="<<Please see CHANGELOG.md>>"
-    if docker inspect -f='{{.Id}}' elgalu/selenium:2.53.0s |grep ${IMGID} &> /dev/null; then
+    if docker inspect -f='{{.Id}}' elgalu/selenium:latest |grep ${IMGID} &> /dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"
@@ -331,113 +331,19 @@ Host machine, terminal 2:
 3
 Now when you run your tests instead of connecting. If docker run fails try `xhost +`
 
-### Using free available ports and tunneling to emulate localhost testing
-Let's say you need to expose 4 ports (3000, 2525, 4545, 4546) from your laptop but test on the remote docker selenium.
-Enter tunneling.
-
-```sh
-# -- Common: Set some handy shortcuts.
-# On development machine (target test localhost server)
-SOPTS="-o StrictHostKeyChecking=no"
-TUNLOCOPTS="-v -N $SOPTS -L"
-TUNREVOPTS="-v -N $SOPTS -R"
-# port 0 means bind to a free available port
-ANYPORT=0
-
-# -- Option 1. docker run - Running docker locally
-# Run a selenium instance binding to host random ports
-REMOTE_DOCKER_SRV=localhost
-CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
-    -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium
-
-# -- Option 2.docker run- Running docker on remote docker server like in the cloud
-# Useful if the docker server is running in the cloud. Establish free local ports
-REMOTE_DOCKER_SRV=some.docker.server.com
-ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
-# Note in remote server I'm using authorized_keys instead of id_rsa.pub given
-# it acts as a jump host so my public key is already on that server
-CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
-    -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium
-
-# -- Common: Wait for the container to start
-./host-scripts/wait-docker-selenium.sh grid 7s
-json_filter='{{(index (index .NetworkSettings.Ports "22222/tcp") 0).HostPort}}'
-SSHD_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
-echo $SSHD_PORT #=> e.g. SSHD_PORT=32769
-
-# -- Option 1. Obtain dynamic values like container IP and assigned free ports
-json_filter='{{(index (index .NetworkSettings.Ports "24444/tcp") 0).HostPort}}'
-FREE_SELE_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
-json_filter='{{(index (index .NetworkSettings.Ports "25900/tcp") 0).HostPort}}'
-FREE_VNC_PORT=$(docker inspect -f='${json_filter}' $CONTAINER)
-
-# -- Option 2. Get some free ports in current local machine. Needs python.
-# IMPORTANT: Go back to development machine
-FREE_SELE_PORT=$(python -c 'import socket; s=socket.socket(); \
-    s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-FREE_VNC_PORT=$(python -c 'import socket; s=socket.socket(); \
-    s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-# -- Option 2. Tunneling selenium+vnc is necessary if using a remote docker
-ssh ${TUNLOCOPTS} localhost:${FREE_SELE_PORT}:localhost:24444 \
-    -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
-LOC_TUN_SELE_PID=$!
-ssh ${TUNLOCOPTS} localhost:${FREE_VNC_PORT}:localhost:25900 \
-    -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
-LOC_TUN_VNC_PID=$!
-echo $FREE_SELE_PORT $FREE_VNC_PORT
-
-# -- Common: Expose local ports so can be tested as 'localhost'
-# inside the docker container
-ssh ${TUNREVOPTS} localhost:3000:localhost:3000 \
-    -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
-REM_TUN1_PID=$!
-ssh ${TUNREVOPTS} localhost:2525:localhost:2525 \
-    -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
-REM_TUN2_PID=$!
-ssh ${TUNREVOPTS} localhost:4545:localhost:4545 \
-    -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
-REM_TUN3_PID=$!
-ssh ${TUNREVOPTS} localhost:4546:localhost:4546 \
-    -p ${SSHD_PORT} application@${REMOTE_DOCKER_SRV} &
-REM_TUN4_PID=$!
-echo Option 1. Should show 4 ports when doing it locally
-echo Option 2. Should show 6 ports when doing it remotely
-echo $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
-    $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
-# Use the container as if selenium and VNC were running locally
-# thanks to ssh -L port FWD
-google-chrome-stable \
-    "http://localhost:${FREE_SELE_PORT}/wd/hub/static/resource/hub.html"
-vncv localhost:${FREE_VNC_PORT} -Scaling=70% &
-# Stop all the things after your tests are done
-kill $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
-    $REM_TUN4_PID $LOC_TUN_SELE_PID $LOC_TUN_VNC_PID
-# if in Option 2. execute below commands inside docker
-# provider machine `ssh ${REMOTE_DOCKER_SRV}`
-docker stop ${CONTAINER}
-docker rm ${CONTAINER}
-```
-
 ## Step by step build
 
-### 1. Build this image
+### Build this image
+If you git clone this repo locally, i.e. `git clone` it and `cd` into where the Dockerfile is, you can:
 
-If you git clone this repo locally, i.e. cd into where the Dockerfile is, you can:
+    docker build -t selenium .
 
-    docker build -t="elgalu/docker-selenium:local" .
-
-If you prefer to download the final built image from docker you can pull it, personally I always prefer to build them manually except for the base images like Ubuntu 14.04.2:
-
-    docker pull elgalu/selenium
-
-### 2. Use this image
+### Use this image
 
 #### e.g. Spawn a container for Chrome testing:
 
     CH=$(docker run --rm --name=CH -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
-        -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
+        -v /e2e/uploads:/e2e/uploads selenium)
 
 *Note:* `-v /e2e/uploads:/e2e/uploads` is optional in case you are testing browser uploads on your WebApp, you'll probably need to share a directory for this.
 
@@ -464,7 +370,7 @@ In case you have RealVNC binary `vnc` in your path, you can always take a look, 
 This command line is the same as for Chrome, remember that the selenium running container is able to launch either Chrome or Firefox, the idea around having 2 separate containers, one for each browser is for convenience, plus avoid certain `:focus` issues your WebApp may encounter during e2e automation.
 
     FF=$(docker run --rm --name=ff -p=127.0.0.1::24444 -p=127.0.0.1::25900 \
-        -v /e2e/uploads:/e2e/uploads elgalu/docker-selenium:local)
+        -v /e2e/uploads:/e2e/uploads selenium)
 
 #### How to get docker internal IP through logs
 
@@ -476,9 +382,9 @@ This command line is the same as for Chrome, remember that the selenium running 
     docker images
     #=>
 
-    REPOSITORY               TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
-    elgalu/docker-selenium   local               eab41ff50f72        About an hour ago   931.1 MB
-    ubuntu                   14.04.2             d0955f21bf24        4 weeks ago         188.3 MB
+    REPOSITORY  TAG              IMAGE ID      CREATED             SIZE
+    selenium    latest           a13d4195fc1f  About an hour ago   2.927 GB
+    ubuntu      xenial-20160525  2fa927b5cdd3  4 weeks ago         122 MB
 
 ### DNS
 

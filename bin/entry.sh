@@ -39,6 +39,11 @@ export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
 export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
+# {{CONTAINER_IP}} is a place holder for dynamically setting the IP of a node
+if [ "${SELENIUM_NODE_HOST}" = "{{CONTAINER_IP}}" ]; then
+  export SELENIUM_NODE_HOST="${CONTAINER_IP}"
+fi
+
 #----------------------------------------------------------
 # Extend required services depending on what the user needs
 if [ "${VIDEO}" = "true" ]; then
