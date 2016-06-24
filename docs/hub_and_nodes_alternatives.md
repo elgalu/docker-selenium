@@ -13,7 +13,9 @@ Note the same can be achieved without explicitly creating a network by using `--
 
 This is the diagram showing how the setup will look like:
 
-![diagram-selenium-hub-4-nodes](../images/grid_4_nodes_diagram_seleniums.svg)
+#### Diagram
+
+![diagram-selenium-hub-4-nodes](../images/grid_4_nodes_diagram_seleniums.png)
 
 > A bridge network is useful in cases where you want to run a relatively small network on a single host.
 
@@ -96,7 +98,7 @@ This is the final sample grid
 
 This is the docker diagram of that grid
 
-![diagram-selenium-hub-4-nodes](../images/grid_4_nodes_diagram_seleniums.svg)
+![diagram-selenium-hub-4-nodes](../images/grid_4_nodes_diagram_seleniums.png)
 
 ### Cleanup
 

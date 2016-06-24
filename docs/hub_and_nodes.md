@@ -73,9 +73,10 @@ This is the final sample grid
 
 ![docker-selenium-hub-4-nodes](../images/grid_4_nodes_random_ports_localhost.png)
 
+#### Diagram
 This is the docker diagram of that grid
 
-![diagram-selenium-hub-4-nodes](../images/grid_4_nodes_diagram_host.svg)
+![diagram-selenium-hub-4-nodes](../images/grid_4_nodes_diagram_host.png)
 
 ### Cleanup
 
