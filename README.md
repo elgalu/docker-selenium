@@ -31,7 +31,7 @@ Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium)
 * process manager: this image uses [supervisord](http://supervisord.org) while the official [uses bash](https://github.com/SeleniumHQ/docker-selenium/blob/master/StandaloneChromeDebug/entry_point.sh)
 * release flow: TravisCI docker pushes vs docker.com automated builds in the official repo
 
-Even though both projects share the same purpose is good to have alternatives. Letting both projects grow and learn from each other's success or failures ultimately impacts the final users positively. This doesn't discard that at some point all selenium maintainers will sit together a sprint to coordinate some major changes and cleanup open issues and perhaps we might merge both projects again in the future also.
+Even though both projects share the same purpose is good to have alternatives, see also for example [docker-alpine-selenium](https://github.com/SUNx2YCH/docker-alpine-selenium). Letting more than 1 docker-selenium project grow to be able to learn from each other's success or failures ultimately impacts the final users positively. This doesn't discard that at some point all selenium maintainers will sit together a sprint to coordinate some major changes and cleanup open issues and perhaps we might merge N similar projects in the future.
 
 ### Alternatives
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
