@@ -69,17 +69,30 @@ Shutdown gracefully
     docker exec grid stop
     docker stop grid
 
-### Parallel
-This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel on the same container you can still do so by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.0k/Dockerfile#L949) to 1.
+Shutdown immediately, no mercy
 
-        docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
+    docker rm -vf grid
+
+### Docker Compose
+See [docker-compose](./docs/docker-compose.md)
+
+### Parallel
+This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel you can still do, there are some ways to do this:
+
+1. The recommended way is via [docker-compose](./docs/docker-compose.md)
+
+        SELENIUM_HUB_PORT=4444 docker-compose -p selenium scale hub=1 chrome=3 firefox=3
+
+1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
+
+        docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
             -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
             -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
             elgalu/selenium
 
 The drawback is that all tests will run on the same desktop meaning the video recording will only capture the browser in the foreground but it's in the roadmap to make all this transparent, see issues [#78](https://github.com/elgalu/docker-selenium/issues/78) and [#77](https://github.com/elgalu/docker-selenium/issues/77).
 
-Another problem with increasing `MAX_INSTANCES` & `MAX_SESSIONS` is focus issues. So if you don't need video recording you can use the official docker selenium grid to scale up/down via docker-compose, see for example [this blog post](http://carlosbecker.com/posts/selenium-grid-docker-compose)
+Another problem with increasing `MAX_INSTANCES` & `MAX_SESSIONS` is focus issues. So in this case is better scale up/down via [docker-compose](./docs/docker-compose.md).
 
 ### OSX
 If you are in Mac, you need to get the correct IP of the docker machine. One of these two commands should work to get it:

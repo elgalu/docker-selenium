@@ -15,7 +15,9 @@ python:
   - "2.7"
 
 env:
-  - TEST_SLEEPS="0.7"
+  global:
+    - TEST_SLEEPS="0.7"
+    - DOCKER_COMPOSE_VERSION=1.7.1
 
 before_install:
   - travis_retry ./test/before_install_setup

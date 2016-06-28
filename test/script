@@ -7,5 +7,7 @@ set -xe
 ./test/script_bats
 ./test/script_scenario_1
 ./test/script_scenario_2
+./test/script_scenario_3
+./test/script_scenario_4
 ./test/script_archive
 ./test/script_push

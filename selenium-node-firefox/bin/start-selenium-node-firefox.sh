@@ -18,7 +18,7 @@ java ${JAVA_OPTS} \
   -port ${SELENIUM_NODE_FF_PORT} \
   -host ${SELENIUM_NODE_HOST} \
   -role node \
-  -hub http://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register \
+  -hub "${SELENIUM_HUB_PROTO}://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register" \
   -browser "${FIREFOX_BROWSER_CAPS}" \
   -trustAllSSLCertificates \
   -maxSession ${MAX_SESSIONS} \

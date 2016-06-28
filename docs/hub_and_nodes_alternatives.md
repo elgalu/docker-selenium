@@ -1,7 +1,7 @@
 ## Grid
 You can launch a grid only container via environment variables (deprecated) or using docker's first class citizen networking features (preferred).
 *Grid* and *Hub* terms are used interchangeably during this doc.
-Note `docker run --link` option is deprecated, see `These techniques are cumbersome to set up and prone to error` in docker docs.
+Note `docker run --link` option is [deprecated](https://docs.docker.com/compose/link-env-deprecated), see `These techniques are cumbersome to set up and prone to error` in docker docs.
 So let's use some [docker user-defined networks](https://docs.docker.com/engine/userguide/networking/dockernetworks#user-defined-networks)
 
 ## Network

@@ -949,6 +949,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # internal ports since you can map them to the host via `docker run -p`
   SELENIUM_HUB_PORT="${DEFAULT_SELENIUM_HUB_PORT}" \
   # You may want to connect to another hub
+  SELENIUM_HUB_PROTO="http" \
   SELENIUM_HUB_HOST="127.0.0.1" \
   SELENIUM_NODE_HOST="127.0.0.1" \
   SELENIUM_NODE_CH_PORT="${DEFAULT_SELENIUM_NODE_CH_PORT}" \
@@ -995,7 +996,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SUPERVISOR_HTTP_PORT="${DEFAULT_SUPERVISOR_HTTP_PORT}" \
   SUPERVISOR_HTTP_USERNAME="supervisorweb" \
   SUPERVISOR_HTTP_PASSWORD="somehttpbasicauthpwd" \
-  SUPERVISOR_REQUIRED_SRV_LIST="xmanager|xvfb" \
+  SUPERVISOR_REQUIRED_SRV_LIST="xmanager" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST1="ignoreMe" \
   SUPERVISOR_NOT_REQUIRED_SRV_LIST2="ignoreMe" \
   SLEEP_SECS_AFTER_KILLING_SUPERVISORD=3 \
@@ -1163,4 +1164,7 @@ COPY scm-source.json /
 # - there is no default command CMD
 # ENTRYPOINT ["entry.sh"]
 # CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-CMD "entry.sh"
+
+# Using the string form `CMD "entry.sh"` causes Docker to run your process
+# using bash which doesn’t handle signals properly
+CMD ["entry.sh"]

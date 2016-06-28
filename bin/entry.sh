@@ -99,61 +99,115 @@ fi
 exec 3>&1
 
 function get_free_display() {
-  local get_random_disp_num=false
-  local selected_disp_num=${DISP_N}
-  local find_display_num=0
+  local selected_disp_num="-1"
+  local find_display_num=-1
 
-  if [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] && [ "${selected_disp_num}" = "${DEFAULT_DISP_N}" ]; then
-    get_random_disp_num=true
-  fi
+  # Get a list of socket DISPLAYs already used
+  netstat -nlp | grep -Po '(?<=\/tmp\/\.X11-unix\/X)([0-9]+)' | sort -u > /tmp/netstatX11.log
+  #DEBUG: cat /tmp/netstatX11.log 1>&3
 
-  if [ "${selected_disp_num}" = "-1" ] || [ "${get_random_disp_num}" = "true" ]; then
-    selected_disp_num="-1"
-    # Get a list of socket DISPLAYs already used
-    netstat -nlp | grep -Po '(?<=\/tmp\/\.X11-unix\/X)([0-9]+)' | sort -u > /tmp/netstatX11.log
-    #DEBUG: cat /tmp/netstatX11.log 1>&3
-
-    # -s  file is not zero size
-    if [ -s /tmp/netstatX11.log ]; then
-      # important: while loops are executed in a subshell
-      # var assignments will be lost unless using <<<
-      while true ; do
-        let find_display_num=${find_display_num}+1
-        # read -r Do not treat a backslash character in any special way.
-        #         Consider each backslash to be part of the input line.
-        while read read_disp_num ; do
-          if [ "${read_disp_num}" = "${find_display_num}" ]; then
-            echo "-- WARN: DISPLAY=${find_display_num} is taken, searching for another..." 1>&3
-            selected_disp_num="-1"
-            break
-          elif [ "${selected_disp_num}" = "-1" ]; then
-            selected_disp_num="${find_display_num}"
-            echo "-- INFO: Possible free DISPLAY=${find_display_num}" 1>&3
-            # echo "-- DEBUG: Updated selected_disp_num=$selected_disp_num" 1>&3
-            # echo "-- DEBUG: WAS read_disp_num=$read_disp_num" 1>&3
-          fi
-        done <<< "$(cat /tmp/netstatX11.log)"
-        # echo "-- DEBUG: selected_disp_num=$selected_disp_num" 1>&3
-        [ "${selected_disp_num}" != "-1" ] && break
-        # echo "-- DEBUG: find_display_num=$find_display_num" 1>&3
-        if [ ${find_display_num} -gt ${MAX_DISPLAY_SEARCH} ]; then
-          echo "-- ERROR: Entered in an infinite loop at $0 after netstat" 1>&2 1>&3
+  # -s  file is not zero size
+  if [ -s /tmp/netstatX11.log ]; then
+    # important: while loops are executed in a subshell
+    # var assignments will be lost unless using <<<
+    # while true ; do
+    #   let find_display_num=${find_display_num}+1
+    local pythonCmd="from random import shuffle;list1 = list(range($MAX_DISPLAY_SEARCH));shuffle(list1);print (' '.join(str(e) for e in list1))"
+    local displayNums=$(python -c "${pythonCmd}")
+    IFS=' ' read -r -a arrayDispNums <<< "$displayNums"
+    for find_display_num in ${arrayDispNums[@]}; do
+      # read -r Do not treat a backslash character in any special way.
+      #         Consider each backslash to be part of the input line.
+      while read read_disp_num ; do
+        if [ "${read_disp_num}" = "${find_display_num}" ]; then
+          echo "-- WARN: DISPLAY=${find_display_num} is taken, searching for another..." 1>&3
+          selected_disp_num="-1"
           break
+        elif [ "${selected_disp_num}" = "-1" ]; then
+          selected_disp_num="${find_display_num}"
+          echo "-- INFO: Possible free DISPLAY=${find_display_num}" 1>&3
+          # echo "-- DEBUG: Updated selected_disp_num=$selected_disp_num" 1>&3
+          # echo "-- DEBUG: WAS read_disp_num=$read_disp_num" 1>&3
         fi
-      done
-    else
-      echo "-- INFO: Emtpy file /tmp/netstatX11.log" 1>&3
-      selected_disp_num="${DEFAULT_DISP_N}"
-    fi
-    [ "${selected_disp_num}" = "-1" ] || echo "-- INFO: Found free DISPLAY=${selected_disp_num}" 1>&3
+      done <<< "$(cat /tmp/netstatX11.log)"
+      # echo "-- DEBUG: selected_disp_num=$selected_disp_num" 1>&3
+      [ "${selected_disp_num}" != "-1" ] && break
+      # echo "-- DEBUG: find_display_num=$find_display_num" 1>&3
+      if [ ${find_display_num} -gt ${MAX_DISPLAY_SEARCH} ]; then
+        echo "-- ERROR: Entered in an infinite loop at $0 after netstat" 1>&2 1>&3
+        break
+      fi
+    done
+  else
+    echo "-- INFO: Emtpy file /tmp/netstatX11.log" 1>&3
+    selected_disp_num="${DEFAULT_DISP_N}"
   fi
+  [ "${selected_disp_num}" = "-1" ] || echo "-- INFO: Found free DISPLAY=${selected_disp_num}" 1>&3
 
   echo ${selected_disp_num}
 }
 
-export DISP_N=$(get_free_display)
-export DISPLAY=":${DISP_N}"
-export XEPHYR_DISPLAY=":${DISP_N}"
+function start_xvfb() {
+  # Start the X server that can run on machines with no real display
+  # using Xvfb instead of Xdummy
+  echo "-- INFO: Will try to start Xvfb at DISPLAY=${DISPLAY}" 1>&3
+  # if DEBUG = true ...
+  # echo "Will use the following values for Xvfb"
+  # echo "  screen=${SCREEN_NUM} geometry=${GEOMETRY}"
+  # echo "  XVFB_CLI_OPTS_TCP=${XVFB_CLI_OPTS_TCP}"
+  # echo "  XVFB_CLI_OPTS_BASE=${XVFB_CLI_OPTS_BASE}"
+  # echo "  XVFB_CLI_OPTS_EXT=${XVFB_CLI_OPTS_EXT}"
+  Xvfb ${DISPLAY} -screen ${SCREEN_NUM} ${GEOMETRY} \
+    ${XVFB_CLI_OPTS_TCP} ${XVFB_CLI_OPTS_BASE} ${XVFB_CLI_OPTS_EXT} \
+    1> "${LOGS_DIR}/xvfb-tryouts-stdout.log" \
+    2> "${LOGS_DIR}/xvfb-tryouts-stderr.log" &
+  echo "$!" > /tmp/xvfb.pid
+}
+
+if [ ! -z "${XE_DISP_NUM}" ]; then
+  echo "INFO: XE_DISP_NUM '${XE_DISP_NUM}' was provided so switching to that DISPLAY"
+  echo "INFO:   and skipping virtual framebuffer startup in favor of remote."
+  export DISP_N="${XE_DISP_NUM}"
+  export DISPLAY=":${DISP_N}"
+  start_xvfb
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
+  # Find a free DISPLAY port
+  i=0
+  while true ; do
+    let i=${i}+1
+    export DISP_N=$(get_free_display)
+    export DISPLAY=":${DISP_N}"
+    export XEPHYR_DISPLAY=":${DISP_N}"
+    if ! start_xvfb; then
+      echo "-- WARN: start_xvfb() failed!" 1>&3
+    fi
+    if timeout --foreground "1s" wait-xvfb.sh &> "${LOGS_DIR}/wait-xvfb.log"; then
+      break
+    else
+      echo "-- WARN: wait-xvfb.sh failed! for DISPLAY=${DISPLAY}" 1>&3
+    fi
+    if [ ${i} -gt ${MAX_DISPLAY_SEARCH} ]; then
+      echo "-- ERROR: Failed to start Xvfb at $0 after many retries." 1>&2 1>&3
+      break
+    fi
+  done
+else
+  export XEPHYR_DISPLAY=":${DISP_N}"
+  export DISPLAY=":${DISP_N}"
+  start_xvfb
+fi
+
+
+# Validations
+if [ "${SELENIUM_HUB_PORT}" = "" ]; then
+  echo "FATAL: SELENIUM_HUB_PORT is empty but should be a number" 1>&2
+  exit 120
+fi
+
+if [ ":$DISP_N" != "${DISPLAY}" ]; then
+  echo "FATAL: DISP_N '${DISP_N}' doesn't match DISPLAY '${DISPLAY}'" 1>&2
+  exit 122
+fi
 
 # TODO: Remove this duplicated logic
 if [ "${SELENIUM_HUB_PORT}" = "0" ]; then

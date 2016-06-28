@@ -4,6 +4,7 @@
 set -e
 
 docker --version
+docker-compose --version
 
 ./host-scripts/gen-scm-source.sh
 

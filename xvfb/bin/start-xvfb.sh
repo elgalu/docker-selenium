@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# DISABLED! since we always need Xvfb this file will be deprecated
+
+# set -e: exit asap if a command exits with a non-zero status
+set -e
+
+if [ -f /tmp/xvfb.pid ]; then
+  kill $(cat /tmp/xvfb.pid)
+  rm -f /tmp/xvfb.pid
+fi
+
 if [ ! -z "${XE_DISP_NUM}" ]; then
   echo "INFO: XE_DISP_NUM '${XE_DISP_NUM}' was provided so switching to that DISPLAY"
   echo "INFO:   and skipping virtual framebuffer startup in favor of remote."

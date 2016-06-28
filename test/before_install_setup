@@ -3,8 +3,12 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+# Docker
 docker --version || echo "INFO: No docker installed yet"
-
 sudo ./test/before_install_docker
-
 docker --version || (echo "FATAL: No docker installed" && exit 1)
+
+# Docker Compose
+docker-compose --version || echo "INFO: No docker compose installed yet"
+sudo ./test/before_install_docker_compose
+docker-compose --version || (echo "FATAL: No docker compose installed" && exit 1)

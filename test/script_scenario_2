@@ -1,14 +1,25 @@
 #!/usr/bin/env bash
 
 # set -e: exit asap if a command exits with a non-zero status
-set -e
+# set -x: print each command right before it is executed
+set -xe
+
+echo "#============================="
+echo "# Scenario 2a: Normal restart"
+echo "#============================="
+docker restart grid #normal restart
+sleep 3 #to avoid issue #83
+docker exec grid wait_all_done 40s
+docker exec grid errors || true
+docker exec -t grid run_test
+docker logs grid
 
 echo "#=============================================================="
-echo "# Scenario 2: Forced quick container restart + run tests again"
+echo "# Scenario 2b: Forced quick container restart + run tests again"
 echo "#=============================================================="
 docker restart --time=0 grid #forced quick restart
 sleep 3 #to avoid issue #83
 docker exec grid wait_all_done 40s
 docker exec grid errors || true
-docker exec -ti grid run_test
+docker exec -t grid run_test
 docker logs grid

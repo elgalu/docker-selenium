@@ -80,6 +80,8 @@ update_changelog() {
   TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium)
   TBD_DOCKER_VERS=$(docker --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)')
   TBD_DOCKER_BUILD=$(docker --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)')
+  TBD_DOCKER_COMPOSE_VERS=$(docker-compose --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)')
+  TBD_DOCKER_COMPOSE_BUILD=$(docker-compose --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)')
   uname -rm 2>&1 >uname_rm.log || true
   TBD_HOST_UNAME=$(cat uname_rm.log)
   rm -f uname_rm.log
@@ -106,6 +108,8 @@ update_changelog() {
   sed -i -- "s/TBD_IMAGE_SIZE/${TBD_IMAGE_SIZE}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_DOCKER_VERS/${TBD_DOCKER_VERS}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_DOCKER_BUILD/${TBD_DOCKER_BUILD}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_DOCKER_COMPOSE_VERS/${TBD_DOCKER_COMPOSE_VERS}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_DOCKER_COMPOSE_BUILD/${TBD_DOCKER_COMPOSE_BUILD}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_HOST_UNAME/${TBD_HOST_UNAME}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_DATE/${TBD_DATE}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_CHROME_STABLE/${TBD_CHROME_STABLE}/g" CHANGELOG.md || true

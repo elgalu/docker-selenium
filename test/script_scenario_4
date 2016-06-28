@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+echo "#======================================="
+echo "# Scenario 4: Docker Compose many nodes"
+echo "#======================================="
+export NUM_NODES=2 SELENIUM_HUB_PORT="4444" WAIT_TIMEOUT="80s" WAIT_ALL_DONE="90s"
+./test/compose-test.sh

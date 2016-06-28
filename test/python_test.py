@@ -27,9 +27,10 @@ else:
 msleep = float( os.environ.get('TEST_SLEEPS', '0.1') )
 
 # http://selenium-python.readthedocs.org/en/latest/api.html
+sel_proto = os.environ.get('SELENIUM_HUB_PROTO','http')
 sel_host = os.environ.get('SELENIUM_HUB_HOST','localhost')
 sel_port = os.environ.get('SELENIUM_HUB_PORT','4444')
-myselenium_base_url = "http://%s:%s" % (sel_host, sel_port)
+myselenium_base_url = "%s://%s:%s" % (sel_proto, sel_host, sel_port)
 myselenium_grid_console_url = "%s/grid/console" % (myselenium_base_url)
 myselenium_hub_url = "%s/wd/hub" % (myselenium_base_url)
 print ("Will use browser=%s" % args.browser)

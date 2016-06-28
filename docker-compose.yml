@@ -1,0 +1,50 @@
+version: '2'
+services:
+  hub:
+    image: elgalu/selenium
+    network_mode: host
+    environment:
+      - SELENIUM_HUB_PORT
+      - VNC_START=false
+      - PICK_ALL_RANDMON_PORTS=true
+      - GRID=true
+      - CHROME=false
+      - FIREFOX=false
+
+  chrome:
+    image: elgalu/selenium
+    network_mode: host
+    shm_size: 1g
+    environment:
+      - SELENIUM_HUB_PORT
+      - VNC_START=false
+      - PICK_ALL_RANDMON_PORTS=true
+      - GRID=false
+      - CHROME=true
+      - FIREFOX=false
+    depends_on:
+      - hub
+
+  firefox:
+    image: elgalu/selenium
+    network_mode: host
+    environment:
+      - SELENIUM_HUB_PORT
+      - VNC_START=false
+      - PICK_ALL_RANDMON_PORTS=true
+      - GRID=false
+      - CHROME=false
+      - FIREFOX=true
+    depends_on:
+      - hub
+
+#-- Notes --#
+# shm_size: 1g
+#  Fixes small 64 mb /dev/shm inside docker containers
+#   see: https://github.com/docker/compose/blob/1.7.1/compose/config/config.py#L79
+#  Can also be fixed with:
+#   volumes:
+#     - /dev/shm:/dev/shm
+#  Can also be fixed with:
+#   environment:
+#     - SHM_TRY_MOUNT_UNMOUNT=true

@@ -1,15 +1,17 @@
 ## Grid
-Let's setup a grid and all the nodes on the same IP address than the host machine.
+The preferred way now is to use [docker-compose](./docker-compose.md) or keep reading if you don't want to use docker-compose.
 
-For alternatives see [hub_and_nodes_alternatives](./hub_and_nodes_alternatives.md)
+For even morealternatives see [hub_and_nodes_alternatives](./hub_and_nodes_alternatives.md)
 
 ## Hub
-Note flags `-e CHROME=false -e FIREFOX=false` turn the container into a grid-only one.
+Let's setup a grid and all the nodes on the same IP address than the host machine.
+
+Flags `-e CHROME=false -e FIREFOX=false` turn the container into a grid-only one.
 
     docker run -d --name=hub --net=host \
       -e GRID=true -e CHROME=false -e FIREFOX=false \
       -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
-      -e SELENIUM_HUB_PORT=4444 -p 4444:4444 \
+      -e SELENIUM_HUB_PORT=4444 \
       elgalu/selenium
 
     docker exec hub wait_all_done 30s
@@ -41,7 +43,7 @@ Chrome will also attach to the `host` network interface.
       elgalu/selenium
 
 ### Firefox
-Firefox will also attach to the `seleniums` network interface.
+Firefox will also attach to the host machine network interface.
 
     docker run -d --name=node3_ff --net=host \
       -e GRID=false -e CHROME=false -e FIREFOX=true \
@@ -81,4 +83,3 @@ This is the docker diagram of that grid
 ### Cleanup
 
     docker rm -vf hub node1_ch node2_ch node3_ff node4_ff || true
-    docker network rm seleniums || true
