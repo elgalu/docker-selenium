@@ -7,5 +7,6 @@ set -xe
 echo "#======================================="
 echo "# Scenario 4: Docker Compose many nodes"
 echo "#======================================="
-export NUM_NODES=2 SELENIUM_HUB_PORT="4444" WAIT_TIMEOUT="80s" WAIT_ALL_DONE="90s"
+export NUM_NODES=5 PARAL_TESTS=5 SELENIUM_HUB_PORT="4444" \
+       WAIT_TIMEOUT="80s" WAIT_ALL_DONE="90s"
 ./test/compose-test.sh

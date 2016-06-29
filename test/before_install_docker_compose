@@ -1,13 +1,29 @@
 #!/usr/bin/env bash
 
 # set -e: exit asap if a command exits with a non-zero status
-set -e
+# set -x: print each command right before it is executed
+set -xe
+
+# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
+echoerr() {
+  cat <<< "$@" 1>&2;
+}
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "160"
+  errnum=${2-160}
+  exit $errnum
+}
+
+# Required params
+[ -z "${DOCKER_COMPOSE_VERSION}" ] && die "Required env var DOCKER_COMPOSE_VERSION"
 
 # Install docker compose
 #  https://docs.travis-ci.com/user/docker/#Using-Docker-Compose
-sudo rm -f /usr/local/bin/docker-compose
+rm -f /usr/local/bin/docker-compose
 curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
 chmod +x docker-compose
-sudo mv docker-compose /usr/local/bin
-
+mv docker-compose /usr/local/bin
 docker-compose --version

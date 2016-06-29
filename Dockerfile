@@ -725,7 +725,7 @@ USER ${NORMAL_USER}
 # Selenium
 #==========
 ENV SEL_MAJOR_MINOR_VER 2.53
-ENV SEL_PATCH_LEVEL_VER 0
+ENV SEL_PATCH_LEVEL_VER 1
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \

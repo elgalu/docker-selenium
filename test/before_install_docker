@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # set -e: exit asap if a command exits with a non-zero status
-set -e
+# set -x: print each command right before it is executed
+set -xe
 
 # cleanup
 service docker stop || true

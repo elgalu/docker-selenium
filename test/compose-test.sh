@@ -46,9 +46,9 @@ done
 set -e +x
 
 # http://jeremy.zawodny.com/blog/archives/010717.html
-FAIL=0
+FAIL_COUNT=0
 for job in `jobs -p`; do
-  wait $job || let "FAIL+=1"
+  wait $job || let "FAIL_COUNT+=1"
 done
 
 # Show logs also
@@ -62,8 +62,8 @@ done
 docker-compose down
 
 # Results
-if [ "$FAIL" == "0" ]; then
-  echo "Awesome! $FAIL tests failed"
+if [ "$FAIL_COUNT" == "0" ]; then
+  echo "Awesome! $PARAL_TESTS tests succeeded and $FAIL_COUNT tests failed"
 else
-  die "In total $FAIL tests failed"
+  die "In total $FAIL_COUNT tests failed"
 fi

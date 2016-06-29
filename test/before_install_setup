@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
 # set -e: exit asap if a command exits with a non-zero status
-set -e
+# set -x: print each command right before it is executed
+set -xe
 
 # Docker
 docker --version || echo "INFO: No docker installed yet"
-sudo ./test/before_install_docker
+sudo -E bash -c './test/before_install_docker'
 docker --version || (echo "FATAL: No docker installed" && exit 1)
 
 # Docker Compose
 docker-compose --version || echo "INFO: No docker compose installed yet"
-sudo ./test/before_install_docker_compose
+sudo -E bash -c './test/before_install_docker_compose'
 docker-compose --version || (echo "FATAL: No docker compose installed" && exit 1)
+
+# Notes:
+#  sudo -E or --preserve-env will preserve travis env vars like DOCKER_COMPOSE_VERSION
