@@ -680,7 +680,7 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="46.0.1" \
+ENV FF_VER="47.0.1" \
     FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \

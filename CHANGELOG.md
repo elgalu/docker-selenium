@@ -9,6 +9,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
+ + Upgrade Firefox patch to 47.0.1
  + Add docker-compose support
  + Fix signaling issue by replacing `CMD "entry.sh"` with `CMD ["entry.sh"]`
  + Image tag details:
