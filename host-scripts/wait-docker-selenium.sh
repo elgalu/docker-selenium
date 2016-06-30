@@ -47,7 +47,7 @@ else
     bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/cont/*' || true
   echo "" && echo "" && echo "==> errors <=="
   docker exec ${CONTAINER_ID} \
-    bash -c 'selenium-grep.sh' || true
+    bash -c 'errors' || true
 
   die "
    Your docker-selenium didn't start properly.

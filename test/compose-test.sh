@@ -21,34 +21,58 @@ die () {
 [ -z "${NUM_NODES}" ] && die "Required env var NUM_NODES"
 [ -z "${PARAL_TESTS}" ] && die "Required env var PARAL_TESTS"
 [ -z "${SELENIUM_HUB_PORT}" ] && die "Required env var SELENIUM_HUB_PORT"
-[ -z "${WAIT_TIMEOUT}" ] && export WAIT_TIMEOUT="15s"
 [ -z "${WAIT_ALL_DONE}" ] && export WAIT_ALL_DONE="40s"
 
 # Compose up!
 docker-compose -p selenium scale hub=1 chrome=${NUM_NODES} firefox=${NUM_NODES}
 
+# FIXME: We still need to wait a bit because the nodes registration is not
+#        being waited on wait_all_done script :(
+#        mabe related to issue #83
+sleep 3
+[ "${TRAVIS}" = "true" ] && sleep 3
+
 # Wait then show errors, if any
-docker exec selenium_hub_1 wait_all_done ${WAIT_ALL_DONE}
-docker exec selenium_hub_1 errors || true
+if ! docker exec selenium_hub_1 wait_all_done ${WAIT_ALL_DONE}; then
+  docker exec selenium_hub_1 errors || true
+  docker-compose -p selenium logs hub
+  die "Failed to start the Hub"
+fi
+
 for i in $(seq 1 ${NUM_NODES}); do
-  docker exec selenium_chrome_${NUM_NODES} wait_all_done ${WAIT_ALL_DONE}
-  docker exec selenium_chrome_${i} errors || true
-  docker exec selenium_firefox_${NUM_NODES} wait_all_done ${WAIT_ALL_DONE}
-  docker exec selenium_firefox_${i} errors || true
+  if ! docker-compose -p selenium exec --index ${i} chrome wait_all_done ${WAIT_ALL_DONE}; then
+    docker logs selenium_chrome_${i}
+    docker-compose -p selenium exec --index ${i} chrome errors || true
+    die "Failed to start Node chrome ${i}"
+  fi
+  if ! docker-compose -p selenium exec --index ${i} firefox wait_all_done ${WAIT_ALL_DONE}; then
+    docker logs selenium_firefox_${i}
+    docker-compose -p selenium exec --index ${i} firefox errors || true
+    die "Failed to start Node firefox ${i}"
+  fi
 done
 
 # FIXME: We still need to wait a bit because the nodes registration is not
 #        being waited on wait_all_done script :(
 #        mabe related to issue #83
-sleep 5
+sleep 4
+[ "${TRAVIS}" = "true" ] && sleep 4
 
 # Tests can run anywere, in the hub, in the host, doesn't matter
 for i in $(seq 1 ${PARAL_TESTS}); do
+  # Docker-ompose exec is giving me error:
+  #  in dockerpty/io.py", line 42, in set_blocking
+  #  ValueError: file descriptor cannot be a negative integer (-1)
+  # docker-compose -p selenium exec --index 1 hub run_test &
   docker exec -t selenium_hub_1 run_test &
 done
 
+# sleep a moment to let the UI tests start
+sleep 4
+[ "${TRAVIS}" = "true" ] && sleep 4
+
 # not so verbose from here
-set -e +x
+set +x
 
 # http://jeremy.zawodny.com/blog/archives/010717.html
 FAIL_COUNT=0

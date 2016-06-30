@@ -28,8 +28,7 @@ if [ ! -f "${LOOP_SCRIPT_PATH}" ]; then
 fi
 
 # Avoid waiting forever using the `timeout` command
-if timeout --foreground ${WAIT_TIMEOUT} \
-     ${LOOP_SCRIPT_PATH}; then
+if timeout --foreground ${WAIT_TIMEOUT} ${LOOP_SCRIPT_PATH}; then
   echo ""
   if [ -f /var/log/cont/vnc-stdout.log ]; then
     grep 'password' /var/log/cont/vnc-stdout.log || true
@@ -40,7 +39,7 @@ if timeout --foreground ${WAIT_TIMEOUT} \
 else
   bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/cont/*' || true
   echo "" && echo "" && echo "==> errors <=="
-  bash -c 'selenium-grep.sh' || true
+  bash -c 'errors' || true
 
   die "
    Your docker-selenium didn't start properly.

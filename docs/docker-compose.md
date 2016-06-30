@@ -4,7 +4,7 @@ Scale up and down the nodes by using [docker-compose](https://docs.docker.com/co
     docker-compose --version #=> version 1.7.1, build 0a9ab35
 
 ## Usage
-Either clone this repository or download the files [docker-compose.yml](../docker-compose.yml) using `wget`
+Either clone this repository or download the file [docker-compose.yml](../docker-compose.yml) using `wget`
 
     wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml"
 
@@ -15,9 +15,9 @@ Either start with `docker-compose up` and `scale` later or scale directly and ru
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
-    docker exec selenium_firefox_5 wait_all_done 30s
+    docker-compose -p selenium exec -T --index=3 chrome wait_all_done 30s
 
 ### Cleanup
 The `down` compose command stops and remove containers, networks, volumes, and images created by `up` or `scale`
 
-    docker-compose down
+    docker-compose -p selenium down

@@ -3,9 +3,13 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+# Open new file descriptors that redirects to stderr/stdout
+exec 3>&1
+exec 4>&2
+
 # echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
 echoerr() {
-  cat <<< "$@" 1>&2;
+  cat <<< "$@" 1>&4;
 }
 
 # print error and exit
@@ -19,12 +23,39 @@ die () {
 # Wait for this process dependencies
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 
+function start_fluxbox() {
+  fluxbox -display ${DISPLAY} -verbose \
+    1> "${LOGS_DIR}/fluxbox-tryouts-stdout.log" \
+    2> "${LOGS_DIR}/fluxbox-tryouts-stderr.log" &
+}
+
 if [ "${XMANAGER}" = "openbox" ]; then
   # Openbox is a lightweight window manager using freedesktop standards
   exec openbox-session
 elif [ "${XMANAGER}" = "fluxbox" ]; then
   # Fluxbox is a fast, lightweight and responsive window manager
-  exec fluxbox -display ${DISPLAY}
+  i=0
+  stat_failed=true
+  while true ; do
+    let i=${i}+1
+    if ! start_fluxbox; then
+      echo "-- WARN: start_fluxbox() failed!" 1>&3
+    fi
+    timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
+    if timeout --foreground "${WAIT_FOREGROUND_RETRY}" wait-xmanager.sh &> "${LOGS_DIR}/wait-xmanager-stdout.log"; then
+      stat_failed=false
+      break
+    else
+      echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}" 1>&3
+      killall fluxbox || true
+    fi
+    if [ ${i} -gt 10 ]; then
+      echoerr "-- ERROR: Failed to start Fluxbox at $0 after many retries."
+      break
+    fi
+  done
+  [ "${stat_failed}" = "true" ] && die "Failed to start_fluxbox()."
+  wait
 else
   die "The chosen X manager is not supported: '${XMANAGER}'"
 fi

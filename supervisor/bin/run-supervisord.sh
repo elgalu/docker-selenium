@@ -28,12 +28,12 @@ shutdown () {
   if [ "$(cat ${DOCKER_SELENIUM_STATUS})" = "failed" ]; then
     tail --lines=${TAIL_LOG_LINES} /var/log/cont/*
     echo "" && echo "" && echo "==> errors <=="
-    selenium-grep.sh
+    errors
 
     if [ "${DISABLE_ROLLBACK}" = "true" ]; then
       echo ""
       echo "DEBUGGING: to find out what happened please analyze logs or run"
-      echo "  selenium-grep.sh"
+      echo "  errors"
       echo ""
 
       exec bash

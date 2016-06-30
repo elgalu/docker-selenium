@@ -36,7 +36,7 @@ if timeout --foreground ${WAIT_TIMEOUT} \
 else
   bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/cont/video-rec/*' || true
   echo "" && echo "" && echo "==> errors <=="
-  bash -c 'selenium-grep.sh' || true
+  bash -c 'errors' || true
 
   die "Were unable to stop video recording within '${WAIT_TIMEOUT}'"
 fi

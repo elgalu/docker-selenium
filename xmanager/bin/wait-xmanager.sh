@@ -20,9 +20,15 @@ die () {
 [ -z "${XMANAGER}" ] && die "Need env var set \$XMANAGER"
 
 # It happens that the process name of the X manager is the same as
-# the $XMANAGER variable so this just works `ps -A | grep "${XMANAGER}"`
+#  the $XMANAGER variable so this just works `ps -A | grep "${XMANAGER}"`
 echo "Waiting for X Manager '${XMANAGER}' to be ready..."
 while ! ps -A | grep "${XMANAGER}" > /dev/null 2>&1; do
+  echo -n '.'
+  sleep 0.1
+done
+
+# Found a way to wait for an X Manager
+while ! xsetroot -cursor_name left_ptr -fg white -bg black > /dev/null 2>&1; do
   echo -n '.'
   sleep 0.1
 done

@@ -933,14 +933,16 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   BIN_UTILS="/usr/bin" \
   # JVM uses only 1/4 of system memory by default
   MEM_JAVA_PERCENT=80 \
+  # Max amount of time to wait on Xvfb or Xmanager while retrying
+  WAIT_FOREGROUND_RETRY="1s" \
   # Max amount of time to wait for other processes dependencies
-  WAIT_TIMEOUT="15s" \
+  WAIT_TIMEOUT="25s" \
   SCREEN_WIDTH=1900 \
   SCREEN_HEIGHT=1480 \
   SCREEN_MAIN_DEPTH=24 \
   SCREEN_SUB_DEPTH=32 \
   # Display number; see entry.sh for $DISPLAY
-  DISP_N="${DEFAULT_DISP_N}" \
+  DISP_N="-1" \
   # Maximum searches for a free DISPLAY number
   MAX_DISPLAY_SEARCH=99 \
   SCREEN_NUM=0 \
@@ -1112,8 +1114,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
 #================
 ADD bin/* ${BIN_UTILS}/
 ADD **/bin/* ${BIN_UTILS}/
-ADD utils/bin/selenium-grep.sh /usr/bin/errors
-ADD xterm/bin/timeout-wait-xterm.sh /usr/bin/wait_all_done
 ADD host-scripts/* /host-scripts/
 ADD test/* /test/
 ADD test/run_test.sh /usr/bin/run_test

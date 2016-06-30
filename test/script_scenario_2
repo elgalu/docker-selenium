@@ -4,22 +4,30 @@
 # set -x: print each command right before it is executed
 set -xe
 
+SLEEP_RACE_COND_SECS=2
+WAIT_ALL_DONE="40s"
+
+if [ "${TRAVIS}" = "true" ]; then
+  SLEEP_RACE_COND_SECS=7 #to avoid issue #83
+  WAIT_ALL_DONE="200s"
+fi
+
 echo "#============================="
 echo "# Scenario 2a: Normal restart"
 echo "#============================="
 docker restart grid #normal restart
-sleep 3 #to avoid issue #83
-docker exec grid wait_all_done 40s
+sleep ${SLEEP_RACE_COND_SECS}
+docker exec grid wait_all_done ${WAIT_ALL_DONE}
+docker logs grid
 docker exec grid errors || true
 docker exec -t grid run_test
-docker logs grid
 
 echo "#=============================================================="
 echo "# Scenario 2b: Forced quick container restart + run tests again"
 echo "#=============================================================="
 docker restart --time=0 grid #forced quick restart
-sleep 7 #to avoid issue #83
-docker exec grid wait_all_done 80s
+sleep ${SLEEP_RACE_COND_SECS}
+docker exec grid wait_all_done ${WAIT_ALL_DONE}
+docker logs grid
 docker exec grid errors || true
 docker exec -t grid run_test
-docker logs grid
