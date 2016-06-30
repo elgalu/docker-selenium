@@ -3,9 +3,9 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:xenial-20160525
+FROM ubuntu:xenial-20160629
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20160525"
+    UBUNTU_DATE="20160629"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208

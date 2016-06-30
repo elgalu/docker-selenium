@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Selenium 2.53.1 & Firefox 47.0.1 #102 & docker-compose #108"
+    git commit -m "Selenium 2.53.1 & Firefox 47.0.1 #102 & docker-compose #108 & Upgrade ubuntu 20160629"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1a && git push origin tmp-2.53.1a && git push --tags
 

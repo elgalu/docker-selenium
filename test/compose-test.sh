@@ -37,9 +37,14 @@ for i in $(seq 1 ${NUM_NODES}); do
   docker exec selenium_firefox_${i} errors || true
 done
 
+# FIXME: We still need to wait a bit because the nodes registration is not
+#        being waited on wait_all_done script :(
+#        mabe related to issue #83
+sleep 5
+
 # Tests can run anywere, in the hub, in the host, doesn't matter
 for i in $(seq 1 ${PARAL_TESTS}); do
-  docker exec -t selenium_chrome_${i} run_test &
+  docker exec -t selenium_hub_1 run_test &
 done
 
 # not so verbose from here

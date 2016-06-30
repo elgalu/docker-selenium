@@ -12,6 +12,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Selenium to 2.53.1
  + Upgrade Firefox patch to 47.0.1
  + Add docker-compose support
+ + Upgrade Ubuntu xenial date to 20160629
  + Fix signaling issue by replacing `CMD "entry.sh"` with `CMD ["entry.sh"]`
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
@@ -24,7 +25,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Python: TBD_PYTHON_VERSION
   + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
   + BrowserStack Local version TBD_BROWSER_STACK_VERSION
-  + Tested on kernel dev host: 4.4.0-28-generic x86_64
+  + Tested on kernel dev host: 4.4.0-29-generic x86_64
   + Tested on kernel CI  host: TBD_HOST_UNAME
   + Built at dev host with: Docker version 1.11.2, build b9f10c9
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD

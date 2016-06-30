@@ -114,6 +114,8 @@ function get_free_display() {
     #   let find_display_num=${find_display_num}+1
     local pythonCmd="from random import shuffle;list1 = list(range($MAX_DISPLAY_SEARCH));shuffle(list1);print (' '.join(str(e) for e in list1))"
     local displayNums=$(python -c "${pythonCmd}")
+    # Always find a free DISPLAY port starting with current DISP_N if it was provided
+    [ "${DISP_N}" != "-1" ] && displayNums=" ${DISP_N} ${displayNums}"
     IFS=' ' read -r -a arrayDispNums <<< "$displayNums"
     for find_display_num in ${arrayDispNums[@]}; do
       # read -r Do not treat a backslash character in any special way.
@@ -170,8 +172,9 @@ if [ ! -z "${XE_DISP_NUM}" ]; then
   export DISP_N="${XE_DISP_NUM}"
   export DISPLAY=":${DISP_N}"
   start_xvfb
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
-  # Find a free DISPLAY port
+# elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
+else
+  # Find a free DISPLAY port starting with current DISP_N if any
   i=0
   while true ; do
     let i=${i}+1
@@ -191,10 +194,10 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
       break
     fi
   done
-else
-  export XEPHYR_DISPLAY=":${DISP_N}"
-  export DISPLAY=":${DISP_N}"
-  start_xvfb
+# else
+#   export XEPHYR_DISPLAY=":${DISP_N}"
+#   export DISPLAY=":${DISP_N}"
+#   start_xvfb
 fi
 
 
