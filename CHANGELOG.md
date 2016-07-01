@@ -7,29 +7,29 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 2.53.1b
+ + Date: 2016-07-01
  + Fix race conditions while using many nodes with docker-compose
  + Image tag details:
-  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox stable: TBD_FIREFOX_STABLE
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Selenium: v2.53.1 (a36b8b1)
+  + Chrome stable:  51.0.2704.106
+  + Firefox stable: 47.0.1
+  + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
+  + Java: Oracle Java 9-ea+123
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20160629
+  + Python: 2.7.11
+  + Sauce Connect 4.3.16, build 2396 39e807b
+  + BrowserStack Local version 5.6
   + Tested on kernel dev host: 4.4.0-29-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 3.19.0-30-generic x86_64
   + Built at dev host with: Docker version 1.11.2, build b9f10c9
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.11.2, build b9f10c9
   + Built at dev host with: Docker Compose version 1.7.1, build 0a9ab35
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.7.1, build 0a9ab35
+  + Image size: 2.883 GB
+  + Digest: sha256:e25853bfbd857bf351ba168bc5b7b28300326e88caad0529a21b345d79593bc4
+  + Image ID: sha256:9e666b7765d47a3caec538f5bcec90455cbabf41271a1d202f18ec225ac76717
 
 ## 2.53.1a
  + Date: 2016-06-30
