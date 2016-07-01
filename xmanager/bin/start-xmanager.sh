@@ -23,8 +23,17 @@ die () {
 # Wait for this process dependencies
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 
+function shutdown {
+  echo "Trapped SIGTERM/SIGINT so shutting down $0 gracefully..."
+  exit 0
+}
+
+# Run function shutdown() when this process a killer signal
+trap shutdown SIGTERM SIGINT SIGKILL
+
 function start_fluxbox() {
-  fluxbox -display ${DISPLAY} -verbose \
+  # http://stackoverflow.com/a/21028200/511069
+  fluxbox -display "${DISPLAY}.0" -verbose \
     1> "${LOGS_DIR}/fluxbox-tryouts-stdout.log" \
     2> "${LOGS_DIR}/fluxbox-tryouts-stderr.log" &
 }
@@ -37,25 +46,26 @@ elif [ "${XMANAGER}" = "fluxbox" ]; then
   i=0
   stat_failed=true
   while true ; do
-    let i=${i}+1
-    if ! start_fluxbox; then
-      echo "-- WARN: start_fluxbox() failed!" 1>&3
-    fi
-    timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
-    if timeout --foreground "${WAIT_FOREGROUND_RETRY}" wait-xmanager.sh &> "${LOGS_DIR}/wait-xmanager-stdout.log"; then
-      stat_failed=false
-      break
-    else
-      echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}" 1>&3
-      killall fluxbox || true
-    fi
-    if [ ${i} -gt 10 ]; then
-      echoerr "-- ERROR: Failed to start Fluxbox at $0 after many retries."
-      break
-    fi
+    while true ; do
+      let i=${i}+1
+      if ! start_fluxbox; then
+        echo "-- WARN: start_fluxbox() failed!" 1>&3
+      fi
+      if timeout --foreground "${WAIT_FOREGROUND_RETRY}" wait-xmanager.sh &> "${LOGS_DIR}/wait-xmanager-stdout.log"; then
+        stat_failed=false
+        break
+      else
+        echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}" 1>&3
+        killall fluxbox || true
+      fi
+      if [ ${i} -gt 3 ]; then
+        echoerr "-- ERROR: Failed to start Fluxbox at $0 after many retries."
+        break
+      fi
+    done
+    [ "${stat_failed}" != "true" ] && wait
+    stat_failed=true
   done
-  [ "${stat_failed}" = "true" ] && die "Failed to start_fluxbox()."
-  wait
 else
   die "The chosen X manager is not supported: '${XMANAGER}'"
 fi

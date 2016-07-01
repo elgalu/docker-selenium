@@ -3,24 +3,24 @@
 ## Local
 For pull requests or local commits:
 
-    docker rm -vf grid; ./test/before_install_build && ./test/install && ./test/script && docker tag selenium:latest elgalu/selenium:latest
+    ./test/before_install_build && ./test/install && ./test/script && docker tag selenium:latest elgalu/selenium:latest
     docker exec grid versions && ./test/after_script
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.1a #name your branch according to your changes
+    git checkout -b tmp-2.53.1b #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Selenium 2.53.1 & Firefox 47.0.1 #102 & docker-compose #108 & Upgrade ubuntu 20160629"
+    git commit -m "Fix race conditions while using many nodes with docker-compose"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.1a && git push origin tmp-2.53.1a && git push --tags
+    git tag 2.53.1b && git push origin tmp-2.53.1b && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.1a && git push origin --delete tmp-2.53.1a
+    git checkout master && git pull && git branch -d tmp-2.53.1b && git push origin --delete tmp-2.53.1b
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- Upgrade release tag in github.com with latest CHANGELOG.md
@@ -37,9 +37,9 @@ Keep certain bins if chrome version changed for example:
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.1a && git push origin :2.53.1a
+    git tag -d 2.53.1b && git push origin :2.53.1b
     #git add ...
-    git commit --amend && git tag 2.53.1a && git push --force origin tmp-2.53.1a && git push --tags
+    git commit --amend && git tag 2.53.1b && git push --force origin tmp-2.53.1b && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

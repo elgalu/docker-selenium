@@ -3,6 +3,9 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+# Ensure clean env
+docker rm -vf grid || true
+
 docker run --name=grid -d -e VIDEO=true -v /dev/shm:/dev/shm selenium
 docker exec grid wait_all_done 40s
 docker exec grid versions

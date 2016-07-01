@@ -911,8 +911,8 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
     DEFAULT_NOVNC_PORT="26080" \
     DEFAULT_SSHD_PORT="22222" \
     DEFAULT_SAUCE_LOCAL_SEL_PORT="4445" \
-    DEFAULT_SUPERVISOR_HTTP_PORT="29001" \
-    DEFAULT_DISP_N="10"
+    DEFAULT_SUPERVISOR_HTTP_PORT="29001"
+    # DEFAULT_DISP_N="10"
 
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
@@ -935,6 +935,10 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   MEM_JAVA_PERCENT=80 \
   # Max amount of time to wait on Xvfb or Xmanager while retrying
   WAIT_FOREGROUND_RETRY="1s" \
+  # Supervisor processes retry attemps (0 means do not retry)
+  XVFB_STARTRETRIES=0 \
+  XMANAGER_STARTRETRIES=0 \
+  XMANAGER_STARTSECS=0 \
   # Max amount of time to wait for other processes dependencies
   WAIT_TIMEOUT="25s" \
   SCREEN_WIDTH=1900 \
@@ -1043,6 +1047,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VIDEO_CHUNKS_MAX=999 \
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
   # You can choose what X manager to use
+  #  fluxbox | openbox
   XMANAGER="fluxbox" \
   # Sauce Labs tunneling. Naming is required: SAUCE_TUNNEL_ID
   SAUCE_TUNNEL="false" \

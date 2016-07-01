@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
+# Open new file descriptors that redirects to stderr/stdout
+exec 3>&1
+exec 4>&2
+
 # echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
 echoerr() {
-  cat <<< "$@" 1>&2;
+  cat <<< "$@" 1>&4;
 }
 
 # print error and exit
@@ -25,6 +29,9 @@ shutdown () {
   kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
   die "Some processes failed to start so quitting."
 }
+
+# clean status file
+echo "" > ${DOCKER_SELENIUM_STATUS}
 
 # timeout runs the given command and kills it if it is still running
 # after the specified time interval:
@@ -79,5 +86,6 @@ x-terminal-emulator -ls  \
 # Join them in 1 bash line to avoid supervisor split them in debug output
 # this output is used to signal docker-selenium is ready for testing
 echo -e "\nContainer docker internal IP: $CONTAINER_IP\n"
+echo -e "\nContainer docker internal IP: $CONTAINER_IP\n" 1>&3
 
 wait
