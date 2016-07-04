@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+# cleanup
+service docker stop || true
+rm -f /etc/apt/sources.list.d/docker.list
+apt-get -qqy purge lxc-docker || true
+apt-get -qqy purge docker-engine || true
+/etc/init.d/apparmor stop || true
+rm -rf /var/lib/docker /dev/mapper/docker* /usr/bin/docker /run/docker /etc/docker
+rm -rf /etc/apt/sources.list.d/docker* /etc/default/docker /etc/init.d/docker /etc/apparmor.d/cache/docker
+rm -rf /etc/apparmor.d/docker /etc/bash_completion.d/docker /var/log/upstart/docker*
+rm -rf /var/lib/apt/lists/*docker* /var/lib/dpkg/info/*docker* /dev/disk/by-id/*docker*
+rm -rf /var/cache/apt/archives/docker*
+
+# install
+CODE_NAME=$(lsb_release -sc) #e.g. trusty
+[ "${CODE_NAME}" == "" ] && CODE_NAME=trusty
+echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list
+# sed -i.bak '/docker/d' /etc/apt/sources.list.d/docker.list
+apt-get -qqy update
+apt-get -qqy install apt-transport-https ca-certificates
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+apt-cache policy docker-engine || true
+apt-get -qqy install linux-image-extra-$(uname -r)
+apt-get -qqy install apparmor
+/etc/init.d/apparmor start || true
+export DEBCONF_NONINTERACTIVE_SEEN=true
+apt-get -qqy install docker-engine
+service docker start || true
+
+docker --version

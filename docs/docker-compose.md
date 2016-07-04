@@ -10,7 +10,7 @@ Either clone this repository or download the file [docker-compose.yml](../docker
     wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml"
 
 ### Run
-Either start with `docker-compose up` and `scale` later or scale directly and run in daemon mode:
+Either start with `docker-compose ... scale` as shown in below example or you can also use `docker-compose up` and scale after in a second command.
 
     SELENIUM_HUB_PORT=4444 docker-compose -p selenium scale hub=1 chrome=3 firefox=3
 

@@ -26,7 +26,8 @@ java ${JAVA_OPTS} \
   -browserTimeout ${SEL_BROWSER_TIMEOUT_SECS} \
   -cleanUpCycle ${SEL_CLEANUPCYCLE_MS} \
   -nodePolling ${SEL_NODEPOLLING_MS} \
-  ${SELENIUM_NODE_PARAMS}
+  ${SELENIUM_NODE_PARAMS} \
+  ${CUSTOM_SELENIUM_NODE_PROXY_PARAMS}
 
 # Note to double pipe output and keep this process logs add at the end:
 #  2>&1 | tee $SELENIUM_LOG
