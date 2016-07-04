@@ -1,7 +1,8 @@
 # Compose
-Scale up and down the nodes by using [docker-compose](https://docs.docker.com/compose/). Install the tooling by following that link.
+Scale up and down the nodes by using [docker-compose](https://docs.docker.com/compose/). Install the tooling by following that link and make sure you have latest stable versions of both tools, docker and docker-compose:
 
-    docker-compose --version #=> version 1.7.1, build 0a9ab35
+    docker --version         #=> 1.11.2
+    docker-compose --version #=> 1.7.1
 
 ## Usage
 Either clone this repository or download the file [docker-compose.yml](../docker-compose.yml) using `wget`

@@ -7,5 +7,13 @@ set -xe
 echo "#======================================================="
 echo "# Scenario 3: Docker Compose 1 hub, 1 chrome, 1 firefox"
 echo "#======================================================="
-export NUM_NODES=1 PARAL_TESTS=1 SELENIUM_HUB_PORT="4444"
+export SELENIUM_HUB_PORT="4444" NUM_NODES=1 PARAL_TESTS=1
+
+if [ "${TRAVIS}" = "true" ]; then
+  export SLEEP_TIME=7
+else
+  # My local laptop has more power so hit it harder
+  export SLEEP_TIME=0
+fi
+
 ./test/compose-test.sh

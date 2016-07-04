@@ -3,7 +3,7 @@
 ## Local
 For pull requests or local commits:
 
-    ./test/before_install_build && ./test/install && ./test/script && docker tag selenium:latest elgalu/selenium:latest
+    ./test/before_install_build && ./test/install && ./test/script
     docker exec grid versions && ./test/after_script
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv

@@ -23,9 +23,6 @@ die () {
 [ -z "${SELENIUM_HUB_PORT}" ] && die "Required env var SELENIUM_HUB_PORT"
 [ -z "${WAIT_ALL_DONE}" ] && export WAIT_ALL_DONE="40s"
 
-SLEEP_LOCALLY=0
-SLEEP_TRAVIS=3
-
 # Ensure clean
 docker-compose -p selenium down || true
 
@@ -35,8 +32,7 @@ docker-compose -p selenium scale hub=1 chrome=${NUM_NODES} firefox=${NUM_NODES}
 # FIXME: We still need to wait a bit because the nodes registration is not
 #        being waited on wait_all_done script :(
 #        mabe related to issue #83
-sleep ${SLEEP_LOCALLY}
-[ "${TRAVIS}" = "true" ] && sleep ${SLEEP_TRAVIS}
+sleep ${SLEEP_TIME}
 
 # Wait then show errors, if any
 if ! docker exec selenium_hub_1 wait_all_done ${WAIT_ALL_DONE}; then
@@ -61,8 +57,7 @@ done
 # FIXME: We still need to wait a bit because the nodes registration is not
 #        being waited on wait_all_done script :(
 #        mabe related to issue #83
-sleep ${SLEEP_LOCALLY}
-[ "${TRAVIS}" = "true" ] && sleep ${SLEEP_TRAVIS}
+sleep ${SLEEP_TIME}
 
 # Tests can run anywere, in the hub, in the host, doesn't matter
 for i in $(seq 1 ${PARAL_TESTS}); do
@@ -74,8 +69,7 @@ for i in $(seq 1 ${PARAL_TESTS}); do
 done
 
 # sleep a moment to let the UI tests start
-sleep ${SLEEP_LOCALLY}
-[ "${TRAVIS}" = "true" ] && sleep ${SLEEP_TRAVIS}
+sleep ${SLEEP_TIME}
 
 # not so verbose from here
 set +x
