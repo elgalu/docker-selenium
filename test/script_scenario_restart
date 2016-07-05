@@ -12,9 +12,9 @@ if [ "${TRAVIS}" = "true" ]; then
   WAIT_ALL_DONE="200s"
 fi
 
-echo "#============================="
-echo "# Scenario 2a: Normal restart"
-echo "#============================="
+echo "#======================================"
+echo "# Scenario 2a [restart]: Normal restart"
+echo "#======================================"
 docker restart grid #normal restart
 sleep ${SLEEP_RACE_COND_SECS}
 docker exec grid wait_all_done ${WAIT_ALL_DONE}
@@ -22,9 +22,9 @@ docker logs grid
 docker exec grid errors || true
 docker exec -t grid run_test
 
-echo "#=============================================================="
-echo "# Scenario 2b: Forced quick container restart + run tests again"
-echo "#=============================================================="
+echo "#========================================================================"
+echo "# Scenario 2b [restart]: Forced quick container restart + run tests again"
+echo "#========================================================================"
 docker restart --time=0 grid #forced quick restart
 sleep ${SLEEP_RACE_COND_SECS}
 docker exec grid wait_all_done ${WAIT_ALL_DONE}

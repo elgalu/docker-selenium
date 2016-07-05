@@ -23,7 +23,28 @@ die () {
 # Install docker compose
 #  https://docs.travis-ci.com/user/docker/#Using-Docker-Compose
 rm -f /usr/local/bin/docker-compose
-curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+PLATFORM=`uname -s`-`uname -m`
+# At some point below ".1" was needed probably due to a release bug
+# if [ "$(uname)" != 'Darwin' ] && \
+#    [ "${DOCKER_COMPOSE_VERSION}" = "1.8.0-rc2" ]; then
+#   PLATFORM=${PLATFORM}.1
+# fi
+url="https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-${PLATFORM}"
+curl -L ${url} >docker-compose
+if jq .error docker-compose; then
+  cat docker-compose 1>&2
+  die "Failed curling docker-compose at $0 see above content."
+fi
+
 chmod +x docker-compose
 mv docker-compose /usr/local/bin
 docker-compose --version
+
+# [ -z "${DOCKER_MACHINE_VERSION}" ] && die "Required env var DOCKER_MACHINE_VERSION"
+# - DOCKER_MACHINE_VERSION="0.7.0"
+# - DOCKER_MACHINE_VERSION="0.8.0-rc1"
+# rm -f /usr/local/bin/docker-machine
+# curl -L https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-`uname -s`-`uname -m` >docker-machine
+# chmod +x docker-machine
+# mv docker-machine /usr/local/bin
+# docker-machine --version

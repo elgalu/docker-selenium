@@ -403,3 +403,34 @@ kill $REM_TUN1_PID $REM_TUN2_PID $REM_TUN3_PID \
 docker stop ${CONTAINER}
 docker rm ${CONTAINER}
 ```
+
+### Sample .travis.yml
+os:
+  - linux
+  - osx
+# OSX conf
+osx_image: xcode8
+# Linux conf
+sudo: required
+services:
+  - docker
+matrix:
+  allow_failures:
+    - env: TRAVIS_OS_NAME=osx
+    - env: DOCKER_COMPOSE_VERSION="1.8.0-rc1"
+    # - env: TRAVIS_OS_NAME=osx DOCKER_VERSION=stable DOCKER_COMPOSE_VERSION="1.7.1"
+env:
+  global:
+    - TEST_SLEEPS="0.7"
+  matrix:
+    # Docker compose stable version
+    - DOCKER_VERSION="stable"
+      DOCKER_COMPOSE_VERSION="1.7.1"
+      DOCKER_PUSH=true
+    - DOCKER_VERSION="1.12.0-rc3"
+      DOCKER_COMPOSE_VERSION="1.7.1"
+    # Docker compose release candidate version
+    - DOCKER_VERSION="stable"
+      DOCKER_COMPOSE_VERSION="1.8.0-rc1"
+    - DOCKER_VERSION="1.12.0-rc3"
+      DOCKER_COMPOSE_VERSION="1.8.0-rc1"

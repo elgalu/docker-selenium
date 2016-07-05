@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+# ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew update
+
+brew cask install dockertoolbox
+# Below will fail with
+#  Error with pre-create check:
+#    This computer doesn't have VT-X/AMD-v enabled.
+#    Enabling it in the BIOS is mandatory
+# for the time being, see
+#  https://github.com/travis-ci/travis-ci/issues/5738#issuecomment-227167082
+docker-machine create --driver virtualbox default || true
+docker-machine --version
+docker-machine ls
+eval "$(docker-machine env default)"
+docker --version
+docker-compose --version
+
+if [ "${DOCKER_VERSION}" != "stable" ]; then
+  echo "WIP..."
+fi

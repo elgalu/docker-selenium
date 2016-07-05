@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+echo "#===================================================================="
+echo "# Scenario 4 [compose_1_1]: Docker Compose 1 hub, 1 chrome, 1 firefox"
+echo "#===================================================================="
+
 # set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed
 set -xe
 
-echo "#======================================================="
-echo "# Scenario 3: Docker Compose 1 hub, 1 chrome, 1 firefox"
-echo "#======================================================="
 export SELENIUM_HUB_PORT="4444" NUM_NODES=1 PARAL_TESTS=1
 
 if [ "${TRAVIS}" = "true" ]; then

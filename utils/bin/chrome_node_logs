@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+grep -Ev 'webSocketsHandshake|visual|colormap|bits|DirectColor|TrueColor|depth:|masks:|screen' \
+  /var/log/cont/* | grep "selenium-node-chrome"

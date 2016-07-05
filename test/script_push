@@ -177,7 +177,9 @@ git_push_tag_push() {
 # Main #
 ########
 if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then
-  echo "This is a pull request so no docker push"
+  echo "This is a pull request so no docker push."
+elif [ "${DOCKER_PUSH}" != "true" ]; then
+  echo "DOCKER_PUSH is not 'true' so will not docker push."
 elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
   docker_login_tag_push
   git_config

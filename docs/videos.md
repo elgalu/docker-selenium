@@ -51,3 +51,12 @@ Check your video, note it may be splitted in many files if is too long
 
 ### Split videos
 By default is 10 mins but can be changed through `-e VIDEO_CHUNK_SECS="00:10:00"`
+
+### Start
+Start and stop on-demand
+
+    docker exec grid start-video
+
+Now run your tests
+
+Then stop. Follor the steps in the [Stop](#stop) section

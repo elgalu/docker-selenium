@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
+echo "#========================================================="
+echo "# Scenario 1 [basic]: Run tests right after the container started"
+echo "#========================================================="
+
 # set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed
 set -xe
 
-echo "#========================================================="
-echo "# Scenario 1: Run tests right after the container started"
-echo "#========================================================="
 docker exec -t grid run_test
 docker exec grid errors || true

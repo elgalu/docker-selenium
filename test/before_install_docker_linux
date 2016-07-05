@@ -30,6 +30,18 @@ apt-get -qqy install apparmor
 /etc/init.d/apparmor start || true
 export DEBCONF_NONINTERACTIVE_SEEN=true
 apt-get -qqy install docker-engine
+
+if [ "${DOCKER_VERSION}" != "stable" ]; then
+  # wget -nv -O docker.tgz "https://github.com/docker/docker/archive/v${DOCKER_VERSION}.tar.gz"
+  # tar xvzf docker.tgz
+  # mv docker-${DOCKER_VERSION} docker_src
+  # mv docker_src/* /usr/bin/
+  wget -nv -O docker.tgz "https://test.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz"
+  tar -xvzf docker.tgz
+  mv docker/* /usr/bin/
+  service docker stop || true
+fi
+
 service docker start || true
 
 docker --version

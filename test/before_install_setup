@@ -6,7 +6,11 @@ set -xe
 
 # Docker
 docker --version || echo "INFO: No docker installed yet"
-sudo -E bash -c './test/before_install_docker'
+if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+  ./test/before_install_docker_osx
+else
+  sudo -E bash -c './test/before_install_docker_linux'
+fi
 docker --version || (echo "FATAL: No docker installed" && exit 1)
 
 # Docker Compose

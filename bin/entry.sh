@@ -170,6 +170,7 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   fi
 fi
 
+# Allow node's -proxy customizations without having to use SELENIUM_NODE_PARAMS
 if [ "${SELENIUM_NODE_PROXY_PARAMS}" != "" ]; then
   export CUSTOM_SELENIUM_NODE_PROXY_PARAMS="-proxy ${SELENIUM_NODE_PROXY_PARAMS}"
 else
