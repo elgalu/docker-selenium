@@ -170,8 +170,10 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   fi
 fi
 
-if [[ "${SELENIUM_NODE_PROXY_PARAMS}" != "" ]]; then
-  CUSTOM_SELENIUM_NODE_PROXY_PARAMS="-proxy ${SELENIUM_NODE_PROXY_PARAMS}"
+if [ "${SELENIUM_NODE_PROXY_PARAMS}" != "" ]; then
+  export CUSTOM_SELENIUM_NODE_PROXY_PARAMS="-proxy ${SELENIUM_NODE_PROXY_PARAMS}"
+else
+  export CUSTOM_SELENIUM_NODE_PROXY_PARAMS=""
 fi
 
 #----------------------------------------
