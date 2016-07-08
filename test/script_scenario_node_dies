@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+echo "#======================================================"
+echo "# Scenario 3 [node_dies]: Node dies then container dies"
+echo "#======================================================"
+
+###################
+# Echo with Error #
+###################
+# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
+echoerr() {
+  cat <<< "$@" 1>&2;
+}
+
+########################
+# Print error and exit #
+########################
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "160"
+  errnum=${2-160}
+  exit $errnum
+}
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+export SELENIUM_NODE_CH_PORT=5757 \
+       SELENIUM_NODE_FF_PORT=6868 \
+       SHUTDOWN_END_POINT="selenium-server/driver/?cmd=shutDownSeleniumServer" \
+       NODE_SUICIDE_WAIT_TIME=20
+
+echo "#================================================="
+echo "# Scenario 3a [node_dies]: Dies by killing Chrome"
+echo "#================================================="
+
+# Ensure clean env
+docker rm -vf mynodes || true
+
+# Create container for Chrome
+docker run --name=mynodes -d \
+  -e FIREFOX=false \
+  -e SELENIUM_NODE_CH_PORT -p ${SELENIUM_NODE_CH_PORT}:${SELENIUM_NODE_CH_PORT} \
+  -v /dev/shm:/dev/shm \
+  selenium
+
+docker exec mynodes wait_all_done 40s
+docker exec mynodes errors || true
+docker logs mynodes
+
+# Basic checkup
+docker exec -t mynodes selenium_test chrome
+docker exec mynodes errors || true
+
+if curl -s "http://localhost:${SELENIUM_NODE_CH_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+  # The container should have been removed
+  sleep ${NODE_SUICIDE_WAIT_TIME}
+  if docker rm mynodes; then
+    echo "Chrome 3a PASSED"
+  else
+    die "Test failed for Chrome at $0 during docker rm mynodes"
+  fi
+else
+  echoerr "Expected OKOK at $0 for Chrome but got something else"
+  curl "http://localhost:${SELENIUM_NODE_CH_PORT}/${SHUTDOWN_END_POINT}"
+  die "Test failed for Chrome at $0 during curl"
+fi
+
+echo "#================================================="
+echo "# Scenario 3b [node_dies]: Dies by killing Firefox"
+echo "#================================================="
+
+# Ensure clean env
+docker rm -vf mynodes || true
+
+# Create container for Firefox
+docker run --name=mynodes -d \
+  -e CHROME=false \
+  -e SELENIUM_NODE_FF_PORT -p ${SELENIUM_NODE_FF_PORT}:${SELENIUM_NODE_FF_PORT} \
+  selenium
+
+docker exec mynodes wait_all_done 40s
+docker exec mynodes errors || true
+docker logs mynodes
+
+# Basic checkup
+docker exec -t mynodes selenium_test firefox
+docker exec mynodes errors || true
+
+if curl -s "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+  # The container should have been removed
+  sleep ${NODE_SUICIDE_WAIT_TIME}
+  if docker rm mynodes; then
+    echo "Firefox 3a PASSED"
+  else
+    die "Test failed for Firefox at $0 during docker rm mynodes"
+  fi
+else
+  echoerr "Expected OKOK at $0 for Firefox but got something else"
+  curl "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}"
+  die "Test failed for Firefox at $0 during curl"
+fi

@@ -964,6 +964,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
   SELENIUM_NODE_PROXY_PARAMS="" \
+  SELENIUM_NODE_REGISTER_CYCLE="" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \

@@ -177,6 +177,13 @@ else
   export CUSTOM_SELENIUM_NODE_PROXY_PARAMS=""
 fi
 
+# Allow node's -registerCycle customizations without having to use SELENIUM_NODE_PARAMS
+if [ "${SELENIUM_NODE_REGISTER_CYCLE}" != "" ]; then
+  export CUSTOM_SELENIUM_NODE_REGISTER_CYCLE="-registerCycle ${SELENIUM_NODE_REGISTER_CYCLE}"
+else
+  export CUSTOM_SELENIUM_NODE_REGISTER_CYCLE=""
+fi
+
 #----------------------------------------
 # Remove lock files, thanks @garagepoort
 # clear_x_locks.sh

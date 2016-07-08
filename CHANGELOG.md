@@ -9,7 +9,9 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
- + TBD_COMMIT_MSG
+ + Add node -registerCycle customization via SELENIUM_NODE_REGISTER_CYCLE
+ + Suicide nodes on selenium exited node.
+ + WIP to add OSX support #111 #110
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE
