@@ -37,6 +37,12 @@ MAINTAINER Leo Gallucci <elgalu3@gmail.com>
 ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
+# http://askubuntu.com/a/235911/134645
+RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com \
+      3B4FE6ACC0B21F32 \
+      40976EAF437D05B5 \
+      2EA8F35793D8809A
+
 #========================
 # Miscellaneous packages
 #========================

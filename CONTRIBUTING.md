@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Add node registerCycle. Suicide nodes on selenium exited node."
+    git commit -m "Add OSX support closes #111 #110"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1f && git push origin tmp-2.53.1f && git push --tags
 

@@ -7,11 +7,36 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + TBD_COMMIT_MSG
+ + Image tag details:
+  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox stable: TBD_FIREFOX_STABLE
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
+  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Tested on kernel dev host: 4.4.0-30-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 1.12.0-rc3, build 91e29e8
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at dev host with: Docker Compose version 1.8.0-rc2, build c72c966
+  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 2.53.1f
  + Date: 2016-07-08
  + Add node -registerCycle customization via SELENIUM_NODE_REGISTER_CYCLE
  + Suicide nodes on selenium exited node.
  + WIP to add OSX support #111 #110
+ + Upgrade BrowserStack Local 5.7
  + Image tag details:
   + Selenium: v2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106

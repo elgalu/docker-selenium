@@ -4,6 +4,8 @@
 # set -x: print each command right before it is executed
 set -xe
 
+[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
+
 ./test/script_bats
 ./test/script_scenario_basic
 ./test/script_scenario_restart

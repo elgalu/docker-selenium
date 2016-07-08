@@ -1,23 +1,16 @@
 # Compose
 Scale up and down the nodes by using [docker-compose](https://docs.docker.com/compose/).
-Install the tooling by following that link and make sure you have latest stable versions of both tools.
-
-## Requisites
-Docker and docker-compose:
-
-    docker --version         #=> 1.11.2
-    docker-compose --version #=> 1.7.1
+For requirements check [docker-compose#requisites](./docker-compose.md#requisites)
 
 ## Usage
-Either clone this repository or download the file [docker-compose.yml](../docker-compose.yml) using `wget`
+Either clone this repository or download the file [docker-compose-host.yml](../docker-compose-host.yml) using `wget`
 
-    wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml"
+    wget -nv -O docker-compose.yml "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose-host.yml"
 
 ### Run
 Either start with `docker-compose ... scale` as shown in below example or you can also use `docker-compose up` and scale after in a second command.
 
-    SELENIUM_HUB_PORT=4444 docker-compose -p selenium up -d
-    docker-compose -p selenium scale chrome=3 firefox=3
+    SELENIUM_HUB_PORT=4444 docker-compose -p selenium scale hub=1 chrome=3 firefox=3
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 

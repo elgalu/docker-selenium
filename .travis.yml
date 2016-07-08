@@ -2,6 +2,10 @@
 # us to pick a language else it will pick Ruby by default
 language: generic
 
+sudo: required
+services:
+  - docker
+
 # Omit running tests on temporal branches
 branches:
   except:
@@ -12,48 +16,38 @@ env:
     - TEST_SLEEPS="0.7"
 
 matrix:
+  allow_failures:
+    - os: osx
+      env:
+        - DOCKER_VERSION="1.12.0-rc3"
+          DOCKER_COMPOSE_VERSION="1.8.0-rc2"
   include:
     # Linux with docker:stable compose:stable
     - os: linux
-      sudo: required
-      services:
-        - docker
       env:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.7.1"
           DOCKER_PUSH=true
     # Linux with docker:beta compose:stable
     - os: linux
-      sudo: required
-      services:
-        - docker
       env:
         - DOCKER_VERSION="1.12.0-rc3"
           DOCKER_COMPOSE_VERSION="1.7.1"
     # Linux with docker:stable compose:beta
     - os: linux
-      sudo: required
-      services:
-        - docker
       env:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.8.0-rc2"
     # Linux with docker:beta compose:beta
     - os: linux
-      sudo: required
-      services:
-        - docker
       env:
         - DOCKER_VERSION="1.12.0-rc3"
           DOCKER_COMPOSE_VERSION="1.8.0-rc2"
     # Mac OSX: only test native docker version
     - os: osx
-      osx_image: xcode8
       env:
         - DOCKER_VERSION="1.12.0-rc3"
           DOCKER_COMPOSE_VERSION="1.8.0-rc2"
-  allow_failures:
-    - os: osx
 
 before_install:
   - travis_retry ./test/before_install_setup

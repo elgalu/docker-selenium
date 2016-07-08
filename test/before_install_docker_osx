@@ -6,21 +6,31 @@ set -xe
 
 # ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew update
+brew install wget || true
 
-brew cask install dockertoolbox
+# https://github.com/caskroom/homebrew-cask/blob/master/USAGE.md#other-ways-to-specify-a-cask
+brew cask install ./osx/dockertoolbox-rc.rb --force
+
+# We don't want to use docker-machine
+docker-machine stop default || true
+
+# Currently erroring:
+#  https://travis-ci.org/elgalu/docker-selenium/jobs/143358317
+#   com.docker.docker Incompatible CPU detected
+#   Docker requires a processor with virtualization capabilities
+/Applications/Docker.app/Contents/MacOS/Docker &
+sleep 20
+
 # Below will fail with
 #  Error with pre-create check:
 #    This computer doesn't have VT-X/AMD-v enabled.
 #    Enabling it in the BIOS is mandatory
 # for the time being, see
 #  https://github.com/travis-ci/travis-ci/issues/5738#issuecomment-227167082
-docker-machine create --driver virtualbox default || true
-docker-machine --version
-docker-machine ls
-eval "$(docker-machine env default)"
+# docker-machine --restart || true
+# docker-machine create --driver virtualbox default || true
+# docker-machine --version
+# docker-machine ls
+# eval "$(docker-machine env default)"
 docker --version
 docker-compose --version
-
-if [ "${DOCKER_VERSION}" != "stable" ]; then
-  echo "WIP..."
-fi

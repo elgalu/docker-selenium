@@ -4,6 +4,8 @@
 # set -x: print each command right before it is executed
 set -xe
 
+[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
+
 docker --version
 docker-compose --version
 

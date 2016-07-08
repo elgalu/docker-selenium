@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
 echo "#===================================================================="
-echo "# Scenario 4 [compose_1_1]: Docker Compose 1 hub, 1 chrome, 1 firefox"
+echo "# Scenario 4a [compose_1_1]: Docker Compose 1 hub, 1 chrome, 1 firefox"
 echo "#===================================================================="
 
 # set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed
 set -xe
 
-export SELENIUM_HUB_PORT="4444" NUM_NODES=1 PARAL_TESTS=1
+export SELENIUM_HUB_PORT="4444" \
+       NUM_NODES=1 PARAL_TESTS=1
 
 if [ "${TRAVIS}" = "true" ]; then
   export SLEEP_TIME=7
@@ -17,4 +18,13 @@ else
   export SLEEP_TIME=0
 fi
 
+export COMPOSE_FILE="docker-compose-host.yml" \
+       DO_COMPOSE_UP="false"
+./test/compose-test.sh
+
+echo "#===================================================================="
+echo "# Scenario 4b [compose_1_1]: Docker Compose 1 hub, 1 chrome, 1 firefox"
+echo "#===================================================================="
+export COMPOSE_FILE="docker-compose.yml" \
+       DO_COMPOSE_UP="true"
 ./test/compose-test.sh
