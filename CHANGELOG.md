@@ -9,7 +9,10 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
- + TBD_COMMIT_MSG
+ + Add OSX support closes #111 #110
+ + Add docs/share-host.md and docs/jenkins.md (WIP)
+ + Chore: Add `WORKDIR ${NORMAL_USER_HOME}`
+ + Chore: Add `docker exec grid cat HUB_PORT #=> 24444`
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE

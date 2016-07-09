@@ -339,6 +339,26 @@ if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ]; then
     tmpfs /dev/shm || true
 fi
 
+#-------------------------------------------
+# Keep updated environment vars inside files
+#-------------------------------------------
+# So can be consulted later on with:
+#  docker exec grid cat HUB_PORT #=> 24444
+#  docker exec selenium_chrome_1 cat FF_PORT #=> 44023
+echo "${SELENIUM_HUB_PORT}" > SELENIUM_HUB_PORT
+echo "${SELENIUM_HUB_PORT}" > HUB_PORT
+echo "${SELENIUM_NODE_CH_PORT}" > SELENIUM_NODE_CH_PORT
+echo "${SELENIUM_NODE_CH_PORT}" > CH_PORT
+echo "${SELENIUM_NODE_FF_PORT}" > SELENIUM_NODE_FF_PORT
+echo "${SELENIUM_NODE_FF_PORT}" > FF_PORT
+echo "${DISPLAY}" > DISPLAY
+echo "${VNC_PORT}" > VNC_PORT
+echo "${NOVNC_PORT}" > NOVNC_PORT
+echo "${SSHD_PORT}" > SSHD_PORT
+echo "${SAUCE_LOCAL_SEL_PORT}" > SAUCE_LOCAL_SEL_PORT
+echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
+env > env
+
 #------
 # exec
 #------

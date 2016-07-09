@@ -22,6 +22,7 @@ die () {
 [ -z "${PARAL_TESTS}" ] && die "Required env var PARAL_TESTS"
 [ -z "${SELENIUM_HUB_PORT}" ] && die "Required env var SELENIUM_HUB_PORT"
 [ -z "${WAIT_ALL_DONE}" ] && export WAIT_ALL_DONE="40s"
+[ -z "${PAUSE_SECS_BETWEEN_RUN_TEST}" ] && export PAUSE_SECS_BETWEEN_RUN_TEST="0"
 
 # Ensure clean
 docker-compose -f ${COMPOSE_FILE} -p selenium down || true
@@ -66,11 +67,15 @@ sleep ${SLEEP_TIME}
 
 # Tests can run anywere, in the hub, in the host, doesn't matter
 for i in $(seq 1 ${PARAL_TESTS}); do
+  # Need to sleep a bit between tests to avoid
+  #  https://github.com/SeleniumHQ/selenium/issues/2442
+  sleep ${PAUSE_SECS_BETWEEN_RUN_TEST}
   # Docker-ompose exec is giving me error:
   #  in dockerpty/io.py", line 42, in set_blocking
   #  ValueError: file descriptor cannot be a negative integer (-1)
   # docker-compose -f ${COMPOSE_FILE} -p selenium exec --index 1 hub run_test &
-  docker exec -t selenium_hub_1 run_test &
+  docker exec -t selenium_hub_1 selenium_test chrome &
+  docker exec -t selenium_hub_1 selenium_test firefox &
 done
 
 # sleep a moment to let the UI tests start

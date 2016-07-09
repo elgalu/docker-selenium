@@ -14,6 +14,8 @@ services:
 
   chrome:
     image: elgalu/selenium
+    depends_on:
+      - hub
     network_mode: host
     shm_size: 1g
     environment:
@@ -23,11 +25,11 @@ services:
       - GRID=false
       - CHROME=true
       - FIREFOX=false
-    depends_on:
-      - hub
 
   firefox:
     image: elgalu/selenium
+    depends_on:
+      - hub
     network_mode: host
     environment:
       - SELENIUM_HUB_PORT
@@ -36,8 +38,6 @@ services:
       - GRID=false
       - CHROME=false
       - FIREFOX=true
-    depends_on:
-      - hub
 
 #-- Notes --#
 # shm_size: 1g

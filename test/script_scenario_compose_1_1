@@ -11,11 +11,12 @@ set -xe
 export SELENIUM_HUB_PORT="4444" \
        NUM_NODES=1 PARAL_TESTS=1
 
+# Below sleep avoids:
+#  Error forwarding the new session cannot find : Capabilities ...
 if [ "${TRAVIS}" = "true" ]; then
-  export SLEEP_TIME=7
+  export SLEEP_TIME=15
 else
-  # My local laptop has more power so hit it harder
-  export SLEEP_TIME=0
+  export SLEEP_TIME=4
 fi
 
 export COMPOSE_FILE="docker-compose-host.yml" \

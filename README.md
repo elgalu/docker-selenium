@@ -39,6 +39,26 @@ If you don't require a real browser [PhantomJS](https://github.com/ariya/phantom
 You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
 A [new chromium headless project](https://github.com/electron/electron/issues/228#issuecomment-223797342) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
 
+### Requisites
+This project is normally tested in the last version of Docker and docker-compose and also in the release candidates.
+To figure out the currently used specific versions it surely works on,
+see file [.travis.yml](./.travis.yml) example values:
+
+    docker --version         #=> 1.11.2
+    docker-compose --version #=> 1.7.1
+
+If you need to use docker-machine to run docker
+(like for example on a Mac before the Docker native version 1.12),
+you also need to install VirtualBox and then run these commands to get started:
+
+
+```sh
+docker-machine create --driver virtualbox default
+eval "$(docker-machine env default)"
+```
+
+You will need to run the second `eval` command for every new terminal window.
+
 ### Usage
 
 <h4 id="run"><img width="24" src="./images/icons/logo.png" /> Run</h4>
@@ -75,6 +95,9 @@ Shutdown immediately, no mercy
 
 ### Docker Compose
 See [docker-compose](./docs/docker-compose.md)
+
+### Jenkins
+See [jenkins](./docs/jenkins.md)
 
 ### Parallel
 This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel you can still do, there are some ways to do this:

@@ -1,29 +1,42 @@
 # Compose
 Scale up and down the nodes by using [docker-compose](https://docs.docker.com/compose/).
-Install the tooling by following that link and make sure you have latest stable versions of both tools.
 
-## Requisites
-Docker and docker-compose:
+For using it by sharing the host (localhost) network interface see [share-host](./share-host.md)
 
-    docker --version         #=> 1.11.2
-    docker-compose --version #=> 1.7.1
+For requirements check [README#requisites](../README.md#requisites)
 
 ## Usage
-Either clone this repository or download the file [docker-compose.yml](../docker-compose.yml) using `wget`
+Either clone this repository or download the file [docker-compose.yml][] using `wget`
 
     wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml"
+    docker-compose -p selenium down #ensure is not already running
 
 ### Run
-Either start with `docker-compose ... scale` as shown in below example or you can also use `docker-compose up` and scale after in a second command.
+Start it with `docker-compose up` then **scale** it:
 
-    SELENIUM_HUB_PORT=4444 docker-compose -p selenium up -d
-    docker-compose -p selenium scale chrome=3 firefox=3
+    export SELENIUM_HUB_PORT=4444 NODES=3
+    docker-compose -p selenium up -d
+    docker-compose -p selenium scale chrome=${NODES} firefox=${NODES}
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
-    docker-compose -p selenium exec -T --index=3 chrome wait_all_done 30s
+    docker exec selenium_hub_1 wait_all_done 30s
+    for ((i=1; i<=${NODES}; i++)); do
+      docker-compose -p selenium exec -T --index=$i chrome wait_all_done 30s
+      docker-compose -p selenium exec -T --index=$i firefox wait_all_done 30s
+    done
+
+### Test
+You can now run your tests by using the `--seleniumUrl="http://localhost:4444/wd/hub"`.
+
+However if your web application under test is running in localhost, e.g. `--appHost=localhost`
+you should instead either dockerize your application and add it to the [docker-compose.yml][] file as another [service](https://docs.docker.com/compose/compose-file/#/service-configuration-reference) or somehow replace `--appHost=localhost` with `--appHost=d.host.loc.dev` in the config file of your testing framework. The string `d.host.loc.dev` is a place holder inside the docker container that points to the IP of your localhost.
 
 ### Cleanup
-The `down` compose command stops and remove containers, networks, volumes, and images created by `up` or `scale`
+Once your tests are done you can clean up:
 
     docker-compose -p selenium down
+
+The `down` compose command stops and remove containers, networks, volumes, and images created by `up` or `scale`
+
+[docker-compose.yml]: ../docker-compose.yml

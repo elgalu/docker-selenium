@@ -15,7 +15,11 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
 echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 
-# See standalone params docs at https://code.google.com/p/selenium/wiki/Grid2
+# See standalone params docs at
+#  https://code.google.com/p/selenium/wiki/Grid2
+#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/GridParameters.properties
+# See node defaults at
+#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 java ${JAVA_OPTS} \
   -jar ${SEL_HOME}/selenium-server-standalone.jar \
   -port ${SELENIUM_NODE_CH_PORT} \

@@ -440,6 +440,7 @@ RUN apt-get update -qqy \
   && pip install --upgrade pip \
   && pip install --upgrade setuptools \
   && pip install --upgrade selenium \
+  && pip install --upgrade retrying \
   && rm -rf /var/lib/apt/lists/*
 
 #=========================================
@@ -970,7 +971,10 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
   SELENIUM_NODE_PROXY_PARAMS="" \
-  SELENIUM_NODE_REGISTER_CYCLE="" \
+  # How often in ms the node will try to register itself again.
+  # Allow to restart the hub without having to restart the nodes.
+  #  (node) in ms. Selenium default: 5000
+  SELENIUM_NODE_REGISTER_CYCLE="0" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \
@@ -982,8 +986,12 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   MAX_SESSIONS=1 \
   SEL_RELEASE_TIMEOUT_SECS=19000 \
   SEL_BROWSER_TIMEOUT_SECS=16000 \
-  SEL_CLEANUPCYCLE_MS=90000 \
-  SEL_NODEPOLLING_MS=80000 \
+  # How often a proxy will check for timed out thread.
+  #  (node) in ms. Selenium default: 5000
+  SEL_CLEANUPCYCLE_MS=9000 \
+  # Interval between alive checks of node how often the hub checks if the node is still alive.
+  #  (node) in ms. Selenium default: 5000
+  SEL_NODEPOLLING_MS=6000 \
   # Docker for Mac beta - containers do not start #227
   no_proxy=localhost \
   HUB_ENV_no_proxy=localhost \
@@ -1169,6 +1177,7 @@ COPY scm-source.json /
 # Ensure the file is up-to-date else you should update it by running
 #  ./host-scripts/gen-scm-source.sh
 # on the host machine
+WORKDIR ${NORMAL_USER_HOME}
 
 #===================
 # CMD or ENTRYPOINT

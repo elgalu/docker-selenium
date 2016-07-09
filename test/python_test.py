@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # To install the Python client library:
 # pip install -U selenium
@@ -37,8 +38,14 @@ print ("Will use browser=%s" % args.browser)
 print ("Will connect to selenium at %s" % myselenium_hub_url)
 print ("Will sleep '%s' secs between test steps" % msleep)
 
-# http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
-driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
+from retrying import retry
+
+@retry(stop_max_attempt_number=5, stop_max_delay=5000, wait_fixed=200)
+def webdriver_connect():
+    # http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
+    return webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
+
+driver = webdriver_connect()
 driver.implicitly_wait(10)
 time.sleep(msleep)
 
@@ -73,35 +80,31 @@ driver.set_window_size(width, height)
 
 # Test: https://code.google.com/p/chromium/issues/detail?id=519952
 pageurl = "http://www.google.com/adwords"
+# pageurl = "http://d.host.loc.dev:8088/adwords"
 print ("Opening page %s" % pageurl)
 driver.get(pageurl)
-time.sleep(msleep)
-
 print ("Current title: %s" % driver.title)
 print ("Asserting 'Google Adwords' in driver.title")
 assert "Google AdWords" in driver.title
+# assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
 
-pageurl = "http://www.python.org"
-print ("Opening page %s" % pageurl)
-driver.get(pageurl)
-time.sleep(msleep)
+# print ("Click link 'Kosten'")
+# link = driver.find_element_by_link_text('Kosten')
+# link.click()
+# driver.maximize_window()
+# time.sleep(msleep)
+# print ("Current title: %s" % driver.title)
+# print ("Asserting 'Kosten' in driver.title")
+# assert "Kosten von Google AdWords | Google AdWords" in driver.title
 
-print ("Asserting 'Python' in driver.title")
-assert "Python" in driver.title
-
-print ("Finding element by name: q")
-elem = driver.find_element_by_name("q")
-
-print ("Sending keys 'pycon'")
-elem.send_keys("pycon")
-time.sleep(msleep)
-
-print ("Sending RETURN key")
-elem.send_keys(Keys.RETURN)
-time.sleep(msleep)
-
-print ("Ensure no results were found")
-assert "No results found." not in driver.page_source
+# print ("Go back to home page")
+# link = driver.find_element_by_link_text('Übersicht')
+# link.click()
+# time.sleep(msleep)
+# print ("Current title: %s" % driver.title)
+# print ("Asserting 'Google (PPC)' in driver.title")
+# assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
+# time.sleep(msleep)
 
 print ("Close driver and clean up")
 driver.close()

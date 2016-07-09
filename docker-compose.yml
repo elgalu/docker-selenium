@@ -4,7 +4,7 @@ services:
   hub:
     image: elgalu/selenium
     ports:
-      - 4444:${SELENIUM_HUB_PORT}
+      - ${SELENIUM_HUB_PORT}:${SELENIUM_HUB_PORT}
     environment:
       - SELENIUM_HUB_PORT
       - VNC_START=false
@@ -15,8 +15,6 @@ services:
 
   chrome:
     image: elgalu/selenium
-    depends_on:
-      - hub
     network_mode: "service:hub"
     shm_size: 1g
     environment:
@@ -29,8 +27,6 @@ services:
 
   firefox:
     image: elgalu/selenium
-    depends_on:
-      - hub
     network_mode: "service:hub"
     environment:
       - SELENIUM_HUB_PORT

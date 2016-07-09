@@ -15,6 +15,11 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
 echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 
+# See standalone params docs at
+#  https://code.google.com/p/selenium/wiki/Grid2
+#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/GridParameters.properties
+# See node defaults at
+#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 # TODO: how to set default firefox to latest?
 export FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS},version=${FIREFOX_VERSION},firefox_binary=${FIREFOX_DEST_BIN}"
 java ${JAVA_OPTS} \
