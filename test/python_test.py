@@ -40,7 +40,7 @@ print ("Will sleep '%s' secs between test steps" % msleep)
 
 from retrying import retry
 
-@retry(stop_max_attempt_number=5, stop_max_delay=5000, wait_fixed=200)
+@retry(stop_max_attempt_number=5, stop_max_delay=180100, wait_fixed=200)
 def webdriver_connect():
     # http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
     return webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)

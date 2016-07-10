@@ -6,6 +6,7 @@ echo "#===================================================================="
 
 # set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed
+# set -u: treat unset variables as an error and exit immediately
 set -xe
 
 export SELENIUM_HUB_PORT="4444" \

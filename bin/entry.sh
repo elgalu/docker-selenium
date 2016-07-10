@@ -344,6 +344,7 @@ fi
 #-------------------------------------------
 # So can be consulted later on with:
 #  docker exec grid cat HUB_PORT #=> 24444
+#  docker exec grid cat DISPLAY  #=> :41
 #  docker exec selenium_chrome_1 cat FF_PORT #=> 44023
 echo "${SELENIUM_HUB_PORT}" > SELENIUM_HUB_PORT
 echo "${SELENIUM_HUB_PORT}" > HUB_PORT
