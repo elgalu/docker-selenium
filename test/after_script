@@ -7,6 +7,5 @@ set -e
 docker exec grid stop || true
 docker stop grid || true
 docker rm grid || true
-
-# fast wait
-# docker rm -vf grid || true
+# quick destroy
+docker rm -vf grid_adwords_mock || true

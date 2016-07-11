@@ -37,6 +37,7 @@ echo "#================================================="
 
 # Ensure clean env
 docker rm -vf mynodes || true
+docker rm -vf grid_adwords_mock || true
 
 # Create container for Chrome
 docker run --name=mynodes -d \
@@ -44,6 +45,9 @@ docker run --name=mynodes -d \
   -e SELENIUM_NODE_CH_PORT -p ${SELENIUM_NODE_CH_PORT}:${SELENIUM_NODE_CH_PORT} \
   -v /dev/shm:/dev/shm \
   selenium
+
+# We need a mock service for testing
+docker run -d --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 40s
 docker exec mynodes errors || true
@@ -73,12 +77,16 @@ echo "#================================================="
 
 # Ensure clean env
 docker rm -vf mynodes || true
+docker rm -vf grid_adwords_mock || true
 
 # Create container for Firefox
 docker run --name=mynodes -d \
   -e CHROME=false \
   -e SELENIUM_NODE_FF_PORT -p ${SELENIUM_NODE_FF_PORT}:${SELENIUM_NODE_FF_PORT} \
   selenium
+
+# We need a mock service for testing
+docker run -d --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 40s
 docker exec mynodes errors || true

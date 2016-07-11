@@ -15,6 +15,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add docs/share-host.md and docs/jenkins.md (WIP)
  + Chore: Add `WORKDIR ${NORMAL_USER_HOME}`
  + Chore: Add `docker exec grid cat HUB_PORT #=> 24444`
+ + Chore: Test offline site (mocked http server)
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE

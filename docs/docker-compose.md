@@ -13,6 +13,7 @@ Either clone this repository or download the file [docker-compose.yml][] using `
 
 ### Run
 Start it with `docker-compose up` then **scale** it:
+You should replace `adwords_mock` with your web service under test within the [docker-compose.yml][] file.
 
     export SELENIUM_HUB_PORT=4444 NODES=3
     docker-compose -p selenium up -d
@@ -29,8 +30,8 @@ Wait until the grid starts properly before starting the tests _(Optional but rec
 ### Test
 You can now run your tests by using the `--seleniumUrl="http://localhost:4444/wd/hub"`.
 
-However if your web application under test is running in localhost, e.g. `--appHost=localhost`
-you should instead either dockerize your application and add it to the [docker-compose.yml][] file as another [service](https://docs.docker.com/compose/compose-file/#/service-configuration-reference) or somehow replace `--appHost=localhost` with `--appHost=d.host.loc.dev` in the config file of your testing framework. The string `d.host.loc.dev` is a place holder inside the docker container that points to the IP of your localhost.
+However if your web application under test is running in localhost, e.g. `--appHost=localhost` or is publicly not accessible
+you should instead either dockerize your application as shown in the example [adwords_mock](https://github.com/elgalu/google_adwords_mock) within the [docker-compose.yml][]. Its there shown as another [service](https://docs.docker.com/compose/compose-file/#/service-configuration-reference). Another option (if you don't want to dockerize your app yet) is to somehow replace `--appHost=localhost` with `--appHost=d.host.loc.dev` in the config file of your testing framework. The string `d.host.loc.dev` is a place holder inside the docker container that points to the IP of your localhost.
 
 ### Cleanup
 Once your tests are done you can clean up:

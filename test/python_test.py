@@ -40,7 +40,7 @@ print ("Will sleep '%s' secs between test steps" % msleep)
 
 from retrying import retry
 
-@retry(stop_max_attempt_number=5, stop_max_delay=180100, wait_fixed=200)
+@retry(stop_max_attempt_number=12, stop_max_delay=180100, wait_fixed=300)
 def webdriver_connect():
     # http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
     return webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
@@ -79,32 +79,47 @@ if args.browser == 'chrome':
 driver.set_window_size(width, height)
 
 # Test: https://code.google.com/p/chromium/issues/detail?id=519952
-pageurl = "http://www.google.com/adwords"
-# pageurl = "http://d.host.loc.dev:8088/adwords"
-print ("Opening page %s" % pageurl)
-driver.get(pageurl)
+# e.g. pageurl = "http://localhost:33001/adwords"
+# e.g. pageurl = "http://www.google.com:80/adwords"
+# e.g. pageurl = "https://www.google.com:443/adwords"
+# e.g. pageurl = "http://d.host.loc.dev:33001/adwords"
+page_port = os.environ.get('MOCK_SERVER_PORT','33001')
+page_host = os.environ.get('MOCK_SERVER_HOST','localhost')
+pageurl = ("http://%s:%s/adwords" % (page_host, page_port))
+
+@retry(stop_max_attempt_number=7, stop_max_delay=30100, wait_fixed=300)
+def open_web_page():
+    print ("Opening page %s" % pageurl)
+    driver.get(pageurl)
+    time.sleep(msleep)
+    print ("Current title: %s" % driver.title)
+    print ("Asserting 'Google Adwords' in driver.title")
+    assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
+
+open_web_page()
+
+print ("Click link 'Kosten'")
+link = driver.find_element_by_link_text('Kosten')
+link.click()
+driver.maximize_window()
+time.sleep(msleep)
+
+@retry(stop_max_attempt_number=7, stop_max_delay=20100, wait_fixed=300)
+def open_costs_page():
+    print ("Current title: %s" % driver.title)
+    print ("Asserting 'Kosten' in driver.title")
+    assert "Kosten von Google AdWords | Google AdWords" in driver.title
+
+open_costs_page()
+
+print ("Go back to home page")
+link = driver.find_element_by_link_text('Übersicht')
+link.click()
+time.sleep(msleep)
 print ("Current title: %s" % driver.title)
-print ("Asserting 'Google Adwords' in driver.title")
-assert "Google AdWords" in driver.title
-# assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
-
-# print ("Click link 'Kosten'")
-# link = driver.find_element_by_link_text('Kosten')
-# link.click()
-# driver.maximize_window()
-# time.sleep(msleep)
-# print ("Current title: %s" % driver.title)
-# print ("Asserting 'Kosten' in driver.title")
-# assert "Kosten von Google AdWords | Google AdWords" in driver.title
-
-# print ("Go back to home page")
-# link = driver.find_element_by_link_text('Übersicht')
-# link.click()
-# time.sleep(msleep)
-# print ("Current title: %s" % driver.title)
-# print ("Asserting 'Google (PPC)' in driver.title")
-# assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
-# time.sleep(msleep)
+print ("Asserting 'Google (PPC)' in driver.title")
+assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
+time.sleep(msleep)
 
 print ("Close driver and clean up")
 driver.close()

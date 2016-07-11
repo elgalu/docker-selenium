@@ -3,7 +3,7 @@ Miscellaneous internal notes, do not read!
 ## Build
 
     time (docker build -t elgalu/selenium . ;echo $?;beep)
-    docker run --rm -ti -m 3000M --name=local -p=4444:24444 -p=5900:25900 -e VIDEO=true -v /dev/shm:/dev/shm elgalu/selenium
+    docker run --rm -ti -m 3000M --name=local -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e VNC_PASSWORD=hola -v /dev/shm:/dev/shm elgalu/selenium
 
 ### Wait
 Wait and get versions

@@ -33,7 +33,7 @@ if [ "${DO_COMPOSE_UP}" = "true" ]; then
 fi
 
 # Compose scale!
-docker-compose -f ${COMPOSE_FILE} -p selenium scale hub=1 chrome=${NUM_NODES} firefox=${NUM_NODES}
+docker-compose -f ${COMPOSE_FILE} -p selenium scale adwords_mock=1 hub=1 chrome=${NUM_NODES} firefox=${NUM_NODES}
 
 # FIXME: We still need to wait a bit because the nodes registration is not
 #        being waited on wait_all_done script :(

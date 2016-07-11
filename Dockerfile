@@ -41,7 +41,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com \
       3B4FE6ACC0B21F32 \
       40976EAF437D05B5 \
-      2EA8F35793D8809A
+      2EA8F35793D8809A \
+  && apt-key update -qqy
 
 #========================
 # Miscellaneous packages
@@ -893,6 +894,7 @@ ADD **/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
 RUN apt-get update -qqy \
+  && apt-key update -qqy \
   && apt-get -qqy install \
     haveged rng-tools \
   && service haveged start \
@@ -975,7 +977,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # How often in ms the node will try to register itself again.
   # Allow to restart the hub without having to restart the nodes.
   #  (node) in ms. Selenium default: 5000
-  SELENIUM_NODE_REGISTER_CYCLE="0" \
+  SELENIUM_NODE_REGISTER_CYCLE="5000" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \

@@ -16,6 +16,7 @@ echo "#======================================"
 echo "# Scenario 2a [restart]: Normal restart"
 echo "#======================================"
 docker restart grid #normal restart
+docker restart grid_adwords_mock
 sleep ${SLEEP_RACE_COND_SECS}
 docker exec grid wait_all_done ${WAIT_ALL_DONE}
 docker logs grid
@@ -26,6 +27,7 @@ echo "#========================================================================"
 echo "# Scenario 2b [restart]: Forced quick container restart + run tests again"
 echo "#========================================================================"
 docker restart --time=0 grid #forced quick restart
+docker restart --time=0 grid_adwords_mock
 sleep ${SLEEP_RACE_COND_SECS}
 docker exec grid wait_all_done ${WAIT_ALL_DONE}
 docker logs grid

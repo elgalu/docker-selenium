@@ -6,7 +6,7 @@ For using it non-Linux machines or, in general, by not sharing the host (localho
 For requirements check [README#requisites](../README.md#requisites)
 
 ## Usage
-Either clone this repository or download the file [docker-compose-host.yml](../docker-compose-host.yml) using `wget`
+Either clone this repository or download the file [docker-compose-host.yml][] using `wget`
 
     wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose-host.yml"
     mv -f docker-compose-host.yml docker-compose.yml
@@ -14,9 +14,10 @@ Either clone this repository or download the file [docker-compose-host.yml](../d
 
 ### Run
 Either start with `docker-compose ... scale` as shown in below example or you can also use `docker-compose up` and scale after in a second command.
+You should replace `adwords_mock` with your web service under test within the [docker-compose-host.yml][] file..
 
     export SELENIUM_HUB_PORT=4444 NODES=3
-    docker-compose -p selenium scale hub=1 chrome=${NODES} firefox=${NODES}
+    docker-compose -p selenium scale adwords_mock=1 hub=1 chrome=${NODES} firefox=${NODES}
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
@@ -36,3 +37,5 @@ Once your tests are done you can clean up:
     docker-compose -p selenium down
 
 The `down` compose command stops and remove containers, networks, volumes, and images created by `up` or `scale`
+
+[docker-compose-host.yml]: ../docker-compose-host.yml

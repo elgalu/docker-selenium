@@ -8,8 +8,13 @@ set -xe
 
 # Ensure clean env
 docker rm -vf grid || true
+docker rm -vf grid_adwords_mock || true
 
 docker run --name=grid -d -e VIDEO=true -v /dev/shm:/dev/shm selenium
+
+# We need a mock service for testing
+docker run -d --name=grid_adwords_mock --net=container:grid elgalu/google_adwords_mock
+
 docker exec grid wait_all_done 40s
 docker exec grid versions
 docker exec grid errors || true
