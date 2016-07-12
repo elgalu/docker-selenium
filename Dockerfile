@@ -977,7 +977,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # How often in ms the node will try to register itself again.
   # Allow to restart the hub without having to restart the nodes.
   #  (node) in ms. Selenium default: 5000
-  SELENIUM_NODE_REGISTER_CYCLE="5000" \
+  SELENIUM_NODE_REGISTER_CYCLE="1000" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \

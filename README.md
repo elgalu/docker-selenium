@@ -76,11 +76,9 @@ You will need to run the second `eval` command for every new terminal window.
         docker exec grid wait_all_done 30s
 
 After this, [Selenium][] should be up and running at `http://localhost:4444/wd/hub`. Open the url in your browser to confirm it is running.
-If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine/installation/windows/) `localhost` won't work! Find out the correct IP through `boot2docker ip` or `docker-machine ip default`.
+If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine/installation/windows/) `localhost` won't work unless you are in Docker Beta (version >= 1.12) If you are using Docker version <= 1.11 please find out the correct IP through `docker-machine ip default`.
 
 **Notes:**
- * Add `sudo` only if needed in your environment
- * Add `--privileged` or `-v /dev/shm:/dev/shm` if you really need it. For example when [Chrome crashes](https://github.com/elgalu/docker-selenium/issues/20) during your high gpu intensive tests.
  * Once this [docker feature](https://github.com/docker/docker/pull/22719) is in place `wait_all_done` won't be necessary anymore.
 
 #### Stop

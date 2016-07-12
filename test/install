@@ -4,4 +4,3 @@
 set -e
 
 ./test/install_bats
-./test/install_grid

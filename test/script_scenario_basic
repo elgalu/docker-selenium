@@ -1,8 +1,61 @@
 #!/usr/bin/env bash
 
-echo "#========================================================="
-echo "# Scenario 1 [basic]: Run tests right after the container started"
-echo "#========================================================="
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+echo "#==================================================================="
+echo "# Scenario 1a [basic]: SETUP: Run tests right after the cont started"
+echo "#==================================================================="
+
+[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
+
+docker tag selenium:latest elgalu/selenium:latest
+
+# Ensure clean env
+docker rm -vf grid || true
+
+function get_mock_port() {
+  echo $(docker inspect -f='{{(index (index .NetworkSettings.Ports "33001/tcp") 0).HostPort}}' grid_adwords_mock)
+}
+
+# Ensure the mock page loads before continuing
+i=0
+while true ; do
+  docker rm -vf grid_adwords_mock || true
+  docker run -d --name=grid_adwords_mock -P elgalu/google_adwords_mock
+  let i=${i}+1
+
+  MOCK_SERVER_PORT=$(get_mock_port)
+  if wget --timeout=2 --tries=3 --waitretry=10 \
+          "http://localhost:${MOCK_SERVER_PORT}/adwords"; then
+    break
+  fi
+
+  docker logs grid_adwords_mock
+  if [ ${i} -gt 3 ]; then
+    echo "-- ERROR: Failed to start the Mock at $0 after 3 retries." 1>&2
+    exit 3
+  fi
+done
+docker logs grid_adwords_mock
+
+rm adwords
+export MOCK_SERVER_PORT=$(get_mock_port)
+
+docker run --name=grid -d -e VIDEO=true \
+  -e MOCK_SERVER_HOST="d.host.loc.dev" \
+  -e MOCK_SERVER_PORT \
+  -v /dev/shm:/dev/shm selenium
+
+docker exec grid wait_all_done 40s
+docker exec grid versions
+docker exec grid errors || true
+docker logs grid
+
+echo "#==================================================================="
+echo "# Scenario 1b [basic]: Run tests right after the container started"
+echo "#==================================================================="
 
 # set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed

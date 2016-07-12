@@ -5,6 +5,7 @@
 # pip install -U selenium
 import time
 import os
+from retrying import retry
 
 # Import the Selenium 2 namespace (aka "webdriver")
 from selenium import webdriver
@@ -23,7 +24,7 @@ if args.browser == 'chrome':
 elif args.browser == 'firefox':
     caps = DesiredCapabilities.FIREFOX
 else:
-    raise ValueError("Invalid browser '%s'", args.browser)
+    raise ValueError("Invalid browser '%s'" % args.browser)
 
 msleep = float( os.environ.get('TEST_SLEEPS', '0.1') )
 
@@ -35,13 +36,11 @@ myselenium_base_url = "%s://%s:%s" % (sel_proto, sel_host, sel_port)
 myselenium_grid_console_url = "%s/grid/console" % (myselenium_base_url)
 myselenium_hub_url = "%s/wd/hub" % (myselenium_base_url)
 print ("Will use browser=%s" % args.browser)
-print ("Will connect to selenium at %s" % myselenium_hub_url)
 print ("Will sleep '%s' secs between test steps" % msleep)
 
-from retrying import retry
-
-@retry(stop_max_attempt_number=12, stop_max_delay=180100, wait_fixed=300)
+@retry(stop_max_attempt_number=12, stop_max_delay=30100, wait_fixed=300)
 def webdriver_connect():
+    print ("Will connect to selenium at %s" % myselenium_hub_url)
     # http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
     return webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
 
@@ -55,25 +54,33 @@ height = os.environ.get('SCREEN_HEIGHT','600')
 driver.set_window_position(0, 0)
 driver.set_window_size(width, height)
 
-if args.browser == 'chrome':
-    driver.set_window_size(1400, 500)
-    # Selenium grid console - open
+@retry(stop_max_attempt_number=5, stop_max_delay=20100, wait_fixed=100)
+def open_hub_page():
     print ("Opening local selenium grid console page %s" %
            myselenium_grid_console_url)
     driver.get(myselenium_grid_console_url)
+
+@retry(stop_max_attempt_number=5, stop_max_delay=20100, wait_fixed=100)
+def check_hub_title():
+    print ("Current title: %s" % driver.title)
+    print ("Asserting 'Grid Console' in driver.title")
+    assert "Grid Console" in driver.title
+
+if args.browser == 'chrome':
+    driver.set_window_size(1400, 500)
+    # Selenium grid console - open
+    open_hub_page()
     time.sleep(msleep)
     # zoom in
     driver.execute_script("document.body.style.zoom='150%'")
     time.sleep(msleep)
 
     # Selenium grid console - assert
-    print ("Current title: %s" % driver.title)
-    print ("Asserting 'Grid Console' in driver.title")
-    assert "Grid Console" in driver.title
+    check_hub_title()
 
     # Selenium grid console - take screen shot
     screen_shot_path = '/test/console.png'
-    print ("Taking screen shot and saving to %s", screen_shot_path)
+    print ("Taking screen shot and saving to %s" % screen_shot_path)
     driver.get_screenshot_as_file(screen_shot_path)
 
 driver.set_window_size(width, height)
@@ -87,7 +94,7 @@ page_port = os.environ.get('MOCK_SERVER_PORT','33001')
 page_host = os.environ.get('MOCK_SERVER_HOST','localhost')
 pageurl = ("http://%s:%s/adwords" % (page_host, page_port))
 
-@retry(stop_max_attempt_number=7, stop_max_delay=30100, wait_fixed=300)
+@retry(stop_max_attempt_number=7, stop_max_delay=20100, wait_fixed=300)
 def open_web_page():
     print ("Opening page %s" % pageurl)
     driver.get(pageurl)
