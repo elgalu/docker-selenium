@@ -1,0 +1,14 @@
+{
+  "caps": [
+    {
+      "BROWSER_NAME": "chrome",
+      "VERSION": "51.0.2704.106",
+      "PLATFORM": "LINUX"
+    },
+    {
+      "BROWSER_NAME": "firefox",
+      "VERSION": "47.0.1",
+      "PLATFORM": "LINUX"
+    }
+  ]
+}

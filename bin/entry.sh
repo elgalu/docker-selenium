@@ -29,9 +29,6 @@ export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | 
 export COMMON_CAPS="maxInstances=${MAX_INSTANCES},platform=LINUX,acceptSslCerts=true"
 export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
 export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
-export CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
-# For current selected firefox
-export FIREFOX_DEST_BIN="${FF_DEST}/firefox"
 # We may need uid & gid from host machine
 export HOST_GID=$(stat -c "%g" ${VIDEOS_DIR})
 export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})

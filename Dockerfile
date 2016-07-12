@@ -694,7 +694,8 @@ ENV FF_VER="47.0.1" \
     FF_PLATFORM="linux-x86_64" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
     FF_DEST="${SEL_HOME}/firefox"
-ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
+ENV FF_COMP="firefox-${FF_VER}.tar.bz2" \
+    FIREFOX_DEST_BIN="${FF_DEST}/firefox"
 ENV FF_URL "${FF_BASE_URL}/firefox/releases/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
   && wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
@@ -1144,10 +1145,13 @@ ADD test/run_test.sh /usr/bin/run_test
 ADD test/selenium_test.sh /usr/bin/selenium_test
 ADD test/python_test.py /usr/bin/python_test
 
-#==================
-# Fix dirs (again)
-#==================
-RUN mkdir -p ${NORMAL_USER_HOME}/.vnc \
+#===================================
+# Fix dirs (again) and final chores
+#===================================
+RUN sudo touch /capabilities.json \
+  && sudo chown ${NORMAL_USER}:${NORMAL_GROUP} /capabilities.json \
+  && generate_capabilities_json \
+  && mkdir -p ${NORMAL_USER_HOME}/.vnc \
   # Videos
   && mkdir -p ${VIDEOS_DIR} \
   && sudo ln -s ${VIDEOS_DIR} / \

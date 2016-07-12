@@ -3,7 +3,7 @@
 ## Local
 For pull requests or local commits:
 
-    ./test/before_install_build && ./test/install && ./test/script
+    ./test/before_install_build && ./test/install && ./test/script_start && ./test/script_with_retry && ./test/script_end
     docker exec grid versions && ./test/after_script
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv

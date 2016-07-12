@@ -76,7 +76,9 @@ install:
   - ./test/install
 
 script:
-  - ./test/script
+  - ./test/script_start
+  - travis_retry ./test/script_with_retry
+  - ./test/script_end
 
 # cleanup though doesn't seem to be necessary in Travis infra
 after_script:

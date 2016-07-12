@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+gen_caps_json() {
+  CHROME_STABLE=$(chrome_stable_version)
+  FIREFOX_STABLE=$(firefox_version)
+
+  cat << EOF > /capabilities.json
+{
+  "caps": [
+    {
+      "BROWSER_NAME": "chrome",
+      "VERSION": "${CHROME_STABLE}",
+      "PLATFORM": "LINUX"
+    },
+    {
+      "BROWSER_NAME": "firefox",
+      "VERSION": "${FIREFOX_STABLE}",
+      "PLATFORM": "LINUX"
+    }
+  ]
+}
+EOF
+}
+
+gen_caps_json
