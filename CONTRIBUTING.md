@@ -3,7 +3,7 @@
 ## Local
 For pull requests or local commits:
 
-    ./test/before_install_build && ./test/install && ./test/script_start && ./test/script_with_retry && ./test/script_end
+    time (./test/before_install_build && ./test/install && ./test/script_start && ./test/script_with_retry && ./test/script_end) ; beep
     docker exec grid versions && ./test/after_script
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "New default SELENIUM_NODE_REGISTER_CYCLE=1000"
+    git commit -m "Upgrade Docker beta from 1.12.0-rc3 to 1.12.0-rc4"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1h && git push origin tmp-2.53.1h && git push --tags
 
