@@ -11,6 +11,9 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: TBD_DATE
  + Upgrade Docker beta from 1.12.0-rc3 to 1.12.0-rc4
  + Add -e SEL_UNREGISTER_IF_STILL_DOWN_AFTER and default to 2500 ms
+ + Add capabilities.json
+ + Make `VNC_PASSWORD=no` passwordless accessible
+ + Chore: get rid of `supervisord: no process found`
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE

@@ -1152,8 +1152,14 @@ ADD test/python_test.py /usr/bin/python_test
 # Fix dirs (again) and final chores
 #===================================
 RUN sudo touch /capabilities.json \
+  # Capabilties json file
   && sudo chown ${NORMAL_USER}:${NORMAL_GROUP} /capabilities.json \
-  && generate_capabilities_json \
+  && generate_capabilities_json > /capabilities.json \
+  && cp /capabilities.json ${NORMAL_USER_HOME}/capabilities.json \
+  && cp /capabilities.json ${NORMAL_USER_HOME}/capabilities \
+  && cp /capabilities.json ${NORMAL_USER_HOME}/caps.json \
+  && cp /capabilities.json ${NORMAL_USER_HOME}/caps \
+  # VNC
   && mkdir -p ${NORMAL_USER_HOME}/.vnc \
   # Videos
   && mkdir -p ${VIDEOS_DIR} \

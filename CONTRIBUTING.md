@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Add -e SEL_UNREGISTER_IF_STILL_DOWN_AFTER and default to 2500 ms"
+    git commit -m "Make `VNC_PASSWORD=no` passwordless accessible"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1h && git push origin tmp-2.53.1h && git push --tags
 

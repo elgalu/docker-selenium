@@ -12,7 +12,6 @@ services:
       - GRID=true
       - CHROME=false
       - FIREFOX=false
-      - MOCK_SERVER_PORT=33001
 
   chrome:
     image: elgalu/selenium
@@ -25,7 +24,6 @@ services:
       - GRID=false
       - CHROME=true
       - FIREFOX=false
-      - MOCK_SERVER_PORT=33001
 
   firefox:
     image: elgalu/selenium
@@ -37,7 +35,6 @@ services:
       - GRID=false
       - CHROME=false
       - FIREFOX=true
-      - MOCK_SERVER_PORT=33001
 
   adwords_mock:
     image: elgalu/google_adwords_mock

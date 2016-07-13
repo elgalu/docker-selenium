@@ -68,7 +68,7 @@ You will need to run the second `eval` command for every new terminal window.
         docker pull elgalu/selenium #upgrades to latest if a newer version is available
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
+            -e TZ="US/Pacific" -e VNC_PASSWORD=no \
             -v /dev/shm:/dev/shm elgalu/selenium
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
@@ -79,6 +79,7 @@ After this, [Selenium][] should be up and running at `http://localhost:4444/wd/h
 If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine/installation/windows/) `localhost` won't work unless you are in Docker Beta (version >= 1.12) If you are using Docker version <= 1.11 please find out the correct IP through `docker-machine ip default`.
 
 **Notes:**
+ * `VNC_PASSWORD=no` will make it VNC passwordless accessible.
  * Once this [docker feature](https://github.com/docker/docker/pull/22719) is in place `wait_all_done` won't be necessary anymore.
 
 #### Stop
@@ -293,6 +294,8 @@ In Protrator
 However this is now the default of this image, see `CHROME_ARGS="--no-sandbox"` in the Dockerfile so don't be surprised to see the "Stability and security will suffer" banner when opening Chrome inside the container.
 
 ## Security
+
+Using `VNC_PASSWORD=no` will make it VNC passwordless accessible, leave it empty to get a randomly generated one or if you don't use VNC simply deactivate it via `docker run ... -e VNC_START=false`
 
 The docker images are built and pushed from [TravisCI](https://travis-ci.org/elgalu/docker-selenium/builds/123103275) for full traceability.
 
