@@ -9,7 +9,8 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
- + TBD_COMMIT_MSG
+ + Upgrade Docker beta from 1.12.0-rc3 to 1.12.0-rc4
+ + Add -e SEL_UNREGISTER_IF_STILL_DOWN_AFTER and default to 2500 ms
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE

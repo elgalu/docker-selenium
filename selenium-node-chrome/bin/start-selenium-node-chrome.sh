@@ -34,6 +34,7 @@ java ${JAVA_OPTS} \
   -browserTimeout ${SEL_BROWSER_TIMEOUT_SECS} \
   -cleanUpCycle ${SEL_CLEANUPCYCLE_MS} \
   -nodePolling ${SEL_NODEPOLLING_MS} \
+  -unregisterIfStillDownAfter ${SEL_UNREGISTER_IF_STILL_DOWN_AFTER} \
   -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
   ${SELENIUM_NODE_PARAMS} \
   ${CUSTOM_SELENIUM_NODE_PROXY_PARAMS} \

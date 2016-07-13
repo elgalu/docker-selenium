@@ -975,10 +975,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
   SELENIUM_NODE_PROXY_PARAMS="" \
-  # How often in ms the node will try to register itself again.
-  # Allow to restart the hub without having to restart the nodes.
-  #  (node) in ms. Selenium default: 5000
-  SELENIUM_NODE_REGISTER_CYCLE="1000" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \
@@ -990,12 +986,19 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   MAX_SESSIONS=1 \
   SEL_RELEASE_TIMEOUT_SECS=19000 \
   SEL_BROWSER_TIMEOUT_SECS=16000 \
+  # How often in ms the node will try to register itself again.
+  # Allow to restart the hub without having to restart the nodes.
+  #  (node) in ms. Selenium default: 5000
+  SELENIUM_NODE_REGISTER_CYCLE="1000" \
   # How often a proxy will check for timed out thread.
   #  (node) in ms. Selenium default: 5000
-  SEL_CLEANUPCYCLE_MS=9000 \
+  SEL_CLEANUPCYCLE_MS=2000 \
   # Interval between alive checks of node how often the hub checks if the node is still alive.
   #  (node) in ms. Selenium default: 5000
-  SEL_NODEPOLLING_MS=6000 \
+  SEL_NODEPOLLING_MS=1500 \
+  # If the node remains down for more than unregisterIfStillDownAfter millisec
+  #  it will disappear from the hub. in ms. Default: 1min
+  SEL_UNREGISTER_IF_STILL_DOWN_AFTER=2500 \
   # Docker for Mac beta - containers do not start #227
   no_proxy=localhost \
   HUB_ENV_no_proxy=localhost \
