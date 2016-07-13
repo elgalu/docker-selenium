@@ -16,14 +16,14 @@ docker tag selenium:latest elgalu/selenium:latest
 docker rm -vf grid || true
 
 function get_mock_port() {
-  echo $(docker inspect -f='{{(index (index .NetworkSettings.Ports "33001/tcp") 0).HostPort}}' grid_adwords_mock)
+  echo $(docker inspect -f='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' grid_adwords_mock)
 }
 
 # Ensure the mock page loads before continuing
 i=0
 while true ; do
   docker rm -vf grid_adwords_mock || true
-  docker run -d --name=grid_adwords_mock -P elgalu/google_adwords_mock
+  docker run -d -t --name=grid_adwords_mock -P elgalu/google_adwords_mock
   let i=${i}+1
 
   MOCK_SERVER_PORT=$(get_mock_port)

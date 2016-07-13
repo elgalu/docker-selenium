@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Make `VNC_PASSWORD=no` passwordless accessible"
+    git commit -m "Chore: Use mock server at port 8080"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1h && git push origin tmp-2.53.1h && git push --tags
 

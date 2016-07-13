@@ -86,11 +86,11 @@ if args.browser == 'chrome':
 driver.set_window_size(width, height)
 
 # Test: https://code.google.com/p/chromium/issues/detail?id=519952
-# e.g. pageurl = "http://localhost:33001/adwords"
+# e.g. pageurl = "http://localhost:8080/adwords"
 # e.g. pageurl = "http://www.google.com:80/adwords"
 # e.g. pageurl = "https://www.google.com:443/adwords"
-# e.g. pageurl = "http://d.host.loc.dev:33001/adwords"
-page_port = os.environ.get('MOCK_SERVER_PORT','33001')
+# e.g. pageurl = "http://d.host.loc.dev:8080/adwords"
+page_port = os.environ.get('MOCK_SERVER_PORT','8080')
 page_host = os.environ.get('MOCK_SERVER_HOST','localhost')
 pageurl = ("http://%s:%s/adwords" % (page_host, page_port))
 

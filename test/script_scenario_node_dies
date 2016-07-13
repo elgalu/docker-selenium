@@ -47,7 +47,7 @@ docker run --name=mynodes -d \
   selenium
 
 # We need a mock service for testing
-docker run -d --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
+docker run -d -t --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 40s
 docker exec mynodes errors || true
@@ -86,7 +86,7 @@ docker run --name=mynodes -d \
   selenium
 
 # We need a mock service for testing
-docker run -d --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
+docker run -d -t --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 40s
 docker exec mynodes errors || true
