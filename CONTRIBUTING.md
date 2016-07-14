@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Chore: Use mock server at port 8080"
+    git commit -m "Upgrade dockertoolbox cask to 1.12.0-rc4"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1i && git push origin tmp-2.53.1i && git push --tags
 

@@ -3,10 +3,10 @@
 # Docs:
 #  https://github.com/astorije/homebrew-cask/blob/master/CONTRIBUTING.md#cask-stanzas
 cask 'dockertoolbox-rc' do
-  version '1.12.0-rc4'
+  version '1.12.0-rc3'
 
-  # shasum -a 256 DockerToolbox-1.12.0-rc4.pkg
-  sha256 '95ac6d6688c08443f9e42926f50c058083fc96fee8cd9ec124644572956d32a0'
+  # shasum -a 256 DockerToolbox-1.12.0-rc3.pkg
+  sha256 'e661176aa37223a081ed6bcb82ff94e6c8be15d48075badf4d32c4ddb2ac8cb9'
   # github.com/docker/toolbox was verified as official when first introduced to the cask
   url "https://github.com/docker/toolbox/releases/download/v#{version}/DockerToolbox-#{version}.pkg"
 
@@ -15,7 +15,7 @@ cask 'dockertoolbox-rc' do
   #  curl --compressed -L "https://github.com/docker/toolbox/releases.atom" | \
   #    sed 's|<pubDate>[^<]*</pubDate>||g' | shasum -a 256
   appcast 'https://github.com/docker/toolbox/releases.atom',
-          checkpoint: '1099f331135a6e1178c057cdd6938dca3102d37cb245f574b33833f2d78e67a7'
+          checkpoint: '634a681112d156cbcdc75e66508b2a759f70b7e8ce9ff8e8b794338705a8ead7'
 
   name 'Docker Toolbox'
   homepage 'https://www.docker.com/toolbox'

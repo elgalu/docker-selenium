@@ -86,6 +86,5 @@ x-terminal-emulator -ls  \
 # Join them in 1 bash line to avoid supervisor split them in debug output
 # this output is used to signal docker-selenium is ready for testing
 echo -e "\nContainer docker internal IP: $CONTAINER_IP\n"
-# echo -e "\nContainer docker internal IP: $CONTAINER_IP\n" 1>&3
 
 wait
