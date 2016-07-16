@@ -36,11 +36,12 @@ else
   tar xzf ${VNC_FILE_LINUX}
   rm -f "VNC-Server-${VNC_CLIENT_VERSION}-Linux-x64.deb"
   INST_CMD="sudo dpkg -i VNC-Viewer-${VNC_CLIENT_VERSION}-Linux-x64.deb"
+  echo "About to: '${INST_CMD}'"
   if ! eval "${INST_CMD}"; then
     echoerr "Please install manually with sudo or open this deb file to install it:"
     echoerr "${INST_CMD}"
   fi
   # Uninstall with:
-  #  sudo apt-get remove -qyy realvnc-vnc-viewer
+  #  sudo apt-get -qyy remove realvnc-vnc-viewer
 fi
 cd ..

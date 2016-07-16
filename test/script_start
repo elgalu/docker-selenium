@@ -12,5 +12,4 @@ export TESTING="true"
 ./test/script_scenario_basic
 ./test/script_scenario_restart
 ./test/script_scenario_node_dies
-./test/script_scenario_compose_1_1
 ./test/script_scenario_make

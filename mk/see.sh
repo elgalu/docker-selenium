@@ -26,4 +26,4 @@ set -x
 PORT=$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} cat VNC_PORT)
 IP=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers }}" | grep -oE '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)')
 ${VNC_CLIENT} -WarnUnencrypted=0 -SendKeyEvents=0 -GrabKeyboard=0 \
-  SendPointerEvents=0 -Scaling 30% ${IP}:${PORT}
+  SendPointerEvents=0 -Scaling ${SIZE} ${IP}:${PORT}
