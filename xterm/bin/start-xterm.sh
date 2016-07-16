@@ -4,10 +4,7 @@
 exec 3>&1
 exec 4>&2
 
-# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
-echoerr() {
-  cat <<< "$@" 1>&4;
-}
+echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
 
 # print error and exit
 die () {

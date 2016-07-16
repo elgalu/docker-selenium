@@ -14,7 +14,7 @@ export SELENIUM_HUB_PORT="4444" \
 
 # Below sleep avoids:
 #  Error forwarding the new session cannot find : Capabilities ...
-if [ "${TRAVIS}" = "true" ]; then
+if [ "${CI}" = "true" ]; then
   export SLEEP_TIME=15
 else
   export SLEEP_TIME=4

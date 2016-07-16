@@ -10,6 +10,8 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
  + Upgrade dockertoolbox cask to 1.12.0-rc4
+ + Add Makefile support to stay DRY
+ + Upgrade Python from 2.7.11 to 2.7.12
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE

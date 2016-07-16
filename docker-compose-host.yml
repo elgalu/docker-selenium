@@ -6,7 +6,6 @@ services:
     network_mode: host
     environment:
       - SELENIUM_HUB_PORT
-      - VNC_START=false
       - PICK_ALL_RANDMON_PORTS=true
       - GRID=true
       - CHROME=false
@@ -18,7 +17,6 @@ services:
     shm_size: 1g
     environment:
       - SELENIUM_HUB_PORT
-      - VNC_START=false
       - PICK_ALL_RANDMON_PORTS=true
       - GRID=false
       - CHROME=true
@@ -29,13 +27,12 @@ services:
     network_mode: host
     environment:
       - SELENIUM_HUB_PORT
-      - VNC_START=false
       - PICK_ALL_RANDMON_PORTS=true
       - GRID=false
       - CHROME=false
       - FIREFOX=true
 
-  adwords_mock:
+  mock:
     image: elgalu/google_adwords_mock
     network_mode: host
     tty: true

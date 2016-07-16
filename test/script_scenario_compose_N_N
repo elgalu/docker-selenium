@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
+
 echo "#===================================================="
-echo "# Scenario 5a [compose_N_N]: Docker Compose many nodes"
+echo "# Scenario 6a [compose_N_N]: Docker Compose many nodes"
 echo "#===================================================="
 
 # set -e: exit asap if a command exits with a non-zero status
@@ -10,7 +12,7 @@ set -xe
 
 export SELENIUM_HUB_PORT="4444"
 
-if [ "${TRAVIS}" = "true" ]; then
+if [ "${CI}" = "true" ]; then
   export NUM_NODES=2 PARAL_TESTS=2 WAIT_ALL_DONE="390s" SLEEP_TIME=19 \
          PAUSE_SECS_BETWEEN_RUN_TEST="0"
 else
@@ -24,7 +26,7 @@ export COMPOSE_FILE="docker-compose-host.yml" \
 ./test/compose-test.sh
 
 echo "#===================================================="
-echo "# Scenario 5b [compose_N_N]: Docker Compose many nodes"
+echo "# Scenario 6b [compose_N_N]: Docker Compose many nodes"
 echo "#===================================================="
 export COMPOSE_FILE="docker-compose.yml" \
        DO_COMPOSE_UP="true"

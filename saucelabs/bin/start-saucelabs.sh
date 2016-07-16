@@ -3,10 +3,7 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
-echoerr() {
-  cat <<< "$@" 1>&2;
-}
+echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
 
 # print error and exit
 die () {

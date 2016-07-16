@@ -4,10 +4,7 @@
 # set -x: print each command right before it is executed
 set -xe
 
-# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
-echoerr() {
-  cat <<< "$@" 1>&2;
-}
+echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
 
 # print error and exit
 die () {
@@ -25,15 +22,15 @@ die () {
 [ -z "${PAUSE_SECS_BETWEEN_RUN_TEST}" ] && export PAUSE_SECS_BETWEEN_RUN_TEST="0"
 
 # Ensure clean
-docker-compose -f ${COMPOSE_FILE} -p selenium down || true
+docker-compose -f ${COMPOSE_FILE} -p grid down || true
 
 # Compose up!
 if [ "${DO_COMPOSE_UP}" = "true" ]; then
-  docker-compose -f ${COMPOSE_FILE} -p selenium up -d
+  docker-compose -f ${COMPOSE_FILE} -p grid up -d
 fi
 
 # Compose scale!
-docker-compose -f ${COMPOSE_FILE} -p selenium scale adwords_mock=1 hub=1 chrome=${NUM_NODES} firefox=${NUM_NODES}
+docker-compose -f ${COMPOSE_FILE} -p grid scale mock=1 hub=1 chrome=${NUM_NODES} firefox=${NUM_NODES}
 
 # FIXME: We still need to wait a bit because the nodes registration is not
 #        being waited on wait_all_done script :(
@@ -41,21 +38,21 @@ docker-compose -f ${COMPOSE_FILE} -p selenium scale adwords_mock=1 hub=1 chrome=
 sleep ${SLEEP_TIME}
 
 # Wait then show errors, if any
-if ! docker exec selenium_hub_1 wait_all_done ${WAIT_ALL_DONE}; then
-  docker exec selenium_hub_1 errors || true
-  docker-compose -f ${COMPOSE_FILE} -p selenium logs hub
+if ! docker exec grid_hub_1 wait_all_done ${WAIT_ALL_DONE}; then
+  docker exec grid_hub_1 errors || true
+  docker-compose -f ${COMPOSE_FILE} -p grid logs hub
   die "Failed to start the Hub"
 fi
 
 for i in $(seq 1 ${NUM_NODES}); do
-  if ! docker-compose -f ${COMPOSE_FILE} -p selenium exec --index ${i} chrome wait_all_done ${WAIT_ALL_DONE}; then
-    docker logs selenium_chrome_${i}
-    docker-compose -f ${COMPOSE_FILE} -p selenium exec --index ${i} chrome errors || true
+  if ! docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} chrome wait_all_done ${WAIT_ALL_DONE}; then
+    docker logs grid_chrome_${i}
+    docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} chrome errors || true
     die "Failed to start Node chrome ${i}"
   fi
-  if ! docker-compose -f ${COMPOSE_FILE} -p selenium exec --index ${i} firefox wait_all_done ${WAIT_ALL_DONE}; then
-    docker logs selenium_firefox_${i}
-    docker-compose -f ${COMPOSE_FILE} -p selenium exec --index ${i} firefox errors || true
+  if ! docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} firefox wait_all_done ${WAIT_ALL_DONE}; then
+    docker logs grid_firefox_${i}
+    docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} firefox errors || true
     die "Failed to start Node firefox ${i}"
   fi
 done
@@ -73,9 +70,9 @@ for i in $(seq 1 ${PARAL_TESTS}); do
   # Docker-ompose exec is giving me error:
   #  in dockerpty/io.py", line 42, in set_blocking
   #  ValueError: file descriptor cannot be a negative integer (-1)
-  # docker-compose -f ${COMPOSE_FILE} -p selenium exec --index 1 hub run_test &
-  docker exec -t selenium_hub_1 selenium_test chrome &
-  docker exec -t selenium_hub_1 selenium_test firefox &
+  # docker-compose -f ${COMPOSE_FILE} -p grid exec --index 1 hub run_test &
+  docker exec -t grid_hub_1 selenium_test chrome &
+  docker exec -t grid_hub_1 selenium_test firefox &
 done
 
 # sleep a moment to let the UI tests start
@@ -91,14 +88,14 @@ for job in `jobs -p`; do
 done
 
 # Show logs also
-docker logs selenium_hub_1
+docker logs grid_hub_1
 for i in $(seq 1 ${NUM_NODES}); do
-  docker logs selenium_chrome_${i}
-  docker logs selenium_firefox_${i}
+  docker logs grid_chrome_${i}
+  docker logs grid_firefox_${i}
 done
 
 # Cleanup
-docker-compose -f ${COMPOSE_FILE} -p selenium down
+docker-compose -f ${COMPOSE_FILE} -p grid down
 
 # Results
 if [ "$FAIL_COUNT" == "0" ]; then

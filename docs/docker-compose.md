@@ -8,23 +8,23 @@ For requirements check [README#requisites](../README.md#requisites)
 ## Usage
 Either clone this repository or download the file [docker-compose.yml][] using `wget`
 
-    wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose.yml"
-    docker-compose -p selenium down #ensure is not already running
+    wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/latest/docker-compose.yml"
+    docker-compose -p grid down #ensure is not already running
 
 ### Run
 Start it with `docker-compose up` then **scale** it:
-You should replace `adwords_mock` with your web service under test within the [docker-compose.yml][] file.
+You should replace `mock` with your web service under test within the [docker-compose.yml][] file.
 
     export SELENIUM_HUB_PORT=4444 NODES=3
-    docker-compose -p selenium up -d
-    docker-compose -p selenium scale chrome=${NODES} firefox=${NODES}
+    docker-compose -p grid up -d
+    docker-compose -p grid scale chrome=${NODES} firefox=${NODES}
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
-    docker exec selenium_hub_1 wait_all_done 30s
+    docker exec grid_hub_1 wait_all_done 30s
     for ((i=1; i<=${NODES}; i++)); do
-      docker-compose -p selenium exec -T --index=$i chrome wait_all_done 30s
-      docker-compose -p selenium exec -T --index=$i firefox wait_all_done 30s
+      docker-compose -p grid exec -T --index=$i chrome wait_all_done 30s
+      docker-compose -p grid exec -T --index=$i firefox wait_all_done 30s
     done
 
 ### Test
@@ -36,7 +36,7 @@ you should instead either dockerize your application as shown in the example [ad
 ### Cleanup
 Once your tests are done you can clean up:
 
-    docker-compose -p selenium down
+    docker-compose -p grid down
 
 The `down` compose command stops and remove containers, networks, volumes, and images created by `up` or `scale`
 

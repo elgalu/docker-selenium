@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
+
+echo "#===================================================="
+echo "# Scenario 5 [make]: Docker Compose many nodes"
+echo "#===================================================="
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+
+if [ "${CI}" = "true" ]; then
+  make setup compose chrome=2 firefox=1
+else
+  # My local laptop has more power so hit it harder
+  make setup compose chrome=3 firefox=5
+  # also has a real display so we can "see"
+  make see browser=chrome node=1
+  make see browser=firefox node=1
+fi
+
+make test
+
+make cleanup

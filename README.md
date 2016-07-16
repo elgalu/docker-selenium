@@ -68,8 +68,7 @@ You will need to run the second `eval` command for every new terminal window.
         docker pull elgalu/selenium #upgrades to latest if a newer version is available
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            -e TZ="US/Pacific" -e VNC_PASSWORD=no \
-            -v /dev/shm:/dev/shm elgalu/selenium
+            -e TZ="US/Pacific" -v /dev/shm:/dev/shm elgalu/selenium
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
@@ -79,7 +78,7 @@ After this, [Selenium][] should be up and running at `http://localhost:4444/wd/h
 If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine/installation/windows/) `localhost` won't work unless you are in Docker Beta (version >= 1.12) If you are using Docker version <= 1.11 please find out the correct IP through `docker-machine ip default`.
 
 **Notes:**
- * `VNC_PASSWORD=no` will make it VNC passwordless accessible.
+ * The new default `VNC_PASSWORD=no` will make it VNC passwordless accessible.
  * Once this [docker feature](https://github.com/docker/docker/pull/22719) is in place `wait_all_done` won't be necessary anymore.
 
 #### Stop
@@ -101,9 +100,9 @@ See [jenkins](./docs/jenkins.md)
 ### Parallel
 This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel you can still do so, there are some ways to do this:
 
-1. The recommended way is via [docker-compose](./docs/docker-compose.md) and you should replace `adwords_mock` with your web service under test within the [docker-compose.yml][] file.
+1. The recommended way is via [docker-compose](./docs/docker-compose.md) and you should replace `mock` with your web service under test within the [docker-compose.yml][] file.
 
-        SELENIUM_HUB_PORT=4444 docker-compose -p selenium scale adwords_mock=1 hub=1 chrome=3 firefox=3
+        SELENIUM_HUB_PORT=4444 docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3
 
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
 

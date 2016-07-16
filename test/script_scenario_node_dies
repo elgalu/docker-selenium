@@ -7,10 +7,7 @@ echo "#======================================================"
 ###################
 # Echo with Error #
 ###################
-# echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
-echoerr() {
-  cat <<< "$@" 1>&2;
-}
+echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
 
 ########################
 # Print error and exit #
@@ -37,7 +34,7 @@ echo "#================================================="
 
 # Ensure clean env
 docker rm -vf mynodes || true
-docker rm -vf grid_adwords_mock || true
+docker rm -vf grid_mock || true
 
 # Create container for Chrome
 docker run --name=mynodes -d \
@@ -47,7 +44,7 @@ docker run --name=mynodes -d \
   selenium
 
 # We need a mock service for testing
-docker run -d -t --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
+docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 40s
 docker exec mynodes errors || true
@@ -77,7 +74,7 @@ echo "#================================================="
 
 # Ensure clean env
 docker rm -vf mynodes || true
-docker rm -vf grid_adwords_mock || true
+docker rm -vf grid_mock || true
 
 # Create container for Firefox
 docker run --name=mynodes -d \
@@ -86,7 +83,7 @@ docker run --name=mynodes -d \
   selenium
 
 # We need a mock service for testing
-docker run -d -t --name=grid_adwords_mock --net=container:mynodes elgalu/google_adwords_mock
+docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 40s
 docker exec mynodes errors || true

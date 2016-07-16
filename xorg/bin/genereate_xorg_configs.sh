@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-# Echo fn that outputs to stderr http://stackoverflow.com/a/2990533/511069
-echoerr() {
-  cat <<< "$@" 1>&2;
-}
+echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
 
 # Print error and exit
 die () {

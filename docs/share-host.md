@@ -8,23 +8,23 @@ For requirements check [README#requisites](../README.md#requisites)
 ## Usage
 Either clone this repository or download the file [docker-compose-host.yml][] using `wget`
 
-    wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/master/docker-compose-host.yml"
+    wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/latest/docker-compose-host.yml"
     mv -f docker-compose-host.yml docker-compose.yml
-    docker-compose -p selenium down #ensure is not already running
+    docker-compose -p grid down #ensure is not already running
 
 ### Run
 Either start with `docker-compose ... scale` as shown in below example or you can also use `docker-compose up` and scale after in a second command.
-You should replace `adwords_mock` with your web service under test within the [docker-compose-host.yml][] file..
+You should replace `mock` with your web service under test within the [docker-compose-host.yml][] file..
 
     export SELENIUM_HUB_PORT=4444 NODES=3
-    docker-compose -p selenium scale adwords_mock=1 hub=1 chrome=${NODES} firefox=${NODES}
+    docker-compose -p grid scale mock=1 hub=1 chrome=${NODES} firefox=${NODES}
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
-    docker exec selenium_hub_1 wait_all_done 30s
+    docker exec grid_hub_1 wait_all_done 30s
     for ((i=1; i<=${NODES}; i++)); do
-      docker-compose -p selenium exec -T --index=$i chrome wait_all_done 30s
-      docker-compose -p selenium exec -T --index=$i firefox wait_all_done 30s
+      docker-compose -p grid exec -T --index=$i chrome wait_all_done 30s
+      docker-compose -p grid exec -T --index=$i firefox wait_all_done 30s
     done
 
 ### Test
@@ -34,7 +34,7 @@ Because we use the `network_mode: host` feature everything will run in `localhos
 ### Cleanup
 Once your tests are done you can clean up:
 
-    docker-compose -p selenium down
+    docker-compose -p grid down
 
 The `down` compose command stops and remove containers, networks, volumes, and images created by `up` or `scale`
 

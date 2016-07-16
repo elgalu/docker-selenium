@@ -1011,8 +1011,11 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_PORT="${DEFAULT_VNC_PORT}" \
   # VNC_CLI_OPTS="-noipv6 -no6 -forever -shared" \
   VNC_CLI_OPTS="-forever -shared" \
-  # You can set the VNC password or leave null so a random password is generated:
-  # ENV VNC_PASSWORD topsecret
+  # VNC password options:
+  # - "no" means no password; less secure but not a big deal
+  # - "" (empty string) means it will be randomly generated
+  # - "some-value" will use that password "some-value" or whatever
+  VNC_PASSWORD=no \
   NOVNC_PORT="${DEFAULT_NOVNC_PORT}" \
   NOVNC="false" \
   SSHD="false" \
