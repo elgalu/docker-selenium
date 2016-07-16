@@ -74,7 +74,7 @@ You will need to run the second `eval` command for every new terminal window.
 
         docker exec grid wait_all_done 30s
 
-After this, [Selenium][] should be up and running at `http://localhost:4444/wd/hub`. Open the url in your browser to confirm it is running.
+After this, [Selenium][] will be up and ready to accept clients at `http://localhost:4444/wd/hub`. The grid's available browsers can be viewed by opening the console at `http://localhost:4444/grid/console`.
 If you are using Mac (OSX) or [Microsoft Windows](https://docs.docker.com/engine/installation/windows/) `localhost` won't work unless you are in Docker Beta (version >= 1.12) If you are using Docker version <= 1.11 please find out the correct IP through `docker-machine ip default`.
 
 **Notes:**
