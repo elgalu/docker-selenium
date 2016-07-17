@@ -11,8 +11,20 @@
 # Contributing
 #  export TESTING_MAKE=true NAME=leo PORT=5555 nodes=2
 #  make chrome=2 firefox=2 && make seeall dock
+ifeq ($(OS),Windows_NT)
+$(error Windows is not currently supported)
+endif
+
 export GIT_BASE_URL ?= https://raw.githubusercontent.com/elgalu/docker-selenium
 export GIT_TAG_OR_BRANCH ?= latest
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+export VNC_CLIENT := vncviewer
+endif
+ifeq ($(UNAME_S),Darwin)
+export VNC_CLIENT := /Applications/RealVNC/VNC Viewer.app/Contents/MacOS/vncviewer
+endif
 
 default: compose
 

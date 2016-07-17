@@ -19,7 +19,9 @@ die () {
 if [ "$(uname)" = 'Darwin' ]; then
   echo "Will install wmctrl for OSX"
   set -x
-  brew install wmctrl
+  brew cask install xquartz
+  # https://github.com/Homebrew/homebrew-x11/blob/master/wmctrl.rb
+  brew install homebrew/x11/wmctrl
 else
   echo "Will install wmctrl for Linux"
   INST_CMD="sudo apt-get -qyy install wmctrl"

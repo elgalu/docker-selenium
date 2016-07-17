@@ -5,7 +5,14 @@ You should replace `mock` with your web service under test within the generated 
 
     wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/latest/Makefile"
     make get setup #first-time
-    make install_vnc install_wmctrl #VNC-support
+
+If you want VNC helpers support _(optional)_
+
+    make install_vnc
+
+If you also want windows manager support, i.e. want to `make move` _(optional but not recommended in OSX)_
+
+    make install_wmctrl
 
 ## Usage
 Make sure to [setup](#setup) first.

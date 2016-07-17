@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed
-# set -u: treat unset variables as an error and exit immediately
+# set -e: exit asap if a command exits with a non-zero status
 set -e
+# set -u: treat unset variables as an error and exit immediately
 set -u
 
 echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
@@ -16,6 +16,18 @@ die () {
   exit $errnum
 }
 
+# http://stackoverflow.com/a/8996924/511069
+md5_sum() {
+  if builtin command -v md5 > /dev/null; then
+    echo "md5"
+  elif builtin command -v md5sum > /dev/null ; then
+    echo "md5sum"
+  else
+    die "Neither md5 nor md5sum were found in the PATH"
+  fi
+  return 0
+}
+
 cd mk
 if [ "$(uname)" = 'Darwin' ]; then
   echo "Will install '${VNC_CLIENT_NAME}' for OSX"
@@ -23,16 +35,16 @@ if [ "$(uname)" = 'Darwin' ]; then
   if [ ! -f "${VNC_FILE_OSX}" ]; then
     wget -nv "${VNC_DOWNLOAD_BASE_URL}/${VNC_FILE_OSX}"
   fi
-  md5sum --check vnc_osx.md5
+  $(md5_sum) -r vnc_osx.md5
   # https://github.com/caskroom/homebrew-cask/blob/master/USAGE.md#other-ways-to-specify-a-cask
-  brew cask install ./osx/vnc_cask.rb --force
+  brew cask install ./vnc_cask.rb --force
 else
   echo "Will install '${VNC_CLIENT_NAME}' for Linux"
   echo "${VNC_MD5SUM_LINUX}  ${VNC_FILE_LINUX}" > vnc_linux.md5
   if [ ! -f "${VNC_FILE_LINUX}" ]; then
     wget -nv "${VNC_DOWNLOAD_BASE_URL}/${VNC_FILE_LINUX}"
   fi
-  md5sum --check vnc_linux.md5
+  $(md5_sum) --check vnc_linux.md5
   tar xzf ${VNC_FILE_LINUX}
   rm -f "VNC-Server-${VNC_CLIENT_VERSION}-Linux-x64.deb"
   INST_CMD="sudo dpkg -i VNC-Viewer-${VNC_CLIENT_VERSION}-Linux-x64.deb"

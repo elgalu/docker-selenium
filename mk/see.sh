@@ -15,9 +15,6 @@ die () {
   exit $errnum
 }
 
-# set -x: print each command right before it is executed
-set -x
-
 # ID=$(docker inspect --format="{{.Id}}" ${COMPOSE_PROJ_NAME}_hub_1)
 # MASK=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers.${ID}.IPv4Address }}")
 # IP=$(echo ${MASK} | sed -e 's/\/.*//')
@@ -25,5 +22,14 @@ set -x
 
 PORT=$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} cat VNC_PORT)
 IP=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers }}" | grep -oE '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)')
-${VNC_CLIENT} -WarnUnencrypted=0 -SendKeyEvents=0 -GrabKeyboard=0 \
-  SendPointerEvents=0 -Scaling ${SIZE} ${IP}:${PORT}
+
+if [ "$(uname)" != 'Darwin' ]; then
+  OPTS="-GrabKeyboard=0"
+else
+  OPTS=""
+fi
+
+# set -x: print each command right before it is executed
+set -x
+
+"${VNC_CLIENT}" -WarnUnencrypted=0 -SendKeyEvents=0 SendPointerEvents=0 -Scaling ${SIZE} ${OPTS} ${IP}:${PORT}

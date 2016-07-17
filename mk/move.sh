@@ -18,7 +18,8 @@ die () {
 # set -x: print each command right before it is executed
 
 DISP="$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} cat DISPLAY)"
-WIN_TITLE="${DISP} - VNC Viewer"
+CONT_HOSTNAME=$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} hostname)
+WIN_TITLE="${CONT_HOSTNAME}${DISP} - VNC Viewer"
 
 if [ "${browser}" = "chrome" ] && [ "${node}" = "1" ]; then
   # NorthWest(1)0,0
