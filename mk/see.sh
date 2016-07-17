@@ -21,7 +21,14 @@ die () {
 # IP=`docker inspect -f='{{.NetworkSettings.IPAddress}}' ${COMPOSE_PROJ_NAME}_hub_1`
 
 PORT=$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} cat VNC_PORT)
-IP=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers }}" | grep -oE '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)')
+if [ "$(uname)" = 'Darwin' ]; then
+  IP="localhost"
+else
+  # We need a fixed port range to expose VNC
+  # due to a bug in Docker for Mac beta (1.12)
+  # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+  IP=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers }}" | grep -oE '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)')
+fi
 
 if [ "$(uname)" != 'Darwin' ]; then
   OPTS="-GrabKeyboard=0"

@@ -946,6 +946,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   MEM_JAVA_PERCENT=80 \
   # Max amount of time to wait on Xvfb or Xmanager while retrying
   WAIT_FOREGROUND_RETRY="1s" \
+  WAIT_VNC_FOREGROUND_RETRY="7s" \
   # Supervisor processes retry attemps (0 means do not retry)
   XVFB_STARTRETRIES=0 \
   XMANAGER_STARTRETRIES=0 \
@@ -1009,6 +1010,11 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # Vnc
   VNC_START="true" \
   VNC_PORT="${DEFAULT_VNC_PORT}" \
+  # We need a fixed port range to expose VNC
+  # due to a bug in Docker for Mac beta (1.12)
+  # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+  VNC_FROM_PORT="" \
+  VNC_TO_PORT="" \
   # VNC_CLI_OPTS="-noipv6 -no6 -forever -shared" \
   VNC_CLI_OPTS="-forever -shared" \
   # VNC password options:

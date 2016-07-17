@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export VNC_PORT=$(cat VNC_PORT)
+
 # Make it portable
 [ -z "${VIDEO_PATH}" ] && export \
     VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"

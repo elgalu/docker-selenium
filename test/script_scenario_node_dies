@@ -25,8 +25,13 @@ set -xe
 
 export SELENIUM_NODE_CH_PORT=5757 \
        SELENIUM_NODE_FF_PORT=6868 \
-       SHUTDOWN_END_POINT="selenium-server/driver/?cmd=shutDownSeleniumServer" \
-       NODE_SUICIDE_WAIT_TIME=20
+       SHUTDOWN_END_POINT="selenium-server/driver/?cmd=shutDownSeleniumServer"
+
+if [ "${CI}" = "true" ]; then
+  NODE_SUICIDE_WAIT_TIME=20
+else
+  NODE_SUICIDE_WAIT_TIME=5
+fi
 
 echo "#================================================="
 echo "# Scenario 3a [node_dies]: Dies by killing Chrome"

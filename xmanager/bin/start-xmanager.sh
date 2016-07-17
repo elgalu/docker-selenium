@@ -3,10 +3,6 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-# Open new file descriptors that redirects to stderr/stdout
-exec 3>&1
-exec 4>&2
-
 echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
 
 # print error and exit
@@ -40,19 +36,22 @@ if [ "${XMANAGER}" = "openbox" ]; then
   exec openbox-session
 elif [ "${XMANAGER}" = "fluxbox" ]; then
   # Fluxbox is a fast, lightweight and responsive window manager
+
+  # Race conditions are possible for the port range lookup
+  # so try again
   i=0
   stat_failed=true
   while true ; do
     while true ; do
       let i=${i}+1
       if ! start_fluxbox; then
-        echo "-- WARN: start_fluxbox() failed!" 1>&3
+        echo "-- WARN: start_fluxbox() failed!"
       fi
       if timeout --foreground "${WAIT_FOREGROUND_RETRY}" wait-xmanager.sh &> "${LOGS_DIR}/wait-xmanager-stdout.log"; then
         stat_failed=false
         break
       else
-        echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}" 1>&3
+        echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}"
         killall fluxbox || true
       fi
       if [ ${i} -gt 3 ]; then

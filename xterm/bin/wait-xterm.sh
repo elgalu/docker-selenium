@@ -9,5 +9,3 @@ while ! grep 'Container docker internal IP' \
   echo -n '.'
   sleep 0.2;
 done
-
-echo "Done wait-xterm.sh"

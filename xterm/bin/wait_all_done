@@ -32,14 +32,14 @@ if timeout --foreground ${WAIT_TIMEOUT} ${LOOP_SCRIPT_PATH}; then
   fi
   grep 'IP:' /var/log/cont/xterm-stdout.log || die "Failed to grep IP:"
   echo "Note if you are in Mac (OSX) 'boot2docker ip' or 'docker-machine ip default' will tell you the relevant IP"
-  echo -e "\nSelenium all done and ready for testing!"
+  echo -e "Selenium all done and ready for testing!"
 else
   bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/cont/*' || true
   echo "" && echo "" && echo "==> errors <=="
   bash -c 'errors' || true
+  # bash -c "grep -v webSocketsHandshake /var/log/cont/vnc-tryouts-stderr*.log"
 
   die "
    Your docker-selenium didn't start properly.
-   Start it next time with -e DISABLE_ROLLBACK=true
   "
 fi

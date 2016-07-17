@@ -9,7 +9,7 @@
 #  make setup compose chrome=3 firefox=5 see browser=firefox node=5
 #
 # Contributing
-#  export TESTING_MAKE=true NAME=leo PORT=5555 nodes=2
+#  export TESTING_MAKE=true proj=leo PORT=5555 nodes=2
 #  make chrome=2 firefox=2 && make seeall dock
 ifeq ($(OS),Windows_NT)
 $(error Windows is not currently supported)
@@ -154,11 +154,15 @@ setup: .env basic_reqs mk/install_vnc.sh mk/vnc_cask.rb mk/see.sh mk/install_wmc
 	@echo "Requirements checked."
 
 cleanup:
-	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} down \
+	@echo -n "Stopping and removing ${COMPOSE_PROJ_NAME}..."
+	@docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} down \
 	  --remove-orphans >./mk/compose_down.log 2>&1
+	@echo "Done!"
 
-# Alias
-down: cleanup
+# like cleanup but verbose
+down:
+	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} down \
+	  --remove-orphans
 
 scale:
 	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} scale \

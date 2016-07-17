@@ -5,6 +5,12 @@ services:
     image: elgalu/selenium
     ports:
       - ${SELENIUM_HUB_PORT}:${SELENIUM_HUB_PORT}
+      # We need a fixed port range to expose VNC
+      # due to a bug in Docker for Mac beta (1.12)
+      # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+      - ${VNC_FROM_PORT}-${VNC_TO_PORT}:${VNC_FROM_PORT}-${VNC_TO_PORT}
+      # e.g. (hard-coded)
+      # - 40650-40700:40650-40700
     environment:
       - SELENIUM_HUB_PORT
       - PICK_ALL_RANDMON_PORTS=true
@@ -18,7 +24,10 @@ services:
     shm_size: 1g
     environment:
       - SELENIUM_HUB_PORT
+      - VNC_FROM_PORT
+      - VNC_TO_PORT
       - PICK_ALL_RANDMON_PORTS=true
+      - VIDEO=true
       - GRID=false
       - CHROME=true
       - FIREFOX=false
@@ -28,7 +37,10 @@ services:
     network_mode: "service:hub"
     environment:
       - SELENIUM_HUB_PORT
+      - VNC_FROM_PORT
+      - VNC_TO_PORT
       - PICK_ALL_RANDMON_PORTS=true
+      - VIDEO=true
       - GRID=false
       - CHROME=false
       - FIREFOX=true

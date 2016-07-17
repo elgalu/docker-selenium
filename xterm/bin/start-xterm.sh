@@ -37,9 +37,8 @@ echo "" > ${DOCKER_SELENIUM_STATUS}
 # Wait for everyone to be done
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
   shutdown "Failed while waiting for Xvfb to start!"
-#TODO: wait-xmanager.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh || \
-  shutdown "Failed while waiting for VNC to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
+  shutdown "Failed while waiting for XManager to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || \
   shutdown "Failed while waiting for noVNC to start!"
 #TODO: wait-sshd.sh
@@ -55,6 +54,13 @@ timeout --foreground ${SAUCE_WAIT_RETRY_TIMEOUT} wait-saucelabs.sh || \
   shutdown "Failed while waiting for Sauce Labs tunnel to start!"
 timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
   shutdown "Failed while waiting for BrowserStack tunnel to start!"
+
+# TODO: Re enable shutdown at some point. But fails when
+# we have little ports available (corner case but fails)
+# if ! timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh; then
+#   bash -c "grep -v webSocketsHandshake ${VNC_TRYOUT_ERR_LOG}*.log" 1>&2
+#   shutdown "Failed while waiting for VNC to start!"
+# fi
 
 # Help at http://supervisord.org/subprocess.html#process-states
 echo "Checking process-states through supervisorctl status"

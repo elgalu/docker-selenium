@@ -13,8 +13,12 @@ docker_push.log
 bats/
 compose_down.log
 docker-pull.log
+hub_1.log
+chrome*.log
+firefox*.log
 VNC-*-Linux-x64-DEB.tar.gz
 VNC-Viewer-*-Linux-x64.deb
 VNC-*-MacOSX-x86_64.pkg
 vnc_linux.md5
 vnc_osx.md5
+tmposx/

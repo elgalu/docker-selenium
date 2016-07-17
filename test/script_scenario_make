@@ -16,10 +16,15 @@ if [ "${CI}" = "true" ]; then
   make setup compose chrome=2 firefox=1
 else
   # My local laptop has more power so hit it harder
+  export VNC_FROM_PORT=5010
+  export VNC_TO_PORT=5020
   make setup compose chrome=3 firefox=5
   # also has a real display so we can "see"
   make see browser=chrome node=1
   make see browser=firefox node=1
+  sleep 1.5
+  make move browser=chrome node=1
+  make move browser=firefox node=1
 fi
 
 make test

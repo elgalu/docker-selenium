@@ -10,7 +10,8 @@ echo "#===================================================================="
 set -xe
 
 export SELENIUM_HUB_PORT="4444" \
-       NUM_NODES=1 PARAL_TESTS=1
+       NUM_NODES=1 PARAL_TESTS=1 \
+       VNC_FROM_PORT="40650" VNC_TO_PORT="40700"
 
 # Below sleep avoids:
 #  Error forwarding the new session cannot find : Capabilities ...

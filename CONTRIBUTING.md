@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "OSX Makefile fixes"
+    git commit -m "Add VNC_FROM_PORT & VNC_TO_PORT range"
     git tag -d latest #tag latest will be updated from TravisCI
     git tag 2.53.1k && git push origin tmp-2.53.1k && git push --tags
 

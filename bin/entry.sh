@@ -19,6 +19,8 @@ export SAUCE_LOG_FILE="${LOGS_DIR}/saucelabs-stdout.log"
 export BSTACK_LOG_FILE="${LOGS_DIR}/browserstack-stdout.log"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
 export DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log"
+export VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr"
+export VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
 touch ${DOCKER_SELENIUM_STATUS}
 # We recalculate screen dimensions because docker run supports changing them
 export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
@@ -55,12 +57,6 @@ if [ "${SSHD}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|sshd"
 else
   export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="sshd"
-fi
-
-if [ "${VNC_START}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|vnc"
-else
-  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="vnc"
 fi
 
 if [ "${NOVNC}" = "true" ]; then
@@ -122,14 +118,28 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   fi
 fi
 
-if [ "${VNC_PORT}" = "0" ]; then
-  export VNC_PORT=$(get_unused_port)
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
-  # User want to pick random ports but may also want to fix some others
-  if [ "${VNC_PORT}" = "${DEFAULT_VNC_PORT}" ]; then
-    export VNC_PORT=$(get_unused_port)
+if [ "${VNC_START}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|vnc"
+
+  # We need a fixed port range to expose VNC
+  # due to a bug in Docker for Mac beta (1.12)
+  # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+  if [ "${VNC_FROM_PORT}" != "" ] && [ "${VNC_TO_PORT}" != "" ]; then
+    export VNC_PORT=$(get_unused_port_from_range ${VNC_FROM_PORT} ${VNC_TO_PORT})
+  else
+    if [ "${VNC_PORT}" = "0" ]; then
+      export VNC_PORT=$(get_unused_port)
+    elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+      # User want to pick random ports but may also want to fix some others
+      if [ "${VNC_PORT}" = "${DEFAULT_VNC_PORT}" ]; then
+        export VNC_PORT=$(get_unused_port)
+      fi
+    fi
   fi
+else
+  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="vnc"
 fi
+
 
 if [ "${NOVNC_PORT}" = "0" ]; then
   export NOVNC_PORT=$(get_unused_port)
