@@ -9,29 +9,36 @@
 #  make setup compose chrome=3 firefox=5 see browser=firefox node=5
 #
 # Contributing
-#  export TESTING=true NAME=leo PORT=5555 nodes=2
+#  export TESTING_MAKE=true NAME=leo PORT=5555 nodes=2
 #  make chrome=2 firefox=2 && make seeall dock
+export GIT_BASE_URL ?= https://raw.githubusercontent.com/elgalu/docker-selenium
+export GIT_TAG_OR_BRANCH ?= latest
+
+default: compose
+
+get: .env
+
+.env:
+	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.env"
+
 include .env
 
 ECHOERR=sh -c 'awk " BEGIN { print \"-- ERROR: $$1\" > \"/dev/fd/2\" }"' ECHOERR
 # TODO: Output warning in color: yellow
 ECHOWARN=sh -c 'awk " BEGIN { print \"-- WARN: $$1\" > \"/dev/fd/2\" }"' ECHOWARN
 
-default: compose
-
 docker-compose.yml:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/docker-compose.yml"
-
-.env:
-	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.env"
 
 mk/install_vnc.sh:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/install_vnc.sh" \
 	  -O mk/install_vnc.sh
+	chmod +x mk/install_vnc.sh
 
 mk/install_wmctrl.sh:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/install_wmctrl.sh" \
 	  -O mk/install_wmctrl.sh
+	chmod +x mk/install_wmctrl.sh
 
 mk/vnc_cask.rb:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/vnc_cask.rb" \
@@ -40,14 +47,17 @@ mk/vnc_cask.rb:
 mk/see.sh:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/see.sh" \
 	  -O mk/see.sh
-
-mk/wait.sh:
-	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/wait.sh" \
-	  -O mk/wait.sh
+	chmod +x mk/see.sh
 
 mk/move.sh:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/move.sh" \
 	  -O mk/move.sh
+	chmod +x mk/move.sh
+
+mk/wait.sh:
+	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/wait.sh" \
+	  -O mk/wait.sh
+	chmod +x mk/wait.sh
 
 install_vnc:
 	./mk/install_vnc.sh
@@ -73,14 +83,16 @@ docker-compose:
 	fi
 
 pull:
-	# Only pull for end users
-	@if [ "${TESTING}" != "true" ]; then \
+	@# Only pull for end users, not CI servers or repo owners
+	@if [ "${TESTING_MAKE}" != "true" ]; then \
+	  echo "Pulling latest version of docker-selenium..." ; \
 	  docker pull elgalu/selenium:${DOCKER_SELENIUM_TAG} \
 	    > mk/docker-pull.log ; \
+	  tail -n 4 mk/docker-pull.log ; \
 	fi
 
 warn_vncviewer:
-	# Only check if not in a CI server
+	@# Only check if not in a CI server
 	@if [ "${BUILD_NUMBER}" = "" ]; then \
 	  if ! eval ${VNC_CHECK_CMD}; then \
 	    ${ECHOWARN} ${VNC_CLIENT_ERROR_MSG} ; \
@@ -95,7 +107,7 @@ check_vncviewer:
 	fi
 
 warn_wmctrl:
-	# Only check if not in a CI server
+	@# Only check if not in a CI server
 	@if [ "${BUILD_NUMBER}" = "" ]; then \
 	  if ! eval ${WMCTRL_CHECK_CMD}; then \
 	    ${ECHOWARN} ${WMCTRL_CLIENT_ERROR_MSG} ; \
@@ -126,7 +138,7 @@ env:
 basic_reqs: docker-compose.yml .env mk mk/wait.sh mk/move.sh docker docker-compose
 
 # Gather all requisites
-setup: basic_reqs mk/install_vnc.sh mk/vnc_cask.rb mk/see.sh mk/install_wmctrl.sh warn_vncviewer warn_wmctrl pull
+setup: .env basic_reqs mk/install_vnc.sh mk/vnc_cask.rb mk/see.sh mk/install_wmctrl.sh warn_vncviewer warn_wmctrl pull
 	@echo "Requirements checked."
 
 cleanup:

@@ -2,14 +2,15 @@
 
 [ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
 
-echo "#===================================================="
-echo "# Scenario 5 [make]: Docker Compose many nodes"
-echo "#===================================================="
+echo "#================================================"
+echo "# Scenario 5a [make]: Docker Compose many nodes"
+echo "#================================================"
 
 # set -e: exit asap if a command exits with a non-zero status
 # set -x: print each command right before it is executed
 set -xe
 
+export TESTING_MAKE="true"
 
 if [ "${CI}" = "true" ]; then
   make setup compose chrome=2 firefox=1
@@ -22,5 +23,34 @@ else
 fi
 
 make test
-
 make cleanup
+
+echo "#==================================="
+echo "# Scenario 5b [make]: wget Makefile"
+echo "#==================================="
+
+# Test clean directory
+if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then
+  echo "This is a PR so will skip to test make clean dir"
+  export GIT_TAG_OR_BRANCH=""
+elif [ "${TRAVIS_TAG}" != "" ]; then
+  export GIT_TAG_OR_BRANCH="${TRAVIS_TAG}"
+elif [ "${TRAVIS_COMMIT}" != "" ]; then
+  export GIT_TAG_OR_BRANCH="${TRAVIS_COMMIT}"
+else
+  export GIT_TAG_OR_BRANCH="master"
+fi
+
+if [ "${GIT_TAG_OR_BRANCH}" != "" ]; then
+  rm -rf tmp_make
+  mkdir tmp_make
+  cd tmp_make
+  ln -s ../Makefile
+  make get setup install_vnc install_wmctrl
+  # Test default 1 chrome 1 firefox case
+  make
+  make test
+  # Test alias
+  make down
+  cd ..
+fi

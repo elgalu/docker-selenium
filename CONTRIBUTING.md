@@ -3,7 +3,7 @@
 ## Local
 For pull requests or local commits:
 
-    time (./test/bef && ./test/install && ./test/script_start && ./test/1_1 && ./test/N_N && ./test/script_end) ; beep
+    time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
     docker exec grid versions && ./test/after_script
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
