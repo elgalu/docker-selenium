@@ -1,13 +1,12 @@
 tmp/
 tmp_make/
 *_image/
-binaries/
+binaries/*.deb
 READMEBS.md
 READMEZala.sh
 .python-version
 videos
 android/
-binaries
 scm-source.json
 TODO.md
 docker_push.log
