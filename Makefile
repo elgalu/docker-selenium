@@ -181,7 +181,27 @@ wait:
 move: check_wmctrl
 	./mk/move.sh
 
-# VNC open all.
+gather_videos:
+	mkdir -p ./videos
+	@for node in $(shell seq --separator ' ' 1 ${tot_nodes}); do \
+	  docker exec "${proj}_${browser}_$$node" stop-video \
+	    >./mk/stop_video_${browser}_$$node.log || true ; \
+	  docker cp "${proj}_${browser}_$$node:/videos/." videos ; \
+	  docker exec "${proj}_${browser}_$$node" rm_videos || true ; \
+	  docker exec "${proj}_${browser}_$$node" start-video ; \
+	done
+	ls -la ./videos/
+
+gather_videos_chrome:
+	$(MAKE) gather_videos browser=chrome tot_nodes=${chrome}
+
+gather_videos_firefox:
+	$(MAKE) gather_videos browser=firefox tot_nodes=${firefox}
+
+# Gather video artifacts
+videos: gather_videos_chrome gather_videos_firefox
+
+# VNC open all. As of now only 4 are supported
 seeall: check_vncviewer
 	$(MAKE) see browser=chrome node=1
 	$(MAKE) see browser=firefox node=1
@@ -227,5 +247,9 @@ test:
 	down \
 	cleanup \
 	move \
+	videos \
+	gather_videos \
+	gather_videos_chrome \
+	gather_videos_firefox \
 	env \
 	test

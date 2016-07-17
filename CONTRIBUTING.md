@@ -6,21 +6,21 @@ For pull requests or local commits:
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
     docker exec grid versions && ./test/after_script
     open ./images/grid_console.png #to verify the versions are correct
-    git checkout ./images/grid_console.png && open ./videos/chrome/test.mkv
+    git checkout ./images/grid_console.png && open ./videos/chrome/*.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.1k #name your branch according to your changes
+    git checkout -b tmp-2.53.1l #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Add VNC_FROM_PORT & VNC_TO_PORT range"
+    git commit -m "Easily gather video artifacts with `make videos`"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.1k && git push origin tmp-2.53.1k && git push --tags
+    git tag 2.53.1l && git push origin tmp-2.53.1l && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.1k && git push origin --delete tmp-2.53.1k
+    git checkout master && git pull && git branch -d tmp-2.53.1l && git push origin --delete tmp-2.53.1l
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -36,9 +36,9 @@ Keep certain bins if chrome version changed for example:
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.1k && git push origin :2.53.1k
+    git tag -d 2.53.1l && git push origin :2.53.1l
     #git add ...
-    git commit --amend && git tag 2.53.1k && git push --force origin tmp-2.53.1k && git push --tags
+    git commit --amend && git tag 2.53.1l && git push --force origin tmp-2.53.1l && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

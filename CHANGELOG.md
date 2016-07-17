@@ -11,6 +11,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: TBD_DATE
  + OSX Makefile fixes
  + Add VNC_FROM_PORT & VNC_TO_PORT range
+ + Easily gather video artifacts with `make videos`
  + Image tag details:
   + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
   + Chrome stable:  TBD_CHROME_STABLE

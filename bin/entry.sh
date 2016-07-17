@@ -35,7 +35,6 @@ export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | g
 export HOST_GID=$(stat -c "%g" ${VIDEOS_DIR})
 export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
 # Video
-export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
 # {{CONTAINER_IP}} is a place holder for dynamically setting the IP of a node
@@ -118,8 +117,20 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   fi
 fi
 
+# Video
+if [ "${VIDEO_FILE_NAME}" = "" ]; then
+  export VIDEO_FILE_NAME="vid"
+  [ "${CHROME}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_chrome_${SELENIUM_NODE_CH_PORT}"
+  [ "${FIREFOX}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_firefox_${SELENIUM_NODE_FF_PORT}"
+fi
+export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
+
+
 if [ "${VNC_START}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|vnc"
+  # TODO: Re enable shutdown at some point. But fails when
+  # we have little ports available (corner case but fails)
+  # export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|vnc"
+  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="vnc"
 
   # We need a fixed port range to expose VNC
   # due to a bug in Docker for Mac beta (1.12)

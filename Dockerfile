@@ -1073,7 +1073,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   FIREFOX="true" \
   # Video file and extension, e.g. swf, mp4, mkv, flv
   VIDEO_FILE_EXTENSION="mkv" \
-  VIDEO_FILE_NAME="test" \
+  VIDEO_FILE_NAME="" \
   VIDEO_FLUSH_SECS="0.5" \
   VIDEO_CHUNK_SECS="00:05:00" \
   VIDEO_CHUNKS_MAX=999 \

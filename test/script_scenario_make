@@ -3,7 +3,7 @@
 [ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
 
 echo "#================================================"
-echo "# Scenario 5a [make]: Docker Compose many nodes"
+echo "# Scenario 4a [make]: Docker Compose many nodes"
 echo "#================================================"
 
 # set -e: exit asap if a command exits with a non-zero status
@@ -28,10 +28,11 @@ else
 fi
 
 make test
+make videos
 make cleanup
 
 echo "#==================================="
-echo "# Scenario 5b [make]: wget Makefile"
+echo "# Scenario 4b [make]: wget Makefile"
 echo "#==================================="
 
 # Test clean directory

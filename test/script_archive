@@ -14,3 +14,4 @@ docker cp grid:/test/videos/chrome ./videos/
 docker cp grid:/test/videos/firefox ./videos/
 ls -la ./videos/chrome
 ls -la ./videos/firefox
+ls -la ./videos

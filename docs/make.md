@@ -34,6 +34,11 @@ The best way is to run your tests inside your web application under test, in thi
     docker exec -t grid_mock_1 \
       npm test --seleniumUrl="http://localhost:4444/wd/hub"
 
+### Videos
+Gather the videos artifacts easily
+
+    make videos
+
 ### Cleanup
 When done, is convenient to shutdown all the containers.
 

@@ -16,6 +16,8 @@ docker-pull.log
 hub_1.log
 chrome*.log
 firefox*.log
+stop_video_chrome*.log
+stop_video_firefox*.log
 VNC-*-Linux-x64-DEB.tar.gz
 VNC-Viewer-*-Linux-x64.deb
 VNC-*-MacOSX-x86_64.pkg
