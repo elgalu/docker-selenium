@@ -11,7 +11,7 @@ echo "#===================================================="
 set -xe
 
 export SELENIUM_HUB_PORT="4444" \
-       VNC_FROM_PORT="40650" VNC_TO_PORT="40700"
+       VNC_FROM_PORT="43900" VNC_TO_PORT="43950"
 
 if [ "${CI}" = "true" ]; then
   export NUM_NODES=2 PARAL_TESTS=2 WAIT_ALL_DONE="390s" SLEEP_TIME=19 \
@@ -29,6 +29,7 @@ export COMPOSE_FILE="docker-compose-host.yml" \
 echo "#===================================================="
 echo "# Scenario 6b [compose_N_N]: Docker Compose many nodes"
 echo "#===================================================="
+export VNC_FROM_PORT="26950" VNC_TO_PORT="26999"
 export COMPOSE_FILE="docker-compose.yml" \
        DO_COMPOSE_UP="true"
 ./test/compose-test.sh

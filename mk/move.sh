@@ -15,7 +15,9 @@ die () {
   exit $errnum
 }
 
-# set -x: print each command right before it is executed
+if [ "$(uname)" = 'Darwin' ]; then
+  die "Sorry: moving windows with wmctrl in OSX is not properly supported."
+fi
 
 DISP="$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} cat DISPLAY)"
 CONT_HOSTNAME=$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} hostname)

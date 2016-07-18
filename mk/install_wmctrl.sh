@@ -17,6 +17,8 @@ die () {
 }
 
 if [ "$(uname)" = 'Darwin' ]; then
+  die "Sorry: moving windows with wmctrl in OSX is not properly supported."
+  #-----------------------------------------------------------------
   echo "Will install wmctrl for OSX"
   set -x
   brew cask install xquartz

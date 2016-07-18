@@ -24,6 +24,7 @@ fi
 #----------------------
 # Stop video recording
 #----------------------
+export VIDEO=false
 supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec
 
 # Avoid waiting forever using the `timeout` command

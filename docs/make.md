@@ -10,9 +10,10 @@ If you want VNC helpers support _(optional)_
 
     make install_vnc
 
-If you also want windows manager support, i.e. want to `make move` _(optional but not recommended in OSX)_
+### OSX
+In OSX is convenient to increase the Docker service CPUs and Memory specially if you plan to run more than one Chrome and Firefox at the same time:
 
-    make install_wmctrl
+<img id="cpu" width="260" src="../images/Docker_Mac_CPUs_Memory.png" />
 
 ## Usage
 Make sure to [setup](#setup) first.

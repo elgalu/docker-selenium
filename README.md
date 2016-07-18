@@ -102,7 +102,7 @@ This image is designed to run one test on each docker container but if you still
 
 1. The recommended way is via [docker-compose](./docs/docker-compose.md) and you should replace `mock` with your web service under test within the [docker-compose.yml][] file.
 
-        export SELENIUM_HUB_PORT=4444 VNC_FROM_PORT=40650 VNC_TO_PORT=40700
+        export SELENIUM_HUB_PORT=4444 VNC_FROM_PORT=40650 VNC_TO_PORT=40700 VIDEO=false
         docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3
 
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.

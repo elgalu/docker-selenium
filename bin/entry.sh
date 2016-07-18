@@ -13,8 +13,6 @@ echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSION}"
 # Fix/extend ENV vars
 #---------------------
 # export PATH="${PATH}:${BIN_UTILS}"
-export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"
-export VIDEO_PIDFILE="${RUN_DIR}/video.pid"
 export SAUCE_LOG_FILE="${LOGS_DIR}/saucelabs-stdout.log"
 export BSTACK_LOG_FILE="${LOGS_DIR}/browserstack-stdout.log"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
@@ -44,11 +42,12 @@ fi
 
 #----------------------------------------------------------
 # Extend required services depending on what the user needs
-if [ "${VIDEO}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|video-rec"
-else
-  export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
-fi
+export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
+# if [ "${VIDEO}" = "true" ]; then
+#   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|video-rec"
+# else
+#   export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
+# fi
 
 sudo sh -c "echo 'X11Forwarding ${SSHD_X11FORWARDING}' >> /etc/ssh/sshd_config"
 sudo sh -c "echo 'GatewayPorts ${SSHD_GATEWAYPORTS}'   >> /etc/ssh/sshd_config"
@@ -118,13 +117,18 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
 fi
 
 # Video
+export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"
+export VIDEO_PIDFILE="${RUN_DIR}/video.pid"
 if [ "${VIDEO_FILE_NAME}" = "" ]; then
   export VIDEO_FILE_NAME="vid"
   [ "${CHROME}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_chrome_${SELENIUM_NODE_CH_PORT}"
   [ "${FIREFOX}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_firefox_${SELENIUM_NODE_FF_PORT}"
 fi
 export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
-
+echo "${VIDEO_LOG_FILE}" > VIDEO_LOG_FILE
+echo "${VIDEO_PIDFILE}" > VIDEO_PIDFILE
+echo "${VIDEO_FILE_NAME}" > VIDEO_FILE_NAME
+echo "${VIDEO_PATH}" > VIDEO_PATH
 
 if [ "${VNC_START}" = "true" ]; then
   # TODO: Re enable shutdown at some point. But fails when

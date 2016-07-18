@@ -43,6 +43,7 @@ trap shutdown SIGTERM SIGINT SIGKILL
 # -clear_all  As -clear_keys, except try to release any CapsLock, NumLock ...
 #
 # Redirecting to >/dev/null until https://github.com/LibVNC/x11vnc/issues/14
+export VNC_PID="9999"
 function start_vnc() {
   # rm -f ${VNC_TRYOUT_OUT_LOG}.${VNC_PORT}.log ${VNC_TRYOUT_ERR_LOG}.${VNC_PORT}.log
   # http://stackoverflow.com/a/21028200/511069
@@ -52,6 +53,7 @@ function start_vnc() {
     -display ${DISPLAY} ${VNC_AUTH_OPTS} \
     1> "${VNC_TRYOUT_OUT_LOG}.${VNC_PORT}.log" \
     2> "${VNC_TRYOUT_ERR_LOG}.${VNC_PORT}.log" &
+  export VNC_PID=$!
 }
 
 # For now is not possible to VNC at the same time we use Xephyr
@@ -95,7 +97,8 @@ else
       break
     else
       echo "-- WARN: wait-vnc.sh failed! for VNC_PORT=${VNC_PORT}"
-      killall x11vnc || true
+      # killall x11vnc || true
+      kill ${VNC_PID}
     fi
   done
 

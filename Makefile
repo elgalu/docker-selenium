@@ -128,6 +128,10 @@ warn_wmctrl:
 	fi
 
 check_wmctrl:
+	@if [ $(shell uname -s) = 'Darwin' ]; then \
+	  echo "Sorry: moving windows with wmctrl in OSX is not upported." 1>&2 ; \
+	  exit 11 ; \
+	fi
 	@if ! eval ${WMCTRL_CHECK_CMD}; then \
 	  ${ECHOERR} ${WMCTRL_CLIENT_ERROR_MSG} ; \
 	  exit 5; \
@@ -159,10 +163,26 @@ cleanup:
 	  --remove-orphans >./mk/compose_down.log 2>&1
 	@echo "Done!"
 
-# like cleanup but verbose
+# like cleanup but verbose plus graceful stop-video
 down:
+	@if [ "${VIDEO}" = "true" ]; then \
+	  $(MAKE) stop_videos_chrome ; \
+	  $(MAKE) stop_videos_firefox ; \
+	fi
 	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} down \
 	  --remove-orphans
+
+stop_videos:
+	@for node in $(shell seq --separator ' ' 1 ${tot_nodes}); do \
+	  docker exec "${proj}_${browser}_$$node" stop-video \
+	    >./mk/stop_video_${browser}_$$node.log || true ; \
+	done
+
+stop_videos_chrome:
+	@$(MAKE) stop_videos browser=chrome tot_nodes=${chrome}
+
+stop_videos_firefox:
+	@$(MAKE) stop_videos browser=firefox tot_nodes=${firefox}
 
 scale:
 	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} scale \
@@ -251,5 +271,8 @@ test:
 	gather_videos \
 	gather_videos_chrome \
 	gather_videos_firefox \
+	stop_videos \
+	stop_videos_chrome \
+	stop_videos_firefox \
 	env \
 	test

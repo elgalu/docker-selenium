@@ -6,5 +6,11 @@ set +e
 which bats >/dev/null 2>&1
 if [ $? -ne 0 ] ; then
   echo "Install bats for testing shell scripts."
-  git clone https://github.com/sstephenson/bats.git && cd bats && sudo ./install.sh /usr/local
+  if [ "$(uname)" = 'Darwin' ]; then
+    brew install bats
+  else
+    git clone https://github.com/sstephenson/bats.git
+    cd bats
+    sudo ./install.sh /usr/local
+  fi
 fi

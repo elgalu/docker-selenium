@@ -27,7 +27,7 @@ services:
       - VNC_FROM_PORT
       - VNC_TO_PORT
       - PICK_ALL_RANDMON_PORTS=true
-      - VIDEO=true
+      - VIDEO
       - GRID=false
       - CHROME=true
       - FIREFOX=false
@@ -40,7 +40,7 @@ services:
       - VNC_FROM_PORT
       - VNC_TO_PORT
       - PICK_ALL_RANDMON_PORTS=true
-      - VIDEO=true
+      - VIDEO
       - GRID=false
       - CHROME=false
       - FIREFOX=true

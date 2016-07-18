@@ -13,21 +13,33 @@ set -xe
 export TESTING_MAKE="true"
 
 if [ "${CI}" = "true" ]; then
+  export VNC_FROM_PORT="5010" VNC_TO_PORT="5030"
   make setup compose chrome=2 firefox=1
 else
   # My local laptop has more power so hit it harder
-  export VNC_FROM_PORT=5010
-  export VNC_TO_PORT=5020
-  make setup compose chrome=3 firefox=5
+  export VNC_FROM_PORT="5010" VNC_TO_PORT="5020"
+  if [ "$(uname)" = 'Darwin' ]; then
+    # Increase by 1 in OSX
+    make setup compose chrome=2 firefox=1
+    make scale chrome=2 firefox=2
+    make scale chrome=3 firefox=2
+    make scale chrome=3 firefox=3
+  else
+    make setup compose chrome=3 firefox=5
+  fi
   # also has a real display so we can "see"
   make see browser=chrome node=1
+  sleep 1
   make see browser=firefox node=1
-  sleep 1.5
-  make move browser=chrome node=1
-  make move browser=firefox node=1
+  if [ "$(uname)" != 'Darwin' ]; then
+    sleep 3
+    make move browser=chrome node=1
+    make move browser=firefox node=1
+  fi
 fi
 
 make test
+rm -f videos/*.mkv
 make videos
 make cleanup
 
@@ -52,7 +64,11 @@ if [ "${GIT_TAG_OR_BRANCH}" != "" ]; then
   mkdir tmp_make
   cd tmp_make
   ln -s ../Makefile
-  make get setup install_vnc install_wmctrl
+  export VNC_FROM_PORT="5110" VNC_TO_PORT="5120"
+  make get setup
+  if [ "${CI}" = "true" ]; then
+    make install_vnc install_wmctrl
+  fi
   # Test default 1 chrome 1 firefox case
   make
   make test

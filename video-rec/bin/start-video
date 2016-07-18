@@ -1,4 +1,29 @@
 #!/usr/bin/env bash
 
+echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
+  errnum=${2-150}
+  exit $errnum
+}
+
+[ -z "${VIDEO_REC_STOP_SIGNAL}" ] && export VIDEO_REC_STOP_SIGNAL="INT"
+[ -z "${LOGFILE_MAXBYTES}" ] && export LOGFILE_MAXBYTES="10MB"
+[ -z "${LOGFILE_BACKUPS}" ] && export LOGFILE_BACKUPS=5
+[ -z "${LOGS_DIR}" ] && export LOGS_DIR="/var/log/cont"
+[ -z "${NORMAL_USER}" ] && export NORMAL_USER="application"
+
+export VIDEO_LOG_FILE="$(cat VIDEO_LOG_FILE)"
+export VIDEO_PIDFILE="$(cat VIDEO_PIDFILE)"
+export VIDEO_FILE_NAME="$(cat VIDEO_FILE_NAME)"
+export VIDEO_PATH="$(cat VIDEO_PATH)"
+
 # Test: supervisorctl -c /etc/supervisor/supervisord.conf status
+export VIDEO=true
 supervisorctl -c /etc/supervisor/supervisord.conf start video-rec
+
+timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || \
+  die "Failed while waiting for video recording to start!"

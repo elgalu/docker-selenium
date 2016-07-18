@@ -11,7 +11,8 @@ set -xe
 
 export SELENIUM_HUB_PORT="4444" \
        NUM_NODES=1 PARAL_TESTS=1 \
-       VNC_FROM_PORT="40650" VNC_TO_PORT="40700"
+       VNC_FROM_PORT="41800" VNC_TO_PORT="41850" \
+       VIDEO="false"
 
 # Below sleep avoids:
 #  Error forwarding the new session cannot find : Capabilities ...
@@ -28,6 +29,7 @@ export COMPOSE_FILE="docker-compose-host.yml" \
 echo "#===================================================================="
 echo "# Scenario 5b [compose_1_1]: Docker Compose 1 hub, 1 chrome, 1 firefox"
 echo "#===================================================================="
+export VNC_FROM_PORT="32900" VNC_TO_PORT="32950"
 export COMPOSE_FILE="docker-compose.yml" \
        DO_COMPOSE_UP="true"
 ./test/compose-test.sh

@@ -8,7 +8,7 @@ LOGSDTOUT="${VNC_TRYOUT_OUT_LOG}.${VNC_PORT}.log"
 LOGERR="${VNC_TRYOUT_ERR_LOG}.${VNC_PORT}.log"
 
 fail_fast() {
-  killall x11vnc || true
+  # killall x11vnc || true
   exit 3
 }
 

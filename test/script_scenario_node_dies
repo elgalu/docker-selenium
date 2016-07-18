@@ -30,7 +30,7 @@ export SELENIUM_NODE_CH_PORT=5757 \
 if [ "${CI}" = "true" ]; then
   NODE_SUICIDE_WAIT_TIME=20
 else
-  NODE_SUICIDE_WAIT_TIME=5
+  NODE_SUICIDE_WAIT_TIME=7
 fi
 
 echo "#================================================="

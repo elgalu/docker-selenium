@@ -434,3 +434,8 @@ env:
       DOCKER_COMPOSE_VERSION="1.8.0-rc1"
     - DOCKER_VERSION="1.12.0-rc3"
       DOCKER_COMPOSE_VERSION="1.8.0-rc1"
+
+If you also want windows manager support, i.e. want to `make move` _(optional but not supported in OSX)_
+
+    make install_wmctrl
+
