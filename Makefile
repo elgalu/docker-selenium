@@ -3,7 +3,7 @@
 #  make chrome=3 firefox=5
 #   note is destructive, firsts `compose down`
 #   warns if your service is not listed in the `docker-compose.yml`
-#  make cleanup
+#  make down
 #
 # All in one
 #  make setup compose chrome=3 firefox=5 see browser=firefox node=5
@@ -173,7 +173,7 @@ down:
 	  --remove-orphans
 
 stop_videos:
-	@for node in $(shell seq --separator ' ' 1 ${tot_nodes}); do \
+	@for node in $(shell seq -s ' ' 1 ${tot_nodes}); do \
 	  docker exec "${proj}_${browser}_$$node" stop-video \
 	    >./mk/stop_video_${browser}_$$node.log || true ; \
 	done
@@ -203,7 +203,7 @@ move: check_wmctrl
 
 gather_videos:
 	mkdir -p ./videos
-	@for node in $(shell seq --separator ' ' 1 ${tot_nodes}); do \
+	@for node in $(shell seq -s ' ' 1 ${tot_nodes}); do \
 	  docker exec "${proj}_${browser}_$$node" stop-video \
 	    >./mk/stop_video_${browser}_$$node.log || true ; \
 	  docker cp "${proj}_${browser}_$$node:/videos/." videos ; \
