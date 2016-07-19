@@ -85,8 +85,11 @@ else
 fi
 
 # Start a GUI xTerm to help debugging when VNC into the container
+# with a random geometry so we can differentiate multiple nodes
+GEOM1=$(python -c 'import random; print(random.randint(80,140))')
+GEOM2=$(python -c 'import random; print(random.randint(30,50))')
 x-terminal-emulator -ls  \
-  -geometry 120x40+10+10 \
+  -geometry ${GEOM1}x${GEOM2}+10+10 \
   -title "x-terminal-emulator" \
   &
 

@@ -43,7 +43,7 @@ Gather the videos artifacts easily
 ### Cleanup
 When done, is convenient to shutdown all the containers.
 
-    make cleanup
+    make down
 
 ## Update
 Every now and then you will want to upgrade the script files [.env](../.env), [docker-compose.yml][], [mk/](../mk) and so on.

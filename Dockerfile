@@ -3,9 +3,9 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:xenial-20160706
+FROM ubuntu:xenial-20160713
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20160706"
+    UBUNTU_DATE="20160713"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208
@@ -38,10 +38,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
 # http://askubuntu.com/a/235911/134645
-RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com \
-      3B4FE6ACC0B21F32 \
-      40976EAF437D05B5 \
-      2EA8F35793D8809A \
+RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A \
+  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
+  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 \
   && apt-key update -qqy
 
 #========================
