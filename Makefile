@@ -98,9 +98,7 @@ pull:
 	@# Only pull for end users, not CI servers or repo owners
 	@if [ "${TESTING_MAKE}" != "true" ]; then \
 	  echo "Pulling latest version of docker-selenium..." ; \
-	  docker pull elgalu/selenium:${DOCKER_SELENIUM_TAG} \
-	    > mk/docker-pull.log ; \
-	  tail -n 4 mk/docker-pull.log ; \
+	  docker pull elgalu/selenium:${DOCKER_SELENIUM_TAG} ; \
 	fi
 
 warn_vncviewer:
@@ -224,16 +222,22 @@ videos: gather_videos_chrome gather_videos_firefox
 # VNC open all. As of now only 4 are supported
 seeall: check_vncviewer
 	$(MAKE) see browser=chrome node=1
+	@sleep 0.3
 	$(MAKE) see browser=firefox node=1
+	@sleep 0.3
 	$(MAKE) see browser=chrome node=2
+	@sleep 0.3
 	$(MAKE) see browser=firefox node=2
 
 # Move them all. As of now only 4 are supported
 dock: check_wmctrl
-	sleep 1 #TODO Make active wait: http://stackoverflow.com/a/19441380/511069
+	@sleep 0.5 #TODO Make active wait: http://stackoverflow.com/a/19441380/511069
 	$(MAKE) move browser=chrome node=1
+	@sleep 0.3 #TODO Make active wait
 	$(MAKE) move browser=firefox node=1
+	@sleep 0.5 #TODO Make active wait
 	$(MAKE) move browser=chrome node=2
+	@sleep 0.7 #TODO Make active wait
 	$(MAKE) move browser=firefox node=2
 
 # Run self tests
