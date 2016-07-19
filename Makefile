@@ -119,7 +119,7 @@ check_vncviewer:
 warn_wmctrl:
 	@# Only check if not in a CI server
 	@if [ "${BUILD_NUMBER}" = "" ]; then \
-	  if ! eval ${WMCTRL_CHECK_CMD}; then \
+	  if ! eval ${WMCTRL_CHECK_CMD} >/dev/null; then \
 	    ${ECHOWARN} ${WMCTRL_CLIENT_ERROR_MSG} ; \
 	    ${ECHOWARN} "  RUN: make install_wmctrl" ; \
 	  fi ; \
@@ -130,7 +130,7 @@ check_wmctrl:
 	  echo "Sorry: moving windows with wmctrl in OSX is not upported." 1>&2 ; \
 	  exit 11 ; \
 	fi
-	@if ! eval ${WMCTRL_CHECK_CMD}; then \
+	@if ! eval ${WMCTRL_CHECK_CMD} >/dev/null; then \
 	  ${ECHOERR} ${WMCTRL_CLIENT_ERROR_MSG} ; \
 	  exit 5; \
 	fi

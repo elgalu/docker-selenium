@@ -3,7 +3,7 @@
 ## Setup
 You should replace `mock` with your web service under test within the generated [docker-compose.yml][] file.
 
-    wget -nv "https://raw.githubusercontent.com/elgalu/docker-selenium/latest/Makefile"
+    wget -nv https://git.io/vKrBP -O Makefile
     make get setup #first-time
 
 If you want VNC helpers support _(optional)_
