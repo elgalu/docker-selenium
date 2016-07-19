@@ -51,7 +51,9 @@ git_co_fetch_merge_stash() {
   git stash save || true
   git checkout -t github/master -b github/master
   echo "Will git merge into master"
-  git merge travis-${TRAVIS_TAG}
+  if ! timeout --foreground "30s" git merge travis-${TRAVIS_TAG}; then
+    echo "WARN: Timed out on git merge!" 1>&2
+  fi
   git stash pop || true
 }
 
