@@ -3,8 +3,10 @@
 ## Setup
 You should replace `mock` with your web service under test within the generated [docker-compose.yml][] file.
 
+This is only necessary the first time:
+
     wget -nv https://git.io/vKrBP -O Makefile
-    make get setup #first-time
+    make get setup
 
 If you want VNC helpers support _(optional)_
 
@@ -46,6 +48,10 @@ When done, is convenient to shutdown all the containers.
     make down
 
 ## Update
+To update latest version of this docker image either `docker pull elgalu/selenium` or simply:
+
+    make pull
+
 Every now and then you will want to upgrade the script files [.env](../.env), [docker-compose.yml][], [mk/](../mk) and so on.
 But given the upgrades are destructive is better to git clone this repository and do `git pull` from time to time.
 If you make changes to these config files locally git will advise how to merge latest changes and you will be safe of losing your customizations.
@@ -55,6 +61,6 @@ If you make changes to these config files locally git will advise how to merge l
 
 ### Git upgrades
     git pull
-
+    make pull
 
 [docker-compose.yml]: ../docker-compose.yml
