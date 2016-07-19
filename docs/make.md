@@ -1,8 +1,6 @@
 # Make
 
 ## Setup
-You should replace `mock` with your web service under test within the generated [docker-compose.yml][] file.
-
 This is only necessary the first time:
 
     wget -nv https://git.io/vKrBP -O Makefile
@@ -11,6 +9,8 @@ This is only necessary the first time:
 If you want VNC helpers support _(optional)_
 
     make install_vnc
+
+You should now replace the `mock` example service with your web service under test within the generated [docker-compose.yml][] file.
 
 ### OSX
 In OSX is convenient to increase the Docker service CPUs and Memory specially if you plan to run more than one Chrome and Firefox at the same time:
@@ -21,9 +21,11 @@ In OSX is convenient to increase the Docker service CPUs and Memory specially if
 Make sure to [setup](#setup) first.
 
 ### Run
-Run spceifying how many nodes you need to run your tests, hopefully in parallel.
+Run specifying how many nodes you need to run your tests.
 
-    make chrome=5 firefox=4
+    make chrome=2 firefox=2
+
+The idea of having *N* Chrome nodes and *N* Firefox nodes is to be able to run tests in parallel. Note *N* is `2` in this arbitrary example.
 
 ### VNC
 This will open the VNC viewer.
@@ -40,6 +42,7 @@ The best way is to run your tests inside your web application under test, in thi
 ### Videos
 Gather the videos artifacts easily
 
+    export chrome=2 firefox=2
     make videos
 
 ### Cleanup
