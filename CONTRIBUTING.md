@@ -8,19 +8,19 @@ For pull requests or local commits:
     open ./images/grid_console.png #to verify the versions are correct
     git checkout ./images/grid_console.png && open ./videos/chrome/*.mkv
     travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.1p #name your branch according to your changes
+    git checkout -b tmp-2.53.1q #name your branch according to your changes
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Start xterm with a random geometry to differentiate nodes"
+    git commit -m "Upgrade Chrome major from 51 to 52.0.2743.82"
     git tag -d latest #tag latest will be updated from TravisCI
-    git tag 2.53.1p && git push origin tmp-2.53.1p && git push --tags
+    git tag 2.53.1q && git push origin tmp-2.53.1q && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.1p && git push origin --delete tmp-2.53.1p
+    git checkout master && git pull && git branch -d tmp-2.53.1q && git push origin --delete tmp-2.53.1q
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -30,15 +30,17 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    VER="51.0.2704.106"
-    wget -nv --show-progress -O binaries/google-chrome-stable_${VER}_amd64.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    VER="52.0.2743.82"
+    cd binaries && NAME="google-chrome-stable_${VER}_amd64"
+    wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.1p && git push origin :2.53.1p
+    git tag -d 2.53.1q && git push origin :2.53.1q
     #git add ...
-    git commit --amend && git tag 2.53.1p && git push --force origin tmp-2.53.1p && git push --tags
+    git commit --amend && git tag 2.53.1q && git push --force origin tmp-2.53.1q && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

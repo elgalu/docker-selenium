@@ -6,8 +6,8 @@ stop 2>&1 >/dev/null || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
-# echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSIONS}"
-echo "-- INFO: Available Firefox Versions: ${FIREFOX_VERSION}"
+echo "-- INFO: Available Google Chrome Version: $(chrome_stable_version)"
+echo "-- INFO: Available Firefox...... Version: ${FIREFOX_VERSION}"
 
 #---------------------
 # Fix/extend ENV vars
@@ -29,9 +29,6 @@ export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | 
 export COMMON_CAPS="maxInstances=${MAX_INSTANCES},platform=LINUX,acceptSslCerts=true"
 export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
 export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
-# We may need uid & gid from host machine
-export HOST_GID=$(stat -c "%g" ${VIDEOS_DIR})
-export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
 # Video
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
@@ -346,7 +343,7 @@ fi
 #------------------
 # Fix running user
 #------------------
-RUN_PREFIX="sudo -E HOME=/home/$NORMAL_USER -u $NORMAL_USER"
+RUN_PREFIX="sudo --preserve-env HOME=/home/$NORMAL_USER -u $NORMAL_USER"
 WHOAMI=$(whoami)
 WHOAMI_EXIT_CODE=$?
 echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID is '$UID'"
@@ -391,19 +388,19 @@ if [ $WHOAMI_EXIT_CODE != 0 ]; then
     echo "-- INFO: Will try to fix uid before continuing"
     # TODO: fix it ...
     echo "-- now will try to use NORMAL_USER: '$NORMAL_USER' to continue"
-    exec ${RUN_PREFIX} run-supervisord.sh --nodaemon
+    exec ${RUN_PREFIX} run-supervisord.sh
   else
     echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
     echo "-- will try to use NORMAL_USER: '$NORMAL_USER' instead."
-    exec ${RUN_PREFIX} run-supervisord.sh --nodaemon
+    exec ${RUN_PREFIX} run-supervisord.sh
   fi
 elif [ "$WHOAMI" = "root" ]; then
   echo "-- WARN: Container running user is 'root' so switching to less privileged one"
   echo "-- will use NORMAL_USER: '$NORMAL_USER' instead."
-  exec ${RUN_PREFIX} run-supervisord.sh --nodaemon
+  exec ${RUN_PREFIX} run-supervisord.sh
 else
   echo "-- INFO: Will use \$USER '$USER' and \$(whoami) is '$WHOAMI'"
-  exec run-supervisord.sh --nodaemon
+  exec run-supervisord.sh
 fi
 
 # Note: sudo -i creates a login shell for someUser, which implies the following:

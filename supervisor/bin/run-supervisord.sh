@@ -47,7 +47,7 @@ trap shutdown SIGHUP SIGTERM SIGINT
 
 echo -n "supervisord --version=" && supervisord --version
 
-supervisord -c /etc/supervisor/supervisord.conf --user ${USER} &
+supervisord -c /etc/supervisor/supervisord.conf --user ${USER} --nodaemon &
 SUPERVISOR_PID=$!
 
 # tells bash to wait until child processes have exited

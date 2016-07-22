@@ -140,11 +140,11 @@ see: check_vncviewer
 
 # Shortcut to VNC into Firefox
 seeff:
-	$(MAKE) see browser=firefox
+	@$(MAKE) -s see browser=firefox
 
 # Shortcut to VNC into Chrome
 seech:
-	$(MAKE) see browser=chrome
+	@$(MAKE) -s see browser=chrome
 
 env:
 	env
@@ -164,8 +164,8 @@ cleanup:
 # like cleanup but verbose plus graceful stop-video
 down:
 	@if [ "${VIDEO}" = "true" ]; then \
-	  $(MAKE) stop_videos_chrome ; \
-	  $(MAKE) stop_videos_firefox ; \
+	  $(MAKE) -s stop_videos_chrome ; \
+	  $(MAKE) -s stop_videos_firefox ; \
 	fi
 	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} down \
 	  --remove-orphans
@@ -177,19 +177,19 @@ stop_videos:
 	done
 
 stop_videos_chrome:
-	@$(MAKE) stop_videos browser=chrome tot_nodes=${chrome}
+	@$(MAKE) -s stop_videos browser=chrome tot_nodes=${chrome}
 
 stop_videos_firefox:
-	@$(MAKE) stop_videos browser=firefox tot_nodes=${firefox}
+	@$(MAKE) -s stop_videos browser=firefox tot_nodes=${firefox}
 
 scale:
 	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} scale \
 	  ${APP_NAME}=1 hub=1 chrome=${chrome} firefox=${firefox}
-	$(MAKE) wait chrome=${chrome} firefox=${firefox}
+	@$(MAKE) -s wait chrome=${chrome} firefox=${firefox}
 
 compose: basic_reqs cleanup
 	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} up -d
-	$(MAKE) scale chrome=${chrome} firefox=${firefox}
+	@$(MAKE) -s scale chrome=${chrome} firefox=${firefox}
 
 wait:
 	./mk/wait.sh
@@ -211,34 +211,34 @@ gather_videos:
 	ls -la ./videos/
 
 gather_videos_chrome:
-	$(MAKE) gather_videos browser=chrome tot_nodes=${chrome}
+	@$(MAKE) -s gather_videos browser=chrome tot_nodes=${chrome}
 
 gather_videos_firefox:
-	$(MAKE) gather_videos browser=firefox tot_nodes=${firefox}
+	@$(MAKE) -s gather_videos browser=firefox tot_nodes=${firefox}
 
 # Gather video artifacts
 videos: gather_videos_chrome gather_videos_firefox
 
 # VNC open all. As of now only 4 are supported
 seeall: check_vncviewer
-	$(MAKE) see browser=chrome node=1
+	@$(MAKE) -s see browser=chrome node=1
 	@sleep 0.3
-	$(MAKE) see browser=firefox node=1
+	@$(MAKE) -s see browser=firefox node=1
 	@sleep 0.4
-	$(MAKE) see browser=chrome node=2
+	@$(MAKE) -s see browser=chrome node=2
 	@sleep 0.5
-	$(MAKE) see browser=firefox node=2
+	@$(MAKE) -s see browser=firefox node=2
 
 # Move them all. As of now only 4 are supported
 dock: check_wmctrl
-	@sleep 0.5 #TODO Make active wait: http://stackoverflow.com/a/19441380/511069
-	$(MAKE) move browser=chrome node=1
-	@sleep 0.7 #TODO Make active wait
-	$(MAKE) move browser=firefox node=1
-	@sleep 0.9 #TODO Make active wait
-	$(MAKE) move browser=chrome node=2
-	@sleep 1.1 #TODO Make active wait
-	$(MAKE) move browser=firefox node=2
+	@sleep 0.2 #TODO Make active wait: http://stackoverflow.com/a/19441380/511069
+	@$(MAKE) -s move browser=chrome node=1
+	@sleep 0.2 #TODO Make active wait
+	@$(MAKE) -s move browser=firefox node=1
+	@sleep 0.2 #TODO Make active wait
+	@$(MAKE) -s move browser=chrome node=2
+	@sleep 0.2 #TODO Make active wait
+	@$(MAKE) -s move browser=firefox node=2
 
 # Run self tests
 test:

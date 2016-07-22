@@ -251,11 +251,6 @@ RUN groupadd -g ${NORMAL_USER_GID} ${NORMAL_GROUP} \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 ENV NORMAL_USER_HOME /home/${NORMAL_USER}
 
-#==============
-# Back to sudo
-#==============
-USER root
-
 #=====================================
 # Google Chrome - Latest through apt
 #=====================================
@@ -775,7 +770,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="51.0.2704.106" \
+RUN  latest_chrome_version_trigger="52.0.2743.82" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
