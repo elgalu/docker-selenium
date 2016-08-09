@@ -1,6 +1,7 @@
 # Even though we run everything inside docker Travis require
 # us to pick a language else it will pick Ruby by default
-language: generic
+# language: generic
+language: python
 
 # Omit running tests on temporal branches,
 #  i.e. branches with names that start with "tmp"
@@ -12,6 +13,11 @@ env:
   global:
     - TEST_SLEEPS="0.7"
 
+sudo: required
+dist: trusty
+services:
+  - docker
+
 matrix:
   allow_failures:
     # Currently erroring in Mac (OSX):
@@ -20,10 +26,10 @@ matrix:
     #   Docker requires a processor with virtualization capabilities
     - env:
         - DOCKER_VERSION="1.12.0-rc4"
-          DOCKER_COMPOSE_VERSION="1.8.0-rc2"
+          DOCKER_COMPOSE_VERSION="1.8.0"
           OPERATING_SYSTEM="osx"
   include:
-    # Linux with docker:stable compose:stable
+    # Linux with docker:stable compose:stable/older
     - os: linux
       sudo: required
       dist: trusty
@@ -33,7 +39,7 @@ matrix:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.7.1"
           DOCKER_PUSH=true
-    # Linux with docker:beta compose:stable
+    # Linux with docker:beta compose:stable/older
     - os: linux
       sudo: required
       dist: trusty
@@ -50,7 +56,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.8.0-rc2"
+          DOCKER_COMPOSE_VERSION="1.8.0"
     # Linux with docker:beta compose:beta
     - os: linux
       sudo: required
@@ -59,13 +65,13 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="1.12.0-rc4"
-          DOCKER_COMPOSE_VERSION="1.8.0-rc2"
+          DOCKER_COMPOSE_VERSION="1.8.0"
     # Mac OSX: only test native docker version
     - os: osx
       osx_image: xcode8
       env:
         - DOCKER_VERSION="1.12.0-rc4"
-          DOCKER_COMPOSE_VERSION="1.8.0-rc2"
+          DOCKER_COMPOSE_VERSION="1.8.0"
           OPERATING_SYSTEM="osx"
 
 before_install:

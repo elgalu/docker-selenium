@@ -1,9 +1,7 @@
 tmp/
 tmp_make/
 *_image/
-binaries/*.deb
-binaries/*.md5
-binaries/*.sha
+binaries/*
 READMEBS.md
 READMEZala.sh
 .python-version

@@ -38,9 +38,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
 # http://askubuntu.com/a/235911/134645
+# Remove with: sudo apt-key del 40976EAF437D05B5
 RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A \
   && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
-  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 \
   && apt-key update -qqy
 
 #========================
@@ -745,7 +745,7 @@ ENV CHROME_DRIVER_BASE "chromedriver.storage.googleapis.com"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.22" \
+  && CHROME_DRIVER_VERSION="2.23" \
   # && CHROME_DRIVER_VERSION=$(curl 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -770,7 +770,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="52.0.2743.82" \
+RUN  latest_chrome_version_trigger="52.0.2743.116" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \

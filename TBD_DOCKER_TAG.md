@@ -14,9 +14,9 @@
   + BrowserStack Local version TBD_BROWSER_STACK_VERSION
   + Tested on kernel dev host: 4.4.0-32-generic x86_64
   + Tested on kernel CI  host: TBD_HOST_UNAME
-  + Built at dev host with: Docker version 1.12.0-rc4, build e4a0dbc
+  + Built at dev host with: Docker version 1.12.0, build 8eab29e
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Built at dev host with: Docker Compose version 1.8.0-rc2, build c72c966
+  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
   + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
   + Image size: TBD_IMAGE_SIZE
   + Digest: TBD_DIGEST
