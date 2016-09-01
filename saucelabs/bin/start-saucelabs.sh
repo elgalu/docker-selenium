@@ -73,7 +73,7 @@ function shutdown {
 echo "Waiting for file ${SAUCE_TUNNEL_READY_FILE} to be created..."
 while ! ls -l "${SAUCE_TUNNEL_READY_FILE}" >/dev/null 2>&1; do sleep 0.1; done
 
-# Now wait for the tunnel to finish starting
+# Now wait for the tunnel to be ready
 timeout --foreground ${SAUCE_WAIT_TIMEOUT} wait-saucelabs.sh
 
 # Run function shutdown() when this process a killer signal

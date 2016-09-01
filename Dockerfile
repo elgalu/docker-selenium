@@ -44,6 +44,9 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A \
 # Remove with: sudo apt-key del 40976EAF437D05B5
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
   && apt-key update -qqy
+# Remove with: sudo apt-key del 3B4FE6ACC0B21F32
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 \
+  && apt-key update -qqy
 
 #========================
 # Miscellaneous packages

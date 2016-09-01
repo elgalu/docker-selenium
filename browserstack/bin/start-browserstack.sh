@@ -37,7 +37,7 @@ function shutdown {
   exit 0
 }
 
-# Now wait for the tunnel to finish starting
+# Now wait for the tunnel to be ready
 timeout --foreground ${BSTACK_WAIT_TIMEOUT} wait-browserstack.sh
 
 # Run function shutdown() when this process a killer signal

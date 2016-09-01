@@ -83,7 +83,7 @@ Firefox will also attach to the `seleniums` network interface.
       elgalu/selenium
 
 ### Wait
-Is convenient to wait for all the nodes to finish starting correctly, also to catch errors before starting the tests in vane:
+Is convenient to wait for all the nodes to start correctly, also to catch errors before starting the tests in vane:
 
       docker exec node1_ch wait_all_done 30s
       docker exec node2_ch wait_all_done 30s

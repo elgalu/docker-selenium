@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome major to 53.0.2785.89"
+    git commit -m "Chores: finish starting => be ready & apt-key 3B4FE6ACC0B21F32"
     git tag -d latest && git tag 2.53.1s && git push origin tmp-2.53.1s && git push --tags
 
 -- Wait for Travis to pass OK

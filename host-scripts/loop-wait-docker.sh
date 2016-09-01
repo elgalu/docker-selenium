@@ -17,7 +17,7 @@ die () {
 [ -z "$1" ] && die "Need 1st argument: CONTAINER_ID"
 CONTAINER_ID=${1}
 
-echo -n "Waiting for docker-selenium to finish starting..."
+echo -n "Waiting for docker-selenium to be ready..."
 while ! docker exec ${CONTAINER_ID} \
     grep 'Container docker internal IP' /var/log/cont/xterm-stdout.log \
     > /dev/null 2>&1; do

@@ -30,6 +30,7 @@ matrix:
           OPERATING_SYSTEM="osx"
   include:
     # Linux with docker:stable compose:stable/older
+    # Use DOCKER_PUSH_LATEST=false to debug
     - os: linux
       sudo: required
       dist: trusty
@@ -37,9 +38,9 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.7.1"
+          DOCKER_COMPOSE_VERSION="1.8.0"
           DOCKER_PUSH=true
-          DOCKER_PUSH_LATEST=false
+          DOCKER_PUSH_LATEST=true
     # Linux with docker:beta compose:stable/older
     - os: linux
       sudo: required
@@ -48,7 +49,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="1.12.1-rc2"
-          DOCKER_COMPOSE_VERSION="1.7.1"
+          DOCKER_COMPOSE_VERSION="1.8.0"
     # Linux with docker:stable compose:beta
     - os: linux
       sudo: required
