@@ -494,7 +494,7 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/xvfb-stderr.log
     /var/log/cont/xvfb-stdout.log
 
-
+<!-- links -->
 [2.47.1m]: https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
 [Selenium]: https://github.com/SeleniumHQ/selenium
 [sauce]: https://saucelabs.com/selenium/selenium-grid

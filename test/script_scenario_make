@@ -29,13 +29,13 @@ else
   fi
   # also has a real display so we can "see"
   make see browser=chrome node=1
-  sleep 1
-  make see browser=firefox node=1
-  if [ "$(uname)" != 'Darwin' ]; then
-    sleep 3
-    make move browser=chrome node=1
-    make move browser=firefox node=1
-  fi
+  # sleep 1
+  # make see browser=firefox node=1
+  # if [ "$(uname)" != 'Darwin' ]; then
+  #   sleep 3
+  #   make move browser=chrome node=1
+  #   make move browser=firefox node=1
+  # fi
 fi
 
 make test

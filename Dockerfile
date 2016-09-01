@@ -3,9 +3,9 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:xenial-20160713
+FROM ubuntu:xenial-20160818
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20160713"
+    UBUNTU_DATE="20160818"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208
@@ -38,9 +38,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
 # http://askubuntu.com/a/235911/134645
+# Remove with: sudo apt-key del 2EA8F35793D8809A
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A \
+  && apt-key update -qqy
 # Remove with: sudo apt-key del 40976EAF437D05B5
-RUN  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A \
-  && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
   && apt-key update -qqy
 
 #========================
@@ -770,7 +772,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="52.0.2743.116" \
+RUN  latest_chrome_version_trigger="53.0.2785.89" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \

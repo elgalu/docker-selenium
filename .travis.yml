@@ -25,7 +25,7 @@ matrix:
     #   com.docker.docker Incompatible CPU detected
     #   Docker requires a processor with virtualization capabilities
     - env:
-        - DOCKER_VERSION="1.12.0-rc4"
+        - DOCKER_VERSION="1.12.1-rc2"
           DOCKER_COMPOSE_VERSION="1.8.0"
           OPERATING_SYSTEM="osx"
   include:
@@ -39,6 +39,7 @@ matrix:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.7.1"
           DOCKER_PUSH=true
+          DOCKER_PUSH_LATEST=false
     # Linux with docker:beta compose:stable/older
     - os: linux
       sudo: required
@@ -46,7 +47,7 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.0-rc4"
+        - DOCKER_VERSION="1.12.1-rc2"
           DOCKER_COMPOSE_VERSION="1.7.1"
     # Linux with docker:stable compose:beta
     - os: linux
@@ -64,13 +65,13 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.0-rc4"
+        - DOCKER_VERSION="1.12.1-rc2"
           DOCKER_COMPOSE_VERSION="1.8.0"
     # Mac OSX: only test native docker version
     - os: osx
       osx_image: xcode8
       env:
-        - DOCKER_VERSION="1.12.0-rc4"
+        - DOCKER_VERSION="1.12.1-rc2"
           DOCKER_COMPOSE_VERSION="1.8.0"
           OPERATING_SYSTEM="osx"
 
