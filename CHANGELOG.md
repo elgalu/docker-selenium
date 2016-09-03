@@ -7,29 +7,29 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 2.53.1t
+ + Date: 2016-09-03
  + Upgrade Chrome patch to 53.0.2785.92
  + Image tag details:
-  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox stable: TBD_FIREFOX_STABLE
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Selenium: v2.53.1 (a36b8b1)
+  + Chrome stable:  53.0.2785.92
+  + Firefox stable: 47.0.1
+  + Chromedriver: 2.23.409687 (c46e862757edc04c06b1bd88724d15a5807b84d1)
+  + Java: Oracle Java 9-ea+130
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20160818
+  + Python: 2.7.12
+  + Sauce Connect 4.3.16, build 2396 39e807b
+  + BrowserStack Local version 6.1
   + Tested on kernel dev host: 4.4.0-37-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 3.19.0-66-generic x86_64
   + Built at dev host with: Docker version 1.12.1, build 23cf638
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.12.1, build 23cf638
   + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.8.0, build f3628c7
+  + Image size: 2.551 GB
+  + Digest: sha256:97696ad3194f3e6f85f159aa61fa6dea48527bc25bde11280d409847c78baf0e
+  + Image ID: sha256:e8a8156e798da518d4db488937c1dd2c622a20dc4cd28734270cd6b4658e2622
 
 ## 2.53.1s
  + Date: 2016-09-01
