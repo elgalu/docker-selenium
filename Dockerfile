@@ -775,7 +775,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="53.0.2785.92" \
+RUN  latest_chrome_version_trigger="53.0.2785.101" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -1197,7 +1197,7 @@ RUN sudo touch /capabilities.json \
 #=====================================================
 # Meta JSON file to hold commit info of current build
 #=====================================================
-COPY scm-source.json /
+ADD scm-source.json /
 # Ensure the file is up-to-date else you should update it by running
 #  ./host-scripts/gen-scm-source.sh
 # on the host machine
