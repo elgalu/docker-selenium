@@ -4,22 +4,20 @@
 For pull requests or local commits:
 
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
-    docker exec grid versions && ./test/after_script
-    open ./images/grid_console.png #to verify the versions are correct
-    git checkout ./images/grid_console.png && open ./videos/chrome/*.mkv
-    travis lint #if you changed .travis.yml
-    git checkout -b tmp-2.53.1u #name your branch according to your changes
+    docker exec grid versions && ./test/after_script && travis lint
+    open ./images/grid_console.png && open ./videos/chrome/*.mkv
+    git checkout -b tmp-2.53.1v && git checkout ./images/grid_console.png
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome patch to 53.0.2785.101"
-    git tag -d latest && git tag 2.53.1u && git push origin tmp-2.53.1u && git push --tags
+    git commit -m "Upgrade Chromedriver from 2.23 to 2.24"
+    git tag -d latest && git tag 2.53.1v && git push origin tmp-2.53.1v && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-2.53.1u && git push origin --delete tmp-2.53.1u
+    git checkout master && git pull && git branch -d tmp-2.53.1v && git push origin --delete tmp-2.53.1v
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -29,20 +27,17 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd binaries && wget -O stable_updates.html "http://googlechromereleases.blogspot.de/search/label/Stable%20updates"
-    VER=$(grep -Po '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)' stable_updates.html | head -1)
-    echo $VER; VER="53.0.2785.101"
+    cd binaries && VER="53.0.2785.101"
     NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha
-    rm -f stable_updates.html && cd ..
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 2.53.1u && git push origin :2.53.1u
+    git tag -d 2.53.1v && git push origin :2.53.1v
     #git add ...
-    git commit --amend && git tag 2.53.1u && git push --force origin tmp-2.53.1u && git push --tags
+    git commit --amend && git tag 2.53.1v && git push --force origin tmp-2.53.1v && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

@@ -62,7 +62,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 \
 # ts from moreutils will prepend a timestamp to every line of input you give it
 # grc is a terminal colorizer that works nice with tail https://github.com/garabik/grc
 # dbus-x11 is needed to avoid http://askubuntu.com/q/237893/134645
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     apt-utils \
     sudo \
@@ -94,7 +94,7 @@ ENV LANGUAGE ${LANG_WHICH}_${LANG_WHERE}.${ENCODING}
 ENV LANG ${LANGUAGE}
 RUN locale-gen ${LANGUAGE} \
   && dpkg-reconfigure --frontend noninteractive locales \
-  && apt-get update -qqy \
+  && apt-get -qqy update \
   && apt-get -qqy install \
     language-pack-en \
   && rm -rf /var/lib/apt/lists/*
@@ -118,7 +118,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     openjdk-7-jre-headless \
 #   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
@@ -134,7 +134,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     openjdk-8-jre-headless \
 #   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
@@ -150,7 +150,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     openjdk-9-jre-headless \
 #   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
@@ -165,7 +165,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     software-properties-common \
 #   && echo debconf shared/accepted-oracle-license-v1-1 \
@@ -173,7 +173,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 #   && echo debconf shared/accepted-oracle-license-v1-1 \
 #       seen true | debconf-set-selections \
 #   && add-apt-repository ppa:webupd8team/java \
-#   && apt-get update -qqy \
+#   && apt-get -qqy update \
 #   && apt-get -qqy install \
 #     oracle-java8-installer \
 #   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
@@ -188,7 +188,7 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     software-properties-common \
   && echo debconf shared/accepted-oracle-license-v1-1 \
@@ -196,7 +196,7 @@ RUN apt-get update -qqy \
   && echo debconf shared/accepted-oracle-license-v1-1 \
       seen true | debconf-set-selections \
   && add-apt-repository ppa:webupd8team/java \
-  && apt-get update -qqy \
+  && apt-get -qqy update \
   && apt-get -qqy install \
     oracle-java9-installer \
   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
@@ -209,7 +209,7 @@ RUN apt-get update -qqy \
 # Fonts & video libraries
 #=========================
 # and gstreamer for mp4 & html5 support
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     fonts-ipafont-gothic \
     xfonts-100dpi \
@@ -226,7 +226,7 @@ RUN apt-get update -qqy \
 # Openbox
 # A lightweight window manager using freedesktop standards
 #=========
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     openbox obconf menu \
   && rm -rf /var/lib/apt/lists/*
@@ -235,7 +235,7 @@ RUN apt-get update -qqy \
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     fluxbox \
   && rm -rf /var/lib/apt/lists/*
@@ -271,7 +271,7 @@ ENV NORMAL_USER_HOME /home/${NORMAL_USER}
 #     libnss3-1d \
 # RUN wget -nv -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
 #   && echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-#   && apt-get update -qqy \
+#   && apt-get -qqy update \
 #   && apt-get -qqy install \
 #     google-chrome-${CHROME_FLAVOR} \
 #   && rm -rf /var/lib/apt/lists/* \
@@ -291,7 +291,7 @@ ENV NORMAL_USER_HOME /home/${NORMAL_USER}
 # Pyvnc2swf: Is a cross-platform screen recording tool (vnc2swf command)
 #  - captures screen motion through VNC protocol
 #  - generates a Shockwave Flash (SWF) movie
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     x11vnc \
     pyvnc2swf \
@@ -307,7 +307,7 @@ ENV RUN_DIR /var/run/sele
 #======================
 # http://linux.die.net/man/5/sshd_config
 # http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/sshd_config.5
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     openssh-server \
   && echo "PidFile ${RUN_DIR}/sshd.pid" >> /etc/ssh/sshd_config \
@@ -351,7 +351,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 #===============================
 # ffmpeg (ffmpeg): Is a better alternative to Pyvnc2swf
 #   (use in Ubuntu >= 15) packages: ffmpeg
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     libx264-dev \
 #     libvorbis-dev \
@@ -364,7 +364,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 #===============================
 # libav-tools (avconv): Is a fork of ffmpeg
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     libx264-dev \
     libvorbis-dev \
@@ -377,7 +377,7 @@ RUN apt-get update -qqy \
 #=======================================================
 # gifify: check elgalu/gifify-docker instead
 # imagemagick convert between image formats as well as transformations
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     imagemagick \
 #     fontconfig \
@@ -421,7 +421,7 @@ RUN apt-get update -qqy \
 #==========================
 # Mozilla Firefox - Latest
 #==========================
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     firefox \
 #   && rm -rf /var/lib/apt/lists/*
@@ -431,7 +431,7 @@ RUN apt-get -qqy purge firefox
 #=========================================================
 # Python2 for Supervisor, selenium tests, and other stuff
 #=========================================================
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     python2.7 \
     python-pip \
@@ -448,7 +448,7 @@ RUN apt-get update -qqy \
 #=========================================
 # Note Python3 fails installing mozInstall==1.12 with
 #  NameError: name 'file' is not defined
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     python3.5 \
 #     python3-pip \
@@ -504,7 +504,7 @@ ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
 # Supervisor install
 #====================
 # https://github.com/Supervisor/supervisor
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     supervisor \
 # 2016-06-28 commit: 154cb4c84f28ac, version: supervisor-4.0.0.dev0
@@ -750,7 +750,7 @@ ENV CHROME_DRIVER_BASE "chromedriver.storage.googleapis.com"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
-  && CHROME_DRIVER_VERSION="2.23" \
+  && CHROME_DRIVER_VERSION="2.24" \
   # && CHROME_DRIVER_VERSION=$(curl 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
@@ -797,7 +797,7 @@ USER root
 #=======
 # GDebi
 #=======
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-get -qqy install \
     gdebi
 
@@ -837,7 +837,7 @@ RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
 # GNOME Shell provides core interface functions like switching windows,
 # launching applications or see your notifications
 #=========
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     gnome-shell \
 #   && rm -rf /var/lib/apt/lists/*
@@ -847,7 +847,7 @@ RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
 # A Lightweight X11 Desktop Environment
 #=========
 # NOT working! TODO: see https://github.com/dockerfile/ubuntu-desktop/blob/master/Dockerfile#L13
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     lxde \
 #   && mkdir -p /usr/share/backgrounds \
@@ -862,7 +862,7 @@ RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
 # The issue can be recreated with "ami-ed7c149a" and maybe in CentOS
 # ENV XAUTH_DIR /var/lib/lightdm
 # ENV XAUTHORITY ${XAUTH_DIR}/.Xauthority
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     lightdm dbus-x11 x11-common \
 #   && dpkg-reconfigure --frontend noninteractive lightdm x11-common \
@@ -877,7 +877,7 @@ RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
 # GNOME ubuntu-desktop
 # The fat and full featured windows manager
 #======================
-# RUN apt-get update -qqy \
+# RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     ubuntu-desktop \
 #   && rm -rf /var/lib/apt/lists/*
@@ -893,7 +893,7 @@ ADD **/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 # to generate the /dev/random seed
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
-RUN apt-get update -qqy \
+RUN apt-get -qqy update \
   && apt-key update -qqy \
   && apt-get -qqy install \
     haveged rng-tools \

@@ -439,3 +439,8 @@ If you also want windows manager support, i.e. want to `make move` _(optional bu
 
     make install_wmctrl
 
+## Binaries
+
+    cd binaries && wget -O stable_updates.html "http://googlechromereleases.blogspot.de/search/label/Stable%20updates"
+    VER=$(grep -Po '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)' stable_updates.html | head -1)
+    rm -f stable_updates.html && cd ..
