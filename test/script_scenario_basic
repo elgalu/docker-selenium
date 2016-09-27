@@ -48,8 +48,11 @@ export MOCK_SERVER_PORT=$(get_mock_port)
 docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
-  -v /dev/shm:/dev/shm selenium
+  -v /dev/shm:/dev/shm \
+  selenium
+  # -v /var/run/dbus:/var/run/dbus \
 
+sleep 0.5 && docker logs grid
 docker exec grid wait_all_done 40s
 docker exec grid versions
 docker exec grid errors || true

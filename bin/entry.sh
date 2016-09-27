@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
 
+# set -e: exit asap if a command exits with a non-zero status
+set -e
+
+# Workaround that might help to get dbus working in docker
+#  http://stackoverflow.com/a/38355729/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234
+#  - still unclear if this helps: `-v /var/run/dbus:/var/run/dbus`
+#  - this works generates errors: DBUS_SESSION_BUS_ADDRESS="/dev/null"
+#  - this gives less erros: DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null"
+sudo rm -f /var/lib/dbus/machine-id
+sudo mkdir -p /var/run/dbus
+sudo service dbus restart
+# Test dbus works
+service dbus status
+export $(dbus-launch)
+export NSS_USE_SHARED_DB=ENABLED
+echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
+echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
+
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`
 stop 2>&1 >/dev/null || true

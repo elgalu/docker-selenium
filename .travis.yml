@@ -25,11 +25,11 @@ matrix:
     #   com.docker.docker Incompatible CPU detected
     #   Docker requires a processor with virtualization capabilities
     - env:
-        - DOCKER_VERSION="1.12.1-rc2"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+        - DOCKER_VERSION="1.12.1"
+          DOCKER_COMPOSE_VERSION="1.8.1"
           OPERATING_SYSTEM="osx"
   include:
-    # Linux with docker:stable compose:stable/older
+    # Linux with docker:stable compose:stable
     # Use DOCKER_PUSH_LATEST=false to debug
     - os: linux
       sudo: required
@@ -38,19 +38,19 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+          DOCKER_COMPOSE_VERSION="1.8.1"
           DOCKER_PUSH=true
           DOCKER_PUSH_LATEST=true
-    # Linux with docker:beta compose:stable/older
+    # Linux with docker:beta/older compose:beta/older
     - os: linux
       sudo: required
       dist: trusty
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.1-rc2"
+        - DOCKER_VERSION="1.11.1"
           DOCKER_COMPOSE_VERSION="1.8.0"
-    # Linux with docker:stable compose:beta
+    # Linux with docker:stable compose:beta/older
     - os: linux
       sudo: required
       dist: trusty
@@ -59,21 +59,21 @@ matrix:
       env:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.8.0"
-    # Linux with docker:beta compose:beta
+    # Linux with docker:beta/older compose:stable
     - os: linux
       sudo: required
       dist: trusty
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.1-rc2"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+        - DOCKER_VERSION="1.11.1"
+          DOCKER_COMPOSE_VERSION="1.8.1"
     # Mac OSX: only test native docker version
     - os: osx
       osx_image: xcode8
       env:
-        - DOCKER_VERSION="1.12.1-rc2"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+        - DOCKER_VERSION="1.12.1"
+          DOCKER_COMPOSE_VERSION="1.8.1"
           OPERATING_SYSTEM="osx"
 
 before_install:

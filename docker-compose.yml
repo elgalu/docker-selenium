@@ -26,6 +26,8 @@ services:
     memswap_limit: 4g
     # 90000 means 90%
     # cpu_quota: 90000
+    # volumes:
+    #   - /var/run/dbus:/var/run/dbus
     environment:
       - SELENIUM_HUB_PORT
       - VNC_FROM_PORT

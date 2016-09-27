@@ -47,6 +47,7 @@ docker run --name=mynodes -d \
   -e SELENIUM_NODE_CH_PORT -p ${SELENIUM_NODE_CH_PORT}:${SELENIUM_NODE_CH_PORT} \
   -v /dev/shm:/dev/shm \
   selenium
+  # -v /var/run/dbus:/var/run/dbus \
 
 # We need a mock service for testing
 docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
@@ -111,3 +112,6 @@ else
   curl "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}"
   die "Test failed for Firefox at $0 during curl"
 fi
+
+# cleanup
+make down

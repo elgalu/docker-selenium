@@ -16,7 +16,7 @@
   + Tested on kernel CI  host: TBD_HOST_UNAME
   + Built at dev host with: Docker version 1.12.1, build 23cf638
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
+  + Built at dev host with: Docker Compose version 1.8.1, build 878cff1
   + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
   + Image size: TBD_IMAGE_SIZE
   + Digest: TBD_DIGEST
