@@ -7,33 +7,33 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 2.53.1y
+ + Date: 2016-09-27
  + Set chromedriver --log-path='/var/log/cont/chromedriver.log'
  + Add geckodriver for Firefox >= 48 (future releases)
  + Upgrade Ubuntu xenial to 20160923
  + Perhaps fixed DBUS mistery with at entry.sh
  + Client side: docker-compose from 1.8.0 to 1.8.1
  + Image tag details:
-  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox stable: TBD_FIREFOX_STABLE
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Selenium: v2.53.1 (a36b8b1)
+  + Chrome stable:  53.0.2785.116
+  + Firefox stable: 47.0.1
+  + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
+  + Java: Oracle Java 9-ea+134
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20160923.1
+  + Python: 2.7.12
+  + Sauce Connect 4.4.0, build 2863 e8cba87
+  + BrowserStack Local version 6.1
   + Tested on kernel dev host: 4.4.0-38-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 3.19.0-66-generic x86_64
   + Built at dev host with: Docker version 1.12.1, build 23cf638
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.12.1, build 23cf638
   + Built at dev host with: Docker Compose version 1.8.1, build 878cff1
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.8.1, build 878cff1
+  + Image size: 2.562 GB
+  + Digest: sha256:8bff17c78931b805dd99e62d93a920af3ea4c492d310b669c2dfd46dbe79f525
+  + Image ID: sha256:fc282eb5b7b7120cdcb23f8a45aeddef3128bf2de3595493d2806cb799e02883
 
 ## 2.53.1x
  + Date: 2016-09-15
