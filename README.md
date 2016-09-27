@@ -256,14 +256,14 @@ If the VNC password was randomly generated find out with
 
 ### Chrome crashed
 
-If your tests crashes in Chrome you may need to increase shm size or simply start your container by sharing `-v /dev/shm:/dev/shm`
+If your tests crashes in Chrome you may need to increase shm size or simply start your container by sharing `-v /dev/shm:/dev/shm` or, alternatively, `--shm-size=1g`
 
     docker run ... -v /dev/shm:/dev/shm
 
 Alternatively you can increase it inside the container:
 
 1. start docker in privileged mode: `docker run --privileged`
-2. increase shm size from default 64mb to something bigger:
+2. increase shm size from default 64mb or 68mb to something bigger:
 
 ```sh
 docker exec grid sudo umount /dev/shm

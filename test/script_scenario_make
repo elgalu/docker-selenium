@@ -42,6 +42,8 @@ make test
 rm -f videos/*.mkv
 make videos
 make cleanup
+make down
+docker rm -vf grid_hub_1 || true
 
 echo "#==================================="
 echo "# Scenario 4b [make]: wget Makefile"

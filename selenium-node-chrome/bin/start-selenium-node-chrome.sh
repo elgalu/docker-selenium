@@ -34,6 +34,8 @@ java ${JAVA_OPTS} \
   -nodePolling ${SEL_NODEPOLLING_MS} \
   -unregisterIfStillDownAfter ${SEL_UNREGISTER_IF_STILL_DOWN_AFTER} \
   -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
+  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
+  -Dwebdriver.chrome.verboseLogging=${CHROME_VERBOSELOGGING} \
   ${SELENIUM_NODE_PARAMS} \
   ${CUSTOM_SELENIUM_NODE_PROXY_PARAMS} \
   ${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE} \

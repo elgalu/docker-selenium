@@ -3,9 +3,9 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:xenial-20160818
+FROM ubuntu:xenial-20160923.1
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20160818"
+    UBUNTU_DATE="20160923.1"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208
@@ -46,6 +46,9 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
   && apt-key update -qqy
 # Remove with: sudo apt-key del 3B4FE6ACC0B21F32
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 \
+  && apt-key update -qqy
+# Remove with: sudo apt-key del A2F683C52980AECF
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
   && apt-key update -qqy
 
 #========================
@@ -418,16 +421,6 @@ RUN apt-get -qqy update \
 #   && npm install -g gifify \
 #   && gifify --version
 
-#==========================
-# Mozilla Firefox - Latest
-#==========================
-# RUN apt-get -qqy update \
-#   && apt-get -qqy install \
-#     firefox \
-#   && rm -rf /var/lib/apt/lists/*
-# If we are not installing latest from apt sources then remove (purge) default
-RUN apt-get -qqy purge firefox
-
 #=========================================================
 # Python2 for Supervisor, selenium tests, and other stuff
 #=========================================================
@@ -460,6 +453,7 @@ RUN apt-get -qqy update \
 
 ENV CPU_ARCH 64
 ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
+RUN mkdir -p ${SEL_HOME}
 
 #===============================
 # Mozilla Firefox install tools
@@ -673,11 +667,31 @@ RUN cd /tmp \
 #       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
 #      ;done
 
+#==========================
+# Mozilla Firefox - Latest
+#==========================
+# RUN apt-get -qqy update \
+#   && apt-get -qqy install \
+#     firefox \
+#   && rm -rf /var/lib/apt/lists/*
+# ENV FF_VER="latest" \
+#     FF_LANG="en-US" \
+#     FF_DEST="/usr/lib/firefox"
+# ENV FIREFOX_DEST_BIN="${FF_DEST}/firefox"
+# RUN ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
+
 #-------------------------#
 # FIREFOX_VERSIONS Latest #
 #-------------------------#
 # Install Latest available firefox version
 # this also used to work: ENV FIREFOX_LATEST_VERSION latest
+#
+#--- Nightly
+# ENV FF_VER="52.0a0" \
+#     FF_PLATFORM="linux-i686" \
+#     FF_INNER_PATH="firefox/nightly/latest-mozilla-central"
+# ENV FF_COMP="firefox-${FF_VER}.${FF_LANG}.${FF_PLATFORM}.tar.bz2"
+# ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_COMP}"
 #
 # Where to find latest version:
 #  https://archive.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
@@ -688,19 +702,42 @@ RUN cd /tmp \
 # FF_LANG can be either en-US // de // fr and so on
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
-ENV FF_VER="47.0.1" \
-    FF_LANG="en-US" \
-    FF_PLATFORM="linux-x86_64" \
+
+ENV FF_LANG="en-US" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
     FF_DEST="${SEL_HOME}/firefox"
-ENV FF_COMP="firefox-${FF_VER}.tar.bz2" \
-    FIREFOX_DEST_BIN="${FF_DEST}/firefox"
-ENV FF_URL "${FF_BASE_URL}/firefox/releases/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
+ENV FIREFOX_DEST_BIN="${FF_DEST}/firefox"
+
+#--- Stable
+ENV FF_VER="47.0.1" \
+    FF_PLATFORM="linux-x86_64" \
+    FF_INNER_PATH="firefox/releases"
+ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
+ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
+
 RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
   && wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && bzip2 -d "firefox.tar.bz2" \
   && tar xf "firefox.tar" \
-  && rm "firefox.tar"
+  && rm "firefox.tar" \
+  && sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
+
+#============
+# GeckoDriver
+#============
+ENV GECKOD_VER="0.10.0" \
+    GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
+RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
+     "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
+  && rm -rf /opt/geckodriver* \
+  && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
+  && mv /opt/geckodriver /usr/bin/geckodriver \
+  && chmod +x /usr/bin/geckodriver \
+  && ln -fs /usr/bin/geckodriver /opt/geckodriver \
+  && ln -fs /usr/bin/geckodriver ${FF_DEST}/geckodriver \
+  && ln -fs /usr/bin/geckodriver /usr/bin/wires \
+  && ln -fs /usr/bin/geckodriver ${FF_DEST}/wires \
+  && rm /tmp/geckodriver.tar.gz
 
   # && rm -rf ${NORMAL_USER_HOME}/firefox-src
 # RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \
@@ -977,6 +1014,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_NODE_PROXY_PARAMS="" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox" \
+  # Will be passed with: -Dwebdriver.chrome.verboseLogging
+  CHROME_VERBOSELOGGING="true" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \
   # SELENIUM_NODE_CHROME_PARAMS='-Dselenium.chrome.args="--no-sandbox"' \
   # WEBDRIVER_NODE_CHROME_PARAMS='-Dwebdriver.chrome.args="--no-sandbox"' \
@@ -1125,9 +1164,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
   #                   -v $(which docker):$(which docker)
   DOCKER_SOCK="/var/run/docker.sock" \
-  # DBUS hack thanks @pwaller
-  #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234
-  DBUS_SESSION_BUS_ADDRESS=/dev/null \
+  # for DBUS hacks, see entry.sh
+  # DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null" \
   # Selenium test steps sleep
   TEST_SLEEPS="0.5" \
   # Restore
