@@ -48,7 +48,7 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.0"
+        - DOCKER_VERSION="1.12.2-rc1"
           DOCKER_COMPOSE_VERSION="1.8.0"
     # Linux with docker:stable compose:beta/older
     - os: linux
@@ -66,7 +66,7 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.0"
+        - DOCKER_VERSION="1.12.2-rc1"
           DOCKER_COMPOSE_VERSION="1.8.1"
     # Mac OSX: only test native docker version
     - os: osx

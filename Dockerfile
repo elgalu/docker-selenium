@@ -123,6 +123,10 @@ RUN echo "Setting time zone to '${TZ}'" \
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 # RUN apt-get -qqy update \
 #   && apt-get -qqy install \
+#     software-properties-common \
+#   && add-apt-repository ppa:openjdk-r/ppa \
+#   && apt-get -qqy update \
+#   && apt-get -qqy install \
 #     openjdk-7-jre-headless \
 #   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
 #        /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/security/java.security \
@@ -725,19 +729,19 @@ RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
 #============
 # GeckoDriver
 #============
-ENV GECKOD_VER="0.10.0" \
-    GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
-RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
-     "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
-  && rm -rf /opt/geckodriver* \
-  && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
-  && mv /opt/geckodriver /usr/bin/geckodriver \
-  && chmod +x /usr/bin/geckodriver \
-  && ln -fs /usr/bin/geckodriver /opt/geckodriver \
-  && ln -fs /usr/bin/geckodriver ${FF_DEST}/geckodriver \
-  && ln -fs /usr/bin/geckodriver /usr/bin/wires \
-  && ln -fs /usr/bin/geckodriver ${FF_DEST}/wires \
-  && rm /tmp/geckodriver.tar.gz
+# ENV GECKOD_VER="0.10.0" \
+#     GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
+# RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
+#      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
+#   && rm -rf /opt/geckodriver* \
+#   && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
+#   && mv /opt/geckodriver /usr/bin/geckodriver \
+#   && chmod +x /usr/bin/geckodriver \
+#   && ln -fs /usr/bin/geckodriver /opt/geckodriver \
+#   && ln -fs /usr/bin/geckodriver /usr/bin/wires \
+#   && ln -fs /usr/bin/geckodriver ${FF_DEST}/geckodriver \
+#   && ln -fs /usr/bin/geckodriver ${FF_DEST}/wires \
+#   && rm /tmp/geckodriver.tar.gz
 
   # && rm -rf ${NORMAL_USER_HOME}/firefox-src
 # RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \

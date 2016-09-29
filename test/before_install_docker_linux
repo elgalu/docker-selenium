@@ -7,6 +7,7 @@ set -xe
 # cleanup
 service docker stop || true
 rm -f /etc/apt/sources.list.d/docker.list
+rm -f /usr/lib/systemd/system/docker.service
 apt-get -qqy purge lxc-docker || true
 apt-get -qqy purge docker-engine || true
 /etc/init.d/apparmor stop || true

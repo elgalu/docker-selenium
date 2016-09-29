@@ -17,8 +17,10 @@ service dbus status
 export $(dbus-launch)
 export NSS_USE_SHARED_DB=ENABLED
 echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
+#=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
 echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
-
+#=> e.g. DBUS_SESSION_BUS_PID=44
+#
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`
 stop 2>&1 >/dev/null || true

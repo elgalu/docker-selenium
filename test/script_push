@@ -30,7 +30,7 @@ docker_login_tag_push() {
   docker tag selenium:latest elgalu/selenium:latest
   docker push elgalu/selenium:${TRAVIS_TAG} | tee docker_push.log
   if [ "${DOCKER_PUSH_LATEST}" != "true" ]; then
-    echo "DOCKER_PUSH_LATEST is false so don't update tag :latest"
+    echo "DOCKER_PUSH_LATEST is false (probably a beta release) so don't update tag ':latest'"
   else
     docker push elgalu/selenium:latest
   fi
