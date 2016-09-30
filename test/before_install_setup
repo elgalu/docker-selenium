@@ -7,10 +7,9 @@ set -xe
 # Docker
 docker --version || echo "INFO: No docker installed yet"
 if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-  # Let's wait until Travis provides Docker for OSX
-  docker --version || exit 0
-  docker --version && exit 1 #that's how I'll know
-
+  # # Let's wait until Travis provides Docker for OSX
+  # docker --version || exit 0
+  # docker --version && exit 1 #that's how I'll know
   ./test/before_install_docker_osx
 else
   sudo -E bash -c './test/before_install_docker_linux'
