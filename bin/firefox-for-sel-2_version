@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Example:
+#  firefox -version 2>&1
+#=> Mozilla Firefox 47.0.1
+
+[ -z "${SEL_HOME}" ] && export SEL_HOME="$(cat SEL_HOME)"
+
+# Example:
+#=> 47.0.1
+${SEL_HOME}/firefox-for-sel-2/firefox \
+  -version 2>&1 | grep -Po '(?<=Firefox )([a-z0-9\.]+)'

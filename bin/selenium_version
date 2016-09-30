@@ -1,13 +1,33 @@
 #!/usr/bin/env bash
 
+# log_file="selenium_version.log"
+# java -jar ${SELENIUM_JAR_PATH} \
+#   -port ${SELENIUM_HUB_PORT} \
+#   -log ${log_file} \
+#   >/dev/null 2>&1 &
+# pid=$!
+# sleep 1 && kill ${pid} || true
+# rm -f ${log_file}
 
-# Example:
-#  java -jar .../selenium-server-standalone.jar ... grep revision
-#=> 15:19:03.625 INFO - v2.53.0, with Core v2.53.0. Built from revision 35ae25b
+[ -z "${USE_SELENIUM}" ] && export USE_SELENIUM="$(cat USE_SELENIUM)"
+[ -z "${SELENIUM_JAR_PATH}" ] && export SELENIUM_JAR_PATH="$(cat SELENIUM_JAR_PATH)"
+[ -z "${SELENIUM_HUB_PORT}" ] && export SELENIUM_HUB_PORT="$(cat SELENIUM_HUB_PORT)"
+[ -z "${LOGS_DIR}" ] && export LOGS_DIR="$(cat LOGS_DIR)"
 
-# Example:
-#=> 2.53.0
-java -jar ${SEL_HOME}/selenium-server-standalone.jar -port ${SELENIUM_HUB_PORT} 2>&1 \
-  | grep revision \
-  | grep -Po '(?<=Core v)([a-z0-9\.]+)' \
-  | sed 's/\.$//'
+if [ "${USE_SELENIUM}" == "2" ]; then
+  # Selenium 2 - Example:
+  #=> 2.53.1
+  java -jar ${SELENIUM_JAR_PATH} -port ${SELENIUM_HUB_PORT} 2>&1 \
+    | grep revision \
+    | grep -Po '(?<=Core v)([a-z0-9\.]+)' \
+    | sed 's/\.$//'
+else
+  # Selenium 3 - Example:
+  #=> 3.0.0-beta4
+  log_file="${LOGS_DIR}/selenium-hub-stderr.log"
+  cat ${log_file} \
+    | grep revision \
+    | grep -Po "(?<=version:\s).*([a-z0-9\.\-]+)'," \
+    | sed "s/'//g" \
+    | sed "s/,//g"
+fi

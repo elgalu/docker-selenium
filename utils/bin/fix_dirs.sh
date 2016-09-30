@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Set default firefox to the chosen one
-sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin
+sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 
 # May need to fix perms when mounting volumes
 #  Issue: http://stackoverflow.com/questions/23544282/

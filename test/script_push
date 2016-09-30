@@ -198,3 +198,7 @@ elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
 else
   echo "This is not git tagged so no version push to docker"
 fi
+
+# New available env var:
+# https://github.com/travis-ci/docs-travis-ci-com/blob/gh-pages/user/environment-variables.md
+#  TRAVIS_PULL_REQUEST_BRANCH: If the current job is a pull request, the name of the branch from which the PR orginated

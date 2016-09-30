@@ -60,7 +60,9 @@ docker logs mynodes
 docker exec -t mynodes selenium_test chrome
 docker exec mynodes errors || true
 
-if curl -s "http://localhost:${SELENIUM_NODE_CH_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+# https://github.com/SeleniumHQ/selenium/issues/2852
+# if curl -s "http://localhost:${SELENIUM_NODE_CH_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+if docker stop mynodes; then
   # The container should have been removed
   sleep ${NODE_SUICIDE_WAIT_TIME}
   if docker rm mynodes; then
@@ -99,7 +101,9 @@ docker logs mynodes
 docker exec -t mynodes selenium_test firefox
 docker exec mynodes errors || true
 
-if curl -s "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+# https://github.com/SeleniumHQ/selenium/issues/2852
+# if curl -s "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+if docker stop mynodes; then
   # The container should have been removed
   sleep ${NODE_SUICIDE_WAIT_TIME}
   if docker rm mynodes; then

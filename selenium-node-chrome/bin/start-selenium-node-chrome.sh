@@ -19,23 +19,23 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 # See node defaults at
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 export CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
-java ${JAVA_OPTS} \
-  -jar ${SEL_HOME}/selenium-server-standalone.jar \
+java \
+  -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
+  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
+  -Dwebdriver.chrome.verboseLogging="${CHROME_VERBOSELOGGING}" \
+  ${JAVA_OPTS} \
+  -jar ${SELENIUM_JAR_PATH} \
   -port ${SELENIUM_NODE_CH_PORT} \
   -host ${SELENIUM_NODE_HOST} \
   -role node \
   -hub "${SELENIUM_HUB_PROTO}://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register" \
   -browser "${CHROME_BROWSER_CAPS}" \
-  -trustAllSSLCertificates \
   -maxSession ${MAX_SESSIONS} \
   -timeout ${SEL_RELEASE_TIMEOUT_SECS} \
   -browserTimeout ${SEL_BROWSER_TIMEOUT_SECS} \
   -cleanUpCycle ${SEL_CLEANUPCYCLE_MS} \
   -nodePolling ${SEL_NODEPOLLING_MS} \
   -unregisterIfStillDownAfter ${SEL_UNREGISTER_IF_STILL_DOWN_AFTER} \
-  -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
-  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
-  -Dwebdriver.chrome.verboseLogging=${CHROME_VERBOSELOGGING} \
   ${SELENIUM_NODE_PARAMS} \
   ${CUSTOM_SELENIUM_NODE_PROXY_PARAMS} \
   ${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE} \

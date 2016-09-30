@@ -18,18 +18,16 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 # Had to increase -cleanUpCycle and -nodePolling to avoid
 #  UnknownError: Session [.*] was terminated due to TIMEOUT
 java ${JAVA_OPTS} \
-  -jar ${SEL_HOME}/selenium-server-standalone.jar \
+  -jar ${SELENIUM_JAR_PATH} \
   -port ${SELENIUM_HUB_PORT} \
   -role hub \
   -maxSession ${MAX_SESSIONS} \
-  -trustAllSSLCertificates \
   -timeout ${SEL_RELEASE_TIMEOUT_SECS} \
   -browserTimeout ${SEL_BROWSER_TIMEOUT_SECS} \
   -cleanUpCycle ${SEL_CLEANUPCYCLE_MS} \
-  -nodePolling ${SEL_NODEPOLLING_MS} \
   ${SELENIUM_HUB_PARAMS}
 
 # Note to double pipe output and keep this process logs add at the end:
-#  2>&1 | tee $SELENIUM_LOG
+#  2>&1 | tee ${SELENIUM_LOG}
 # But is no longer required because individual logs are maintained by
 # supervisord right now.

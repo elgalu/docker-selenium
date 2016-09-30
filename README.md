@@ -91,6 +91,11 @@ Shutdown immediately, no mercy
 
     docker rm -vf grid
 
+### Selenium 3
+Is now possible to choose Selenium 2 or Selenium 3 via docker run `-e USE_SELENIUM=2` (default) or `-e USE_SELENIUM=3`
+Be ready for seeing your tests failing in Firefox.
+Please google those errors first before opening an issue in this project.
+
 ### Docker Compose
 See [docker-compose](./docs/docker-compose.md)
 

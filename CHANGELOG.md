@@ -7,6 +7,39 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + Include Selenium 3 (3.0.0-beta4) and enable via `-e USE_SELENIUM=3`
+ + Allow to choose Selenium 2 or Selenium 3 via `USE_SELENIUM=2` (default) or `USE_SELENIUM=3`
+ + Provide Firefox 49.0.1 for Selenium 3
+ + Provide Firefox 47.0.1 for Selenium 2
+ + Upgrade Chrome patch to 53.0.2785.143
+ + Bug: Removed config option that didn't belong to the hub (is node-only) `-nodePolling`
+ + Bug: Java CLI required all system `-D` args to be before the `-jar` argument
+ + Removed future supported option `-trustAllSSLCertificates`
+ + Add `--disable-gpu` to CHROME_ARGS to avoid the single GPU thread error message
+ + Re-add geckodriver 0.10.0
+ + Image tag details:
+  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox stable: TBD_FIREFOX_STABLE
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
+  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Tested on kernel dev host: 4.4.0-38-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 1.12.1, build 23cf638
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
+  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 2.53.1z
  + Date: 2016-09-29
  + Remove geckodriver as is not being used yet
@@ -25,7 +58,7 @@ Note image ids also change after scm-source.json has being updated which trigger
   + Tested on kernel CI  host: 3.19.0-66-generic x86_64
   + Built at dev host with: Docker version 1.12.1, build 23cf638
   + Built at CI  host with: Docker version 1.12.1, build 23cf638
-  + Built at dev host with: Docker Compose version 1.8.1, build 878cff1
+  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
   + Built at CI  host with: Docker Compose version 1.8.1, build 878cff1
   + Image size: 2.576 GB
   + Digest: sha256:6c4bdb751fe15ebcec8b5a6dc120dd9ccee7f0883fcd24c82e187320e57beda6

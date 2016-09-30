@@ -68,3 +68,26 @@ set -xe
 
 docker exec -t grid run_test
 docker exec grid errors || true
+
+echo "#==================================================================="
+echo "# Scenario 1c [basic]: Test Selenium 3"
+echo "#==================================================================="
+
+docker run --name=grid3 -d -e VIDEO=true \
+  -e MOCK_SERVER_HOST="d.host.loc.dev" \
+  -e MOCK_SERVER_PORT \
+  -e USE_SELENIUM="3" \
+  -v /dev/shm:/dev/shm \
+  selenium
+
+sleep 0.5 && docker logs grid3
+docker exec grid3 wait_all_done 40s
+docker exec grid3 versions
+docker exec grid3 errors || true
+docker logs grid3
+docker exec -t grid3 run_test
+docker exec grid3 errors || true
+
+# cleanup
+docker stop grid3 || true
+docker rm grid3 || true

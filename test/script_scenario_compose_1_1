@@ -29,7 +29,7 @@ export COMPOSE_FILE="docker-compose-host.yml" \
 echo "#===================================================================="
 echo "# Scenario 5b [compose_1_1]: Docker Compose 1 hub, 1 chrome, 1 firefox"
 echo "#===================================================================="
-export VNC_FROM_PORT="54900" VNC_TO_PORT="54950"
+export VNC_FROM_PORT="61900" VNC_TO_PORT="61950"
 export COMPOSE_FILE="docker-compose.yml" \
        DO_COMPOSE_UP="true"
 ./test/compose-test.sh

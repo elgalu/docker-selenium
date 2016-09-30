@@ -10,6 +10,10 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
 
+if [ "${USE_SELENIUM}" == "3" ]; then
+  JAVA_OPTS="-Dwebdriver.gecko.driver=/usr/bin/geckodriver ${JAVA_OPTS}"
+fi
+
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
 echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 
@@ -20,14 +24,14 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 # TODO: how to set default firefox to latest?
 export FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS},version=${FIREFOX_VERSION},firefox_binary=${FIREFOX_DEST_BIN}"
-java ${JAVA_OPTS} \
-  -jar ${SEL_HOME}/selenium-server-standalone.jar \
+java \
+  ${JAVA_OPTS} \
+  -jar ${SELENIUM_JAR_PATH} \
   -port ${SELENIUM_NODE_FF_PORT} \
   -host ${SELENIUM_NODE_HOST} \
   -role node \
   -hub "${SELENIUM_HUB_PROTO}://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register" \
   -browser "${FIREFOX_BROWSER_CAPS}" \
-  -trustAllSSLCertificates \
   -maxSession ${MAX_SESSIONS} \
   -timeout ${SEL_RELEASE_TIMEOUT_SECS} \
   -browserTimeout ${SEL_BROWSER_TIMEOUT_SECS} \

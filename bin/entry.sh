@@ -27,12 +27,17 @@ stop 2>&1 >/dev/null || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
-echo "-- INFO: Available Google Chrome Version: $(chrome_stable_version)"
-echo "-- INFO: Available Firefox...... Version: ${FIREFOX_VERSION}"
-
 #---------------------
 # Fix/extend ENV vars
 #---------------------
+export SELENIUM_JAR_PATH="${SEL_HOME}/selenium-server-standalone-${USE_SELENIUM}.jar"
+export FIREFOX_DEST_BIN="${SEL_HOME}/firefox-for-sel-${USE_SELENIUM}/firefox"
+sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
+
+echo "-- INFO: Chrome..... Version: $(chrome_stable_version)"
+echo "-- INFO: Firefox.... Version: $(firefox_version)"
+echo "-- INFO: Selenium... Version: ${USE_SELENIUM}"
+
 # export PATH="${PATH}:${BIN_UTILS}"
 export SAUCE_LOG_FILE="${LOGS_DIR}/saucelabs-stdout.log"
 export BSTACK_LOG_FILE="${LOGS_DIR}/browserstack-stdout.log"
@@ -398,6 +403,11 @@ echo "${NOVNC_PORT}" > NOVNC_PORT
 echo "${SSHD_PORT}" > SSHD_PORT
 echo "${SAUCE_LOCAL_SEL_PORT}" > SAUCE_LOCAL_SEL_PORT
 echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
+echo "${FIREFOX_DEST_BIN}" > FIREFOX_DEST_BIN
+echo "${USE_SELENIUM}" > USE_SELENIUM
+echo "${SEL_HOME}" > SEL_HOME
+echo "${SELENIUM_JAR_PATH}" > SELENIUM_JAR_PATH
+echo "${LOGS_DIR}" > LOGS_DIR
 env > env
 
 #------

@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
 
-java -version
-java -jar ${SEL_HOME}/selenium-server-standalone.jar -port ${SELENIUM_HUB_PORT} 2>&1 | grep revision
-python --version
-firefox -version
-chromedriver --version
+echo "selenium_version=$(selenium_version) selenium_revision_version=$(selenium_revision_version)"
+
+echo "chrome_stable_version=$(chrome_stable_version)"
 google-chrome-stable --version
+
+echo "firefox_version=$(firefox_version)"
+firefox --version
+echo "firefox-for-sel-2_version=$(firefox-for-sel-2_version)"
+echo "firefox-for-sel-3_version=$(firefox-for-sel-3_version)"
+
+echo "chromedriver_version=$(chromedriver_version)"
+chromedriver --version
+
+echo "sauce_connect_version=$(sauce_connect_version)"
 sc | grep build
+
+echo "browser_stack_version=$(browser_stack_version)"
 BrowserStackLocal -version
+
+echo "java_build_version=$(java_build_version)"
+java -version
+
+echo "python_version=$(python_version)"
+python --version

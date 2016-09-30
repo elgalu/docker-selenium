@@ -680,8 +680,7 @@ RUN cd /tmp \
 #   && rm -rf /var/lib/apt/lists/*
 # ENV FF_VER="latest" \
 #     FF_LANG="en-US" \
-#     FF_DEST="/usr/lib/firefox"
-# ENV FIREFOX_DEST_BIN="${FF_DEST}/firefox"
+#     FIREFOX_DEST_BIN="/usr/lib/firefox/firefox"
 # RUN ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 
 #-------------------------#
@@ -709,39 +708,49 @@ RUN cd /tmp \
 
 ENV FF_LANG="en-US" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
-    FF_DEST="${SEL_HOME}/firefox"
-ENV FIREFOX_DEST_BIN="${FF_DEST}/firefox"
-
-#--- Stable
-ENV FF_VER="47.0.1" \
     FF_PLATFORM="linux-x86_64" \
     FF_INNER_PATH="firefox/releases"
+
+#--- For Selenium 3
+ENV FF_VER="49.0.1"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
-
 RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
   && wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && bzip2 -d "firefox.tar.bz2" \
   && tar xf "firefox.tar" \
   && rm "firefox.tar" \
-  && sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
+  && mv firefox firefox-for-sel-3 \
+  && sudo ln -fs ${SEL_HOME}/firefox-for-sel-3/firefox /usr/bin/firefox
+
+#--- Stable for Selenium 2
+ENV FF_VER="47.0.1"
+ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
+ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
+RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
+  && wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
+  && bzip2 -d "firefox.tar.bz2" \
+  && tar xf "firefox.tar" \
+  && rm "firefox.tar" \
+  && mv firefox firefox-for-sel-2 \
+  && sudo ln -fs ${SEL_HOME}/firefox-for-sel-2/firefox /usr/bin/firefox
 
 #============
 # GeckoDriver
 #============
-# ENV GECKOD_VER="0.10.0" \
-#     GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
-# RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
-#      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
-#   && rm -rf /opt/geckodriver* \
-#   && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
-#   && mv /opt/geckodriver /usr/bin/geckodriver \
-#   && chmod +x /usr/bin/geckodriver \
-#   && ln -fs /usr/bin/geckodriver /opt/geckodriver \
-#   && ln -fs /usr/bin/geckodriver /usr/bin/wires \
-#   && ln -fs /usr/bin/geckodriver ${FF_DEST}/geckodriver \
-#   && ln -fs /usr/bin/geckodriver ${FF_DEST}/wires \
-#   && rm /tmp/geckodriver.tar.gz
+ENV GECKOD_VER="0.10.0" \
+    GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
+RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
+     "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
+  && rm -rf /opt/geckodriver* \
+  && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
+  && mv /opt/geckodriver /usr/bin/geckodriver \
+  && chmod +x /usr/bin/geckodriver \
+  && ln -fs /usr/bin/geckodriver /opt/geckodriver \
+  && ln -fs /usr/bin/geckodriver /usr/bin/wires \
+  && rm /tmp/geckodriver.tar.gz
+  # && ln -fs /usr/bin/geckodriver ${FF_DEST}/geckodriver \
+  # && ln -fs /usr/bin/geckodriver ${FF_DEST}/wires \
 
   # && rm -rf ${NORMAL_USER_HOME}/firefox-src
 # RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \
@@ -774,13 +783,22 @@ USER ${NORMAL_USER}
 #==========
 # Selenium
 #==========
-ENV SEL_MAJOR_MINOR_VER 2.53
-ENV SEL_PATCH_LEVEL_VER 1
+# Selenium 3
+ENV SEL_DIRECTORY="3.0-beta4" \
+    SEL_VERSION="3.0.0-beta4"
+RUN  mkdir -p ${SEL_HOME} \
+  && export SELBASE="https://selenium-release.storage.googleapis.com" \
+  && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VERSION}.jar" \
+  && wget -nv ${SELBASE}/${SELPATH} \
+      -O ${SEL_HOME}/selenium-server-standalone-3.jar
+# Selenium 2
+ENV SEL_MAJOR_MINOR_VER="2.53" \
+    SEL_PATCH_LEVEL_VER="1"
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_MAJOR_MINOR_VER}/selenium-server-standalone-${SEL_MAJOR_MINOR_VER}.${SEL_PATCH_LEVEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
-      -O ${SEL_HOME}/selenium-server-standalone.jar
+      -O ${SEL_HOME}/selenium-server-standalone-2.jar
 
 #==================
 # Chrome webdriver
@@ -816,7 +834,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="53.0.2785.116" \
+RUN  latest_chrome_version_trigger="53.0.2785.143" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -972,6 +990,8 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
 ENV FIREFOX_VERSION="${FF_VER}" \
+  # Selenium 2 or 3
+  USE_SELENIUM="2" \
   # Default chrome flavor, options no longer avariable: beta|unstable
   CHROME_FLAVOR="stable" \
   # Randomize all ports, i.e. pick unused unprivileged ones
@@ -1017,7 +1037,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_NODE_PARAMS="" \
   SELENIUM_NODE_PROXY_PARAMS="" \
   # To taggle issue #58 see https://goo.gl/fz6RTu
-  CHROME_ARGS="--no-sandbox" \
+  CHROME_ARGS="--no-sandbox --disable-gpu" \
   # Will be passed with: -Dwebdriver.chrome.verboseLogging
   CHROME_VERBOSELOGGING="true" \
   # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \

@@ -19,15 +19,15 @@ services:
   - docker
 
 matrix:
-  allow_failures:
-    # Currently erroring in Mac (OSX):
-    #  https://travis-ci.org/elgalu/docker-selenium/jobs/143553463#L636
-    #   com.docker.docker Incompatible CPU detected
-    #   Docker requires a processor with virtualization capabilities
-    - env:
-        - DOCKER_VERSION="1.12.1"
-          DOCKER_COMPOSE_VERSION="1.8.1"
-          OPERATING_SYSTEM="osx"
+  # allow_failures:
+  #   # Currently erroring in Mac (OSX):
+  #   #  https://travis-ci.org/elgalu/docker-selenium/jobs/143553463#L636
+  #   #   com.docker.docker Incompatible CPU detected
+  #   #   Docker requires a processor with virtualization capabilities
+  #   - env:
+  #       - DOCKER_VERSION="1.12.1"
+  #         DOCKER_COMPOSE_VERSION="1.8.1"
+  #         OPERATING_SYSTEM="osx"
   include:
     # Linux with docker:stable compose:stable
     # Use DOCKER_PUSH_LATEST=false to debug
@@ -40,7 +40,7 @@ matrix:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.8.1"
           DOCKER_PUSH=true
-          DOCKER_PUSH_LATEST=true
+          DOCKER_PUSH_LATEST=false
     # Linux with docker:beta/older compose:beta/older
     - os: linux
       sudo: required
