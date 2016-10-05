@@ -12,6 +12,8 @@ ls -la ./images/
 mkdir -p ./videos
 docker cp grid:/test/videos/chrome ./videos/
 docker cp grid:/test/videos/firefox ./videos/
+docker cp grid:/test/videos/mobile_emulation ./videos/
 ls -la ./videos/chrome
 ls -la ./videos/firefox
+ls -la ./videos/mobile_emulation
 ls -la ./videos/

@@ -17,9 +17,9 @@ die () {
 [ -z "${1}" ] && die "Need first argument to be the browser name"
 browser_name=${1}
 
-echo "--------------------------"
+echo "----------------------------------------"
 echo "- Self test on ${browser_name}"
-echo "--------------------------"
+echo "----------------------------------------"
 
 if [ "${VIDEO}" = "true" ]; then
   stop-video >/dev/null 2>&1 || true

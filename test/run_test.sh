@@ -12,6 +12,7 @@ fi
 
 selenium_test chrome
 selenium_test firefox
+selenium_test mobile_emulation
 
 if [ "${VIDEO}" = "true" ]; then
   # restore backup

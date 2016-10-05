@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
  + Selenium 3 and Selenium 2 will both be provided
+ + Support Mobile Emulation https://goo.gl/pqa7cn
  + Image tag details:
   + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
   + Selenium 3: 3.0.0-beta4 (3169782)

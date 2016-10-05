@@ -14,7 +14,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 import argparse
 parser = argparse.ArgumentParser(description='Perform some basic selenium tests.')
-parser.add_argument('browser', choices=['chrome', 'firefox'], nargs='?', default='chrome',
+parser.add_argument('browser', choices=['chrome', 'firefox', 'mobile_emulation'], nargs='?', default='chrome',
                     help='in which browser to test')
 args = parser.parse_args()
 
@@ -24,6 +24,11 @@ current_selenium = os.environ.get('USE_SELENIUM', '2')
 # http://selenium-python.readthedocs.org/en/latest/api.html
 if args.browser == 'chrome':
     caps = DesiredCapabilities.CHROME
+elif args.browser == 'mobile_emulation':
+    mobile_emulation = {"deviceName": "Google Nexus 5"}
+    opts = webdriver.ChromeOptions()
+    opts.add_experimental_option("mobileEmulation", mobile_emulation)
+    caps = opts.to_capabilities()
 elif args.browser == 'firefox':
     caps = DesiredCapabilities.FIREFOX
     if current_selenium == '3':
@@ -113,11 +118,17 @@ def open_web_page():
 
 open_web_page()
 
-print ("Click link 'Kosten'")
-link = driver.find_element_by_link_text('Kosten')
-link.click()
-driver.maximize_window()
-time.sleep(msleep)
+if args.browser == 'mobile_emulation':
+    pageurl = ("http://%s:%s/adwords/costs" % (page_host, page_port))
+    print ("mobile_emulation test: Opening page %s" % pageurl)
+    driver.get(pageurl)
+    time.sleep(msleep)
+else:
+    print ("Click link 'Kosten'")
+    link = driver.find_element_by_link_text('Kosten')
+    link.click()
+    driver.maximize_window()
+    time.sleep(msleep)
 
 @retry(stop_max_attempt_number=7, stop_max_delay=20100, wait_fixed=300)
 def open_costs_page():
@@ -127,14 +138,15 @@ def open_costs_page():
 
 open_costs_page()
 
-print ("Go back to home page")
-link = driver.find_element_by_link_text('Übersicht')
-link.click()
-time.sleep(msleep)
-print ("Current title: %s" % driver.title)
-print ("Asserting 'Google (PPC)' in driver.title")
-assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
-time.sleep(msleep)
+if args.browser != 'mobile_emulation':
+    print ("Go back to home page")
+    link = driver.find_element_by_link_text('Übersicht')
+    link.click()
+    time.sleep(msleep)
+    print ("Current title: %s" % driver.title)
+    print ("Asserting 'Google (PPC)' in driver.title")
+    assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
+    time.sleep(msleep)
 
 print ("Close driver and clean up")
 driver.close()
