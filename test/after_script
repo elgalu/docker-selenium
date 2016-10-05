@@ -4,5 +4,7 @@
 docker exec grid stop || true
 docker stop grid || true
 docker rm grid || true
+docker rm -vf grid2 || true
+docker rm -vf grid3 || true
 # quick destroy
 docker rm -vf grid_mock || true

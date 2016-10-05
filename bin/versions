@@ -13,6 +13,9 @@ echo "firefox-for-sel-3_version=$(firefox-for-sel-3_version)"
 echo "chromedriver_version=$(chromedriver_version)"
 chromedriver --version
 
+echo "geckodriver_version=$(geckodriver_version)"
+geckodriver --version
+
 echo "sauce_connect_version=$(sauce_connect_version)"
 sc | grep build
 

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Example:
+#  geckodriver --version 2>&1
+#=> geckodriver 0.10.0
+#=> ...... The source is available at....
+
+# Example:
+#=> 0.10.0
+geckodriver --version 2>&1 | grep -Po '(?<=geckodriver )([a-z0-9\.]+)'

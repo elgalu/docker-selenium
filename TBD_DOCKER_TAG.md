@@ -2,9 +2,12 @@
  + Date: TBD_DATE
  + TBD_COMMIT_MSG
  + Image tag details:
-  + Selenium: vTBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
+  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 3: 3.0.0-beta4 (3169782)
   + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox stable: TBD_FIREFOX_STABLE
+  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+  + Geckodriver: TBD_GECKO_DRIVER
   + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
   + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
   + Timezone: TBD_TIME_ZONE
@@ -16,7 +19,7 @@
   + Tested on kernel CI  host: TBD_HOST_UNAME
   + Built at dev host with: Docker version 1.12.1, build 23cf638
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Built at dev host with: Docker Compose version 1.8.1, build 878cff1
+  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
   + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
   + Image size: TBD_IMAGE_SIZE
   + Digest: TBD_DIGEST

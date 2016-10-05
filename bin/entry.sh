@@ -33,9 +33,10 @@ rm -f ${RUN_DIR}/*
 export SELENIUM_JAR_PATH="${SEL_HOME}/selenium-server-standalone-${USE_SELENIUM}.jar"
 export FIREFOX_DEST_BIN="${SEL_HOME}/firefox-for-sel-${USE_SELENIUM}/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
+export FIREFOX_VERSION=$(firefox_version)
 
 echo "-- INFO: Chrome..... Version: $(chrome_stable_version)"
-echo "-- INFO: Firefox.... Version: $(firefox_version)"
+echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
 echo "-- INFO: Selenium... Version: ${USE_SELENIUM}"
 
 # export PATH="${PATH}:${BIN_UTILS}"

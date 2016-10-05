@@ -91,10 +91,12 @@ update_changelog() {
   TBD_DATE=$(date +%F)
   TBD_CHROME_STABLE=$(docker exec grid chrome_stable_version)
   TBD_CHROME_DRIVER=$(docker exec grid chromedriver_version)
+  TBD_GECKO_DRIVER=$(docker exec grid geckodriver_version)
   TBD_CHROMEDRIVER_COMMIT=$(docker exec grid chromedriver_commit_version)
-  TBD_FIREFOX_STABLE=$(docker exec grid firefox_version)
-  TBD_SELENIUM_VERSION=$(docker exec grid selenium_version)
-  TBD_SELENIUM_REVISION=$(docker exec grid selenium_revision_version)
+  TBD_FIREFOX_FOR_SEL2=$(docker exec grid firefox-for-sel-2_version)
+  TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox-for-sel-3_version)
+  TBD_SELENIUM_2_VERSION=$(docker exec grid selenium_version)
+  TBD_SELENIUM_2_REVISION=$(docker exec grid selenium_revision_version)
   TBD_PYTHON_VERSION=$(docker exec grid python_version)
   TBD_JAVA_BUILD=$(docker exec grid java_build_version)
   TBD_JAVA_VENDOR=$(docker exec grid java_vendor_version)
@@ -117,10 +119,12 @@ update_changelog() {
   sed -i -- "s/TBD_DATE/${TBD_DATE}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_CHROME_STABLE/${TBD_CHROME_STABLE}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_CHROME_DRIVER/${TBD_CHROME_DRIVER}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_GECKO_DRIVER/${TBD_GECKO_DRIVER}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_CHROMEDRIVER_COMMIT/${TBD_CHROMEDRIVER_COMMIT}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_FIREFOX_STABLE/${TBD_FIREFOX_STABLE}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SELENIUM_VERSION/${TBD_SELENIUM_VERSION}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SELENIUM_REVISION/${TBD_SELENIUM_REVISION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_FIREFOX_FOR_SEL2/${TBD_FIREFOX_FOR_SEL2}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_FIREFOX_FOR_SEL3/${TBD_FIREFOX_FOR_SEL3}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_SELENIUM_2_VERSION/${TBD_SELENIUM_2_VERSION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_SELENIUM_2_REVISION/${TBD_SELENIUM_2_REVISION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_PYTHON_VERSION/${TBD_PYTHON_VERSION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_JAVA_BUILD/${TBD_JAVA_BUILD}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_JAVA_VENDOR/${TBD_JAVA_VENDOR}/g" CHANGELOG.md || true
@@ -141,7 +145,8 @@ git_diff_add_commit() {
   git status
   git add CHANGELOG.md
   git add capabilities.json
-  git add images/grid_console.png
+  git add images/grid2_console.png
+  git add images/grid3_console.png
   git commit -m "${TRAVIS_TAG}: Update image id, digest & png [ci skip]"
   git --no-pager log -n3
   git branch

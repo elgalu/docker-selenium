@@ -42,7 +42,7 @@ matrix:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.8.1"
           DOCKER_PUSH=true
-          DOCKER_PUSH_LATEST=false
+          DOCKER_PUSH_LATEST=true
     # Linux with docker:beta/older compose:beta/older
     - os: linux
       language: python
@@ -51,7 +51,7 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.2-rc1"
+        - DOCKER_VERSION="1.12.2-rc2"
           DOCKER_COMPOSE_VERSION="1.8.0"
     # Linux with docker:stable compose:beta/older
     - os: linux
@@ -71,7 +71,7 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.2-rc1"
+        - DOCKER_VERSION="1.12.2-rc2"
           DOCKER_COMPOSE_VERSION="1.8.1"
     # Mac OSX: only test native docker version
     - os: osx

@@ -7,6 +7,33 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + Selenium 3 and Selenium 2 will both be provided
+ + Image tag details:
+  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 3: 3.0.0-beta4 (3169782)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+  + Geckodriver: TBD_GECKO_DRIVER
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
+  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Tested on kernel dev host: 4.4.0-38-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 1.12.1, build 23cf638
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
+  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 3.0.0b4
  + Date: 2016-09-30
  + Include Selenium 3 (3.0.0-beta4) and enable via `-e USE_SELENIUM=3`
@@ -20,9 +47,12 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add `--disable-gpu` to CHROME_ARGS to avoid the single GPU thread error message
  + Re-add geckodriver 0.10.0
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium 2: 2.53.1 (a36b8b1)
+  + Selenium 3: 3.0.0-beta4 (3169782)
   + Chrome stable:  53.0.2785.143
-  + Firefox stable: 47.0.1
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 49.0.1
+  + Geckodriver: 0.10.0
   + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
   + Java: Oracle Java 9-ea+134
   + Timezone: Europe/Berlin
@@ -44,7 +74,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-09-29
  + Remove geckodriver as is not being used yet
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.116
   + Firefox stable: 47.0.1
   + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
@@ -72,7 +102,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Perhaps fixed DBUS mistery. See `entry.sh`
  + Client side: docker-compose from 1.8.0 to 1.8.1
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.116
   + Firefox stable: 47.0.1
   + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
@@ -96,7 +126,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-09-15
  + Upgrade Chrome stable patch 53.0.2785.116
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.116
   + Firefox stable: 47.0.1
   + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
@@ -121,7 +151,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Chrome (stable) 53.0.2785.113
  + Upgrade Sauce Connect (minor) 4.4.0
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.113
   + Firefox stable: 47.0.1
   + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
@@ -145,7 +175,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-09-10
  + Upgrade Chromedriver from 2.23 to 2.24
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.101
   + Firefox stable: 47.0.1
   + Chromedriver: 2.24.417424 (c5c5ea873213ee72e3d0929b47482681555340c3)
@@ -169,7 +199,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-09-08
  + Upgrade Chrome patch to 53.0.2785.101
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.101
   + Firefox stable: 47.0.1
   + Chromedriver: 2.23.409687 (c46e862757edc04c06b1bd88724d15a5807b84d1)
@@ -193,7 +223,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-09-03
  + Upgrade Chrome patch to 53.0.2785.92
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.92
   + Firefox stable: 47.0.1
   + Chromedriver: 2.23.409687 (c46e862757edc04c06b1bd88724d15a5807b84d1)
@@ -221,7 +251,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Chore: "to finish starting" => "to be ready"
  + Chore: Add missing apt-key 3B4FE6ACC0B21F32
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  53.0.2785.89
   + Firefox stable: 47.0.1
   + Chromedriver: 2.23.409687 (c46e862757edc04c06b1bd88724d15a5807b84d1)
@@ -247,7 +277,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Chromedriver from 2.22 to 2.23
  + Upgrade BrowserStack Local 5.8
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  52.0.2743.116
   + Firefox stable: 47.0.1
   + Chromedriver: 2.23.409687 (c46e862757edc04c06b1bd88724d15a5807b84d1)
@@ -271,7 +301,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-07-22
  + Upgrade Chrome major from 51 to 52.0.2743.82
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  52.0.2743.82
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -296,7 +326,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Ubuntu xenial to 20160713
  + Chore: Start xterm with a random geometry to differentiate nodes
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -320,7 +350,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-07-18
  + Fix OSX seq: illegal option -- -
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -344,7 +374,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-07-18
  + Bugs: Makefile OSX fixes & discourage wmctrl
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -370,7 +400,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add VNC_FROM_PORT & VNC_TO_PORT range
  + Easily gather video artifacts with `make videos`
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -396,7 +426,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add Makefile support to stay DRY
  + Upgrade Python from 2.7.11 to 2.7.12
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -425,7 +455,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Chore: get rid of `supervisord: no process found`
  + Chore: Use mock server at port 8080
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -449,7 +479,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-07-12
  + New default SELENIUM_NODE_REGISTER_CYCLE=1000
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -479,7 +509,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Chore: Add `docker exec grid cat HUB_PORT #=> 24444`
  + Chore: Test offline site (mocked http server)
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -506,7 +536,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + WIP to add OSX support #111 #110
  + Upgrade BrowserStack Local 5.7
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -530,7 +560,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-07-05
  + Add (fixed) node -proxy customization via SELENIUM_NODE_PROXY_PARAMS
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -554,7 +584,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-07-01
  + Fix race conditions while using many nodes with docker-compose
  + Image tag details:
-  + Selenium: v2.53.1 (a36b8b1)
+  + Selenium: 2.53.1 (a36b8b1)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -582,7 +612,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Ubuntu xenial date to 20160629
  + Fix signaling issue by replacing `CMD "entry.sh"` with `CMD ["entry.sh"]`
  + Image tag details:
-  + Selenium: v2.53.0 (3da6b38)
+  + Selenium: 2.53.0 (3da6b38)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 47.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -611,7 +641,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Allow to pick individual unused unprivileged ports via `0` e.g. VNC_PORT=0
  + Fix bug that x11vnc was always assigning port 5900 for tcp6 IPv6 (missing `-rfbportv6`)
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  51.0.2704.106
   + Firefox stable: 46.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -633,7 +663,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-06-17
  + Upgrade Chrome stable patch 51.0.2704.103
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  51.0.2704.103
   + Firefox stable: 46.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -657,7 +687,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Chrome stable patch 51.0.2704.84
  + Upgrade BrowserStack Local 5.6
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  51.0.2704.84
   + Firefox stable: 46.0.1
   + Chromedriver: 2.22.397932 (282ed7cf89cf0053b6542e0d0f039d4123bbb6ad)
@@ -681,7 +711,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Sauce Connect to 4.3.16
  + Upgrade Ubuntu xenial date to 20160525
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  51.0.2704.79
   + Firefox stable: 46.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -704,7 +734,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Chrome stable major 51.0.2704.63
  + Upgrade Sauce Connect to 4.3.15
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  51.0.2704.63
   + Firefox stable: 46.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -728,7 +758,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add mp4 playback ability in firefox for html5 @Z3r0Sum
  + Travis skip tmp branches
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  50.0.2661.102
   + Firefox stable: 46.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -751,7 +781,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Firefox patch to 46.0.1
  + Upgrade Ubuntu xenial date to 20160503
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  50.0.2661.94
   + Firefox stable: 46.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -773,7 +803,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-04-29
  + Upgrade Chrome patch to 50.0.2661.94
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  50.0.2661.94
   + Firefox stable: 46.0
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -798,7 +828,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Fix bug #83 on `docker restart`
  + Bump supervisor commit
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  50.0.2661.86
   + Firefox stable: 46.0
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -820,7 +850,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-04-24
  + Upgrade Chrome patch to 50.0.2661.86
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  50.0.2661.86
   + Firefox stable: 45.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -844,7 +874,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Chore: modularize script_push a bit
  + Chore: Update more changelog versions from Travis
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  50.0.2661.75
   + Firefox stable: 45.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -867,7 +897,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Firefox to 45.0.2
  + Upgrade BrowserStack local to 5.3
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.112
   + Firefox stable: 45.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -893,7 +923,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade BrowserStack local to 5.2
  + Upgrade Chrome patch to 49.0.2623.112
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.112
   + Firefox stable: 45.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -916,7 +946,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Include basic python selenium tests inside the image
  + Begin travis-ci support on the project
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.110
   + Firefox stable: 45.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -939,7 +969,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Bump noVNC updates from last ~ 10 months
  + Add https to selenium download base url
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.87
   + Firefox stable: 45.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -960,7 +990,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Added noVNC back for @vvo
  + Added Algolia and Nvidia to README.md#who
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.87
   + Firefox stable: 45.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -982,7 +1012,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Ubuntu xenial to 20160317
  + Upgrade Sauce Connect to 4.3.14
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.87
   + Firefox stable: 45.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1006,7 +1036,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade BrowserStack Local to 4.9
  + Upgrade Supervisor to 2016-03-06
  + Image tag details:
-  + Selenium: v2.53.0 (35ae25b)
+  + Selenium: 2.53.0 (35ae25b)
   + Chrome stable:  49.0.2623.87
   + Firefox stable: 45.0
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1029,7 +1059,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Chrome (patch) to 49.0.2623.87
  + Remove/comment noVNC as is not being used
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  49.0.2623.87
   + Firefox stable: 45.0
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1049,7 +1079,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-03-02
  + Upgrade Chrome to 49.0.2623.75
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  49.0.2623.75
   + Firefox stable: 44.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1069,7 +1099,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-02-29
  + Upgrade Ubuntu xenial to 20160226
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  48.0.2564.116
   + Firefox stable: 44.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1090,7 +1120,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Switched OpenJDK 8 to Oracle Java 9
  + Upgrade BrowserStack to 4.8
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  48.0.2564.116
   + Firefox stable: 44.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1110,7 +1140,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-02-19
  + Upgrade Chrome to 48.0.2564.116
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  48.0.2564.116
   + Firefox stable: 44.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1130,7 +1160,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-02-18
  + Upgrade Ubuntu xenial to 20160217.2
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  48.0.2564.109
   + Firefox stable: 44.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1150,7 +1180,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Firefox to 44.0.2
  + Upgrade Selenium to 2.52.0
  + Image tag details:
-  + Selenium: v2.52.0 (4c2593c)
+  + Selenium: 2.52.0 (4c2593c)
   + Chrome stable:  48.0.2564.109
   + Firefox stable: 44.0.2
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1168,7 +1198,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-02-10
  + Upgrade Chrome to 48.0.2564.109
  + Image tag details:
-  + Selenium: v2.51.0 (1af067d)
+  + Selenium: 2.51.0 (1af067d)
   + Chrome stable:  48.0.2564.109
   + Firefox stable: 44.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1189,7 +1219,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade BrowserStack to 4.7
  + Allow Chrome `--no-sandbox` mode through `$CHROME_ARGS`
  + Image tag details:
-  + Selenium: v2.51.0 (1af067d)
+  + Selenium: 2.51.0 (1af067d)
   + Chrome stable:  48.0.2564.103
   + Firefox stable: 44.0.1
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1207,7 +1237,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-02-04
  + Upgrade Chrome to 48.0.2564.103 and log chores
  + Image tag details:
-  + Selenium: v2.50.1 (d7fc91b)
+  + Selenium: 2.50.1 (d7fc91b)
   + Chrome stable:  48.0.2564.103
   + Firefox stable: 44.0
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1228,7 +1258,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade BrowserStack to 4.5
  + Upgrade Supervisor 4 dev from 2015-08-24 to 2016-02-01
  + Image tag details:
-  + Selenium: v2.50.1 (d7fc91b)
+  + Selenium: 2.50.1 (d7fc91b)
   + Chrome stable:  48.0.2564.97
   + Firefox stable: 44.0
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1246,7 +1276,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2016-01-29
  + Upgrade Chromedriver from 2.20 to 2.21
  + Image tag details:
-  + Selenium: v2.50.0 (1070ace)
+  + Selenium: 2.50.0 (1070ace)
   + Chrome stable:  48.0.2564.97
   + Firefox stable: 43.0.4
   + Chromedriver: 2.21.371461 (633e689b520b25f3e264a2ede6b74ccc23cb636a)
@@ -1265,7 +1295,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Selenium to 2.50.0
  + Upgrade Chrome to 48.0.2564.97
  + Image tag details:
-  + Selenium: v2.50.0 (1070ace)
+  + Selenium: 2.50.0 (1070ace)
   + Chrome stable:  48.0.2564.97
   + Firefox stable: 43.0.4
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1284,7 +1314,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade ubuntu:xenial-20160119.1 to 20160125
  + Upgrade OpenJDK 1.8.0_72-b05 to b15
  + Image tag details:
-  + Selenium: v2.49.1 (7203e46)
+  + Selenium: 2.49.1 (7203e46)
   + Chrome stable:  48.0.2564.82
   + Firefox stable: 43.0.4
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1303,7 +1333,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Selenium to 2.49.1
  + Upgrade Chrome to 48.0.2564.82
  + Image tag details:
-  + Selenium: v2.49.1 (7203e46)
+  + Selenium: 2.49.1 (7203e46)
   + Chrome stable:  48.0.2564.82
   + Firefox stable: 43.0.4
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1322,7 +1352,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade from ubuntu:xenial-20151218.1 to 20160119.1
  + Upgrade BrowserStack to 4.4
  + Image tag details:
-  + Selenium: v2.49.0 (365eeb4)
+  + Selenium: 2.49.0 (365eeb4)
   + Chrome stable:  47.0.2526.111
   + Firefox stable: 43.0.4
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1341,7 +1371,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Selenium to 2.49.0
  + Upgrade Chrome to 47.0.2526.111
  + Image tag details:
-  + Selenium: v2.49.0 (365eeb4)
+  + Selenium: 2.49.0 (365eeb4)
   + Chrome stable:  47.0.2526.111
   + Firefox stable: 43.0.4
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1360,7 +1390,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Firefox to 43.0.4
  + Upgrade BrowserStack to 4.3
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.106
   + Firefox stable: 43.0.4
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1378,7 +1408,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2015-12-28
  + Upgrade Firefox to 43.0.3
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.106
   + Firefox stable: 43.0.3
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1396,7 +1426,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2015-12-23
  + Upgrade Firefox to 43.0.2
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.106
   + Firefox stable: 43.0.2
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1416,7 +1446,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Java from 1.8.0_66-b01 to 1.8.0_72-b05
  + Upgrade Python from 2.7.10 to 2.7.11
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.106
   + Firefox stable: 43.0.1
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1437,7 +1467,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Sauce Connect to 4.3.13
  + Upgrade BrowserStack to 4.2
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.106
   + Firefox stable: 43.0.1
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1456,7 +1486,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Ubuntu wily from 20151019 to 20151208
  + Upgrade Chrome to 47.0.2526.80
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.80
   + Firefox stable: 42.0
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1474,7 +1504,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2015-12-02
  + Upgrade Chrome to 47.0.2526.73
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  47.0.2526.73
   + Firefox stable: 42.0
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1493,7 +1523,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Sauce Connect to 4.3.12
  + Upgrade BrowserStack to 4.1
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  46.0.2490.86
   + Firefox stable: 42.0
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1513,7 +1543,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Increase wait timeout and other minor chores
  + Improve video transfer artifacts through `docker cp`
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  46.0.2490.86
   + Firefox stable: 42.0
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1533,7 +1563,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade to Firefox to 42.0 and fix mozilla.org => firefox ftp links
  + Upgrade to ubuntu:wily-20151019
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  46.0.2490.80
   + Firefox stable: 42.0
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1555,7 +1585,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade to Chrome to 46.0.2490.71
  + Upgrade to ubuntu:wily-20151009
  + Image tag details:
-  + Selenium: v2.48.2 (41bccdd)
+  + Selenium: 2.48.2 (41bccdd)
   + Chrome stable:  46.0.2490.71
   + Firefox stable: 41.0.2
   + Chromedriver: 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b)
@@ -1574,7 +1604,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Remove older Firefox and Chrome beta/dev as they are not being used.
  + Upgrade BrowserStack Local version 3.9
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:  45.0.2454.101
   + Firefox stable: 41.0.1
   + Chromedriver: 2.19.346067 (6abd8652f8bc7a1d825962003ac88ec6a37a82f1)
@@ -1593,7 +1623,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Firefox to 41.0.1, Chrome 45.0.2454.101 and other flavors.
  + Minor improvements by using SIGTERM instead of SIGKILL.
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         45.0.2454.101
   + Chrome beta:           46.0.2490.52
   + Chrome dev (unstable): 47.0.2522.1
@@ -1616,7 +1646,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2015-09-23
  + Upgrade Firefox to 41.0, Chrome 45.0.2454.99 and other flavors.
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         45.0.2454.99
   + Chrome beta:           46.0.2490.33
   + Chrome dev (unstable): 47.0.2516.0
@@ -1639,7 +1669,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2015-09-16
  + Upgrade Chrome patch level to 45.0.2454.93 and other flavors.
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         45.0.2454.93
   + Chrome beta:           46.0.2490.22
   + Chrome dev (unstable): 47.0.2508.0
@@ -1667,7 +1697,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Fix SSH_AUTH_KEYS detected issue
  + Fix grid-hub registration issues
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         45.0.2454.85
   + Chrome beta:           46.0.2490.13
   + Chrome dev (unstable): 47.0.2503.0
@@ -1693,7 +1723,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Only umount/mount /dev/shm if -e SHM_TRY_MOUNT_UNMOUNT=true
  + Allow to use a network interface different from "eth0" like "em1"
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         45.0.2454.85
   + Chrome beta:           46.0.2490.13
   + Chrome dev (unstable): 47.0.2498.0
@@ -1716,7 +1746,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Date: 2015-08-28
  + Upgrade Firefox 40.0.3, Chrome flavors, chromedriver 2.19 (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.157
   + Chrome beta:           45.0.2454.78
   + Chrome dev (unstable): 46.0.2490.6
@@ -1741,7 +1771,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Fix small tiny 64mb shm issue via SHM_SIZE and `--privileged` mode.
  + Upgrade Chrome stable to 44.0.2403.157 and also beta patch level.
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.157
   + Chrome beta:           45.0.2454.46
   + Chrome dev (unstable): 46.0.2486.0
@@ -1766,7 +1796,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Sauce Connect version and add `sc --doctor`
  + Retry Sauce Connect via -e SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.155
   + Chrome beta:           45.0.2454.37
   + Chrome dev (unstable): 46.0.2486.0
@@ -1792,7 +1822,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Include Sauce Connect tunneling support.
  + Include BrowserStack tunneling support.
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.155
   + Chrome beta:           45.0.2454.37
   + Chrome dev (unstable): 46.0.2478.0
@@ -1819,7 +1849,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Java from 1.8.0_60 to 1.8.0_66
  + Include missed Firefox version 36.0.4
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.130
   + Chrome beta:           45.0.2454.26
   + Chrome dev (unstable): 46.0.2471.2
@@ -1843,7 +1873,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Include and improve host-scripts inside the docker image
  + Reorganize packages installation order
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.125
   + Chrome beta:           45.0.2454.15
   + Chrome dev (unstable): 46.0.2467.2
@@ -1866,7 +1896,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade chrome stable to 44.0.2403.125
  + Add -e MEM_JAVA to allow to pass custom values like "1024m".
  + Image tag details:
-  + Selenium: v2.47.1 (411b314)
+  + Selenium: 2.47.1 (411b314)
   + Chrome stable:         44.0.2403.125
   + Chrome beta:           45.0.2454.15
   + Chrome dev (unstable): 45.0.2454.15
@@ -1889,7 +1919,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Remove letter v from version tags due to github tarball issue.
  + Add +extension GLX to Xvfb in preparation for android emulators.
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome stable:         44.0.2403.89
   + Chrome beta:           44.0.2403.89
   + Chrome dev (unstable): 45.0.2454.7
@@ -1911,7 +1941,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Split video files through `-e VIDEO_CHUNK_SECS="00:10:00"`. (Leo Gallucci)
  + Lower down ffmpeg CPU usage considerable by using libx264 ultrafast.
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome stable:         43.0.2357.134
   + Chrome beta:           44.0.2403.89
   + Chrome dev (unstable): 45.0.2454.7
@@ -1936,7 +1966,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Fix bug in wait-docker-selenium.sh
  + Fix bug while docker stop $NAME; supervisor not getting SIGINT properly.
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome stable:         43.0.2357.134
   + Chrome beta:           44.0.2403.89
   + Chrome dev (unstable): 45.0.2454.7
@@ -1959,7 +1989,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add ./host-scripts/wait-docker-selenium.sh to know when to start tests.
  + Improve log output when container startup fails.
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome stable:         43.0.2357.134
   + Chrome beta:           44.0.2403.81
   + Chrome dev (unstable): 45.0.2454.6
@@ -1981,7 +2011,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Launch as grid only, firefox node only, chrome node only. (Leo Gallucci)
  + Start services via env vars VIDEO=false GRID=true CHROME=true FIREFOX=true
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome stable:         43.0.2357.134
   + Chrome beta:           44.0.2403.81
   + Chrome dev (unstable): 45.0.2454.6
@@ -2007,7 +2037,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Mutated SELENIUM_PARAMS into SELENIUM_HUB_PARAMS & SELENIUM_NODE_PARAMS
  + Record videos via `-e VIDEO=true` or start-video/stop-video scripts.
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome stable:         43.0.2357.134
   + Chrome beta:           44.0.2403.81
   + Chrome dev (unstable): 45.0.2454.6
@@ -2035,7 +2065,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Moved all ports above 2k to mitigate changes of ssh -R port conflicts
  + IMPORTANT: Breaking changes in this release, read the docs again.
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome: 43.0.2357.132
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
   + Firefox: 39.0
@@ -2052,7 +2082,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Firefox from 38.0.5 to 39.0 and Chrome patch level from 130 to 132  (Leo Gallucci)
  + Minor improvement to mozdownload and mozInstall for Firefox download
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome: 43.0.2357.132
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
   + Firefox: 39.0
@@ -2073,7 +2103,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade guacamole from 0.9.6 to 0.9.7
  + Start using pip-based alternate script to get more up-to-date Firefox version
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome: 43.0.2357.130
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
   + Firefox: 38.0.5
@@ -2091,7 +2121,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade chromedriver from 2.15 to 2.16
  + Add Xdummy (Xorg config) driver as an alternative to Xvfb (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.46.0 (87c69e2)
+  + Selenium: 2.46.0 (87c69e2)
   + Chrome: 43.0.2357.124
   + chromedriver: 2.16.333243 (0bfa1d3575fc1044244f21ddb82bf870944ef961)
   + Firefox: 38.0
@@ -2105,7 +2135,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Include urandom fix that hangs selenium start up (Matthew Smith)
  + Switch to Oracle Java 8 to test it out (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 43.0.2357.81
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
@@ -2120,7 +2150,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add jq tool for json querying (Leo Gallucci)
  + Make possible to docker run -v /var/run/docker.sock (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 43.0.2357.81
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
@@ -2134,7 +2164,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Ubuntu from vivid-20150427 to vivid-20150528 (Leo Gallucci)
  + Document how to use this docker image securely via sha256 and image ids (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 43.0.2357.81
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
@@ -2150,7 +2180,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Stop exposing unsecure tcp ports (selenium, vnc, tomcat) and only expose sshd (Leo Gallucci)
  + Document how to do tunneling in the secured container (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 43.0.2357.81
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
@@ -2164,7 +2194,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Add sshd so can tunnel to test local apps remotely (Leo Gallucci)
  + Add guacamole server (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 43.0.2357.81
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
@@ -2180,7 +2210,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + No matter what always use non-root user "application" (Leo Gallucci)
  + Switching to openjdk-8-jre-headless (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 43.0.2357.65
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 38.0
@@ -2194,7 +2224,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Allow internal container VNC_PORT to be changed at run time (Leo Gallucci)
  + Generate random VNC password when no VNC_PASSWORD supplied (default) (Leo Gallucci)
  + Image tag details:
-  + Selenium: v2.45.0 (5017cb8)
+  + Selenium: 2.45.0 (5017cb8)
   + Chrome: 42.0.2311.135
   + chromedriver: 2.15.322448 (52179c1b310fec1797c81ea9a20326839860b7d3)
   + Firefox: 37.0.2
