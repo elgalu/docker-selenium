@@ -30,7 +30,7 @@ Chrome will also attach to the `host` network interface.
       -e GRID=false -e CHROME=true -e FIREFOX=false \
       -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
-      -v /dev/shm:/dev/shm \
+      --shm-size=1g \
       elgalu/selenium
 
 ![docker-selenium-chrome-node](../images/chrome_grid_console.png)
@@ -39,7 +39,7 @@ Chrome will also attach to the `host` network interface.
       -e GRID=false -e CHROME=true -e FIREFOX=false \
       -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
-      -v /dev/shm:/dev/shm \
+      --shm-size=1g \
       elgalu/selenium
 
 ### Firefox
@@ -49,7 +49,7 @@ Firefox will also attach to the host machine network interface.
       -e GRID=false -e CHROME=false -e FIREFOX=true \
       -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
-      -v /dev/shm:/dev/shm \
+      --shm-size=1g \
       elgalu/selenium
 
 ![docker-selenium-firefox-node](../images/firefox_grid_console.png)
@@ -58,7 +58,7 @@ Firefox will also attach to the host machine network interface.
       -e GRID=false -e CHROME=false -e FIREFOX=true \
       -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
-      -v /dev/shm:/dev/shm \
+      --shm-size=1g \
       elgalu/selenium
 
 ### Wait

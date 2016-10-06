@@ -50,7 +50,7 @@ export MOCK_SERVER_PORT=$(get_mock_port)
 docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
-  -v /dev/shm:/dev/shm \
+  --shm-size=1g \
   selenium
   # -v /var/run/dbus:/var/run/dbus \
 
@@ -79,7 +79,7 @@ docker run --name=grid3 -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
   -e USE_SELENIUM="3" \
-  -v /dev/shm:/dev/shm \
+  --shm-size=1g \
   selenium
 
 sleep 0.5 && docker logs grid3

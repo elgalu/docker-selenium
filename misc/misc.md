@@ -3,7 +3,7 @@ Miscellaneous internal notes, do not read!
 ## Build
 
     time (docker build -t elgalu/selenium . ;echo $?;beep)
-    docker run --rm -ti --name=local -e SELENIUM_HUB_PORT=5555 -p=5555:5555 -p=5900:25900 -e VIDEO=true -e VNC_PASSWORD=no -v /dev/shm:/dev/shm elgalu/selenium
+    docker run --rm -ti --name=local -e SELENIUM_HUB_PORT=5555 -p=5555:5555 -p=5900:25900 -e VIDEO=true -e VNC_PASSWORD=no --shm-size=1g elgalu/selenium
 
 ### Wait
 Wait and get versions
@@ -25,7 +25,7 @@ Push setup, first time only:
 
 Build a grid with extra nodes
 
-    docker run --rm --name=local -p 4444:24444 -p 5900:25900 -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium
+    docker run --rm --name=local -p 4444:24444 -p 5900:25900 --shm-size=1g -e VNC_PASSWORD=hola elgalu/selenium
 
     docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container elgalu/selenium
 

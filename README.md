@@ -72,7 +72,7 @@ You will need to run the second `eval` command for every new terminal window.
         docker pull elgalu/selenium #upgrades to latest if a newer version is available
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            -e TZ="US/Pacific" -v /dev/shm:/dev/shm elgalu/selenium
+            -e TZ="US/Pacific" --shm-size=1g elgalu/selenium
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
@@ -105,7 +105,7 @@ Please google those errors first before opening an issue in this project.
 # capabilities['marionette'] = False
 docker run --rm -ti --name=grid2 -p 4444:24444 -p 5900:25900 \
   -e USE_SELENIUM=2 \
-  -v /dev/shm:/dev/shm elgalu/selenium
+  --shm-size=1g elgalu/selenium
 ```
 
 ### e.g. Selenium 3 with FF 49.0.1
@@ -113,7 +113,7 @@ docker run --rm -ti --name=grid2 -p 4444:24444 -p 5900:25900 \
 # capabilities['marionette'] = True
 docker run --rm -ti --name=grid3 -p 4444:24444 -p 5900:25900 \
   -e USE_SELENIUM=3 \
-  -v /dev/shm:/dev/shm elgalu/selenium
+  --shm-size=1g elgalu/selenium
 ```
 
 ### Docker Compose
@@ -133,7 +133,7 @@ This image is designed to run one test on each docker container but if you still
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
+            --shm-size=1g -e VNC_PASSWORD=hola \
             -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
             elgalu/selenium
 
@@ -157,7 +157,7 @@ You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa
     docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
       -e SSHD=true \
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      -v /dev/shm:/dev/shm elgalu/selenium
+      --shm-size=1g elgalu/selenium
 
 Then
 
@@ -168,7 +168,7 @@ Include `-X` in ssh command if you want to redirect the started GUI programs to 
     docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
       -e SSHD=true -e SSHD_X11FORWARDING=yes \
       -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      -v /dev/shm:/dev/shm elgalu/selenium
+      --shm-size=1g elgalu/selenium
 
 Then
 
@@ -189,7 +189,7 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
     docker pull elgalu/selenium
 
     docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
+      --shm-size=1g -e VNC_PASSWORD=hola \
       -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
       elgalu/selenium
 
@@ -202,7 +202,7 @@ You can control and modify the timezone on a container by using the [TZ](https:/
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
         -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
-        -v /dev/shm:/dev/shm elgalu/selenium
+        --shm-size=1g elgalu/selenium
 
 Examples:
 
@@ -269,7 +269,7 @@ Safari Browser already comes with a built-in vnc viewer so this feature is overk
 You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and you will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
-      -v /dev/shm:/dev/shm -p 6080:26080 -e NOVNC=true \
+      --shm-size=1g -p 6080:26080 -e NOVNC=true \
       elgalu/selenium
 
 If the VNC password was randomly generated find out with
@@ -283,7 +283,7 @@ If the VNC password was randomly generated find out with
 
 If your tests crashes in Chrome you may need to increase shm size or simply start your container by sharing `-v /dev/shm:/dev/shm` or, alternatively, `--shm-size=1g`
 
-    docker run ... -v /dev/shm:/dev/shm
+    docker run ... --shm-size=1g
 
 Alternatively you can increase it inside the container:
 
@@ -386,7 +386,7 @@ Host machine, terminal 1:
 Host machine, terminal 2:
 
     docker run --rm --name=ch -p=4444:24444 \
-      -v /dev/shm:/dev/shm \
+      --shm-size=1g \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
       elgalu/selenium
@@ -468,14 +468,14 @@ So `--pid=host` is included to avoid https://github.com/docker/docker/issues/589
 Full example using `--net=host` and `--pid=host` but for this to work in OSX you need the latest docker mac package, upgrade if you haven't done so in the last month.
 
     docker run -d --name=grid --net=host --pid=host \
-      -v /dev/shm:/dev/shm -e SELENIUM_HUB_PORT=4444 \
+      --shm-size=1g -e SELENIUM_HUB_PORT=4444 \
       elgalu/selenium
     docker exec grid wait_all_done 30s
     ./test/python_test.py
 
 #### DNS example
 
-    docker run -d --net=host --pid=host --name=grid -v /dev/shm:/dev/shm elgalu/selenium
+    docker run -d --net=host --pid=host --name=grid --shm-size=1g elgalu/selenium
     docker exec grid wait_all_done 30s
 
 ## Who is using docker-selenium?

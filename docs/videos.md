@@ -11,7 +11,7 @@ Pull image
 Run a new grid
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
-      -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola \
+      --shm-size=1g -e VNC_PASSWORD=hola \
       -e VIDEO=true elgalu/selenium
 
 ### Wait

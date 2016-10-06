@@ -45,7 +45,7 @@ docker rm -vf grid_mock || true
 docker run --name=mynodes -d \
   -e FIREFOX=false \
   -e SELENIUM_NODE_CH_PORT -p ${SELENIUM_NODE_CH_PORT}:${SELENIUM_NODE_CH_PORT} \
-  -v /dev/shm:/dev/shm \
+  --shm-size=1g \
   selenium
   # -v /var/run/dbus:/var/run/dbus \
 
