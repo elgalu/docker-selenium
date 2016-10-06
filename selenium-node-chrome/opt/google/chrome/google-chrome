@@ -1,1 +1,1 @@
-exec /opt/google/chrome/google-chrome-base "$@" "${CHROME_ARGS}"
+exec /opt/google/chrome/google-chrome-base "$@" ${CHROME_ARGS}
