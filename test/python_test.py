@@ -63,7 +63,7 @@ time.sleep(msleep)
 
 # Set location top left and size to max allowed on the container
 width = os.environ.get('SCREEN_WIDTH','800')
-height = os.environ.get('SCREEN_HEIGHT','1200')
+height = os.environ.get('SCREEN_HEIGHT','600')
 driver.set_window_position(0, 0)
 driver.set_window_size(width, height)
 
@@ -80,7 +80,7 @@ def check_hub_title():
     assert "Grid Console" in driver.title
 
 if args.browser == 'chrome':
-    driver.set_window_size(1400, 500)
+    driver.set_window_size(1400, 670)
     # Selenium grid console - open
     open_hub_page()
     time.sleep(msleep)

@@ -2,7 +2,7 @@
 # us to pick a language else it will pick Ruby by default
 # language: generic
 # language: ruby
-language: python
+language: ruby
 
 # Omit running tests on temporal branches,
 #  i.e. branches with names that start with "tmp"
@@ -33,7 +33,7 @@ matrix:
     # Linux with docker:stable compose:stable
     # Use DOCKER_PUSH_LATEST=false to debug
     - os: linux
-      language: python
+      language: ruby
       sudo: required
       dist: trusty
       services:
@@ -45,7 +45,7 @@ matrix:
           DOCKER_PUSH_LATEST=true
     # Linux with docker:beta/older compose:beta/older
     - os: linux
-      language: python
+      language: ruby
       sudo: required
       dist: trusty
       services:
@@ -55,7 +55,7 @@ matrix:
           DOCKER_COMPOSE_VERSION="1.8.1"
     # Linux with docker:stable compose:beta/older
     - os: linux
-      language: python
+      language: ruby
       sudo: required
       dist: trusty
       services:
@@ -65,7 +65,7 @@ matrix:
           DOCKER_COMPOSE_VERSION="1.8.1"
     # Linux with docker:beta/older compose:stable
     - os: linux
-      language: python
+      language: ruby
       sudo: required
       dist: trusty
       services:

@@ -94,3 +94,39 @@ docker cp grid3:/test/console.png ./images/grid3_console.png
 # cleanup
 docker stop grid3 || true
 docker rm grid3 || true
+
+echo "#==================================================================="
+echo "# Scenario 1d [basic]: Selenium IDE RC"
+echo "#==================================================================="
+
+docker run --name=gridrc -d -e VIDEO=true \
+  -e MOCK_SERVER_HOST="d.host.loc.dev" \
+  -e MOCK_SERVER_PORT \
+  -e USE_SELENIUM="2" \
+  -e CHROME=true -e FIREFOX=true \
+  -e RC_CHROME=true -e RC_FIREFOX=true \
+  -e VIDEO_FILE_NAME=sele_ide \
+  --shm-size=1g \
+  -p 4444:24444 \
+  selenium
+
+sleep 0.5 && docker logs gridrc
+docker exec gridrc wait_all_done 40s
+docker exec gridrc versions
+docker exec gridrc errors || true
+docker logs gridrc
+
+# Run tests
+cd test/seleIDE
+gem install bundler -v=1.13.2
+bundle install
+RUBYOPT=W0 bundle exec ./seleIDE *.rb
+
+docker exec gridrc stop-video
+docker exec gridrc errors || true
+mkdir -p ./videos/rc
+docker cp gridrc:/videos/sele_ide.mkv ./videos/rc/
+
+# cleanup
+docker stop gridrc || true
+docker rm gridrc || true

@@ -1,0 +1,10 @@
+ruby '2.3.1'
+source 'https://rubygems.org'
+
+gem 'selenium-client', '1.2.18'
+gem 'rspec', '2.99.0'
+gem 'rspec-core', '2.99.0'
+gem 'rspec-mocks', '2.99.4'
+gem 'rspec-expectations', '2.99.2'
+gem 'test-unit', '1.2.3'
+gem 'bundler', '~> 1.13'
