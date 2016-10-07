@@ -24,3 +24,4 @@ VNC-*-MacOSX-x86_64.pkg
 vnc_linux.md5
 vnc_osx.md5
 tmposx/
+*.log

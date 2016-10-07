@@ -63,7 +63,7 @@ time.sleep(msleep)
 
 # Set location top left and size to max allowed on the container
 width = os.environ.get('SCREEN_WIDTH','800')
-height = os.environ.get('SCREEN_HEIGHT','600')
+height = os.environ.get('SCREEN_HEIGHT','1200')
 driver.set_window_position(0, 0)
 driver.set_window_size(width, height)
 

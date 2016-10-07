@@ -29,10 +29,10 @@ if [ "${browser}" = "chrome" ] && [ "${node}" = "1" ]; then
 elif [ "${browser}" = "firefox" ] && [ "${node}" = "1" ]; then
   # NorthEast(3)1920,0
   set -x && wmctrl -r "${WIN_TITLE}" -e 3,1920,0,-1,-1
-elif [ "${browser}" = "chrome" ] && [ "${node}" = "2" ]; then
+elif [ "${browser}" = "rc_chrome" ] && [ "${node}" = "1" ]; then
   # SouthEast(9)1920,1080
   set -x && wmctrl -r "${WIN_TITLE}" -e 9,1920,1080,-1,-1
-elif [ "${browser}" = "firefox" ] && [ "${node}" = "2" ]; then
+elif [ "${browser}" = "rc_firefox" ] && [ "${node}" = "1" ]; then
   # SouthWest(7)0,1080
   set -x && wmctrl -r "${WIN_TITLE}" -e 7,0,1080,-1,-1
 else

@@ -968,7 +968,7 @@ USER ${NORMAL_USER}
 #===================
 # DNS & hosts stuff
 #===================
-COPY ./dns/etc/hosts /tmp/hosts
+ADD ./dns/etc/hosts /tmp/hosts
 
 #======
 # Envs
@@ -976,6 +976,8 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
     DEFAULT_SELENIUM_NODE_CH_PORT="25550" \
     DEFAULT_SELENIUM_NODE_FF_PORT="25551" \
+    DEFAULT_SELENIUM_NODE_RC_CH_PORT="25552" \
+    DEFAULT_SELENIUM_NODE_RC_FF_PORT="25553" \
     DEFAULT_VNC_PORT="25900" \
     DEFAULT_NOVNC_PORT="26080" \
     DEFAULT_SSHD_PORT="22222" \
@@ -1032,6 +1034,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_NODE_HOST="127.0.0.1" \
   SELENIUM_NODE_CH_PORT="${DEFAULT_SELENIUM_NODE_CH_PORT}" \
   SELENIUM_NODE_FF_PORT="${DEFAULT_SELENIUM_NODE_FF_PORT}" \
+  SELENIUM_NODE_RC_CH_PORT="${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" \
+  SELENIUM_NODE_RC_FF_PORT="${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" \
   # Selenium additional params:
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
@@ -1133,6 +1137,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
+  RC_CHROME="true" \
+  RC_FIREFOX="true" \
   # Video file and extension, e.g. swf, mp4, mkv, flv
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="" \

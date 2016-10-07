@@ -10,19 +10,21 @@ services:
       - GRID=true
       - CHROME=false
       - FIREFOX=false
+      - RC_CHROME=false
+      - RC_FIREFOX=false
 
   chrome:
     image: elgalu/selenium
     network_mode: host
     shm_size: 1g
-    # volumes:
-    #   - /var/run/dbus:/var/run/dbus
     environment:
       - SELENIUM_HUB_PORT
       - PICK_ALL_RANDMON_PORTS=true
       - GRID=false
       - CHROME=true
       - FIREFOX=false
+      - RC_CHROME=false
+      - RC_FIREFOX=false
 
   firefox:
     image: elgalu/selenium
@@ -33,6 +35,33 @@ services:
       - GRID=false
       - CHROME=false
       - FIREFOX=true
+      - RC_CHROME=false
+      - RC_FIREFOX=false
+
+  rc_chrome:
+    image: elgalu/selenium
+    network_mode: host
+    shm_size: 1g
+    environment:
+      - SELENIUM_HUB_PORT
+      - PICK_ALL_RANDMON_PORTS=true
+      - GRID=false
+      - CHROME=false
+      - FIREFOX=false
+      - RC_CHROME=true
+      - RC_FIREFOX=false
+
+  rc_firefox:
+    image: elgalu/selenium
+    network_mode: host
+    environment:
+      - SELENIUM_HUB_PORT
+      - PICK_ALL_RANDMON_PORTS=true
+      - GRID=false
+      - CHROME=false
+      - FIREFOX=false
+      - RC_CHROME=false
+      - RC_FIREFOX=true
 
   mock:
     image: elgalu/google_adwords_mock

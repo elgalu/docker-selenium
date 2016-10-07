@@ -13,21 +13,17 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
 echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 
-# See standalone params docs at
-#  https://code.google.com/p/selenium/wiki/Grid2
-#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/GridParameters.properties
-# See node defaults at
-#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
-CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
+# Add support for Selenium IDE exported scripts via `*chrome` https://github.com/SeleniumHQ/selenium/issues/2431
+CHROME_BROWSER_CAPS="browserName=*chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
 java \
   -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
   -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
   -Dwebdriver.chrome.verboseLogging="${CHROME_VERBOSELOGGING}" \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \
-  -port ${SELENIUM_NODE_CH_PORT} \
+  -port ${SELENIUM_NODE_RC_CH_PORT} \
   -host ${SELENIUM_NODE_HOST} \
-  -role node \
+  -role rc \
   -hub "${SELENIUM_HUB_PROTO}://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register" \
   -browser "${CHROME_BROWSER_CAPS}" \
   -maxSession ${MAX_SESSIONS} \
@@ -43,12 +39,12 @@ java \
 NODE_PID=$!
 
 function shutdown {
-  echo "-- INFO: Shutting down Chrome NODE gracefully..."
+  echo "-- INFO: Shutting down Chrome RC NODE gracefully..."
   kill -SIGINT ${NODE_PID} || true
   kill -SIGTERM ${NODE_PID} || true
   kill -SIGKILL ${NODE_PID} || true
   wait ${NODE_PID}
-  echo "-- INFO: Chrome node shutdown complete."
+  echo "-- INFO: Chrome RC node shutdown complete."
   # First stop video recording because it needs some time to flush it
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
   killall supervisord
@@ -64,7 +60,7 @@ trap trappedFn SIGTERM SIGINT SIGKILL
 
 # tells bash to wait until child processes have exited
 wait ${NODE_PID}
-echo "-- INFO: Passed after wait java Chrome node"
+echo "-- INFO: Passed after wait java Chrome RC node"
 
 # Always shutdown if the node dies
 shutdown

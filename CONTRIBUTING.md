@@ -6,18 +6,18 @@ For pull requests or local commits:
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mkv
-    git checkout -b tmp-3.0.0b4a && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
+    git checkout -b tmp-3.0.0b4b && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Support Mobile Emulation https://goo.gl/pqa7cn"
-    git tag -d latest && git tag 3.0.0b4a && git push origin tmp-3.0.0b4a && git push --tags
+    git commit -m "Support Selenium IDE tests"
+    git tag -d latest && git tag 3.0.0b4b && git push origin tmp-3.0.0b4b && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-3.0.0b4a && git push origin --delete tmp-3.0.0b4a
+    git checkout master && git pull && git branch -d tmp-3.0.0b4b && git push origin --delete tmp-3.0.0b4b
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -27,17 +27,17 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd ~/tmp_binaries && VER="53.0.2785.116" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    cd ~/tmp_binaries && VER="53.0.2785.143" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha
-    cp ${NAME}.md5 ${NAME}.sha ~/docker/binaries
+    cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 3.0.0b4a && git push origin :3.0.0b4a
+    git tag -d 3.0.0b4b && git push origin :3.0.0b4b
     #git add ...
-    git commit --amend && git tag 3.0.0b4a && git push --force origin tmp-3.0.0b4a && git push --tags
+    git commit --amend && git tag 3.0.0b4b && git push --force origin tmp-3.0.0b4b && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

@@ -62,10 +62,10 @@ else
 fi
 
 if [ "${GIT_TAG_OR_BRANCH}" != "" ]; then
-  rm -rf tmp_make
-  mkdir tmp_make
+  # rm -rf tmp_make
+  mkdir -p tmp_make
   cd tmp_make
-  ln -s ../Makefile
+  ln -s ../Makefile || true
   export VNC_FROM_PORT="5110" VNC_TO_PORT="5120"
   make get setup
   if [ "${CI}" = "true" ]; then

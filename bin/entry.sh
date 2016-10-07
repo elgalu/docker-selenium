@@ -27,6 +27,17 @@ stop 2>&1 >/dev/null || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
+# Selenium IDE RC (legacy) doesn't seem to keep working on 3.0.0
+if [ "${USE_SELENIUM}" == "3" ]; then
+  export RC_CHROME="false"
+  export RC_FIREFOX="false"
+fi
+
+# We need larger screens for Selenium IDE RC tests
+if [ "${RC_CHROME}" = "true" ] || [ "${RC_FIREFOX}" = "true" ]; then
+  export SCREEN_HEIGHT=$((SCREEN_HEIGHT*2))
+fi
+
 #---------------------
 # Fix/extend ENV vars
 #---------------------
@@ -99,6 +110,14 @@ if [ "${FIREFOX}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-firefox"
 fi
 
+if [ "${RC_CHROME}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-rc-chrome"
+fi
+
+if [ "${RC_FIREFOX}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-rc-firefox"
+fi
+
 if [ "${SAUCE_TUNNEL}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|saucelabs"
 fi
@@ -137,6 +156,24 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
     export SELENIUM_NODE_FF_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SELENIUM_NODE_RC_CH_PORT}" = "0" ]; then
+  export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SELENIUM_NODE_RC_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" ]; then
+    export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port)
+  fi
+fi
+
+if [ "${SELENIUM_NODE_RC_FF_PORT}" = "0" ]; then
+  export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port)
+elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SELENIUM_NODE_RC_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" ]; then
+    export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port)
   fi
 fi
 
@@ -398,6 +435,10 @@ echo "${SELENIUM_NODE_CH_PORT}" > SELENIUM_NODE_CH_PORT
 echo "${SELENIUM_NODE_CH_PORT}" > CH_PORT
 echo "${SELENIUM_NODE_FF_PORT}" > SELENIUM_NODE_FF_PORT
 echo "${SELENIUM_NODE_FF_PORT}" > FF_PORT
+echo "${SELENIUM_NODE_RC_CH_PORT}" > SELENIUM_NODE_RC_CH_PORT
+echo "${SELENIUM_NODE_RC_CH_PORT}" > RC_CH_PORT
+echo "${SELENIUM_NODE_RC_FF_PORT}" > SELENIUM_NODE_RC_FF_PORT
+echo "${SELENIUM_NODE_RC_FF_PORT}" > RC_FF_PORT
 echo "${DISPLAY}" > DISPLAY
 echo "${VNC_PORT}" > VNC_PORT
 echo "${NOVNC_PORT}" > NOVNC_PORT

@@ -10,26 +10,23 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
 
+if [ "${USE_SELENIUM}" == "3" ]; then
+  JAVA_OPTS="-Dwebdriver.gecko.driver=/usr/bin/geckodriver ${JAVA_OPTS}"
+fi
+
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
 echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 
-# See standalone params docs at
-#  https://code.google.com/p/selenium/wiki/Grid2
-#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/GridParameters.properties
-# See node defaults at
-#  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
-CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
+# Add support for Selenium IDE exported scripts via `*chrome` https://github.com/SeleniumHQ/selenium/issues/2431
+export FIREFOX_BROWSER_CAPS="browserName=*firefox,${COMMON_CAPS},version=${FIREFOX_VERSION},firefox_binary=${FIREFOX_DEST_BIN}"
 java \
-  -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
-  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
-  -Dwebdriver.chrome.verboseLogging="${CHROME_VERBOSELOGGING}" \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \
-  -port ${SELENIUM_NODE_CH_PORT} \
+  -port ${SELENIUM_NODE_RC_FF_PORT} \
   -host ${SELENIUM_NODE_HOST} \
-  -role node \
+  -role rc \
   -hub "${SELENIUM_HUB_PROTO}://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register" \
-  -browser "${CHROME_BROWSER_CAPS}" \
+  -browser "${FIREFOX_BROWSER_CAPS}" \
   -maxSession ${MAX_SESSIONS} \
   -timeout ${SEL_RELEASE_TIMEOUT_SECS} \
   -browserTimeout ${SEL_BROWSER_TIMEOUT_SECS} \
@@ -43,12 +40,12 @@ java \
 NODE_PID=$!
 
 function shutdown {
-  echo "-- INFO: Shutting down Chrome NODE gracefully..."
+  echo "-- INFO: Shutting down Firefox RC NODE gracefully..."
   kill -SIGINT ${NODE_PID} || true
   kill -SIGTERM ${NODE_PID} || true
   kill -SIGKILL ${NODE_PID} || true
   wait ${NODE_PID}
-  echo "-- INFO: Chrome node shutdown complete."
+  echo "-- INFO: Firefox RC node shutdown complete."
   # First stop video recording because it needs some time to flush it
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
   killall supervisord
@@ -56,7 +53,7 @@ function shutdown {
 }
 
 function trappedFn {
-  echo "-- INFO: Trapped SIGTERM/SIGINT on Chrome NODE"
+  echo "-- INFO: Trapped SIGTERM/SIGINT on Firefox RC NODE"
   shutdown
 }
 # Run function shutdown() when this process a killer signal
@@ -64,7 +61,7 @@ trap trappedFn SIGTERM SIGINT SIGKILL
 
 # tells bash to wait until child processes have exited
 wait ${NODE_PID}
-echo "-- INFO: Passed after wait java Chrome node"
+echo "-- INFO: Passed after wait java Firefox RC node"
 
 # Always shutdown if the node dies
 shutdown
