@@ -23,7 +23,7 @@ echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
 #
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`
-stop 2>&1 >/dev/null || true
+stop >/dev/null 2>&1 || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
@@ -31,12 +31,14 @@ rm -f ${RUN_DIR}/*
 if [ "${USE_SELENIUM}" == "3" ]; then
   export RC_CHROME="false"
   export RC_FIREFOX="false"
+  sudo mv /opt/geckodriver /usr/bin/geckodriver
+  sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
 fi
 
 # We need larger screens for Selenium IDE RC tests
-if [ "${RC_CHROME}" = "true" ] || [ "${RC_FIREFOX}" = "true" ]; then
-  export SCREEN_HEIGHT=$((SCREEN_HEIGHT*2))
-fi
+# if [ "${RC_CHROME}" = "true" ] || [ "${RC_FIREFOX}" = "true" ]; then
+#   export SCREEN_HEIGHT=$((SCREEN_HEIGHT*2))
+# fi
 
 #---------------------
 # Fix/extend ENV vars

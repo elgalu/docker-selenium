@@ -22,6 +22,7 @@ die () {
 # Docker login, tag and push selenium #
 #######################################
 docker_login_tag_push() {
+  echo "script_push::docker_login_tag_push"
   # -e="$DOCKER_EMAIL"
   docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   echo "Logged in to docker with user '${DOCKER_USERNAME}'"
@@ -40,6 +41,7 @@ docker_login_tag_push() {
 # Git config name, email, stuff #
 #################################
 git_config() {
+  echo "script_push::git_config"
   git config --global push.default simple
   git config --global user.name "Leo Gallucci Bot"
   git config --global user.email "elgalu3+bot@gmail.com"
@@ -49,6 +51,7 @@ git_config() {
 # Git create branch, merge, keep local changes #
 ################################################
 git_co_fetch_merge_stash() {
+  echo "script_push::git_co_fetch_merge_stash"
   git checkout -b travis-${TRAVIS_TAG}
   git remote add github "https://elgalubot:${GH_TOKEN}@github.com/elgalu/docker-selenium.git"
   git fetch github
@@ -65,6 +68,7 @@ git_co_fetch_merge_stash() {
 # Update the Change log #
 #########################
 update_changelog() {
+  echo "script_push::update_changelog"
   # + ...
   # + Tested on kernel host: TBD_HOST_UNAME
   # + Image size: TBD_IMAGE_SIZE
@@ -78,35 +82,62 @@ update_changelog() {
   # Cleanup:
   #  ./test/after_script
   TBD_DOCKER_TAG=${TRAVIS_TAG}
-  TBD_DIGEST=$(grep -Po '(?<=digest: )([a-z0-9:]+)' docker_push.log)
-  TBD_IMAGE_ID=$(docker inspect -f='{{.Id}}' elgalu/selenium:${TRAVIS_TAG})
-  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium)
-  TBD_DOCKER_VERS=$(docker --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)')
-  TBD_DOCKER_BUILD=$(docker --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)')
-  TBD_DOCKER_COMPOSE_VERS=$(docker-compose --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)')
-  TBD_DOCKER_COMPOSE_BUILD=$(docker-compose --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)')
+  TBD_DIGEST=$(grep -Po '(?<=digest: )([a-z0-9:]+)' docker_push.log) \
+    || die "while trying to get TBD_DIGEST"
+  TBD_IMAGE_ID=$(docker inspect -f='{{.Id}}' elgalu/selenium:${TRAVIS_TAG}) \
+    || die "while trying to get TBD_IMAGE_ID"
+  TBD_IMAGE_SIZE=$(docker images --format "{{.Size}}" selenium) \
+    || die "while trying to get TBD_IMAGE_SIZE"
+  TBD_DOCKER_VERS=$(docker --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)') \
+    || die "while trying to get TBD_DOCKER_VERS"
+  TBD_DOCKER_BUILD=$(docker --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)') \
+    || die "while trying to get TBD_DOCKER_BUILD"
+  TBD_DOCKER_COMPOSE_VERS=$(docker-compose --version 2>&1 | grep -Po '(?<=version )([a-z0-9\.]+)') \
+    || die "while trying to get TBD_DOCKER_COMPOSE_VERS"
+  TBD_DOCKER_COMPOSE_BUILD=$(docker-compose --version 2>&1 | grep -Po '(?<=build )([a-z0-9\.]+)') \
+    || die "while trying to get TBD_DOCKER_COMPOSE_BUILD"
   uname -rm 2>&1 >uname_rm.log || true
-  TBD_HOST_UNAME=$(cat uname_rm.log)
+  TBD_HOST_UNAME=$(cat uname_rm.log) \
+    || die "while trying to get TBD_HOST_UNAME"
   rm -f uname_rm.log
-  TBD_DATE=$(date +%F)
-  TBD_CHROME_STABLE=$(docker exec grid chrome_stable_version)
-  TBD_CHROME_DRIVER=$(docker exec grid chromedriver_version)
-  TBD_GECKO_DRIVER=$(docker exec grid geckodriver_version)
-  TBD_CHROMEDRIVER_COMMIT=$(docker exec grid chromedriver_commit_version)
-  TBD_FIREFOX_FOR_SEL2=$(docker exec grid firefox-for-sel-2_version)
-  TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox-for-sel-3_version)
-  TBD_SELENIUM_2_VERSION=$(docker exec grid selenium_version)
-  TBD_SELENIUM_2_REVISION=$(docker exec grid selenium_revision_version)
-  TBD_PYTHON_VERSION=$(docker exec grid python_version)
-  TBD_JAVA_BUILD=$(docker exec grid java_build_version)
-  TBD_JAVA_VENDOR=$(docker exec grid java_vendor_version)
-  TBD_TIME_ZONE="$(docker exec grid printenv TZ | sed -r 's/[\/]+/\\\//g')"
-  UBUNTU_FLAVOR=$(docker exec grid printenv UBUNTU_FLAVOR)
-  UBUNTU_DATE=$(docker exec grid printenv UBUNTU_DATE)
-  TBD_BROWSER_STACK_VERSION=$(docker exec grid browser_stack_version)
-  TBD_SAUCE_CONNECT_VERS=$(docker exec grid sauce_connect_version)
-  TBD_SAUCE_CONNECT_BUILD=$(docker exec grid sauce_connect_build_version)
-  TBD_SAUCE_CONNECT_REVISION=$(docker exec grid sauce_connect_revision_version)
+  TBD_DATE=$(date +%F) \
+    || die "while trying to get TBD_DATE"
+  TBD_CHROME_STABLE=$(docker exec grid chrome_stable_version) \
+    || die "while trying to get TBD_CHROME_STABLE"
+  TBD_CHROME_DRIVER=$(docker exec grid chromedriver_version) \
+    || die "while trying to get TBD_CHROME_DRIVER"
+  TBD_GECKO_DRIVER=$(docker exec grid geckodriver_version) \
+    || die "while trying to get TBD_GECKO_DRIVER"
+  TBD_CHROMEDRIVER_COMMIT=$(docker exec grid chromedriver_commit_version) \
+    || die "while trying to get TBD_CHROMEDRIVER_COMMIT"
+  TBD_FIREFOX_FOR_SEL2=$(docker exec grid firefox-for-sel-2_version) \
+    || die "while trying to get TBD_FIREFOX_FOR_SEL2"
+  TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox-for-sel-3_version) \
+    || die "while trying to get TBD_FIREFOX_FOR_SEL3"
+  TBD_SELENIUM_2_VERSION=$(docker exec grid selenium_version) \
+    || die "while trying to get TBD_SELENIUM_2_VERSION"
+  TBD_SELENIUM_2_REVISION=$(docker exec grid selenium_revision_version) \
+    || die "while trying to get TBD_SELENIUM_2_REVISION"
+  TBD_PYTHON_VERSION=$(docker exec grid python_version) \
+    || die "while trying to get TBD_PYTHON_VERSION"
+  TBD_JAVA_BUILD=$(docker exec grid java_build_version) \
+    || die "while trying to get TBD_JAVA_BUILD"
+  TBD_JAVA_VENDOR=$(docker exec grid java_vendor_version) \
+    || die "while trying to get TBD_JAVA_VENDOR"
+  TBD_TIME_ZONE="$(docker exec grid printenv TZ | sed -r 's/[\/]+/\\\//g')" \
+    || die "while trying to get TBD_TIME_ZONE"
+  UBUNTU_FLAVOR=$(docker exec grid printenv UBUNTU_FLAVOR) \
+    || die "while trying to get UBUNTU_FLAVOR"
+  UBUNTU_DATE=$(docker exec grid printenv UBUNTU_DATE) \
+    || die "while trying to get UBUNTU_DATE"
+  TBD_BROWSER_STACK_VERSION=$(docker exec grid browser_stack_version) \
+    || die "while trying to get TBD_BROWSER_STACK_VERSION"
+  TBD_SAUCE_CONNECT_VERS=$(docker exec grid sauce_connect_version) \
+    || die "while trying to get TBD_SAUCE_CONNECT_VERS"
+  TBD_SAUCE_CONNECT_BUILD=$(docker exec grid sauce_connect_build_version) \
+    || die "while trying to get TBD_SAUCE_CONNECT_BUILD"
+  TBD_SAUCE_CONNECT_REVISION=$(docker exec grid sauce_connect_revision_version) \
+    || die "while trying to get TBD_SAUCE_CONNECT_REVISION"
   sed -i -- "s/TBD_DOCKER_TAG/${TBD_DOCKER_TAG}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_DIGEST/${TBD_DIGEST}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_IMAGE_ID/${TBD_IMAGE_ID}/g" CHANGELOG.md || true
@@ -141,6 +172,10 @@ update_changelog() {
 # Git add and commit local changes #
 ####################################
 git_diff_add_commit() {
+  echo "script_push::git_diff_add_commit"
+  # set -e: exit asap if a command exits with a non-zero status
+  # set -x: print each command right before it is executed
+  set -xe
   git --no-pager diff --unified=0 CHANGELOG.md
   git status
   git add CHANGELOG.md
@@ -156,6 +191,7 @@ git_diff_add_commit() {
 # Git push changes, tag #
 #########################
 git_push_tag_push() {
+  echo "script_push::git_push_tag_push"
   if git push github HEAD:master >git_push_master.log 2>&1; then \
     failed=false; else failed=true; fi
   # hide secrets

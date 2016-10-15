@@ -3,9 +3,9 @@
 ###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
-FROM ubuntu:xenial-20160923.1
+FROM ubuntu:xenial-20161010
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20160923.1"
+    UBUNTU_DATE="20161010"
 
 #== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
 # FROM ubuntu:wily-20151208
@@ -435,14 +435,14 @@ RUN apt-get -qqy update \
     python-openssl \
     libssl-dev libffi-dev \
   && pip install --upgrade pip \
-  && pip install --upgrade setuptools \
-  && pip install --upgrade selenium \
-  && pip install --upgrade retrying \
   && rm -rf /var/lib/apt/lists/*
+  # && pip install --upgrade setuptools \
 
-#=========================================
-# Python3 for Supervisor, others
-#=========================================
+#=========================================================
+# Python3 for Supervisor, selenium tests, and other stuff
+#=========================================================
+# Note Python2 comes already installed so better stick to
+#  it to avoid occupying more disk space
 # Note Python3 fails installing mozInstall==1.12 with
 #  NameError: name 'file' is not defined
 # RUN apt-get -qqy update \
@@ -454,6 +454,18 @@ RUN apt-get -qqy update \
 #     libssl-dev libffi-dev \
 #   && pip3 install --upgrade pip \
 #   && rm -rf /var/lib/apt/lists/*
+#   # && pip3 install --upgrade setuptools \
+# # make some useful symlinks that are expected to exist
+# RUN cd /usr/local/bin \
+#   && { [ -e easy_install ] || ln -s easy_install-* easy_install; } \
+#   && ln -s idle3 idle \
+#   && ln -s pydoc3 pydoc \
+#   && ln -s python3 python \
+#   && ln -s python3-config python-config \
+#   && mv /usr/bin/python /usr/bin/python2 \
+#   && ln -s /usr/bin/python3 /usr/bin/python \
+#   && python --version \
+#   && pip --version
 
 ENV CPU_ARCH 64
 ENV SEL_HOME ${NORMAL_USER_HOME}/selenium
@@ -501,18 +513,19 @@ RUN mkdir -p ${SEL_HOME}
 #====================
 # Supervisor install
 #====================
-# https://github.com/Supervisor/supervisor
+# TODO: Upgrade to supervisor stable 4.0 as soon as is released
+# Check every now and then if version 4 is finally the stable one
+#  https://pypi.python.org/pypi/supervisor
+#  https://github.com/Supervisor/supervisor
 # RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     supervisor \
-# 2016-06-28 commit: 154cb4c84f28ac, version: supervisor-4.0.0.dev0
-# 2016-04-11 commit: 3e541a34a4ab74, version: supervisor-4.0.0.dev0
-# 2016-03-06 commit: e4a37c6f8d1cb6, version: supervisor-4.0.0.dev0
-# 2016-02-01 commit: eb904ccdb3573e, version: supervisor-4.0.0.dev0
-# 2015-06-24 commit: b3ad59703b554f, version: supervisor-4.0.0.dev0
+# 2016-02-01 commit: eb904ccdb3573e, supervisor/version.txt: 4.0.0.dev0
+# 2016-04-11 commit: 3e541a34a4ab74, supervisor/version.txt: 4.0.0.dev0
+# 2016-06-28 commit: 154cb4c84f28ac, supervisor/version.txt: 4.0.0.dev0
 # 2015-08-24 commit: 304b4f388d3e3f, supervisor/version.txt: 4.0.0.dev0
-# TODO: Upgrade to supervisor stable 4.0 as soon as is released
-RUN SHA="154cb4c84f28ac3e0ac1ce5409faea65c15d2d02" \
+# 2015-10-09 commit: 427eb2bc6b08f7, supervisor/version.txt: 4.0.0.dev0
+RUN SHA="427eb2bc6b08f788573deb91d1391d93f8b58a1b" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/*
@@ -652,6 +665,19 @@ RUN cd /tmp \
   && mv BrowserStackLocal /usr/local/bin \
   && which BrowserStackLocal
 
+#==============================================
+# Java blocks until kernel have enough entropy
+# to generate the /dev/random seed
+#==============================================
+# See: SeleniumHQ/docker-selenium/issues/14
+RUN apt-get -qqy update \
+  && apt-key update -qqy \
+  && apt-get -qqy install \
+    haveged rng-tools \
+  && service haveged start \
+  && update-rc.d haveged defaults \
+  && rm -rf /var/lib/apt/lists/*
+
 #---------------------#
 # FIREFOX_VERSIONS 40 #
 #---------------------#
@@ -735,40 +761,6 @@ RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
   && mv firefox firefox-for-sel-2 \
   && sudo ln -fs ${SEL_HOME}/firefox-for-sel-2/firefox /usr/bin/firefox
 
-#============
-# GeckoDriver
-#============
-ENV GECKOD_VER="0.10.0" \
-    GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
-RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
-     "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
-  && rm -rf /opt/geckodriver* \
-  && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
-  && mv /opt/geckodriver /usr/bin/geckodriver \
-  && chmod +x /usr/bin/geckodriver \
-  && ln -fs /usr/bin/geckodriver /opt/geckodriver \
-  && ln -fs /usr/bin/geckodriver /usr/bin/wires \
-  && rm /tmp/geckodriver.tar.gz
-  # && ln -fs /usr/bin/geckodriver ${FF_DEST}/geckodriver \
-  # && ln -fs /usr/bin/geckodriver ${FF_DEST}/wires \
-
-  # && rm -rf ${NORMAL_USER_HOME}/firefox-src
-# RUN mkdir -p ${NORMAL_USER_HOME}/firefox-src \
-#   && cd ${NORMAL_USER_HOME}/firefox-src \
-  # && mkdir -p ${FIREFOX_DEST} && cd ${FIREFOX_DEST} \
-# RUN cd ${NORMAL_USER_HOME}/firefox-src \
-#   && for FF_VER in $(echo ${FIREFOX_VERSIONS_LAST} | tr "," "\n"); do \
-#          mozdownload --application=firefox \
-#            --locale=${FF_LANG} --retry-attempts=1 \
-#            --platform=linux64 --log-level=WARN --version=${FF_VER} \
-#       && export FIREFOX_DEST="${SEL_HOME}/firefox-${FF_VER}" \
-#       && mkdir -p ${FIREFOX_DEST} \
-#       && mozinstall --app=firefox \
-#           firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-#           --destination=${FIREFOX_DEST} \
-#       && rm firefox-${FF_VER}.${FF_LANG}.linux64.tar.bz2 \
-#      ;done
-
 #-----------#
 # Fix perms #
 #-----------#
@@ -784,8 +776,8 @@ USER ${NORMAL_USER}
 # Selenium
 #==========
 # Selenium 3
-ENV SEL_DIRECTORY="3.0-beta4" \
-    SEL_VERSION="3.0.0-beta4"
+ENV SEL_DIRECTORY="3.0" \
+    SEL_VERSION="3.0.0"
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VERSION}.jar" \
@@ -834,7 +826,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="53.0.2785.143" \
+RUN  latest_chrome_version_trigger="54.0.2840.59" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -892,6 +884,22 @@ RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
   && chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
   && rm -rf /var/lib/apt/lists/*
 
+#============
+# GeckoDriver
+#============
+ENV GECKOD_VER="0.11.1" \
+    GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
+RUN wget --no-verbose -O /tmp/geckodriver.tar.gz \
+     "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
+  && rm -rf /opt/geckodriver* \
+  && tar -C /opt -xvzf /tmp/geckodriver.tar.gz \
+  && chmod +x /opt/geckodriver \
+  && rm /tmp/geckodriver.tar.gz
+  # below moved to entry.sh
+  # && mv /opt/geckodriver /usr/bin/geckodriver \
+  # && ln -fs /usr/bin/geckodriver /opt/geckodriver \
+  # && ln -fs /usr/bin/geckodriver /usr/bin/wires \
+
 #=========
 # GNOME Shell provides core interface functions like switching windows,
 # launching applications or see your notifications
@@ -947,19 +955,6 @@ RUN ln -s ${SEL_HOME}/chromedriver /usr/bin \
 ADD supervisor/etc/supervisor/supervisord.conf /etc/supervisor/
 ADD **/etc/supervisor/conf.d/* /etc/supervisor/conf.d/
 
-#==============================================
-# Java blocks until kernel have enough entropy
-# to generate the /dev/random seed
-#==============================================
-# See: SeleniumHQ/docker-selenium/issues/14
-RUN apt-get -qqy update \
-  && apt-key update -qqy \
-  && apt-get -qqy install \
-    haveged rng-tools \
-  && service haveged start \
-  && update-rc.d haveged defaults \
-  && rm -rf /var/lib/apt/lists/*
-
 #======
 # User
 #======
@@ -1014,9 +1009,9 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   XMANAGER_STARTRETRIES=0 \
   XMANAGER_STARTSECS=0 \
   # Max amount of time to wait for other processes dependencies
-  WAIT_TIMEOUT="25s" \
+  WAIT_TIMEOUT="45s" \
   SCREEN_WIDTH=1900 \
-  SCREEN_HEIGHT=1480 \
+  SCREEN_HEIGHT=1880 \
   SCREEN_MAIN_DEPTH=24 \
   SCREEN_SUB_DEPTH=32 \
   # Display number; see entry.sh for $DISPLAY
@@ -1137,6 +1132,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
+  # -e RC_CHROME=false -e RC_FIREFOX=false
   RC_CHROME="true" \
   RC_FIREFOX="true" \
   # Video file and extension, e.g. swf, mp4, mkv, flv

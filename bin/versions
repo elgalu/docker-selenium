@@ -14,7 +14,7 @@ echo "chromedriver_version=$(chromedriver_version)"
 chromedriver --version
 
 echo "geckodriver_version=$(geckodriver_version)"
-geckodriver --version
+/opt/geckodriver --version
 
 echo "sauce_connect_version=$(sauce_connect_version)"
 sc | grep build

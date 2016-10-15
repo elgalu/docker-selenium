@@ -13,6 +13,7 @@ branches:
 env:
   global:
     - TEST_SLEEPS="0.7"
+    - ADDED_TEST_SLEEP="6.5"
 
 # sudo: required
 # dist: trusty
@@ -26,8 +27,8 @@ matrix:
     #   com.docker.docker Incompatible CPU detected
     #   Docker requires a processor with virtualization capabilities
     - env:
-        - DOCKER_VERSION="1.12.1"
-          DOCKER_COMPOSE_VERSION="1.8.1"
+        - DOCKER_VERSION="1.12.2"
+          DOCKER_COMPOSE_VERSION="1.8.0"
           OPERATING_SYSTEM="osx"
   include:
     # Linux with docker:stable compose:stable
@@ -40,7 +41,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+          DOCKER_COMPOSE_VERSION="1.8.1"
           DOCKER_PUSH=true
           DOCKER_PUSH_LATEST=true
     # Linux with docker:beta/older compose:beta/older
@@ -51,7 +52,7 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.2-rc2"
+        - DOCKER_VERSION="1.12.1"
           DOCKER_COMPOSE_VERSION="1.8.1"
     # Linux with docker:stable compose:beta/older
     - os: linux
@@ -62,7 +63,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.8.1"
+          DOCKER_COMPOSE_VERSION="1.8.0"
     # Linux with docker:beta/older compose:stable
     - os: linux
       language: ruby
@@ -71,14 +72,14 @@ matrix:
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.2-rc2"
-          DOCKER_COMPOSE_VERSION="1.8.1"
+        - DOCKER_VERSION="1.12.1"
+          DOCKER_COMPOSE_VERSION="1.8.0"
     # Mac OSX: only test native docker version
     - os: osx
       osx_image: xcode8
       env:
-        - DOCKER_VERSION="1.12.1"
-          DOCKER_COMPOSE_VERSION="1.8.1"
+        - DOCKER_VERSION="1.12.2"
+          DOCKER_COMPOSE_VERSION="1.8.0"
           OPERATING_SYSTEM="osx"
 
 before_install:

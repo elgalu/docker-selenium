@@ -3,7 +3,7 @@
  + TBD_COMMIT_MSG
  + Image tag details:
   + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
-  + Selenium 3: 3.0.0-beta4 (3169782)
+  + Selenium 3: 3.0.0 (350cf60)
   + Chrome stable:  TBD_CHROME_STABLE
   + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
   + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
@@ -15,11 +15,11 @@
   + Python: TBD_PYTHON_VERSION
   + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
   + BrowserStack Local version TBD_BROWSER_STACK_VERSION
-  + Tested on kernel dev host: 4.4.0-38-generic x86_64
+  + Tested on kernel dev host: 4.4.0-43-generic x86_64
   + Tested on kernel CI  host: TBD_HOST_UNAME
-  + Built at dev host with: Docker version 1.12.1, build 23cf638
+  + Built at dev host with: Docker version 1.12.2, build bb80604
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Built at dev host with: Docker Compose version 1.8.0, build f3628c7
+  + Built at dev host with: Docker Compose version 1.8.1, build 878cff1
   + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
   + Image size: TBD_IMAGE_SIZE
   + Digest: TBD_DIGEST

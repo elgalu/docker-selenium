@@ -52,7 +52,7 @@ docker run --name=mynodes -d \
 # We need a mock service for testing
 docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
 
-docker exec mynodes wait_all_done 40s
+docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true
 docker logs mynodes
 
@@ -93,7 +93,7 @@ docker run --name=mynodes -d \
 # We need a mock service for testing
 docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
 
-docker exec mynodes wait_all_done 40s
+docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true
 docker logs mynodes
 

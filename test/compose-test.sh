@@ -20,6 +20,7 @@ die () {
 [ -z "${SELENIUM_HUB_PORT}" ] && die "Required env var SELENIUM_HUB_PORT"
 [ -z "${WAIT_ALL_DONE}" ] && export WAIT_ALL_DONE="40s"
 [ -z "${PAUSE_SECS_BETWEEN_RUN_TEST}" ] && export PAUSE_SECS_BETWEEN_RUN_TEST="0"
+[ -z "${SLEEP_TIME}" ] && die "Required env var SLEEP_TIME"
 
 # Ensure clean
 docker-compose -f ${COMPOSE_FILE} -p grid down || true

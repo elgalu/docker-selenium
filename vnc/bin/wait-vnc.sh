@@ -23,7 +23,7 @@ fi
 if [ -z "${XE_DISP_NUM}" ]; then
   echo "Waiting for VNC to be ready via process, nc or netstat on VNC_PORT=${VNC_PORT}..."
   echo -n 'By_process.'
-  while ! pidof x11vnc 2>&1 >/dev/null; do
+  while ! pidof x11vnc >/dev/null 2>&1; do
     echo -n '.'
     sleep 0.1
     if grep "ListenOnTCPPort: Address already in use" ${LOGERR}; then
@@ -49,7 +49,7 @@ if [ -z "${XE_DISP_NUM}" ]; then
   # echo -n 'By_netstat.'
   # while ! netstat -an | \
   #         grep "LISTEN" | \
-  #         grep ":${VNC_PORT} " 2>&1 >/dev/null; do
+  #         grep ":${VNC_PORT} " >/dev/null 2>&1; do
   #   echo -n '.'
   #   sleep 0.1
   # done; echo -n 'OK...'

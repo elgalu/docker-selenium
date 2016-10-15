@@ -31,11 +31,13 @@ elif args.browser == 'mobile_emulation':
     caps = opts.to_capabilities()
 elif args.browser == 'firefox':
     caps = DesiredCapabilities.FIREFOX
-    if current_selenium == '3':
+    # if current_selenium == '3':
         # BREAKING CHANGE!
         #  With selenium 3 & Firfox >= 48 you need to set marionette=true
         #  when still using selenium 2 driver bindings (in selenium 3 is transparent)
-        caps['marionette'] = True
+        # UPDATE! no longer needed since selenium 3.0.1 is now the stable version:
+        #  https://pypi.python.org/pypi/selenium
+        # caps['marionette'] = True
 else:
     raise ValueError("Invalid browser '%s'" % args.browser)
 
@@ -80,7 +82,7 @@ def check_hub_title():
     assert "Grid Console" in driver.title
 
 if args.browser == 'chrome':
-    driver.set_window_size(1400, 670)
+    driver.set_window_size(1400, 660)
     # Selenium grid console - open
     open_hub_page()
     time.sleep(msleep)

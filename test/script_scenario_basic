@@ -9,6 +9,7 @@ echo "# Scenario 1a [basic]: SETUP: Run tests right after the cont started"
 echo "#==================================================================="
 
 [ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
+[ -z "${ADDED_TEST_SLEEP}" ] && export ADDED_TEST_SLEEP="0.5"
 
 docker tag selenium:latest elgalu/selenium:latest
 
@@ -16,6 +17,7 @@ docker tag selenium:latest elgalu/selenium:latest
 docker rm -vf grid || true
 docker rm -vf grid2 || true
 docker rm -vf grid3 || true
+docker rm -vf gridrc || true
 # Some dummy log files
 rm -rf **/*"conflicted copy"*.log
 
@@ -52,10 +54,9 @@ docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_PORT \
   --shm-size=1g \
   selenium
-  # -v /var/run/dbus:/var/run/dbus \
 
-sleep 0.5 && docker logs grid
-docker exec grid wait_all_done 40s
+sleep ${ADDED_TEST_SLEEP} && docker logs grid
+docker exec grid wait_all_done 70s
 docker exec grid versions
 docker exec grid errors || true
 docker logs grid
@@ -64,11 +65,12 @@ echo "#==================================================================="
 echo "# Scenario 1b [basic]: Run tests right after the container started"
 echo "#==================================================================="
 
-# set -e: exit asap if a command exits with a non-zero status
-# set -x: print each command right before it is executed
-set -xe
+if ! docker exec -t grid run_test; then
+  docker logs grid
+  docker exec grid errors || true
+  exit 103
+fi
 
-docker exec -t grid run_test
 docker exec grid errors || true
 
 echo "#==================================================================="
@@ -82,8 +84,8 @@ docker run --name=grid3 -d -e VIDEO=true \
   --shm-size=1g \
   selenium
 
-sleep 0.5 && docker logs grid3
-docker exec grid3 wait_all_done 40s
+sleep ${ADDED_TEST_SLEEP} && docker logs grid3
+docker exec grid3 wait_all_done 70s
 docker exec grid3 versions
 docker exec grid3 errors || true
 docker logs grid3
@@ -110,8 +112,8 @@ docker run --name=gridrc -d -e VIDEO=true \
   -p 4444:24444 \
   selenium
 
-sleep 0.5 && docker logs gridrc
-docker exec gridrc wait_all_done 40s
+sleep ${ADDED_TEST_SLEEP} && docker logs gridrc
+docker exec gridrc wait_all_done 70s
 docker exec gridrc versions
 docker exec gridrc errors || true
 docker logs gridrc
