@@ -18,7 +18,7 @@ docker --version || (echo "FATAL: No docker installed" && exit 1)
 
 # Docker Compose
 if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-  echo "OSX should already have docker-compose installed via docker toolbox"
+  echo "OSX should already have docker-compose installed at this point"
 else
   docker-compose --version || echo "INFO: No docker compose installed yet"
   sudo -E bash -c './test/before_install_docker_compose'

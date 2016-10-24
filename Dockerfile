@@ -337,15 +337,15 @@ RUN apt-get -qqy update \
 ########################################
 # noVNC to expose VNC via an html page #
 ########################################
+# Download noVNC commit b403cb92f date 2016-02-24
+# Download websockify commit 558a6439f dated 2015-06-02
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-  # Download noVNC commit b403cb92f date 2016-02-24
   && export NOVNC_SHA="b403cb92fb8de82d04f305b4f14fa978003890d7" \
   && wget -nv -O noVNC.zip \
       "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
   && unzip -x noVNC.zip \
   && mv noVNC-${NOVNC_SHA} \
        ${NORMAL_USER_HOME}/noVNC \
-  # Download websockify commit 558a6439f dated 2015-06-02
   && export WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b" \
   && wget -nv -O websockify.zip \
       "https://github.com/kanaka/websockify/archive/${WEBSOCKIFY_SHA}.zip" \
@@ -641,7 +641,7 @@ RUN SHA="427eb2bc6b08f788573deb91d1391d93f8b58a1b" \
 # Sauce Connect Tunneling #
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
-ENV SAUCE_CONN_VER="sc-4.4.0-linux" \
+ENV SAUCE_CONN_VER="sc-4.4.1-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
   && wget -nv "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
@@ -738,7 +738,7 @@ ENV FF_LANG="en-US" \
     FF_INNER_PATH="firefox/releases"
 
 #--- For Selenium 3
-ENV FF_VER="49.0.1"
+ENV FF_VER="49.0.2"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN mkdir -p ${SEL_HOME} && cd ${SEL_HOME} \
@@ -777,7 +777,7 @@ USER ${NORMAL_USER}
 #==========
 # Selenium 3
 ENV SEL_DIRECTORY="3.0" \
-    SEL_VERSION="3.0.0"
+    SEL_VERSION="3.0.1"
 RUN  mkdir -p ${SEL_HOME} \
   && export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VERSION}.jar" \
@@ -800,9 +800,7 @@ ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_BASE "chromedriver.storage.googleapis.com"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-  # 1st dup line CHROME_DRIVER_VERSION is just to invalidate docker cache
   && CHROME_DRIVER_VERSION="2.24" \
-  # && CHROME_DRIVER_VERSION=$(curl 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE' 2> /dev/null) \
   && CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && cd ${SEL_HOME} \
@@ -826,7 +824,7 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
 # Also fix .deb file names with correct version
-RUN  latest_chrome_version_trigger="54.0.2840.59" \
+RUN  latest_chrome_version_trigger="54.0.2840.71" \
   && mkdir -p ${NORMAL_USER_HOME}/chrome-deb \
   && export CHROME_URL="https://dl.google.com/linux/direct" \
   && wget -nv -O \
@@ -986,44 +984,159 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 # ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS_LAST}" \
   # Firefox version to use during run
   # For firefox please pick one of $FIREFOX_VERSIONS, default latest
+# USE_SELENIUM "2" / "3"
+#   Selenium 2 or 3
+# CHROME_FLAVOR "stable"
+#   Default chrome flavor, options no longer avariable: beta|unstable
+# PICK_ALL_RANDMON_PORTS "true" / "false"
+#   Randomize all ports, i.e. pick unused unprivileged ones
+# MEM_JAVA_PERCENT "80"
+#   Because the JVM uses only 1/4 of system memory by default
+# WAIT_FOREGROUND_RETRY
+# WAIT_VNC_FOREGROUND_RETRY
+#   Max amount of time to wait on Xvfb or Xmanager while retrying
+# XVFB_STARTRETRIES
+# XMANAGER_STARTRETRIES
+# XMANAGER_STARTSECS
+#   Supervisor processes retry attemps (0 means do not retry)
+# WAIT_TIMEOUT
+#   Max amount of time to wait for other processes dependencies
+# DISP_N
+#   Display number; see entry.sh for $DISPLAY
+# MAX_DISPLAY_SEARCH
+#   Maximum searches for a free DISPLAY number
+# SELENIUM_HUB_PORT
+#   Even though you can change them below, don't worry too much about container
+#   internal ports since you can map them to the host via `docker run -p`
+# SELENIUM_HUB_PROTO
+# SELENIUM_HUB_HOST
+# SELENIUM_NODE_HOST
+#   You may want to connect to another hub
+# SELENIUM_HUB_PARAMS
+# SELENIUM_NODE_PARAMS
+# SELENIUM_NODE_PROXY_PARAMS
+#   Selenium additional params:
+# CHROME_ARGS
+#   "--no-sandbox --disable-gpu" To taggle issue #58 see https://goo.gl/fz6RTu
+#   more: "--ignore-certificate-errors"
+# CHROME_VERBOSELOGGING
+#   Will be passed with: -Dwebdriver.chrome.verboseLogging
+#     SELENIUM_NODE_CHROME_PARAMS='-Dselenium.chrome.args="--no-sandbox"' \
+#     WEBDRIVER_NODE_CHROME_PARAMS='-Dwebdriver.chrome.args="--no-sandbox"' \
+#     Selenium capabilities descriptive (to avoid opera/ie warnings)
+#      docs at https://code.google.com/p/selenium/wiki/Grid2
+# SELENIUM_NODE_REGISTER_CYCLE
+#   How often in ms the node will try to register itself again.
+#   Allow to restart the hub without having to restart the nodes.
+#    (node) in ms. Selenium default: 5000
+# SEL_CLEANUPCYCLE_MS
+#   How often a proxy will check for timed out thread.
+#    (node) in ms. Selenium default: 5000
+# SEL_NODEPOLLING_MS
+#   Interval between alive checks of node how often the hub checks if the node is still alive.
+#    (node) in ms. Selenium default: 5000
+# SEL_UNREGISTER_IF_STILL_DOWN_AFTER
+#   If the node remains down for more than unregisterIfStillDownAfter millisec
+#    it will disappear from the hub. in ms. Default: 1min
+# no_proxy
+# HUB_ENV_no_proxy
+#   Docker for Mac beta - containers do not start #227
+# VNC_FROM_PORT
+# VNC_TO_PORT
+#   We need a fixed port range to expose VNC due to a bug in Docker for Mac beta (1.12)
+#   https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+# VNC_CLI_OPTS
+#   e.g. VNC_CLI_OPTS="-noipv6 -no6 -forever -shared"
+#   e.g. VNC_CLI_OPTS="-forever -shared"
+# VNC_PASSWORD
+#   - "no" means no password; less secure but not a big deal
+#   - "" (empty string) means it will be randomly generated
+#   - "some-value" will use that password "some-value" or whatever
+# SSHD_X11FORWARDING
+#   Use SSHD_X11FORWARDING=yes to enable ssh -X
+# SSHD_GATEWAYPORTS
+#   Use SSHD_GATEWAYPORTS=yes for reverse ports tunneling
+# LOG_LEVEL
+#   Supervisor loglevel and also general docker log level
+#   can be: debug, warn, trace, info
+# DISABLE_ROLLBACK
+#   When DISABLE_ROLLBACK=true it will:
+#    - output logs
+#    - exec bash to permit troubleshooting
+# LOGS_DIR
+#   Logs are now managed by supervisord.conf, see
+#    ${LOGS_DIR}/*.log
+# VNC2SWF_ENCODING
+#   no longer used
+#   Encoding movie type "flv", "swf5", "swf7", "mpeg" (PyMedia required)
+#   or "vnc" more info at http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
+# VNC2SWF_FRAMERATE
+#   no longer used
+#   Specifies the framerate in fps. (default=12.0). Reducing the frame rate
+#   sometimes helps reducing the movie size.
+# FFMPEG_FRAME_RATE
+#   ffmpeg encoding options
+# FFMPEG_CODEC_ARGS
+#   Video size can be lowered down via re-encoding, see
+#    http://askubuntu.com/a/365221/134645
+# VIDEO GRID CHROME FIREFOX RC_CHROME RC_FIREFOX
+#   true/false which services should start upon docker run
+# VIDEO_FILE_EXTENSION
+#   Video file and extension, e.g. swf, mp4, mkv, flv
+# XMANAGER
+#   You can choose what X manager to use
+#    fluxbox | openbox
+# SAUCE_TUNNEL SAUCE_TUNNEL_ID SAUCE_USER_NAME SAUCE_API_KEY
+#   Sauce Labs tunneling. Naming is required: SAUCE_TUNNEL_ID
+# BSTACK_TUNNEL BSTACK_TUNNEL_ID BSTACK_ACCESS_KEY
+#   BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
+# TAIL_LOG_LINES
+#   Amount of lines to display when startup errors
+# SHM_TRY_MOUNT_UNMOUNT
+#   Fix small tiny 64mb shm issue
+# ETHERNET_DEVICE_NAME
+#   When docker run --net=host the network name may be different
+# SSHD_STOP_SIGNAL
+# XMANAGER_STOP_SIGNAL
+# XVFB_STOP_SIGNAL
+# XTERM_STOP_SIGNAL
+# SELENIUM_NODE_FIREFOX_STOP_SIGNAL
+# SELENIUM_NODE_CHROME_STOP_SIGNAL
+# SELENIUM_HUB_STOP_SIGNAL
+# VNC_STOP_SIGNAL
+# NOVNC_STOP_SIGNAL
+# VIDEO_REC_STOP_SIGNAL
+# BROWSERSTACK_STOP_SIGNAL
+# SAUCELABS_STOP_SIGNAL
+#   Supervisord stop signals
+# DOCKER_SOCK
+#   Run docker from inside docker
+#   Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
+#                     -v $(which docker):$(which docker)
+
 ENV FIREFOX_VERSION="${FF_VER}" \
-  # Selenium 2 or 3
   USE_SELENIUM="2" \
-  # Default chrome flavor, options no longer avariable: beta|unstable
   CHROME_FLAVOR="stable" \
-  # Randomize all ports, i.e. pick unused unprivileged ones
   PICK_ALL_RANDMON_PORTS="false" \
-  # User and home
   USER="${NORMAL_USER}" \
   HOME="${NORMAL_USER_HOME}" \
-  # Vnc password file
   VNC_STORE_PWD_FILE="${NORMAL_USER_HOME}/.vnc/passwd" \
   BIN_UTILS="/usr/bin" \
-  # JVM uses only 1/4 of system memory by default
   MEM_JAVA_PERCENT=80 \
-  # Max amount of time to wait on Xvfb or Xmanager while retrying
   WAIT_FOREGROUND_RETRY="1s" \
   WAIT_VNC_FOREGROUND_RETRY="7s" \
-  # Supervisor processes retry attemps (0 means do not retry)
   XVFB_STARTRETRIES=0 \
   XMANAGER_STARTRETRIES=0 \
   XMANAGER_STARTSECS=0 \
-  # Max amount of time to wait for other processes dependencies
   WAIT_TIMEOUT="45s" \
   SCREEN_WIDTH=1900 \
   SCREEN_HEIGHT=1880 \
   SCREEN_MAIN_DEPTH=24 \
   SCREEN_SUB_DEPTH=32 \
-  # Display number; see entry.sh for $DISPLAY
   DISP_N="-1" \
-  # Maximum searches for a free DISPLAY number
   MAX_DISPLAY_SEARCH=99 \
   SCREEN_NUM=0 \
-  # ENV XEPHYR_SCREEN_SIZE "${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}"""
-  # Even though you can change them below, don't worry too much about container
-  # internal ports since you can map them to the host via `docker run -p`
   SELENIUM_HUB_PORT="${DEFAULT_SELENIUM_HUB_PORT}" \
-  # You may want to connect to another hub
   SELENIUM_HUB_PROTO="http" \
   SELENIUM_HUB_HOST="127.0.0.1" \
   SELENIUM_NODE_HOST="127.0.0.1" \
@@ -1031,67 +1144,36 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_NODE_FF_PORT="${DEFAULT_SELENIUM_NODE_FF_PORT}" \
   SELENIUM_NODE_RC_CH_PORT="${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" \
   SELENIUM_NODE_RC_FF_PORT="${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" \
-  # Selenium additional params:
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
   SELENIUM_NODE_PROXY_PARAMS="" \
-  # To taggle issue #58 see https://goo.gl/fz6RTu
   CHROME_ARGS="--no-sandbox --disable-gpu" \
-  # Will be passed with: -Dwebdriver.chrome.verboseLogging
   CHROME_VERBOSELOGGING="true" \
-  # e.g. CHROME_ARGS="--no-sandbox --ignore-certificate-errors" \
-  # SELENIUM_NODE_CHROME_PARAMS='-Dselenium.chrome.args="--no-sandbox"' \
-  # WEBDRIVER_NODE_CHROME_PARAMS='-Dwebdriver.chrome.args="--no-sandbox"' \
-  # Selenium capabilities descriptive (to avoid opera/ie warnings)
-  #  docs at https://code.google.com/p/selenium/wiki/Grid2
   MAX_INSTANCES=1 \
   MAX_SESSIONS=1 \
   SEL_RELEASE_TIMEOUT_SECS=19000 \
   SEL_BROWSER_TIMEOUT_SECS=16000 \
-  # How often in ms the node will try to register itself again.
-  # Allow to restart the hub without having to restart the nodes.
-  #  (node) in ms. Selenium default: 5000
   SELENIUM_NODE_REGISTER_CYCLE="1000" \
-  # How often a proxy will check for timed out thread.
-  #  (node) in ms. Selenium default: 5000
   SEL_CLEANUPCYCLE_MS=2000 \
-  # Interval between alive checks of node how often the hub checks if the node is still alive.
-  #  (node) in ms. Selenium default: 5000
   SEL_NODEPOLLING_MS=1500 \
-  # If the node remains down for more than unregisterIfStillDownAfter millisec
-  #  it will disappear from the hub. in ms. Default: 1min
   SEL_UNREGISTER_IF_STILL_DOWN_AFTER=2500 \
-  # Docker for Mac beta - containers do not start #227
   no_proxy=localhost \
   HUB_ENV_no_proxy=localhost \
-  # Xvfb
   XVFB_CLI_OPTS_TCP="-nolisten tcp -nolisten inet6" \
   XVFB_CLI_OPTS_BASE="-ac -r -cc 4 -accessx -xinerama" \
   XVFB_CLI_OPTS_EXT="+extension Composite -extension RANDR +extension GLX" \
-  # Vnc
   VNC_START="true" \
   VNC_PORT="${DEFAULT_VNC_PORT}" \
-  # We need a fixed port range to expose VNC
-  # due to a bug in Docker for Mac beta (1.12)
-  # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
   VNC_FROM_PORT="" \
   VNC_TO_PORT="" \
-  # VNC_CLI_OPTS="-noipv6 -no6 -forever -shared" \
   VNC_CLI_OPTS="-forever -shared" \
-  # VNC password options:
-  # - "no" means no password; less secure but not a big deal
-  # - "" (empty string) means it will be randomly generated
-  # - "some-value" will use that password "some-value" or whatever
   VNC_PASSWORD=no \
   NOVNC_PORT="${DEFAULT_NOVNC_PORT}" \
   NOVNC="false" \
   SSHD="false" \
   SSHD_PORT="${DEFAULT_SSHD_PORT}" \
-  # Use SSHD_X11FORWARDING=yes to enable ssh -X
   SSHD_X11FORWARDING="no" \
-  # Use SSHD_GATEWAYPORTS=yes for reverse ports tunneling
   SSHD_GATEWAYPORTS="no" \
-  # Supervisor (process management) http server
   SUPERVISOR_HTTP_PORT="${DEFAULT_SUPERVISOR_HTTP_PORT}" \
   SUPERVISOR_HTTP_USERNAME="supervisorweb" \
   SUPERVISOR_HTTP_PASSWORD="somehttpbasicauthpwd" \
@@ -1103,49 +1185,28 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SUPERVISOR_STOPSIGNAL=TERM \
   SUPERVISOR_KILLASGROUP="false" \
   SUPERVISOR_STOPASGROUP="false" \
-  # Supervisor loglevel and also general docker log level
-  # can be: debug, warn, trace, info
   LOG_LEVEL=info \
-  # when DISABLE_ROLLBACK=true it will:
-  #  - output logs
-  #  - exec bash to permit troubleshooting
   DISABLE_ROLLBACK="false" \
   LOGFILE_MAXBYTES=10MB \
   LOGFILE_BACKUPS=5 \
-  # Logs are now managed by supervisord.conf, see
-  #  ${LOGS_DIR}/*.log
   LOGS_DIR="/var/log/cont" \
-  # ENV VIDEO_FORMAT xxxx
-  # Encoding movie type "flv", "swf5", "swf7", "mpeg" (PyMedia required)
-  # or "vnc" more info at http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
   VNC2SWF_ENCODING=swf5 \
-  # Specifies the framerate in fps. (default=12.0). Reducing the frame rate
-  # sometimes helps reducing the movie size.
   VNC2SWF_FRAMERATE=25 \
-  # ffmpeg encoding options
   FFMPEG_FRAME_RATE=15 \
-  # Video size can be lowered down via re-encoding, see
-  #  http://askubuntu.com/a/365221/134645
   FFMPEG_CODEC_ARGS="-vcodec libx264 -crf 0 -preset ultrafast" \
-  # Services to start by default; true/false
   VIDEO="false" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
-  # -e RC_CHROME=false -e RC_FIREFOX=false
   RC_CHROME="true" \
   RC_FIREFOX="true" \
-  # Video file and extension, e.g. swf, mp4, mkv, flv
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="" \
   VIDEO_FLUSH_SECS="0.5" \
   VIDEO_CHUNK_SECS="00:05:00" \
   VIDEO_CHUNKS_MAX=999 \
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
-  # You can choose what X manager to use
-  #  fluxbox | openbox
   XMANAGER="fluxbox" \
-  # Sauce Labs tunneling. Naming is required: SAUCE_TUNNEL_ID
   SAUCE_TUNNEL="false" \
   SAUCE_USER_NAME="" \
   SAUCE_API_KEY="" \
@@ -1156,21 +1217,16 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SAUCE_WAIT_TIMEOUT="140s" \
   SAUCE_WAIT_RETRY_TIMEOUT="290s" \
   SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS="1" \
-  # BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
   BSTACK_TUNNEL="false" \
   BSTACK_ACCESS_KEY="" \
   BSTACK_TUNNEL_ID="docker-selenium" \
   BSTACK_TUNNEL_OPTS="-skipCheck -v -forcelocal" \
   BSTACK_WAIT_TIMEOUT="100s" \
   BSTACK_WAIT_RETRY_TIMEOUT="220s" \
-  # Amount of lines to display when startup errors
   TAIL_LOG_LINES="15" \
-  # Fix small tiny 64mb shm issue
   SHM_TRY_MOUNT_UNMOUNT="false" \
   SHM_SIZE="512M" \
-  # When docker run --net=host the network name may be different
   ETHERNET_DEVICE_NAME="eth0" \
-  # Supervisord stop signals
   SSHD_STOP_SIGNAL="TERM" \
   XMANAGER_STOP_SIGNAL="TERM" \
   XVFB_STOP_SIGNAL="TERM" \
@@ -1183,18 +1239,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VIDEO_REC_STOP_SIGNAL="INT" \
   BROWSERSTACK_STOP_SIGNAL="INT" \
   SAUCELABS_STOP_SIGNAL="INT" \
-  # Java stuff
-  # MEM_JAVA="1024m" \
-  #===============================
-  # Run docker from inside docker
-  # Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
-  #                   -v $(which docker):$(which docker)
   DOCKER_SOCK="/var/run/docker.sock" \
-  # for DBUS hacks, see entry.sh
-  # DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null" \
-  # Selenium test steps sleep
   TEST_SLEEPS="0.5" \
-  # Restore
   DEBIAN_FRONTEND="" \
   DEBCONF_NONINTERACTIVE_SEEN=""
 
@@ -1223,25 +1269,22 @@ ADD test/python_test.py /usr/bin/python_test
 #===================================
 # Fix dirs (again) and final chores
 #===================================
+# The .X11-unix stuff is useful when using Xephyr
+# Fixes at /var/run/sshd avoid error "Missing privilege separation directory: /var/run/sshd"
 RUN sudo touch /capabilities.json \
-  # Capabilties json file
   && sudo chown ${NORMAL_USER}:${NORMAL_GROUP} /capabilities.json \
   && generate_capabilities_json > /capabilities.json \
   && cp /capabilities.json ${NORMAL_USER_HOME}/capabilities.json \
   && cp /capabilities.json ${NORMAL_USER_HOME}/capabilities \
   && cp /capabilities.json ${NORMAL_USER_HOME}/caps.json \
   && cp /capabilities.json ${NORMAL_USER_HOME}/caps \
-  # VNC
   && mkdir -p ${NORMAL_USER_HOME}/.vnc \
-  # Videos
   && mkdir -p ${VIDEOS_DIR} \
   && sudo ln -s ${VIDEOS_DIR} / \
-  # Ssh stuff
   && mkdir -p ${NORMAL_USER_HOME}/.ssh \
   && touch ${NORMAL_USER_HOME}/.ssh/authorized_keys \
   && chmod 700 ${NORMAL_USER_HOME}/.ssh \
   && chmod 600 ${NORMAL_USER_HOME}/.ssh/authorized_keys \
-  # Create and fix directories perms
   && sudo mkdir -p ${LOGS_DIR} \
   && sudo mkdir -p ${RUN_DIR} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${SEL_HOME} \
@@ -1250,10 +1293,8 @@ RUN sudo touch /capabilities.json \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} ${RUN_DIR} \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /etc/supervisor \
   && sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} /test \
-  # This X11-unix is useful when using Xephyr
   && sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
   && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
-  # To avoid error "Missing privilege separation directory: /var/run/sshd"
   && sudo mkdir -p /var/run/sshd \
   && sudo chmod 744 /var/run/sshd \
   && echo ""

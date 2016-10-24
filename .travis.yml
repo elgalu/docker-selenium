@@ -1,8 +1,9 @@
 # Even though we run everything inside docker Travis require
 # us to pick a language else it will pick Ruby by default
-# language: generic
-# language: ruby
-language: ruby
+# Choose a lightweight base image; we provide our own build tools.
+# https://github.com/lukasmartinelli/hadolint/blob/master/.travis.yml#L1
+# `language: generic` was failing in OSX
+language: c
 
 # Omit running tests on temporal branches,
 #  i.e. branches with names that start with "tmp"
@@ -15,11 +16,6 @@ env:
     - TEST_SLEEPS="0.7"
     - ADDED_TEST_SLEEP="6.5"
 
-# sudo: required
-# dist: trusty
-# services:
-#   - docker
-
 matrix:
   allow_failures:
     # Currently erroring in Mac (OSX):
@@ -27,14 +23,14 @@ matrix:
     #   com.docker.docker Incompatible CPU detected
     #   Docker requires a processor with virtualization capabilities
     - env:
-        - DOCKER_VERSION="1.12.2"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+        - DOCKER_VERSION="stable"
+          DOCKER_COMPOSE_VERSION="stable"
           OPERATING_SYSTEM="osx"
   include:
     # Linux with docker:stable compose:stable
     # Use DOCKER_PUSH_LATEST=false to debug
     - os: linux
-      language: ruby
+      language: c
       sudo: required
       dist: trusty
       services:
@@ -46,40 +42,40 @@ matrix:
           DOCKER_PUSH_LATEST=true
     # Linux with docker:beta/older compose:beta/older
     - os: linux
-      language: ruby
+      language: c
       sudo: required
       dist: trusty
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.1"
+        - DOCKER_VERSION="1.12.2-rc2"
           DOCKER_COMPOSE_VERSION="1.8.1"
     # Linux with docker:stable compose:beta/older
     - os: linux
-      language: ruby
+      language: c
       sudo: required
       dist: trusty
       services:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+          DOCKER_COMPOSE_VERSION="1.9.0-rc1"
     # Linux with docker:beta/older compose:stable
     - os: linux
-      language: ruby
+      language: c
       sudo: required
       dist: trusty
       services:
         - docker
       env:
-        - DOCKER_VERSION="1.12.1"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+        - DOCKER_VERSION="1.12.2-rc2"
+          DOCKER_COMPOSE_VERSION="1.9.0-rc1"
     # Mac OSX: only test native docker version
     - os: osx
       osx_image: xcode8
       env:
-        - DOCKER_VERSION="1.12.2"
-          DOCKER_COMPOSE_VERSION="1.8.0"
+        - DOCKER_VERSION="stable"
+          DOCKER_COMPOSE_VERSION="stable"
           OPERATING_SYSTEM="osx"
 
 before_install:

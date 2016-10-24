@@ -9,17 +9,24 @@ brew update
 brew install wget || true
 
 # https://github.com/caskroom/homebrew-cask/blob/master/USAGE.md#other-ways-to-specify-a-cask
-brew cask install ./osx/dockertoolbox-rc.rb --force
+# brew cask install ./osx/dockertoolbox-rc.rb --force
+brew install docker docker-compose docker-machine docker-machine-driver-xhyve boot2docker
+sudo chown root:wheel /usr/local/bin/docker-machine-driver-xhyve || true
+sudo chmod u+s /usr/local/bin/docker-machine-driver-xhyve || true
 
 # We don't want to use docker-machine
-docker-machine stop default || true
+# docker-machine stop default || true
 
 # Currently erroring:
 #  https://travis-ci.org/elgalu/docker-selenium/jobs/143358317
 #   com.docker.docker Incompatible CPU detected
 #   Docker requires a processor with virtualization capabilities
-/Applications/Docker.app/Contents/MacOS/Docker &
-sleep 20
+# /Applications/Docker.app/Contents/MacOS/Docker &
+# sleep 20
+brew services start docker-machine
+docker-machine create default --driver xhyve --xhyve-experimental-nfs-share || true
+docker-machine start
+#=> vmx_init: processor not supported by Hypervisor.framework
 
 # Below will fail with
 #  Error with pre-create check:
@@ -34,3 +41,13 @@ sleep 20
 # eval "$(docker-machine env default)"
 docker --version
 docker-compose --version
+docker-machine version
+# docker-machine env default
+#=> Host does not exist: "default"
+# docker-machine create --driver virtualbox default
+#=> Error with pre-create check:
+#=> "VBoxManage not found. Make sure VirtualBox is installed
+#=> and VBoxManage is in the path"
+eval "$(docker-machine env default)" || true
+docker run --rm -t ubuntu uname -a
+docker build -t selenium .

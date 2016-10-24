@@ -27,7 +27,7 @@ stop >/dev/null 2>&1 || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
-# Selenium IDE RC (legacy) doesn't seem to keep working on 3.0.0
+# Selenium IDE RC (legacy) doesn't seem to keep working on Selenium 3
 if [ "${USE_SELENIUM}" == "3" ]; then
   export RC_CHROME="false"
   export RC_FIREFOX="false"
