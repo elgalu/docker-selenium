@@ -42,7 +42,7 @@ shutdown () {
   fi
 }
 
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap shutdown SIGHUP SIGTERM SIGINT
 
 echo -n "supervisord --version=" && supervisord --version

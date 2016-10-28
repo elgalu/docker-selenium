@@ -40,7 +40,7 @@ function shutdown {
 # Now wait for the tunnel to be ready
 timeout --foreground ${BSTACK_WAIT_TIMEOUT} wait-browserstack.sh
 
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap shutdown SIGTERM SIGINT SIGKILL
 
 # tells bash to wait until child processes have exited

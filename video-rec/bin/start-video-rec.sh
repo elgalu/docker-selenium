@@ -26,7 +26,8 @@ VID_TOOL_PID=$!
 # sudo killall -SIGINT avconv
 function shutdown {
   echo "Trapped SIGTERM or SIGINT so shutting down ffmpeg gracefully..."
-  kill -SIGTERM ${VID_TOOL_PID}
+  kill -SIGTERM ${VID_TOOL_PID} || true
+  sleep ${VIDEO_STOP_SLEEP_SECS}
   wait ${VID_TOOL_PID}
   fix_video_perms.sh
   echo "ffmpeg shutdown complete."
@@ -40,7 +41,7 @@ while ! ls -l "${VIDEO_BASE_PATH}"* >/dev/null 2>&1; do sleep 0.1; done
 # Now wait for video recording to start or fail
 timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh
 
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap shutdown SIGTERM SIGINT SIGKILL
 
 # tells bash to wait until child processes have exited

@@ -26,7 +26,9 @@ sudo chmod u+s /usr/local/bin/docker-machine-driver-xhyve || true
 brew services start docker-machine
 docker-machine create default --driver xhyve --xhyve-experimental-nfs-share || true
 docker-machine start
-#=> vmx_init: processor not supported by Hypervisor.framework
+#=> ERROR! vmx_init: processor not supported by Hypervisor.framework
+# Apparently due to Travis using old Mac machines
+# we will have to wait a couple of years
 
 # Below will fail with
 #  Error with pre-create check:

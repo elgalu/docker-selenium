@@ -22,7 +22,7 @@ function shutdown {
   exit 0
 }
 
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap shutdown SIGTERM SIGINT SIGKILL
 
 # Start VNC server to enable viewing what's going on but not mandatory

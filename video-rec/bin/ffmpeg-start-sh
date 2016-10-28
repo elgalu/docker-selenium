@@ -14,7 +14,7 @@ function shutdown {
   exit 0
 }
 
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap shutdown SIGTERM SIGINT SIGKILL
 
 # record testing video using password file
@@ -49,6 +49,7 @@ for i in $(seq -f "%03g" 0 ${VIDEO_CHUNKS_MAX}); do
     -i "${DISPLAY}.0+0,0" \
     ${FFMPEG_CODEC_ARGS} \
     -t "${VIDEO_CHUNK_SECS}" \
+    -segment_format_options movflags=+faststart \
     -y -an "${video_path}" 2>&1 &
   LAST_FFMPEG_PID=$!
 

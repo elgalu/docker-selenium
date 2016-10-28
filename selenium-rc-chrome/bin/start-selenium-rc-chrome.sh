@@ -55,7 +55,7 @@ function trappedFn {
   echo "-- INFO: Trapped SIGTERM/SIGINT on Chrome NODE"
   shutdown
 }
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap trappedFn SIGTERM SIGINT SIGKILL
 
 # tells bash to wait until child processes have exited

@@ -1,39 +1,17 @@
-###################################################
-# Selenium standalone docker for Chrome & Firefox #
-###################################################
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
-# search for more at https://registry.hub.docker.com/_/ubuntu/tags/manage/
+# Find latest images at https://hub.docker.com/r/library/ubuntu/
 FROM ubuntu:xenial-20161010
 ENV UBUNTU_FLAVOR="xenial" \
     UBUNTU_DATE="20161010"
 
-#== Ubuntu wily is 15.10, i.e. FROM ubuntu:15.10
-# FROM ubuntu:wily-20151208
-# ENV UBUNTU_FLAVOR wily
-
-#== Ubuntu vivid is 15.04, i.e. FROM ubuntu:15.04
-#                    https://cloud-images.ubuntu.com/releases/15.04/
-# FROM ubuntu:vivid-20150611
-# ENV UBUNTU_FLAVOR vivid
-
-#== Ubuntu trusty is 14.04, i.e. FROM ubuntu:14.04
-#== Could also use ubuntu:latest but for the sake I replicating an precise env...
-#                    https://cloud-images.ubuntu.com/releases/14.04/
-# FROM ubuntu:trusty-20150630
-# ENV UBUNTU_FLAVOR trusty
-
-#== Ubuntu precise is 12.04, i.e. FROM ubuntu:12.04
-#== Could also use ubuntu:latest but for the sake I replicating an precise env...
-#                    https://cloud-images.ubuntu.com/releases/12.04/
-# FROM ubuntu:precise-20150612
-# ENV UBUNTU_FLAVOR precise
-
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
-  && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-updates main universe\n" >> /etc/apt/sources.list
+  && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-updates main universe\n" >> /etc/apt/sources.list \
+  && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-security main universe\n" >> /etc/apt/sources.list
 
-MAINTAINER Leo Gallucci <elgalu3@gmail.com>
+MAINTAINER Leo Gallucci <elgalu3+team-tip@gmail.com>
 
+# No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
@@ -172,29 +150,6 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt-get -qqy update \
-#   && apt-get -qqy install \
-#     software-properties-common \
-#   && echo debconf shared/accepted-oracle-license-v1-1 \
-#       select true | debconf-set-selections \
-#   && echo debconf shared/accepted-oracle-license-v1-1 \
-#       seen true | debconf-set-selections \
-#   && add-apt-repository ppa:webupd8team/java \
-#   && apt-get -qqy update \
-#   && apt-get -qqy install \
-#     oracle-java8-installer \
-#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-#        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-#        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-#   && rm -rf /var/lib/apt/lists/*
-
-#==================
-# Java9 - Oracle
-#==================
-# Regarding urandom see
-#  http://stackoverflow.com/q/26021181/511069
-#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     software-properties-common \
@@ -205,12 +160,35 @@ RUN apt-get -qqy update \
   && add-apt-repository ppa:webupd8team/java \
   && apt-get -qqy update \
   && apt-get -qqy install \
-    oracle-java9-installer \
+    oracle-java8-installer \
   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-9-oracle/conf/security/java.security \
+       /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-9-oracle/conf/security/java.security \
+       /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
   && rm -rf /var/lib/apt/lists/*
+
+#================
+# Java9 - Oracle
+#================
+# Regarding urandom see
+#  http://stackoverflow.com/q/26021181/511069
+#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
+# RUN apt-get -qqy update \
+#   && apt-get -qqy install \
+#     software-properties-common \
+#   && echo debconf shared/accepted-oracle-license-v1-1 \
+#       select true | debconf-set-selections \
+#   && echo debconf shared/accepted-oracle-license-v1-1 \
+#       seen true | debconf-set-selections \
+#   && add-apt-repository ppa:webupd8team/java \
+#   && apt-get -qqy update \
+#   && apt-get -qqy install \
+#     oracle-java9-installer \
+#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-9-oracle/conf/security/java.security \
+#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
+#        /usr/lib/jvm/java-9-oracle/conf/security/java.security \
+#   && rm -rf /var/lib/apt/lists/*
 
 #=========================
 # Fonts & video libraries
@@ -353,9 +331,9 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
   && mv websockify-${WEBSOCKIFY_SHA} \
        ${NORMAL_USER_HOME}/noVNC/utils/websockify
 
-#===============================
-# ffmpeg/libav and video codecs
-#===============================
+#======================================
+# ffmpeg/libav/avconv and video codecs
+#======================================
 # ffmpeg (ffmpeg): Is a better alternative to Pyvnc2swf
 #   (use in Ubuntu >= 15) packages: ffmpeg
 # RUN apt-get -qqy update \
@@ -366,9 +344,9 @@ RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
 #     ffmpeg \
 #   && rm -rf /var/lib/apt/lists/*
 
-#===============================
-# ffmpeg/libav and video codecs
-#===============================
+#======================================
+# ffmpeg/libav/avconv and video codecs
+#======================================
 # libav-tools (avconv): Is a fork of ffmpeg
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
 RUN apt-get -qqy update \
@@ -800,7 +778,7 @@ ENV CHROME_DRIVER_FILE "chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_BASE "chromedriver.storage.googleapis.com"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 RUN mkdir -p ${NORMAL_USER_HOME}/tmp && cd ${NORMAL_USER_HOME}/tmp \
-  && CHROME_DRIVER_VERSION="2.24" \
+  && CHROME_DRIVER_VERSION="2.25" \
   && CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}" \
   && wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && cd ${SEL_HOME} \
@@ -1113,7 +1091,6 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #   Run docker from inside docker
 #   Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
 #                     -v $(which docker):$(which docker)
-
 ENV FIREFOX_VERSION="${FF_VER}" \
   USE_SELENIUM="2" \
   CHROME_FLAVOR="stable" \
@@ -1205,6 +1182,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VIDEO_FLUSH_SECS="0.5" \
   VIDEO_CHUNK_SECS="00:05:00" \
   VIDEO_CHUNKS_MAX=999 \
+  VIDEO_STOP_SLEEP_SECS="1" \
   VIDEOS_DIR="${NORMAL_USER_HOME}/videos" \
   XMANAGER="fluxbox" \
   SAUCE_TUNNEL="false" \
@@ -1316,6 +1294,7 @@ WORKDIR ${NORMAL_USER_HOME}
 # ENTRYPOINT ["entry.sh"]
 # CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
-# Using the string form `CMD "entry.sh"` causes Docker to run your process
-# using bash which doesn’t handle signals properly
+# IMPORTANT: Using the string form `CMD "entry.sh"` without
+# brackets [] causes Docker to run your process
+# And using `bash` which doesn’t handle signals properly
 CMD ["entry.sh"]

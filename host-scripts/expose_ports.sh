@@ -45,7 +45,7 @@ for i in "${MYAPP_PORTS[@]}"; do
   ssh ${BASE_SSH_CMD} -R localhost:${i}:localhost:${i} &
 done
 
-# Run function shutdown() when this process a killer signal
+# Run function shutdown() when this process receives a killing signal
 trap shutdown SIGTERM SIGINT SIGKILL
 
 # tells bash to wait until child processes have exited
