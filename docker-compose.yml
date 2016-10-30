@@ -1,3 +1,5 @@
+# TODO: implement env vars defaults `${FOO-default}`
+# once docker-compose 1.9 is long stable
 version: '2'
 
 services:

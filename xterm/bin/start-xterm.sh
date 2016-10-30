@@ -59,8 +59,6 @@ timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
 
 if [ "${VIDEO}" = "true" ]; then
   start-video &
-  # timeout --foreground ${WAIT_TIMEOUT} wait-video-rec.sh || \
-  #   shutdown "Failed while waiting for video recording to start!"
 fi
 
 # TODO: Re enable shutdown at some point. But fails when

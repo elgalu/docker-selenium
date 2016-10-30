@@ -5,10 +5,6 @@ set -e
 
 # Wait for this process dependencies
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
-# timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh
-# timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
-# timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh
-# timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh
 
 # Make it portable
 [ -z "${VIDEO_BASE_PATH}" ] && export \

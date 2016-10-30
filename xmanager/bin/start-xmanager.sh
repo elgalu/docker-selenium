@@ -54,7 +54,7 @@ elif [ "${XMANAGER}" = "fluxbox" ]; then
         echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}"
         killall fluxbox || true
       fi
-      if [ ${i} -gt 3 ]; then
+      if [ ${i} -gt ${FLUXBOX_START_MAX_RETRIES} ]; then
         echoerr "-- ERROR: Failed to start Fluxbox at $0 after many retries."
         break
       fi

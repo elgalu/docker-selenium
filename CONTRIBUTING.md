@@ -7,18 +7,18 @@ For pull requests or local commits:
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mkv
     open test/seleIDE/videos/rc/sele_ide.mkv
-    git checkout -b tmp-3.0.1b && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
+    git checkout -b tmp-3.0.1c && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chromedriver to 2.25 (was 2.24)"
-    git tag -d latest && git tag 3.0.1b && git push origin tmp-3.0.1b && git push --tags
+    git commit -m "Add FLUXBOX_START_MAX_RETRIES"
+    git tag -d latest && git tag 3.0.1c && git push origin tmp-3.0.1c && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-3.0.1b && git push origin --delete tmp-3.0.1b
+    git checkout master && git pull && git branch -d tmp-3.0.1c && git push origin --delete tmp-3.0.1c
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -36,9 +36,9 @@ Keep certain bins if chrome version changed for example:
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 3.0.1b && git push origin :3.0.1b
+    git tag -d 3.0.1c && git push origin :3.0.1c
     #git add ...
-    git commit --amend && git tag 3.0.1b && git push --force origin tmp-3.0.1b && git push --tags
+    git commit --amend && git tag 3.0.1c && git push --force origin tmp-3.0.1c && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.
