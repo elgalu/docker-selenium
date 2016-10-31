@@ -1,8 +1,9 @@
 <img id="header" width="760" src="./images/icons/logo_wide.jpg" />
 # Selenium in Docker with Chrome and Firefox
 
-[![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium)
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium "Travis CI")
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge "Chat support")
+[![Docker](https://images.microbadger.com/badges/version/elgalu/selenium.svg)](https://microbadger.com/images/elgalu/selenium "Docker Badge")
 
 * selenium server grid with 2 nodes (chrome & firefox)
 * mkv video recording

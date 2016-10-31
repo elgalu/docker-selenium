@@ -35,6 +35,8 @@ docker_login_tag_push() {
   else
     docker push elgalu/selenium:latest
   fi
+  # Update Docker README.md badges
+  curl -XPOST "https://hooks.microbadger.com/images/elgalu/selenium/2blr1ujGSTcUtm3HnU0-h5m6yLY=" || true
 }
 
 #################################
