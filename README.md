@@ -269,7 +269,7 @@ Disabled by default, [noVNC](https://github.com/kanaka/noVNC) provides a browser
 
 Safari Browser already comes with a built-in vnc viewer so this feature is overkill and is disabled by default, just navigate to vnc://localhost:5900 in your Safari browser.
 
-You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and you will be able to open a browser at [localhost:6080](http://localhost:6080/vnc.html)
+You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and you will be able to open a browser at [localhost:6080](http://localhost:6080/vnc_auto.html)
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
       --shm-size=1g -p 6080:26080 -e NOVNC=true \
