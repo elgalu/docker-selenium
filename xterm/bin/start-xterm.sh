@@ -41,7 +41,6 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
   shutdown "Failed while waiting for XManager to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || \
   shutdown "Failed while waiting for noVNC to start!"
-#TODO: wait-sshd.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || \
   shutdown "Failed while waiting for selenium hub to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \

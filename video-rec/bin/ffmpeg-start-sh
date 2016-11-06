@@ -40,7 +40,7 @@ for i in $(seq -f "%03g" 0 ${VIDEO_CHUNKS_MAX}); do
 
   # Fix perms to be able to start ffmpeg without sudo
   sudo touch "${video_path}"
-  sudo chown ${NORMAL_USER_UID}:${NORMAL_USER_GID} "${video_path}"
+  sudo chown seluser:seluser "${video_path}"
 
   # avconv or ffmpeg
   avconv -f x11grab \

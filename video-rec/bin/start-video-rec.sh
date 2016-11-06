@@ -14,7 +14,7 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 sudo rm -f "${VIDEO_BASE_PATH}"*
 
 # Call the video recording tool
-# ffmpeg-start-sh or vnc2swf-start.sh
+# ffmpeg-start-sh
 ffmpeg-start-sh &
 VID_TOOL_PID=$!
 

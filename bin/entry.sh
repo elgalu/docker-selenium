@@ -43,8 +43,8 @@ fi
 #---------------------
 # Fix/extend ENV vars
 #---------------------
-export SELENIUM_JAR_PATH="${SEL_HOME}/selenium-server-standalone-${USE_SELENIUM}.jar"
-export FIREFOX_DEST_BIN="${SEL_HOME}/firefox-for-sel-${USE_SELENIUM}/firefox"
+export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-${USE_SELENIUM}.jar"
+export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-${USE_SELENIUM}/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 export FIREFOX_VERSION=$(firefox_version)
 
@@ -85,14 +85,6 @@ export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
 # else
 #   export SUPERVISOR_NOT_REQUIRED_SRV_LIST1="video-rec"
 # fi
-
-sudo sh -c "echo 'X11Forwarding ${SSHD_X11FORWARDING}' >> /etc/ssh/sshd_config"
-sudo sh -c "echo 'GatewayPorts ${SSHD_GATEWAYPORTS}'   >> /etc/ssh/sshd_config"
-if [ "${SSHD}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|sshd"
-else
-  export SUPERVISOR_NOT_REQUIRED_SRV_LIST2="sshd"
-fi
 
 if [ "${NOVNC}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|novnc"
@@ -225,15 +217,6 @@ elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${NOVNC_PORT}" = "${DEFAULT_NOVNC_PORT}" ]; then
     export NOVNC_PORT=$(get_unused_port)
-  fi
-fi
-
-if [ "${SSHD_PORT}" = "0" ]; then
-  export SSHD_PORT=$(get_unused_port)
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
-  # User want to pick random ports but may also want to fix some others
-  if [ "${SSHD_PORT}" = "${DEFAULT_SSHD_PORT}" ]; then
-    export SSHD_PORT=$(get_unused_port)
   fi
 fi
 
@@ -444,12 +427,10 @@ echo "${SELENIUM_NODE_RC_FF_PORT}" > RC_FF_PORT
 echo "${DISPLAY}" > DISPLAY
 echo "${VNC_PORT}" > VNC_PORT
 echo "${NOVNC_PORT}" > NOVNC_PORT
-echo "${SSHD_PORT}" > SSHD_PORT
 echo "${SAUCE_LOCAL_SEL_PORT}" > SAUCE_LOCAL_SEL_PORT
 echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
 echo "${FIREFOX_DEST_BIN}" > FIREFOX_DEST_BIN
 echo "${USE_SELENIUM}" > USE_SELENIUM
-echo "${SEL_HOME}" > SEL_HOME
 echo "${SELENIUM_JAR_PATH}" > SELENIUM_JAR_PATH
 echo "${LOGS_DIR}" > LOGS_DIR
 env > env

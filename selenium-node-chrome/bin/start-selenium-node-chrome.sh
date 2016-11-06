@@ -20,7 +20,7 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
 java \
-  -Dwebdriver.chrome.driver="${SEL_HOME}/chromedriver" \
+  -Dwebdriver.chrome.driver="/home/seluser/chromedriver" \
   -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
   -Dwebdriver.chrome.verboseLogging="${CHROME_VERBOSELOGGING}" \
   ${JAVA_OPTS} \

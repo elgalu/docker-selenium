@@ -30,11 +30,7 @@ Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium)
 
 * both browsers and also the grid are on the same container in this repo
 * support for [video recording](./docs/videos.md)
-* support for [customizing the screen size](#screen-size)
-* support for [ssh access](#ssh) that can be particularly useful for tunneling support
-* this image size is considerably larger (around 2.5GB) than the official one which is around 300MB
 * process manager: this image uses [supervisord](http://supervisord.org) while the official [uses bash](https://github.com/SeleniumHQ/docker-selenium/blob/master/StandaloneChromeDebug/entry_point.sh)
-* release flow: TravisCI docker pushes vs docker.com automated builds in the official repo
 
 Even though both projects share the same purpose is good to have alternatives, see also for example [docker-alpine-selenium](https://github.com/SUNx2YCH/docker-alpine-selenium). Letting more than 1 docker-selenium project grow to be able to learn from each other's success or failures ultimately impacts the final users positively. This doesn't discard that at some point all selenium maintainers will sit together a sprint to coordinate some major changes and cleanup open issues and perhaps we might merge N similar projects in the future.
 
@@ -153,39 +149,6 @@ or former:
 
     boot2docker ip
 
-### SSH
-
-You can also ssh into the machine as long as `SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)"` is correct.
-
-    docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
-      -e SSHD=true \
-      -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      --shm-size=1g elgalu/selenium
-
-Then
-
-    ssh -p 22222 -o StrictHostKeyChecking=no application@localhost
-
-Include `-X` in ssh command if you want to redirect the started GUI programs to your host, but for that you also need to pass `-e SSHD_X11FORWARDING=yes`
-
-    docker run --rm -ti --name=grid -p=4444:24444 -p=5900:25900 -p=22222:22222 \
-      -e SSHD=true -e SSHD_X11FORWARDING=yes \
-      -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" \
-      --shm-size=1g elgalu/selenium
-
-Then
-
-    ssh -X -p 22222 -o StrictHostKeyChecking=no application@localhost
-    echo $DISPLAY #=> localhost:10.0
-
-That's is useful for tunneling, or else you can stick with `docker exec` to get into the instance with a shell:
-
-    docker exec -ti grid bash
-
-Supervisor can expose an HTTP server but is not enough to bind the ports via `docker run -p`, so in this case you need to FWD ports with `ssh -L`
-
-    ssh -p 22222 -o StrictHostKeyChecking=no -L localhost:29001:localhost:29001 application@localhost
-
 ### Screen size
 You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` and `SCREEN_HEIGHT` environment variables:
 
@@ -250,7 +213,7 @@ Relevant environment variables to customize it are:
     VIDEO_FILE_EXTENSION=mkv
     FFMPEG_CODEC_ARGS=""
 
-It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mkv* is selected. You may want to delegate video recording through `vnc2swf-start.sh` to a separate server process and even delegate compression to a further step or to a cloud service like YouTube.
+It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mkv* is selected.
 
 ### VNC
 
@@ -512,8 +475,6 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/selenium-rc-chrome-stdout.log
     /var/log/cont/selenium-rc-firefox-stderr.log
     /var/log/cont/selenium-rc-firefox-stdout.log
-    /var/log/cont/sshd-stderr.log
-    /var/log/cont/sshd-stdout.log
     /var/log/cont/supervisord.log
     /var/log/cont/video-rec-stderr.log
     /var/log/cont/video-rec-stdout.log
