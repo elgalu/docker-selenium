@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Example:
 #  firefox -version 2>&1
@@ -6,5 +7,9 @@
 
 # Example:
 #=> 49.0.1
-/home/seluser/firefox-for-sel-3/firefox \
-  -version 2>&1 | grep -Po '(?<=Firefox )([a-z0-9\.]+)'
+FFBIN="/home/seluser/firefox-for-sel-3/firefox"
+if ${FFBIN} >/dev/null 2>&1; then
+  ${FFBIN} -version 2>&1 | grep -Po '(?<=Firefox )([a-z0-9\.]+)'
+else
+  ${FFBIN} #fail and show error
+fi

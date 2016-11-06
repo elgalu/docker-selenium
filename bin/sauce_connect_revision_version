@@ -7,5 +7,3 @@
 # Example:
 #=> d6099dc
 sc 2>&1 | grep build | grep -oE '[^ ]+$'
-
-# grep -oE '[^ ]+$' greps last word of the line

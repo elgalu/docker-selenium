@@ -22,6 +22,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Remove SEL_HOME and simply write /home/seluser
  + Add libstderred.so & libpolyfill.so
  + Use printf instead of awk in echoerr()
+ + Do not swallow errors on *_version scripts
  + Image tag details:
   + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
   + Selenium 3: 3.0.1 (1969d75)

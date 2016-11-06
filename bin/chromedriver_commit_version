@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
+set -e
 
 # Example:
 #=> 633e689b520b25f3e264a2ede6b74ccc23cb636a
-chromedriver --version 2>&1 | grep -Po '(?<=\s\()([a-z0-9]+)'
+if chromedriver --version >/dev/null 2>&1; then
+  chromedriver --version 2>&1 | grep -Po '(?<=\s\()([a-z0-9]+)'
+else
+  chromedriver --version #fail and show error
+fi

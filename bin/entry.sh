@@ -3,6 +3,10 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+# stderr in red http://ku1ik.com -- https://github.com/sickill/stderred
+# Moved to the Dockerfile
+#  export LD_PRELOAD="/usr/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+
 # Workaround that might help to get dbus working in docker
 #  http://stackoverflow.com/a/38355729/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234

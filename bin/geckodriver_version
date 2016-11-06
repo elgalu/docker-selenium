@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Example:
 #  geckodriver --version 2>&1
@@ -9,4 +10,8 @@
 #=> 0.10.0
 CMD="geckodriver"
 [ "${USE_SELENIUM}" == "2" ] && CMD="/opt/geckodriver"
-${CMD} --version 2>&1 | grep -Po '(?<=geckodriver )([a-z0-9\.]+)'
+if ${CMD} --version >/dev/null 2>&1; then
+  ${CMD} --version 2>&1 | grep -Po '(?<=geckodriver )([a-z0-9\.]+)'
+else
+  ${CMD} --version #fail and show error
+fi

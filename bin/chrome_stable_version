@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Example:
 #  google-chrome-stable --version 2>&1
@@ -6,4 +7,8 @@
 
 # Example:
 #=> 50.0.2661.75
-google-chrome-stable --version 2>&1 | grep -Po '(?<=Google Chrome )([a-z0-9\.]+)'
+if google-chrome-stable --version >/dev/null 2>&1; then
+  google-chrome-stable --version 2>&1 | grep -Po '(?<=Google Chrome )([a-z0-9\.]+)'
+else
+  google-chrome-stable --version #fail and show error
+fi
