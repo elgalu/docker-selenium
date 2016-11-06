@@ -11,6 +11,6 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh
 
 # Usage at https://github.com/kanaka/noVNC/blob/master/utils/launch.sh
-${NORMAL_USER_HOME}/noVNC/utils/launch.sh \
+/home/seluser/noVNC/utils/launch.sh \
   --listen ${NOVNC_PORT}\
   --vnc localhost:${VNC_PORT}

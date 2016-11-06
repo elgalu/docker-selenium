@@ -396,7 +396,7 @@ fi
 #------------------
 # Fix running user
 #------------------
-RUN_PREFIX="sudo --preserve-env HOME=/home/$NORMAL_USER -u $NORMAL_USER"
+RUN_PREFIX="sudo --preserve-env HOME=/home/seluser -u seluser"
 WHOAMI=$(whoami)
 WHOAMI_EXIT_CODE=$?
 echo "-- INFO: Container USER var is: '$USER', \$(whoami) returns '$WHOAMI', UID is '$UID'"
@@ -442,21 +442,24 @@ env > env
 #------
 # exec
 #------
+export NORMAL_USER_UID="$(id -u seluser)"
+export NORMAL_USER_GID="$(id -g seluser)"
+
 if [ $WHOAMI_EXIT_CODE != 0 ]; then
   if [ $UID != $NORMAL_USER_UID]; then
     echo "-- WARN: UID '$UID' is different from the expected '$NORMAL_USER_UID'"
     echo "-- INFO: Will try to fix uid before continuing"
     # TODO: fix it ...
-    echo "-- now will try to use NORMAL_USER: '$NORMAL_USER' to continue"
+    echo "-- now will try to use a normal user: 'seluser' to continue"
     exec ${RUN_PREFIX} run-supervisord.sh
   else
     echo "-- WARN: You seem to be running docker -u {{some-non-existing-user-in-container}}"
-    echo "-- will try to use NORMAL_USER: '$NORMAL_USER' instead."
+    echo "-- will try to use a normal user: 'seluser' instead."
     exec ${RUN_PREFIX} run-supervisord.sh
   fi
 elif [ "$WHOAMI" = "root" ]; then
   echo "-- WARN: Container running user is 'root' so switching to less privileged one"
-  echo "-- will use NORMAL_USER: '$NORMAL_USER' instead."
+  echo "-- will use a normal user: 'seluser' instead."
   exec ${RUN_PREFIX} run-supervisord.sh
 else
   echo "-- INFO: Will use \$USER '$USER' and \$(whoami) is '$WHOAMI'"

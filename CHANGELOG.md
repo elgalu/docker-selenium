@@ -19,6 +19,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Remove swf unused video stuff
  + Remove XDummy xorg unused X stuff
  + Remove OpenSSH as is not needed
+ + Stop using user `application` and use shorter `seluser` instead
  + Remove SEL_HOME and simply write /home/seluser
  + Add libstderred.so & libpolyfill.so
  + Use printf instead of awk in echoerr()

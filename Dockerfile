@@ -142,23 +142,15 @@ RUN echo "Setting time zone to '${TZ}'" \
 #========================================
 # Add normal user with passwordless sudo
 #========================================
-ENV NORMAL_USER="seluser"
-ENV NORMAL_GROUP="${NORMAL_USER}"
 # Layer size: tiny: 0.3 MB
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
-RUN useradd ${NORMAL_USER} \
+RUN useradd seluser \
          --shell /bin/bash  \
          --create-home \
-  && usermod -a -G sudo ${NORMAL_USER} \
-  && gpasswd -a ${NORMAL_USER} video \
+  && usermod -a -G sudo seluser \
+  && gpasswd -a seluser video \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
   && echo 'seluser:secret' | chpasswd
-ENV NORMAL_USER_HOME="/home/${NORMAL_USER}"
-# TODO: Calculate NORMAL_USER_UID & NORMAL_USER_GID
-ENV NORMAL_USER_UID="1000" \
-    NORMAL_USER_GID="1000"
-# TODO: Remove ${NORMAL_GROUP} and just hard-code "seluser"
-#       same with NORMAL_USER_HOME or other env vars
 
 #==============================
 # Java8 - OpenJDK JRE headless

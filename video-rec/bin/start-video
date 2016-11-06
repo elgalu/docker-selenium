@@ -14,7 +14,6 @@ die () {
 [ -z "${LOGFILE_MAXBYTES}" ] && export LOGFILE_MAXBYTES="10MB"
 [ -z "${LOGFILE_BACKUPS}" ] && export LOGFILE_BACKUPS=5
 [ -z "${LOGS_DIR}" ] && export LOGS_DIR="/var/log/cont"
-[ -z "${NORMAL_USER}" ] && export NORMAL_USER="application"
 
 export VIDEO_LOG_FILE="$(cat VIDEO_LOG_FILE)"
 export VIDEO_PIDFILE="$(cat VIDEO_PIDFILE)"

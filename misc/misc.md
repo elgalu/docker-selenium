@@ -172,7 +172,7 @@ Dockerfile
         xserver-xephyr \
         xserver-xorg-video-dummy \
       && mkdir -p ${HOME}/.xpra \
-      && chown ${NORMAL_USER}:${NORMAL_GROUP} ${HOME}/.xpra \
+      && chown seluser:seluser ${HOME}/.xpra \
       && rm -rf /var/lib/apt/lists/*
 
 start.sh

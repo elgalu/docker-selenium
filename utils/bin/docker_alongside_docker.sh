@@ -8,15 +8,15 @@
 if [ -S "${DOCKER_SOCK}" ]; then
   TARGET_GID=$(stat -c "%g" ${DOCKER_SOCK})
   EXISTS=$(cat /etc/group | grep $TARGET_GID | wc -l)
-  # Create new group using target GID and add ${NORMAL_USER}
+  # Create new group using target GID and add seluser
   if [ ${EXISTS} == "0" ]; then
     GROUP_NAME="dockersockgrphelper"
     # Create the group as it doesn't exist yet
-    sudo groupadd -g ${TARGET_GID} ${GROUP_NAME}
+    sudo groupadd -g ${TARGET_GID} seluser
   else
     # GID exists, find the group name
     GROUP_NAME=$(getent group ${TARGET_GID} | cut -d: -f1)
   fi
-  sudo gpasswd -a ${NORMAL_USER} ${GROUP_NAME}
-  newgrp ${GROUP_NAME}
+  sudo gpasswd -a seluser seluser
+  newgrp seluser
 fi
