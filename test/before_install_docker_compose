@@ -4,7 +4,7 @@
 # set -x: print each command right before it is executed
 set -xe
 
-echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
+echoerr() { printf "%s\n" "$*" >&2; }
 
 # print error and exit
 die () {

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
+echoerr() { printf "%s\n" "$*" >&2; }
 
 # print error and exit
 die () {

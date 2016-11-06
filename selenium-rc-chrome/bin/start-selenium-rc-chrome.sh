@@ -3,7 +3,7 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-echoerr() { awk " BEGIN { print \"$@\" > \"/dev/fd/2\" }" ; }
+echoerr() { printf "%s\n" "$*" >&2; }
 
 # Wait for this process dependencies
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
