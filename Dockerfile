@@ -34,6 +34,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
 #========================
 # Miscellaneous packages
 #========================
+# libltdl7        0.3 MB
+#   allows to run docker alongside docker
 # netcat-openbsd  0.5 MB
 #   inlcues `nc` an arbitrary TCP and UDP connections and listens
 # pwgen           0.4 MB
@@ -83,6 +85,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy install \
+    libltdl7 \
     netcat-openbsd \
     pwgen \
     bc \
