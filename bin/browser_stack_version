@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Example:
 #  BrowserStackLocal -version 2>&1
@@ -6,4 +7,8 @@
 
 # Example:
 #=> 5.3
-BrowserStackLocal -version 2>&1 | grep -Po '(?<=BrowserStack Local version )([a-z0-9\.]+)'
+if BrowserStackLocal -version >/dev/null 2>&1; then
+  BrowserStackLocal -version 2>&1 | grep -Po '(?<=BrowserStack Local version )([a-z0-9\.]+)'
+else
+  BrowserStackLocal -version #fail and show error
+fi

@@ -5,6 +5,22 @@ set -e
 
 echoerr() { printf "%s\n" "$*" >&2; }
 
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
+  errnum=${2-110}
+  exit $errnum
+}
+
+# Required params (some)
+[ -z "${WAIT_TIMEOUT}" ] && die "Required env var WAIT_TIMEOUT"
+[ -z "${COMMON_CAPS}" ] && die "Required env var COMMON_CAPS"
+[ -z "${SELENIUM_JAR_PATH}" ] && die "Required env var SELENIUM_JAR_PATH"
+[ -z "${SELENIUM_NODE_HOST}" ] && die "Required env var SELENIUM_NODE_HOST"
+[ -z "${FIREFOX_VERSION}" ] && die "Required env var FIREFOX_VERSION"
+[ -z "${FIREFOX_DEST_BIN}" ] && die "Required env var FIREFOX_DEST_BIN"
+
 # Wait for this process dependencies
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh

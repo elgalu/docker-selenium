@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Example OpenJDK 8:
 #  java -version 2>&1
@@ -16,4 +17,8 @@
 #=> 1.8.0_66-internal-b17
 # Example Oracle 9:
 #=> 9-ea+112
-java -version 2>&1 | grep -Po '(?<=Environment \(build )([a-z0-9\._\-\+]+)'
+if java -version >/dev/null 2>&1; then
+  java -version 2>&1 | grep -Po '(?<=Environment \(build )([a-z0-9\._\-\+]+)'
+else
+  java -version #fail and show error
+fi

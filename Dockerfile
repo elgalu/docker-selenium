@@ -57,6 +57,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
 #   killall – kills a process by its name, similar to a pkill Unices.
 #   pstree – Shows currently running processes in a tree format.
 #   peekfd – Peek at file descriptors of running processes.
+# iproute2        2.971 MB
+#   to use `ip` command
 # iputils-ping    3.7 MB
 #   ping, ping6 - send ICMP ECHO_REQUEST to network hosts
 # dbus-x11        4.6 MB
@@ -76,8 +78,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
 #     is a terminal colorizer that works nice with tail https://github.com/garabik/grc
 #   moreutils        44 MB !!
 #     has `ts` that will prepend a timestamp to every line of input you give it
-# Layer size: medium: 26.8 MB
-# Layer size: medium: 24.9 MB (with --no-install-recommends)
+# Layer size: medium: 29.8 MB
+# Layer size: medium: 27.9 MB (with --no-install-recommends)
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy install \
@@ -91,6 +93,7 @@ RUN apt-get -qqy update \
     jq \
     sudo \
     psmisc \
+    iproute2 \
     iputils-ping \
     dbus-x11 \
     wget \
@@ -136,8 +139,8 @@ RUN echo "Setting time zone to '${TZ}'" \
 #========================================
 # Add normal user with passwordless sudo
 #========================================
-ENV NORMAL_USER seluser
-ENV NORMAL_GROUP ${NORMAL_USER}
+ENV NORMAL_USER="seluser"
+ENV NORMAL_GROUP="${NORMAL_USER}"
 # Layer size: tiny: 0.3 MB
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN useradd ${NORMAL_USER} \
@@ -147,7 +150,7 @@ RUN useradd ${NORMAL_USER} \
   && gpasswd -a ${NORMAL_USER} video \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
   && echo 'seluser:secret' | chpasswd
-ENV NORMAL_USER_HOME /home/${NORMAL_USER}
+ENV NORMAL_USER_HOME="/home/${NORMAL_USER}"
 # TODO: Calculate NORMAL_USER_UID & NORMAL_USER_GID
 ENV NORMAL_USER_UID="1000" \
     NORMAL_USER_GID="1000"
@@ -161,7 +164,7 @@ ENV NORMAL_USER_UID="1000" \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# Layer size: big: 132.2 MB -- Total image size now: 295.2 MB
+# Layer size: big: 132.2 MB
 # Layer size: big: 132.2 MB (with --no-install-recommends)
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
@@ -387,17 +390,17 @@ RUN apt-get -qqy update \
 # xvfb: Xvfb or X virtual framebuffer is a display server
 #  + implements the X11 display server protocol
 #  + performs all graphical operations in memory
-# Previous cluttered packages
+# Packages that used to be together in this layer
 #   xvfb                      75.69 MB  no-recommends: 68.2 MB
 #   xorg                      160.3 MB  no-recommends: 134.6 MB
 #   xserver-xorg-video-dummy  116.7 MB  no-recommends: 90.52 MB
-#   x11vnc                    73.83 MB  no-recommends: 10.03 MB
-# Layer size: big: 75.69 MB
-# Layer size: big: 68.2 MB (with --no-install-recommends)
+# Layer size: big: 136.9 MB (with --no-install-recommends)
+# Layer size: big: 162.6 MB
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     xvfb \
+    xorg \
   && rm -rf /var/lib/apt/lists/*
 
 #============
@@ -477,10 +480,10 @@ RUN apt-get -qqy update \
 # Layer size: medium: 11.54 MB (with --no-install-recommends)
 # Layer size: medium: 16.7 MB
 #  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
-    ffmpeg \
-  && rm -rf /var/lib/apt/lists/*
+# RUN apt-get -qqy update \
+#   && apt-get -qqy --no-install-recommends install \
+#     ffmpeg \
+#   && rm -rf /var/lib/apt/lists/*
 
 #==============
 # libav/avconv
@@ -491,10 +494,10 @@ RUN apt-get -qqy update \
 # libav-tools (avconv): a fork of ffmpeg
 #   a better alternative to Pyvnc2swf
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
-#     libav-tools \
-#   && rm -rf /var/lib/apt/lists/*
+RUN apt-get -qqy update \
+  && apt-get -qqy --no-install-recommends install \
+    libav-tools \
+  && rm -rf /var/lib/apt/lists/*
 
 # ------------------------#
 # Sauce Connect Tunneling #
@@ -529,17 +532,22 @@ RUN cd /tmp \
   && mv BrowserStackLocal /usr/local/bin \
   && which BrowserStackLocal
 
+#-----------------#
+# Mozilla Firefox #
+#-----------------#
+# Install all Firefox dependencies
+# Layer size: big: 83.51 MB
+#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
+RUN apt-get -qqy update \
+  && apt-get -qqy --no-install-recommends install \
+    `apt-cache depends firefox | awk '/Depends:/{print$2}'` \
+  && rm -rf /var/lib/apt/lists/*
+
 #===================================================
 # Run the following commands as non-privileged user
 #===================================================
 USER seluser
 
-#------------------#
-# FIREFOX_VERSIONS #
-#------------------#
-# Install Latest available firefox version
-# this also used to work: ENV FIREFOX_LATEST_VERSION latest
-#
 #--- Nightly
 # ENV FF_VER="52.0a0" \
 #     FF_PLATFORM="linux-i686" \
@@ -633,6 +641,7 @@ RUN apt-get -qqy update \
 # We have a wrapper for /opt/google/chrome/google-chrome
 RUN mv /opt/google/chrome/google-chrome /opt/google/chrome/google-chrome-base
 COPY selenium-node-chrome/opt /opt
+COPY lib/* /usr/lib/
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -687,10 +696,6 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
-# ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS1}, ${FIREFOX_VERSIONS2}, ${FIREFOX_VERSIONS3}, ${FIREFOX_VERSIONS4}, ${FIREFOX_VERSIONS5}, ${FIREFOX_VERSIONS6}, ${FIREFOX_VERSIONS_LAST}" \
-# ENV FIREFOX_VERSIONS="${FIREFOX_VERSIONS_LAST}" \
-  # Firefox version to use during run
-  # For firefox please pick one of $FIREFOX_VERSIONS, default latest
 # USE_SELENIUM "2" / "3"
 #   Selenium 2 or 3
 # CHROME_FLAVOR "stable"
@@ -930,7 +935,9 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.5" \
   DEBIAN_FRONTEND="" \
-  DEBCONF_NONINTERACTIVE_SEEN=""
+  DEBCONF_NONINTERACTIVE_SEEN="" \
+  LD_PRELOAD="/usr/lib/libstderred.so" \
+  PS1='${debian_chroot:+($debian_chroot)}\u@\h:${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[\033[00m\]\[\033[01;34m\]\w\[\033[00m\] \$ '
 
 #================================
 # Expose Container's Directories
@@ -988,14 +995,3 @@ COPY scm-source.json /
 # brackets [] causes Docker to run your process
 # And using `bash` which doesn’t handle signals properly
 CMD ["entry.sh"]
-
-USER root
-RUN apt-get -qqy update \
-  && apt-get -qqy install \
-    iproute2 \
-  && apt-get -qyy autoremove \
-  && rm -rf /var/lib/apt/lists/*
-USER seluser
-COPY lib/* /usr/lib/
-RUN echo 'export LD_PRELOAD="/usr/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"' \
-         >> .bashrc
