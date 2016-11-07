@@ -9,7 +9,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
- + Reduce image size by 50%
+ + Reduce image size by 55%
  + Upgrade Chrome patch 54.0.2840.90
  + Remove openbox as we are only using fluxbox
  + Use OpenJDK as is a lot smaller than Oracle Java

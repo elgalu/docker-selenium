@@ -930,9 +930,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.5" \
   DEBIAN_FRONTEND="" \
-  DEBCONF_NONINTERACTIVE_SEEN="" \
-  LD_PRELOAD="/usr/lib/libstderred.so" \
-  PS1='${debian_chroot:+($debian_chroot)}\u@\h:${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\[\033[00m\]\[\033[01;34m\]\w\[\033[00m\] \$ '
+  DEBCONF_NONINTERACTIVE_SEEN=""
 
 #================================
 # Expose Container's Directories

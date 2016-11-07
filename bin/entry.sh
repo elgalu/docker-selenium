@@ -3,10 +3,6 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-# stderr in red http://ku1ik.com -- https://github.com/sickill/stderred
-# Moved to the Dockerfile
-#  export LD_PRELOAD="/usr/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
-
 # Workaround that might help to get dbus working in docker
 #  http://stackoverflow.com/a/38355729/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234
@@ -51,8 +47,9 @@ export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-${USE_SELENIU
 export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-${USE_SELENIUM}/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 export FIREFOX_VERSION=$(firefox_version)
+export CHROME_VESION=$(chrome_stable_version)
 
-echo "-- INFO: Chrome..... Version: $(chrome_stable_version)"
+echo "-- INFO: Chrome..... Version: ${CHROME_VESION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
 echo "-- INFO: Selenium... Version: ${USE_SELENIUM}"
 
@@ -429,6 +426,8 @@ echo "${FIREFOX_DEST_BIN}" > FIREFOX_DEST_BIN
 echo "${USE_SELENIUM}" > USE_SELENIUM
 echo "${SELENIUM_JAR_PATH}" > SELENIUM_JAR_PATH
 echo "${LOGS_DIR}" > LOGS_DIR
+echo "${FIREFOX_VERSION}" > FIREFOX_VERSION
+echo "${CHROME_VESION}" > CHROME_VESION
 env > env
 
 #------

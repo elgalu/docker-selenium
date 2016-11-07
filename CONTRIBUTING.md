@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Reduce image size by 50%"
+    git commit -m "Reduce image size by 55%"
     git tag -d latest && git tag 3.0.1d && git push origin tmp-3.0.1d && git push --tags
 
 -- Wait for Travis to pass OK
