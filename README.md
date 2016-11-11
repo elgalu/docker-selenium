@@ -13,7 +13,7 @@
 * google-chrome-unstable: no longer provided but [can still be found here][2.47.1m]
 * firefox stable latest
 * firefox stable [last 18 versions can be found here][2.47.1m]
-* fluxbox or openbox (lightweight window managers)
+* fluxbox (openbox window manager can still be found [here](https://github.com/elgalu/docker-selenium/releases/tag/3.0.1c))
 
 Selenium 2
 ![docker-selenium-grid](./images/grid2_console.png)

@@ -59,7 +59,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.9.0-rc3"
+          DOCKER_COMPOSE_VERSION="1.9.0-rc4"
     # Linux with docker:beta/older compose:stable
     - os: linux
       language: c
@@ -69,7 +69,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="1.12.3-rc1"
-          DOCKER_COMPOSE_VERSION="1.9.0-rc3"
+          DOCKER_COMPOSE_VERSION="1.9.0-rc4"
     # Mac OSX: only test native docker version
     - os: osx
       osx_image: xcode8

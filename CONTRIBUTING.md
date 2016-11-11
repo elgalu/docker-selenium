@@ -7,18 +7,18 @@ For pull requests or local commits:
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mkv
     open test/seleIDE/videos/rc/sele_ide.mkv
-    git checkout -b tmp-3.0.1d && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
+    git checkout -b tmp-3.0.1e && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Reduce image size by 55%"
-    git tag -d latest && git tag 3.0.1d && git push origin tmp-3.0.1d && git push --tags
+    git commit -m "Upgrade Chrome patch 54.0.2840.100"
+    git tag -d latest && git tag 3.0.1e && git push origin tmp-3.0.1e && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-3.0.1d && git push origin --delete tmp-3.0.1d
+    git checkout master && git pull && git branch -d tmp-3.0.1e && git push origin --delete tmp-3.0.1e
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -28,17 +28,16 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd ~/tmp_binaries && VER="54.0.2840.90" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    cd ~/tmp_binaries && VER="54.0.2840.100" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-    md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha
-    cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
+    md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha && cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 3.0.1d && git push origin :3.0.1d
+    git tag -d 3.0.1e && git push origin :3.0.1e
     #git add ...
-    git commit --amend && git tag 3.0.1d && git push --force origin tmp-3.0.1d && git push --tags
+    git commit --amend && git tag 3.0.1e && git push --force origin tmp-3.0.1e && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.
