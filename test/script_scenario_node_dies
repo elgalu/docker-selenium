@@ -50,6 +50,7 @@ docker run --name=mynodes -d \
   # -v /var/run/dbus:/var/run/dbus \
 
 # We need a mock service for testing
+# docker run --rm -ti --name=zalando_mock -p 8080:8080 elgalu/uk_mock
 docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 70s

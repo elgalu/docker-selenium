@@ -1,10 +1,9 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
 # Layer size: big: 127.2 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
-FROM ubuntu:xenial-20161010
+FROM ubuntu:xenial-20161114
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20161010"
+    UBUNTU_DATE="20161114"
 
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
@@ -12,6 +11,8 @@ RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n
   && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-security main universe\n" >> /etc/apt/sources.list
 
 MAINTAINER Team TIP <elgalu3+team-tip@gmail.com>
+# https://github.com/docker/docker/pull/25466#discussion-diff-74622923R677
+LABEL maintainer "Team TIP <elgalu3+team-tip@gmail.com>"
 
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -82,7 +83,6 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
 #     has `ts` that will prepend a timestamp to every line of input you give it
 # Layer size: medium: 29.8 MB
 # Layer size: medium: 27.9 MB (with --no-install-recommends)
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     libltdl7 \
@@ -116,7 +116,6 @@ ENV LANGUAGE ${LANG_WHICH}_${LANG_WHERE}.${ENCODING}
 ENV LANG ${LANGUAGE}
 # Layer size: small: 8.956 MB
 # Layer size: small: 8.956 MB (with --no-install-recommends)
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN locale-gen ${LANGUAGE} \
   && dpkg-reconfigure --frontend noninteractive locales \
   && apt-get -qqy update \
@@ -134,7 +133,6 @@ RUN locale-gen ${LANGUAGE} \
 ENV TZ "Europe/Berlin"
 # Apply TimeZone
 # Layer size: tiny: 1.339 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN echo "Setting time zone to '${TZ}'" \
   && echo ${TZ} > /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
@@ -143,7 +141,6 @@ RUN echo "Setting time zone to '${TZ}'" \
 # Add normal user with passwordless sudo
 #========================================
 # Layer size: tiny: 0.3 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN useradd seluser \
          --shell /bin/bash  \
          --create-home \
@@ -161,7 +158,6 @@ RUN useradd seluser \
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 # Layer size: big: 132.2 MB
 # Layer size: big: 132.2 MB (with --no-install-recommends)
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     openjdk-8-jre-headless \
@@ -180,7 +176,6 @@ RUN apt-get -qqy update \
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 # Layer size: huge: 618.6 MB (with --no-install-recommends)
 # Layer size: huge: 661.1 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 # RUN apt-get -qqy update \
 #   && apt-get -qqy --no-install-recommends install \
 #     software-properties-common \
@@ -207,7 +202,6 @@ RUN apt-get -qqy update \
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
 # Layer size: tiny: 0.8 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-key update -qqy \
   && apt-get -qqy install \
@@ -227,7 +221,6 @@ WORKDIR /home/seluser
 # Selenium 2 (default)
 #======================
 # Layer size: medium: 21.23 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 ENV SEL_MAJOR_VER="2.53" \
     SEL_PATCH_LEVEL_VER="1"
 ENV SEL_VER="${SEL_MAJOR_VER}.${SEL_PATCH_LEVEL_VER}"
@@ -243,7 +236,6 @@ RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
 # Selenium 3
 #============
 # Layer size: medium: 22.14 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 ENV SEL_DIRECTORY="3.0" \
     SEL_VER="3.0.1"
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -262,7 +254,6 @@ USER root
 #=========================================================
 # Layer size: big.: 79.39 MB (with --no-install-recommends)
 # Layer size: huge: 296 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     python2.7 \
@@ -284,7 +275,6 @@ RUN apt-get -qqy update \
 # After install, make some useful symlinks that are expected to exist
 # Layer size: big.: 138.9 MB (with --no-install-recommends)
 # Layer size: huge: 309.9 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 # RUN apt-get -qqy update \
 #   && apt-get -qqy --no-install-recommends install \
 #     python3.5 \
@@ -343,7 +333,6 @@ RUN SHA="cbebb93f58f4a90963abd96d849395a58d5f034b" \
 # xfonts-75dpi             5.509 MB
 # Layer size: small: 6.898 MB (with --no-install-recommends)
 # Layer size: small: 6.898 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     libfontconfig \
@@ -361,7 +350,6 @@ RUN apt-get -qqy update \
 # Let's disable this as is only filling disk space
 # Layer size: huge: 153.4 MB (with --no-install-recommends)
 # Layer size: huge: 224.4 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 # RUN apt-get -qqy update \
 #   && apt-get -qqy --no-install-recommends install \
 #     openbox obconf menu \
@@ -373,7 +361,6 @@ RUN apt-get -qqy update \
 #=========
 # Layer size: small: 9.659 MB
 # Layer size: small: 6.592 MB (with --no-install-recommends)
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     fluxbox \
@@ -391,7 +378,6 @@ RUN apt-get -qqy update \
 #   xserver-xorg-video-dummy  116.7 MB  no-recommends: 90.52 MB
 # Layer size: big: 136.9 MB (with --no-install-recommends)
 # Layer size: big: 162.6 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     xvfb \
@@ -403,7 +389,6 @@ RUN apt-get -qqy update \
 #============
 # Layer size: medium: 12.67 MB
 # Layer size: medium: 10.08 MB (with --no-install-recommends)
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     x11vnc \
@@ -417,14 +402,16 @@ USER seluser
 ########################################
 # noVNC to expose VNC via an html page #
 ########################################
-# Download noVNC commit b403cb92f date 2016-02-24
-# Download websockify commit 558a6439f dated 2015-06-02
+# Download elgalu/noVNC dated 2016-11-13 commit fae4cec14caefa0bf3462fb0a186476a93192d05
+# Download kanaka/noVNC dated 2016-11-10 commit 80b7dde665cac937aa0929d2b75aa482fc0e10ad
+# Download kanaka/noVNC dated 2016-02-24 commit b403cb92fb8de82d04f305b4f14fa978003890d7
+# Download kanaka/websockify dated 2016-10-10 commit cb1508fa495bea4b333173705772c1997559ae4b
+# Download kanaka/websockify dated 2015-06-02 commit 558a6439f14b0d85a31145541745e25c255d576b
 # Layer size: small: 2.919 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
-ENV NOVNC_SHA="b403cb92fb8de82d04f305b4f14fa978003890d7" \
-    WEBSOCKIFY_SHA="558a6439f14b0d85a31145541745e25c255d576b"
+ENV NOVNC_SHA="fae4cec14caefa0bf3462fb0a186476a93192d05" \
+    WEBSOCKIFY_SHA="cb1508fa495bea4b333173705772c1997559ae4b"
 RUN  wget -nv -O noVNC.zip \
-       "https://github.com/kanaka/noVNC/archive/${NOVNC_SHA}.zip" \
+       "https://github.com/elgalu/noVNC/archive/${NOVNC_SHA}.zip" \
   && unzip -x noVNC.zip \
   && mv noVNC-${NOVNC_SHA} noVNC \
   && rm noVNC.zip \
@@ -448,7 +435,6 @@ USER root
 #       https://www.youtube.com/html5
 # Layer size: big: 149.9 MB
 # Layer size: big: 135.4 MB (with --no-install-recommends)
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     gstreamer1.0-libav \
@@ -459,7 +445,6 @@ RUN apt-get -qqy update \
 #=================================================
 # Layer size: medium: 11.56 MB (with --no-install-recommends)
 # Layer size: medium: 20.76 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     libx264-dev \
@@ -474,7 +459,6 @@ RUN apt-get -qqy update \
 #   (use in Ubuntu >= 15) packages: ffmpeg
 # Layer size: medium: 11.54 MB (with --no-install-recommends)
 # Layer size: medium: 16.7 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 # RUN apt-get -qqy update \
 #   && apt-get -qqy --no-install-recommends install \
 #     ffmpeg \
@@ -485,7 +469,6 @@ RUN apt-get -qqy update \
 #==============
 # Layer size: medium: 11.58 MB (with --no-install-recommends)
 # Layer size: medium: 16.75 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 # libav-tools (avconv): a fork of ffmpeg
 #   a better alternative to Pyvnc2swf
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
@@ -499,7 +482,6 @@ RUN apt-get -qqy update \
 # ------------------------#
 # https://docs.saucelabs.com/reference/sauce-connect/
 # Layer size: medium: 12.42 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 ENV SAUCE_CONN_VER="sc-4.4.1-linux" \
     SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
 RUN cd /tmp \
@@ -516,7 +498,6 @@ RUN cd /tmp \
 # -----------------------#
 # https://www.browserstack.com/local-testing
 # Layer size: medium: 16.02 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 ENV BSTACK_TUNNEL_URL="https://www.browserstack.com/browserstack-local" \
     BSTACK_TUNNEL_ZIP="BrowserStackLocal-linux-x64.zip"
 RUN cd /tmp \
@@ -532,7 +513,6 @@ RUN cd /tmp \
 #-----------------#
 # Install all Firefox dependencies
 # Layer size: big: 83.51 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     `apt-cache depends firefox | awk '/Depends:/{print$2}'` \
@@ -567,8 +547,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
-ENV FF_VER="49.0.2"
+ENV FF_VER="50.0"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
@@ -580,7 +559,6 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
 
 #--- Stable for Selenium 2
 # Layer size: big: 107 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 ENV FF_VER="47.0.1"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
@@ -600,7 +578,6 @@ USER root
 # GeckoDriver
 #============
 # Layer size: tiny: 4.088 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 ENV GECKOD_VER="0.11.1" \
     GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
@@ -620,7 +597,6 @@ ENV CHROME_VERSION_TRIGGER="54.0.2840.100" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 # Layer size: huge: 196.3 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN apt-get -qqy update \
   && mkdir -p chrome-deb \
   && wget -nv "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
@@ -654,7 +630,6 @@ ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
 # Layer size: small: 6.932 MB
-#  [tiny 0~4MB, small 5~9MB, medium 10~39MB, big 40~150MB, huge >150MB]
 RUN  wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && unzip chromedriver_linux${CPU_ARCH}.zip \
   && rm chromedriver_linux${CPU_ARCH}.zip \
