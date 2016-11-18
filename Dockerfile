@@ -402,13 +402,13 @@ USER seluser
 ########################################
 # noVNC to expose VNC via an html page #
 ########################################
-# Download elgalu/noVNC dated 2016-11-13 commit fae4cec14caefa0bf3462fb0a186476a93192d05
+# Download elgalu/noVNC dated 2016-11-18 commit 9223e8f2d1c207fb74cb4b8cc243e59d84f9e2f6
 # Download kanaka/noVNC dated 2016-11-10 commit 80b7dde665cac937aa0929d2b75aa482fc0e10ad
 # Download kanaka/noVNC dated 2016-02-24 commit b403cb92fb8de82d04f305b4f14fa978003890d7
 # Download kanaka/websockify dated 2016-10-10 commit cb1508fa495bea4b333173705772c1997559ae4b
 # Download kanaka/websockify dated 2015-06-02 commit 558a6439f14b0d85a31145541745e25c255d576b
 # Layer size: small: 2.919 MB
-ENV NOVNC_SHA="fae4cec14caefa0bf3462fb0a186476a93192d05" \
+ENV NOVNC_SHA="9223e8f2d1c207fb74cb4b8cc243e59d84f9e2f6" \
     WEBSOCKIFY_SHA="cb1508fa495bea4b333173705772c1997559ae4b"
 RUN  wget -nv -O noVNC.zip \
        "https://github.com/elgalu/noVNC/archive/${NOVNC_SHA}.zip" \
