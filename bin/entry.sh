@@ -128,47 +128,47 @@ fi
 
 # TODO: Remove this duplicated logic
 if [ "${SELENIUM_HUB_PORT}" = "0" ]; then
-  export SELENIUM_HUB_PORT=$(get_unused_port)
+  export SELENIUM_HUB_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_HUB_PORT}" = "${DEFAULT_SELENIUM_HUB_PORT}" ]; then
-    export SELENIUM_HUB_PORT=$(get_unused_port)
+    export SELENIUM_HUB_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
 if [ "${SELENIUM_NODE_CH_PORT}" = "0" ]; then
-  export SELENIUM_NODE_CH_PORT=$(get_unused_port)
+  export SELENIUM_NODE_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_CH_PORT}" ]; then
-    export SELENIUM_NODE_CH_PORT=$(get_unused_port)
+    export SELENIUM_NODE_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
 if [ "${SELENIUM_NODE_FF_PORT}" = "0" ]; then
-  export SELENIUM_NODE_FF_PORT=$(get_unused_port)
+  export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
-    export SELENIUM_NODE_FF_PORT=$(get_unused_port)
+    export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
 if [ "${SELENIUM_NODE_RC_CH_PORT}" = "0" ]; then
-  export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port)
+  export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_RC_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" ]; then
-    export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port)
+    export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
 if [ "${SELENIUM_NODE_RC_FF_PORT}" = "0" ]; then
-  export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port)
+  export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_RC_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" ]; then
-    export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port)
+    export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
@@ -199,11 +199,11 @@ if [ "${VNC_START}" = "true" ]; then
     export VNC_PORT=$(get_unused_port_from_range ${VNC_FROM_PORT} ${VNC_TO_PORT})
   else
     if [ "${VNC_PORT}" = "0" ]; then
-      export VNC_PORT=$(get_unused_port)
+      export VNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
     elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
       # User want to pick random ports but may also want to fix some others
       if [ "${VNC_PORT}" = "${DEFAULT_VNC_PORT}" ]; then
-        export VNC_PORT=$(get_unused_port)
+        export VNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
       fi
     fi
   fi
@@ -213,29 +213,29 @@ fi
 
 
 if [ "${NOVNC_PORT}" = "0" ]; then
-  export NOVNC_PORT=$(get_unused_port)
+  export NOVNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${NOVNC_PORT}" = "${DEFAULT_NOVNC_PORT}" ]; then
-    export NOVNC_PORT=$(get_unused_port)
+    export NOVNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
 if [ "${SAUCE_LOCAL_SEL_PORT}" = "0" ]; then
-  export SAUCE_LOCAL_SEL_PORT=$(get_unused_port)
+  export SAUCE_LOCAL_SEL_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SAUCE_LOCAL_SEL_PORT}" = "${DEFAULT_SAUCE_LOCAL_SEL_PORT}" ]; then
-    export SAUCE_LOCAL_SEL_PORT=$(get_unused_port)
+    export SAUCE_LOCAL_SEL_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
 if [ "${SUPERVISOR_HTTP_PORT}" = "0" ]; then
-  export SUPERVISOR_HTTP_PORT=$(get_unused_port)
+  export SUPERVISOR_HTTP_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SUPERVISOR_HTTP_PORT}" = "${DEFAULT_SUPERVISOR_HTTP_PORT}" ]; then
-    export SUPERVISOR_HTTP_PORT=$(get_unused_port)
+    export SUPERVISOR_HTTP_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 

@@ -662,16 +662,20 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
     DEFAULT_VNC_PORT="25900" \
     DEFAULT_NOVNC_PORT="26080" \
     DEFAULT_SAUCE_LOCAL_SEL_PORT="4445" \
-    DEFAULT_SUPERVISOR_HTTP_PORT="29001"
+    DEFAULT_SUPERVISOR_HTTP_PORT="19001"
 
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
 # USE_SELENIUM "2" / "3"
 #   Selenium 2 or 3
 # CHROME_FLAVOR "stable"
-#   Default chrome flavor, options no longer avariable: beta|unstable
+#   Default chrome flavor, options no longer available: beta|unstable
 # PICK_ALL_RANDMON_PORTS "true" / "false"
 #   Randomize all ports, i.e. pick unused unprivileged ones
+# RANDOM_PORT_FROM
+# RANDOM_PORT_TO
+#   When using PICK_ALL_RANDMON_PORTS=true the ports will
+#   be from a range to avoid collisions
 # MEM_JAVA_PERCENT "80"
 #   Because the JVM uses only 1/4 of system memory by default
 # WAIT_FOREGROUND_RETRY
@@ -782,11 +786,13 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 # DOCKER_SOCK
 #   Run docker from inside docker
 #   Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
-#                     -v $(which docker):$(which docker)
+#                     -v $(which docker):/usr/bin/docker
 ENV FIREFOX_VERSION="${FF_VER}" \
   USE_SELENIUM="2" \
   CHROME_FLAVOR="stable" \
   PICK_ALL_RANDMON_PORTS="false" \
+  RANDOM_PORT_FROM="23100" \
+  RANDOM_PORT_TO="29999" \
   USER="seluser" \
   HOME="/home/seluser" \
   VNC_STORE_PWD_FILE="/home/seluser/.vnc/passwd" \
