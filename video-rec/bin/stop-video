@@ -13,8 +13,8 @@ die () {
   exit $errnum
 }
 
-# if $1 is defined AND NOT EMPTY, use $1; otherwise, set to "7s"
-WAIT_TIMEOUT=${1-7s}
+# if $1 is defined AND NOT EMPTY, use $1; otherwise, set to "20s"
+WAIT_TIME_OUT_VIDEO_STOP=${1-20s}
 LOOP_SCRIPT_PATH="${BIN_UTILS}/wait-stop-video-rec.sh"
 
 if [ ! -f "${LOOP_SCRIPT_PATH}" ]; then
@@ -29,7 +29,7 @@ supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec
 sleep ${VIDEO_STOP_SLEEP_SECS}
 
 # Avoid waiting forever using the `timeout` command
-if timeout --foreground ${WAIT_TIMEOUT} \
+if timeout --foreground ${WAIT_TIME_OUT_VIDEO_STOP} \
      ${LOOP_SCRIPT_PATH}; then
   echo "Video recording stopped"
 else
@@ -37,5 +37,5 @@ else
   echo "" && echo "" && echo "==> errors <=="
   bash -c 'errors' || true
 
-  die "Were unable to stop video recording within '${WAIT_TIMEOUT}'"
+  die "Were unable to stop video recording within '${WAIT_TIME_OUT_VIDEO_STOP}'"
 fi
