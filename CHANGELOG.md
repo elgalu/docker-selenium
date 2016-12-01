@@ -7,35 +7,35 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.0.1j
+ + Date: 2016-12-01
  + Upgrade Firefox patch to 50.0.2
  + Upgrade Ubuntu xenial date from 20161114 to 20161121
  + Upgrade Sauce Connect patch to 4.4.2 (was 4.4.1)
  + [#136] Remove saucelabs in /etc/hosts (#137)
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.0.1 (1969d75)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Chrome stable:  54.0.2840.100
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 50.0.2
+  + Geckodriver: 0.11.1
+  + Chromedriver: 2.25.426924 (649f9b868f6783ec9de71c123212b908bf3b232e)
+  + Java: OpenJDK Java 1.8.0_111-8u111-b14-2ubuntu0.16.04.2-b14
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20161121
+  + Python: 2.7.12
+  + Sauce Connect 4.4.2, build 3154 c8dd102-dirty
+  + BrowserStack Local version 6.5
   + Tested on kernel dev host: 4.4.0-51-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-47-generic x86_64
   + Built at dev host with: Docker version 1.12.3, build 6b644ec
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.12.3, build 6b644ec
   + Built at dev host with: Docker Compose version 1.9.0, build 2585387
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.9.0, build 2585387
+  + Image size: 1.267 GB
+  + Digest: sha256:c547c53c31e108bcdc968007f40167cb057f7c020bee7eeb50439178e432f479
+  + Image ID: sha256:34a4d540614fcaa1858f4bafd6af3af734b67bdb2d39a2429f017b346e96527e
 
 ## 3.0.1i
  + Date: 2016-11-24
