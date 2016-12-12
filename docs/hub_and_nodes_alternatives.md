@@ -45,7 +45,7 @@ The placeholder `{{CONTAINER_IP}}` will be turned into the IP address of the con
 
     docker run -d --name=node1_ch --net=seleniums \
       -e GRID=false -e CHROME=true -e FIREFOX=false \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 -e SELENIUM_HUB_HOST="hub.seleniums" \
       -e SELENIUM_NODE_HOST="{{CONTAINER_IP}}" \
       --shm-size=1g \
@@ -55,7 +55,7 @@ The placeholder `{{CONTAINER_IP}}` will be turned into the IP address of the con
 
     docker run -d --name=node2_ch --net=seleniums \
       -e GRID=false -e CHROME=true -e FIREFOX=false \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 -e SELENIUM_HUB_HOST="hub.seleniums" \
       -e SELENIUM_NODE_HOST="{{CONTAINER_IP}}" \
       --shm-size=1g \
@@ -66,7 +66,7 @@ Firefox will also attach to the `seleniums` network interface.
 
     docker run -d --name=node3_ff --net=seleniums \
       -e GRID=false -e CHROME=false -e FIREFOX=true \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 -e SELENIUM_HUB_HOST="hub.seleniums" \
       -e SELENIUM_NODE_HOST="{{CONTAINER_IP}}" \
       --shm-size=1g \
@@ -76,7 +76,7 @@ Firefox will also attach to the `seleniums` network interface.
 
     docker run -d --name=node4_ff --net=seleniums \
       -e GRID=false -e CHROME=false -e FIREFOX=true \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 -e SELENIUM_HUB_HOST="hub.seleniums" \
       -e SELENIUM_NODE_HOST="{{CONTAINER_IP}}" \
       --shm-size=1g \

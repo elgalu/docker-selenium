@@ -7,18 +7,18 @@ For pull requests or local commits:
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mkv
     open test/seleIDE/videos/rc/sele_ide.mkv
-    git checkout -b tmp-3.0.1j && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
+    git checkout -b tmp-`cat VERSION` && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Firefox patch to 50.0.2"
-    git tag -d latest && git tag 3.0.1j && git push origin tmp-3.0.1j && git push --tags
+    git commit -m "Fix typo at PICK_ALL_RANDOM_PORTS"
+    git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
 
-    git checkout master && git pull && git branch -d tmp-3.0.1j && git push origin --delete tmp-3.0.1j
+    git checkout master && git pull && git branch -d tmp-`cat VERSION` && git push origin --delete tmp-`cat VERSION`
 
 -- Re-add TBD_* section in CHANGELOG.md starting with TBD_DOCKER_TAG
 -- If Chrome version changed upload:
@@ -28,16 +28,16 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd ~/tmp_binaries && VER="54.0.2840.100" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    cd ~/tmp_binaries && VER="55.0.2883.75" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha && cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
 
 ## Retry
 Failed in Travis? retry
 
-    git tag -d 3.0.1j && git push origin :3.0.1j
+    git tag -d `cat VERSION` && git push origin :`cat VERSION`
     #git add ...
-    git commit --amend && git tag 3.0.1j && git push --force origin tmp-3.0.1j && git push --tags
+    git commit --amend && git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

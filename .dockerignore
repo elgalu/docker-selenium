@@ -7,5 +7,9 @@ READMEZala.sh
 videos/
 android/
 binaries
-*.md
+README.md
+TODO.md
+CHANGELOG.md
+CONTRIBUTING.md
+TBD_DOCKER_TAG.md
 bats/

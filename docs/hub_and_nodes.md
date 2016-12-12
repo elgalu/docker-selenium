@@ -10,7 +10,7 @@ Flags `-e CHROME=false -e FIREFOX=false` turn the container into a grid-only one
 
     docker run -d --name=hub --net=host \
       -e GRID=true -e CHROME=false -e FIREFOX=false \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
       elgalu/selenium
 
@@ -28,7 +28,7 @@ Chrome will also attach to the `host` network interface.
 
     docker run -d --name=node1_ch --net=host \
       -e GRID=false -e CHROME=true -e FIREFOX=false \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
       --shm-size=1g \
       elgalu/selenium
@@ -37,7 +37,7 @@ Chrome will also attach to the `host` network interface.
 
     docker run -d --name=node2_ch --net=host \
       -e GRID=false -e CHROME=true -e FIREFOX=false \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
       --shm-size=1g \
       elgalu/selenium
@@ -47,7 +47,7 @@ Firefox will also attach to the host machine network interface.
 
     docker run -d --name=node3_ff --net=host \
       -e GRID=false -e CHROME=false -e FIREFOX=true \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
       --shm-size=1g \
       elgalu/selenium
@@ -56,7 +56,7 @@ Firefox will also attach to the host machine network interface.
 
     docker run -d --name=node4_ff --net=host \
       -e GRID=false -e CHROME=false -e FIREFOX=true \
-      -e VNC_START=false -e PICK_ALL_RANDMON_PORTS=true \
+      -e VNC_START=false -e PICK_ALL_RANDOM_PORTS=true \
       -e SELENIUM_HUB_PORT=4444 \
       --shm-size=1g \
       elgalu/selenium

@@ -15,7 +15,7 @@ services:
       # - 40650-40700:40650-40700
     environment:
       - SELENIUM_HUB_PORT
-      - PICK_ALL_RANDMON_PORTS=true
+      - PICK_ALL_RANDOM_PORTS=true
       - GRID=true
       - CHROME=false
       - FIREFOX=false
@@ -38,7 +38,7 @@ services:
       - VNC_TO_PORT
       - SCREEN_WIDTH=1300
       - SCREEN_HEIGHT=999
-      - PICK_ALL_RANDMON_PORTS=true
+      - PICK_ALL_RANDOM_PORTS=true
       - VIDEO
       - GRID=false
       - CHROME=true
@@ -59,7 +59,7 @@ services:
       - VNC_TO_PORT
       - SCREEN_WIDTH=1300
       - SCREEN_HEIGHT=999
-      - PICK_ALL_RANDMON_PORTS=true
+      - PICK_ALL_RANDOM_PORTS=true
       - VIDEO
       - GRID=false
       - CHROME=false
@@ -83,7 +83,7 @@ services:
       - VNC_TO_PORT
       - SCREEN_WIDTH=1300
       - SCREEN_HEIGHT=999
-      - PICK_ALL_RANDMON_PORTS=true
+      - PICK_ALL_RANDOM_PORTS=true
       - VIDEO
       - GRID=false
       - CHROME=false
@@ -104,7 +104,7 @@ services:
       - VNC_TO_PORT
       - SCREEN_WIDTH=1300
       - SCREEN_HEIGHT=999
-      - PICK_ALL_RANDMON_PORTS=true
+      - PICK_ALL_RANDOM_PORTS=true
       - VIDEO
       - GRID=false
       - CHROME=false
