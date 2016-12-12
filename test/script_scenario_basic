@@ -29,7 +29,7 @@ function get_mock_port() {
 i=0
 while true ; do
   docker rm -vf grid_mock || true
-  docker run -d -t --name=grid_mock -P elgalu/google_adwords_mock
+  docker run -d -t --name=grid_mock -P -e CI elgalu/google_adwords_mock
   let i=${i}+1
 
   MOCK_SERVER_PORT=$(get_mock_port)
@@ -52,6 +52,7 @@ export MOCK_SERVER_PORT=$(get_mock_port)
 docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
+  -e CI \
   --shm-size=1g \
   selenium
 
@@ -81,6 +82,7 @@ docker run --name=grid3 -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
   -e USE_SELENIUM="3" \
+  -e CI \
   --shm-size=1g \
   selenium
 
@@ -104,6 +106,7 @@ echo "#==================================================================="
 docker run --name=gridrc -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
+  -e CI \
   -e USE_SELENIUM="2" \
   -e CHROME=true -e FIREFOX=true \
   -e RC_CHROME=true -e RC_FIREFOX=true \

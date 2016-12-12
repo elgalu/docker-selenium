@@ -44,6 +44,7 @@ docker rm -vf grid_mock || true
 # Create container for Chrome
 docker run --name=mynodes -d \
   -e FIREFOX=false \
+  -e CI \
   -e SELENIUM_NODE_CH_PORT -p ${SELENIUM_NODE_CH_PORT}:${SELENIUM_NODE_CH_PORT} \
   --shm-size=1g \
   selenium
@@ -51,7 +52,10 @@ docker run --name=mynodes -d \
 
 # We need a mock service for testing
 # docker run --rm -ti --name=zalando_mock -p 8080:8080 elgalu/uk_mock
-docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
+docker run -d -t --name=grid_mock \
+  --net=container:mynodes \
+  -e CI \
+  elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true
@@ -87,12 +91,12 @@ docker rm -vf grid_mock || true
 
 # Create container for Firefox
 docker run --name=mynodes -d \
-  -e CHROME=false -e RC_CHROME=false -e RC_FIREFOX=false \
+  -e CHROME=false -e RC_CHROME=false -e RC_FIREFOX=false -e CI \
   -e SELENIUM_NODE_FF_PORT -p ${SELENIUM_NODE_FF_PORT}:${SELENIUM_NODE_FF_PORT} \
   selenium
 
 # We need a mock service for testing
-docker run -d -t --name=grid_mock --net=container:mynodes elgalu/google_adwords_mock
+docker run -d -t --name=grid_mock --net=container:mynodes -e CI elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true

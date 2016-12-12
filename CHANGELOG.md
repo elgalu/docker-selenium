@@ -7,6 +7,38 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + Upgrade Chrome major to 55.0.2883.75 @seangerhardt-wf
+ + Upgrade Chromedriver minor from 2.25 to 2.26
+ + Chore: Add some images to upload at /home/seluser/images
+ + Add Google Analytics anonymous usage statistics tracking see Analytics.md
+ + Support restart docker container for selenium 3 @aituganov
+ + Chore: Fix typo at PICK_ALL_RANDOM_PORTS
+ + Image tag details:
+  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 3: 3.0.1 (1969d75)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+  + Geckodriver: TBD_GECKO_DRIVER
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
+  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Tested on kernel dev host: 4.4.0-53-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 1.12.3, build 6b644ec
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at dev host with: Docker Compose version 1.9.0, build 2585387
+  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 3.0.1j
  + Date: 2016-12-01
  + Upgrade Firefox patch to 50.0.2
@@ -996,7 +1028,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Upgrade Chrome stable patch 51.0.2704.106
  + Fix bug when running Firefox only selenium node.
  + Add ./docs/hub_and_nodes.md
- + Allow to pick all unused ports via `-e PICK_ALL_RANDMON_PORTS=true`
+ + Allow to pick all unused ports via `-e PICK_ALL_RANDOM_PORTS=true`
  + Allow to pick individual unused unprivileged ports via `0` e.g. VNC_PORT=0
  + Fix bug that x11vnc was always assigning port 5900 for tcp6 IPv6 (missing `-rfbportv6`)
  + Image tag details:

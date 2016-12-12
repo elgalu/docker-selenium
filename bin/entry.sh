@@ -31,7 +31,8 @@ rm -f ${RUN_DIR}/*
 if [ "${USE_SELENIUM}" == "3" ]; then
   export RC_CHROME="false"
   export RC_FIREFOX="false"
-  if [! -f /usr/bin/geckodriver ]; then 
+  # Support restart docker container for selenium 3 @aituganov
+  if [ ! -f /usr/bin/geckodriver ]; then
     sudo mv /opt/geckodriver /usr/bin/geckodriver
     sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
   fi
@@ -88,10 +89,12 @@ fi
 # else we pick it from the kernel id
 # docker installation, not related to the user nor the machine
 if [[ ${BUILD_URL} == *"zalan.do"* ]]; then
-  @1d811a9194c4_gcc_version_
     RANDOM_USER_GA_ID=$(echo ${BUILD_URL} | cut -d'/' -f 3 | cut -d'.' -f 1)
+elif [ "${CI}" = "true" ]; then
+    RANDOM_USER_GA_ID="travis"
 else
-    RANDOM_USER_GA_ID=$(cat /proc/version 2>&1 | sed -e 's/ /_/g' | sed -e 's/[()]//g' | sed -e 's/@.*_gcc_version/_gcc/g' | sed -e 's/__/_/g')
+    RANDOM_USER_GA_ID=$(cat /proc/version 2>&1 | sed -e 's/ /_/g' | sed -e 's/[()]//g' | sed -e 's/@.*_gcc_version/_gcc/g' | sed -e 's/__/_/g' | sed -e 's/Linux_version_//g' | sed -e 's/generic_build/genb/g')
+    RANDOM_USER_GA_ID="${DOSEL_VERSION}_${RANDOM_USER_GA_ID}"
 fi
 
 #----------------------------------------------------------
@@ -279,22 +282,24 @@ ga_track_start () {
     DisplayDataProcessingAgreement
 
     START_META_DATA=""
-    START_META_DATA="${START_META_DATA} -proxy=${SELENIUM_NODE_PROXY_PARAMS}"
-    START_META_DATA="${START_META_DATA} -registerCycle=${SELENIUM_NODE_REGISTER_CYCLE}"
-    START_META_DATA="${START_META_DATA} CHROME_ARGS=${CHROME_ARGS}"
-    START_META_DATA="${START_META_DATA} SELENIUM_HUB_HOST=${SELENIUM_HUB_HOST}"
-    START_META_DATA="${START_META_DATA} SELENIUM_NODE_HOST=${SELENIUM_NODE_HOST}"
-    START_META_DATA="${START_META_DATA} SELENIUM_HUB_PARAMS=${SELENIUM_HUB_PARAMS}"
-    START_META_DATA="${START_META_DATA} SELENIUM_NODE_PARAMS=${SELENIUM_NODE_PARAMS}"
-    START_META_DATA="${START_META_DATA} RC_CHROME=${RC_CHROME}"
-    START_META_DATA="${START_META_DATA} RC_FIREFOX=${RC_FIREFOX}"
-    START_META_DATA="${START_META_DATA} SAUCE_TUNNEL=${SAUCE_TUNNEL}"
-    START_META_DATA="${START_META_DATA} SAUCE_LOCAL_SEL_PORT=${SAUCE_LOCAL_SEL_PORT}"
-    START_META_DATA="${START_META_DATA} MEM_JAVA_PERCENT=${MEM_JAVA_PERCENT}"
-    START_META_DATA="${START_META_DATA} WAIT_TIMEOUT=${WAIT_TIMEOUT}"
-    START_META_DATA="${START_META_DATA} WAIT_FOREGROUND_RETRY=${WAIT_FOREGROUND_RETRY}"
-    START_META_DATA="${START_META_DATA} WAIT_VNC_FOREGROUND_RETRY=${WAIT_VNC_FOREGROUND_RETRY}"
-    START_META_DATA="${START_META_DATA} MAX_DISPLAY_SEARCH=${MAX_DISPLAY_SEARCH}"
+    START_META_DATA="${START_META_DATA} -proxy='${SELENIUM_NODE_PROXY_PARAMS}'"
+    START_META_DATA="${START_META_DATA} -registerCycle='${SELENIUM_NODE_REGISTER_CYCLE}'"
+    START_META_DATA="${START_META_DATA} CHROME_ARGS='${CHROME_ARGS}'"
+    START_META_DATA="${START_META_DATA} SELENIUM_HUB_HOST='${SELENIUM_HUB_HOST}'"
+    START_META_DATA="${START_META_DATA} SELENIUM_NODE_HOST='${SELENIUM_NODE_HOST}'"
+    START_META_DATA="${START_META_DATA} SELENIUM_HUB_PARAMS='${SELENIUM_HUB_PARAMS}'"
+    START_META_DATA="${START_META_DATA} SELENIUM_NODE_PARAMS='${SELENIUM_NODE_PARAMS}'"
+    START_META_DATA="${START_META_DATA} RC_CHROME='${RC_CHROME}'"
+    START_META_DATA="${START_META_DATA} RC_FIREFOX='${RC_FIREFOX}'"
+    START_META_DATA="${START_META_DATA} SAUCE_TUNNEL='${SAUCE_TUNNEL}'"
+    START_META_DATA="${START_META_DATA} SAUCE_LOCAL_SEL_PORT='${SAUCE_LOCAL_SEL_PORT}'"
+    START_META_DATA="${START_META_DATA} MEM_JAVA_PERCENT='${MEM_JAVA_PERCENT}'"
+    START_META_DATA="${START_META_DATA} WAIT_TIMEOUT='${WAIT_TIMEOUT}'"
+    START_META_DATA="${START_META_DATA} WAIT_FOREGROUND_RETRY='${WAIT_FOREGROUND_RETRY}'"
+    START_META_DATA="${START_META_DATA} WAIT_VNC_FOREGROUND_RETRY='${WAIT_VNC_FOREGROUND_RETRY}'"
+    START_META_DATA="${START_META_DATA} MAX_DISPLAY_SEARCH='${MAX_DISPLAY_SEARCH}'"
+    START_META_DATA="${START_META_DATA} TRAVIS_REPO_SLUG='${TRAVIS_REPO_SLUG}'"
+    START_META_DATA="${START_META_DATA} TRAVIS_JOB_NUMBER='${TRAVIS_JOB_NUMBER}'"
 
     local args=(
         --max-time 10

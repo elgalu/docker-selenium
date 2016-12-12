@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Fix typo at PICK_ALL_RANDOM_PORTS"
+    git commit -m "Add Google Analytics anonymous usage statistics tracking"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

@@ -455,7 +455,6 @@ Full example using `--net=host` and `--pid=host` but for this to work in OSX you
 * [Nvidia](https://twitter.com/nvidia)
 * And many more! Please ping @elgalu to add you here.
 
-
 ## Troubleshooting
 
 All output is sent to stdout so it can be inspected by running:
@@ -488,6 +487,9 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/xterm-stdout.log
     /var/log/cont/xvfb-stderr.log
     /var/log/cont/xvfb-stdout.log
+
+## License
+See [LICENSE.md](./LICENSE.md)
 
 <!-- links -->
 [2.47.1m]: https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m

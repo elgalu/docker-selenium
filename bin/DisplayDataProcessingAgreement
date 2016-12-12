@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "***************** BEGIN: Data Processing Agreement *****************"
+echo -e "By using this software you agree that the following non-PII"
+echo -e "(non personally identifiable information) data will be collected,"
+echo -e "processed and used by Docker-selenium for the purpose of improving"
+echo -e "our test infrastructure tools. Anonymisation with respect of the IP"
+echo -e "address means that only the first two octets of the IP address are"
+echo -e "collected. See the complete license at:"
+echo -e "https://github.com/elgalu/docker-selenium/blob/master/LICENSE.md"
+echo "****************** END: Data Processing Agreement ******************"

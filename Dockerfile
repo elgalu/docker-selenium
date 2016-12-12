@@ -969,6 +969,9 @@ RUN sudo touch /capabilities.json \
   && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
   && echo ""
 
+# Include current version
+COPY VERSION /home/seluser/
+
 #=====================================================
 # Meta JSON file to hold commit info of current build
 #=====================================================
