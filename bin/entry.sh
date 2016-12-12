@@ -48,10 +48,12 @@ export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-${USE_SELENIUM}/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 export FIREFOX_VERSION=$(firefox_version)
 export CHROME_VESION=$(chrome_stable_version)
+export DOSEL_VERSION=$(cat VERSION)
 
 echo "-- INFO: Chrome..... Version: ${CHROME_VESION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
 echo "-- INFO: Selenium... Version: ${USE_SELENIUM}"
+echo "-- INFO: Dosel...... Version: ${DOSEL_VERSION}"
 
 # export PATH="${PATH}:${BIN_UTILS}"
 export SAUCE_LOG_FILE="${LOGS_DIR}/saucelabs-stdout.log"
@@ -76,6 +78,18 @@ export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 # {{CONTAINER_IP}} is a place holder for dynamically setting the IP of a node
 if [ "${SELENIUM_NODE_HOST}" = "{{CONTAINER_IP}}" ]; then
   export SELENIUM_NODE_HOST="${CONTAINER_IP}"
+fi
+
+# Random ID used for Google Analytics
+# If it is running inside the Zalando Jenkins env,
+# we pick the team name from the ${BUILD_URL}
+# else we pick it from the kernel id
+# docker installation, not related to the user nor the machine
+if [[ ${BUILD_URL} == *"zalan.do"* ]]; then
+  @1d811a9194c4_gcc_version_
+    RANDOM_USER_GA_ID=$(echo ${BUILD_URL} | cut -d'/' -f 3 | cut -d'.' -f 1)
+else
+    RANDOM_USER_GA_ID=$(cat /proc/version 2>&1 | sed -e 's/ /_/g' | sed -e 's/[()]//g' | sed -e 's/@.*_gcc_version/_gcc/g' | sed -e 's/__/_/g')
 fi
 
 #----------------------------------------------------------
@@ -126,10 +140,15 @@ if [ "${SELENIUM_HUB_PORT}" = "" ]; then
   exit 120
 fi
 
+# Fix old typo
+if [ "${PICK_ALL_RANDMON_PORTS}" == "true" ]; then
+  export PICK_ALL_RANDOM_PORTS="${PICK_ALL_RANDMON_PORTS}"
+fi
+
 # TODO: Remove this duplicated logic
 if [ "${SELENIUM_HUB_PORT}" = "0" ]; then
   export SELENIUM_HUB_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_HUB_PORT}" = "${DEFAULT_SELENIUM_HUB_PORT}" ]; then
     export SELENIUM_HUB_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -138,7 +157,7 @@ fi
 
 if [ "${SELENIUM_NODE_CH_PORT}" = "0" ]; then
   export SELENIUM_NODE_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_CH_PORT}" ]; then
     export SELENIUM_NODE_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -147,7 +166,7 @@ fi
 
 if [ "${SELENIUM_NODE_FF_PORT}" = "0" ]; then
   export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
     export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -156,7 +175,7 @@ fi
 
 if [ "${SELENIUM_NODE_RC_CH_PORT}" = "0" ]; then
   export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_RC_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" ]; then
     export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -165,7 +184,7 @@ fi
 
 if [ "${SELENIUM_NODE_RC_FF_PORT}" = "0" ]; then
   export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_RC_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" ]; then
     export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -200,7 +219,7 @@ if [ "${VNC_START}" = "true" ]; then
   else
     if [ "${VNC_PORT}" = "0" ]; then
       export VNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-    elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+    elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
       # User want to pick random ports but may also want to fix some others
       if [ "${VNC_PORT}" = "${DEFAULT_VNC_PORT}" ]; then
         export VNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -214,7 +233,7 @@ fi
 
 if [ "${NOVNC_PORT}" = "0" ]; then
   export NOVNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${NOVNC_PORT}" = "${DEFAULT_NOVNC_PORT}" ]; then
     export NOVNC_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -223,7 +242,7 @@ fi
 
 if [ "${SAUCE_LOCAL_SEL_PORT}" = "0" ]; then
   export SAUCE_LOCAL_SEL_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SAUCE_LOCAL_SEL_PORT}" = "${DEFAULT_SAUCE_LOCAL_SEL_PORT}" ]; then
     export SAUCE_LOCAL_SEL_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -232,7 +251,7 @@ fi
 
 if [ "${SUPERVISOR_HTTP_PORT}" = "0" ]; then
   export SUPERVISOR_HTTP_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ]; then
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SUPERVISOR_HTTP_PORT}" = "${DEFAULT_SUPERVISOR_HTTP_PORT}" ]; then
     export SUPERVISOR_HTTP_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
@@ -252,6 +271,66 @@ if [ "${SELENIUM_NODE_REGISTER_CYCLE}" != "" ]; then
 else
   export CUSTOM_SELENIUM_NODE_REGISTER_CYCLE=""
 fi
+
+ga_track_start () {
+  if [ "${SEND_ANONYMOUS_USAGE_INFO}" == "true" ]; then
+    DisplayDataProcessingAgreement
+
+    START_META_DATA=""
+    START_META_DATA="${START_META_DATA} -proxy=${SELENIUM_NODE_PROXY_PARAMS}"
+    START_META_DATA="${START_META_DATA} -registerCycle=${SELENIUM_NODE_REGISTER_CYCLE}"
+    START_META_DATA="${START_META_DATA} CHROME_ARGS=${CHROME_ARGS}"
+    START_META_DATA="${START_META_DATA} SELENIUM_HUB_HOST=${SELENIUM_HUB_HOST}"
+    START_META_DATA="${START_META_DATA} SELENIUM_NODE_HOST=${SELENIUM_NODE_HOST}"
+    START_META_DATA="${START_META_DATA} SELENIUM_HUB_PARAMS=${SELENIUM_HUB_PARAMS}"
+    START_META_DATA="${START_META_DATA} SELENIUM_NODE_PARAMS=${SELENIUM_NODE_PARAMS}"
+    START_META_DATA="${START_META_DATA} RC_CHROME=${RC_CHROME}"
+    START_META_DATA="${START_META_DATA} RC_FIREFOX=${RC_FIREFOX}"
+    START_META_DATA="${START_META_DATA} SAUCE_TUNNEL=${SAUCE_TUNNEL}"
+    START_META_DATA="${START_META_DATA} SAUCE_LOCAL_SEL_PORT=${SAUCE_LOCAL_SEL_PORT}"
+    START_META_DATA="${START_META_DATA} MEM_JAVA_PERCENT=${MEM_JAVA_PERCENT}"
+    START_META_DATA="${START_META_DATA} WAIT_TIMEOUT=${WAIT_TIMEOUT}"
+    START_META_DATA="${START_META_DATA} WAIT_FOREGROUND_RETRY=${WAIT_FOREGROUND_RETRY}"
+    START_META_DATA="${START_META_DATA} WAIT_VNC_FOREGROUND_RETRY=${WAIT_VNC_FOREGROUND_RETRY}"
+    START_META_DATA="${START_META_DATA} MAX_DISPLAY_SEARCH=${MAX_DISPLAY_SEARCH}"
+
+    local args=(
+        --max-time 10
+        --data v=${GA_API_VERSION}
+        --data aip=1
+        --data t=screenview
+        --data tid="${GA_TRACKING_ID}"
+        --data cid="${RANDOM_USER_GA_ID}"
+        --data an="dosel"
+        --data av="${DOSEL_VERSION}"
+        --data sc="start"
+        --data ds="docker"
+        --data cd="start ${START_META_DATA}"
+        --data cd1="${USE_SELENIUM}"
+        --data cd2="${CHROME_VESION}"
+        --data cd3="${CHROME_FLAVOR}"
+        --data cd4="${FIREFOX_VERSION}"
+        --data cd5="${SCREEN_WIDTH}"
+        --data cd6="${SCREEN_HEIGHT}"
+        --data cd7="${SCREEN_DEPTH}"
+        --data cd8="${MAX_INSTANCES}"
+        --data cd9="${MAX_SESSIONS}"
+        --data cd10="${GRID}"
+        --data cd11="${CHROME}"
+        --data cd12="${FIREFOX}"
+        --data cd13="${VNC_START}"
+        --data cd14="${NOVNC}"
+        --data cd15="${PICK_ALL_RANDOM_PORTS}"
+        --data cd16="${SELENIUM_HUB_PORT}"
+        --data cd17="${SELENIUM_NODE_CH_PORT}"
+        --data cd18="${SELENIUM_NODE_FF_PORT}"
+        --data cd19="${NOVNC_PORT}"
+    )
+
+    curl ${GA_ENDPOINT} "${args[@]}" \
+        --silent --output /dev/null >/dev/null 2>&1 & disown
+  fi
+}
 
 #----------------------------------------
 # Remove lock files, thanks @garagepoort
@@ -355,7 +434,7 @@ if [ ! -z "${XE_DISP_NUM}" ]; then
   export DISP_N="${XE_DISP_NUM}"
   export DISPLAY=":${DISP_N}"
   start_xvfb
-# elif [ "${PICK_ALL_RANDMON_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
+# elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
 else
   # Find a free DISPLAY port starting with current DISP_N if any
   i=0
@@ -435,6 +514,7 @@ env > env
 #------
 # export NORMAL_USER_UID="$(id -u seluser)"
 # export NORMAL_USER_GID="$(id -g seluser)"
+ga_track_start
 exec run-supervisord.sh
 
 # Note: sudo -i creates a login shell for someUser, which implies the following:

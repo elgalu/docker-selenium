@@ -623,7 +623,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ENV CHROME_DRIVER_VERSION="2.25" \
+ENV CHROME_DRIVER_VERSION="2.26" \
     CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
@@ -670,11 +670,11 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #   Selenium 2 or 3
 # CHROME_FLAVOR "stable"
 #   Default chrome flavor, options no longer available: beta|unstable
-# PICK_ALL_RANDMON_PORTS "true" / "false"
+# PICK_ALL_RANDOM_PORTS "true" / "false"
 #   Randomize all ports, i.e. pick unused unprivileged ones
 # RANDOM_PORT_FROM
 # RANDOM_PORT_TO
-#   When using PICK_ALL_RANDMON_PORTS=true the ports will
+#   When using PICK_ALL_RANDOM_PORTS=true the ports will
 #   be from a range to avoid collisions
 # MEM_JAVA_PERCENT "80"
 #   Because the JVM uses only 1/4 of system memory by default
@@ -787,10 +787,17 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #   Run docker from inside docker
 #   Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
 #                     -v $(which docker):/usr/bin/docker
+# TEST_SLEEPS
+#   Used internally due to flaky tests, should be removed in the future
+# SEND_ANONYMOUS_USAGE_INFO
+# GA_TRACKING_ID
+# GA_ENDPOINT
+# GA_API_VERSION
+#   All Google Analytics related, see LICENSE.md & Analytics.md for more info
 ENV FIREFOX_VERSION="${FF_VER}" \
   USE_SELENIUM="2" \
   CHROME_FLAVOR="stable" \
-  PICK_ALL_RANDMON_PORTS="false" \
+  PICK_ALL_RANDOM_PORTS="false" \
   RANDOM_PORT_FROM="23100" \
   RANDOM_PORT_TO="29999" \
   USER="seluser" \
@@ -911,6 +918,10 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SAUCELABS_STOP_SIGNAL="INT" \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.5" \
+  SEND_ANONYMOUS_USAGE_INFO="true" \
+  GA_TRACKING_ID="UA-18144954-9" \
+  GA_ENDPOINT=https://www.google-analytics.com/collect \
+  GA_API_VERSION="1" \
   DEBIAN_FRONTEND="" \
   DEBCONF_NONINTERACTIVE_SEEN=""
 
@@ -929,6 +940,9 @@ COPY test/* /test/
 COPY test/run_test.sh /usr/bin/run_test
 COPY test/selenium_test.sh /usr/bin/selenium_test
 COPY test/python_test.py /usr/bin/python_test
+COPY images ./images
+COPY LICENSE.md /home/seluser/
+COPY Analytics.md /home/seluser/
 
 #===================================
 # Fix dirs (again) and final chores
