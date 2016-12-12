@@ -31,8 +31,10 @@ rm -f ${RUN_DIR}/*
 if [ "${USE_SELENIUM}" == "3" ]; then
   export RC_CHROME="false"
   export RC_FIREFOX="false"
-  sudo mv /opt/geckodriver /usr/bin/geckodriver
-  sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
+  if [! -f /usr/bin/geckodriver ]; then 
+    sudo mv /opt/geckodriver /usr/bin/geckodriver
+    sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
+  fi
 fi
 
 # We need larger screens for Selenium IDE RC tests
