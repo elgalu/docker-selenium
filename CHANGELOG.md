@@ -7,34 +7,34 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.0.1-p1
+ + Date: 2016-12-13
  + Upgrade Chrome patch to 55.0.2883.87
  + Chore: GA: Add screen resolution, depth and user language
  + Add Security.md
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.0.1 (1969d75)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
+  + Chrome stable:  55.0.2883.87
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 50.0.2
+  + Geckodriver: 0.11.1
+  + Chromedriver: 2.26.436382 (70eb799287ce4c2208441fc057053a5b07ceabac)
+  + Java: OpenJDK Java 1.8.0_111-8u111-b14-2ubuntu0.16.04.2-b14
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20161121
+  + Python: 2.7.12
+  + Sauce Connect 4.4.2, build 3154 c8dd102-dirty
+  + BrowserStack Local version 6.7
   + Tested on kernel dev host: 4.4.0-53-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-51-generic x86_64
   + Built at dev host with: Docker version 1.12.3, build 6b644ec
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.12.4, build 1564f02
   + Built at dev host with: Docker Compose version 1.9.0, build 2585387
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.9.0, build 2585387
+  + Image size: 1.283 GB
+  + Digest: sha256:0c1937b99cc16f5e39788750397ff92d378209006ef055d4008c74d7e61a399a
+  + Image ID: sha256:3aa6cafec3be812067b4886b56344938648f2435a166f8bd8c0a0ead4e9c2930
 
 ## 3.0.1-p0
  + Date: 2016-12-12
