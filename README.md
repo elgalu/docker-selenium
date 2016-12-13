@@ -286,51 +286,6 @@ In Protrator
 
 However this is now the default of this image, see `CHROME_ARGS="--no-sandbox"` in the Dockerfile so don't be surprised to see the "Stability and security will suffer" banner when opening Chrome inside the container.
 
-## Security
-
-Using `VNC_PASSWORD=no` will make it VNC passwordless accessible, leave it empty to get a randomly generated one or if you don't use VNC simply deactivate it via `docker run ... -e VNC_START=false`
-
-The docker images are built and pushed from [TravisCI](https://travis-ci.org/elgalu/docker-selenium/builds/123103275) for full traceability.
-
-Do **NOT** expose your selenium grid to the outside world (e.g. in AWS), because Selenium does not provide auth. Therefore, if the ports are not firewalled malicious users will use [your selenium grid as a bot net](https://github.com/SeleniumHQ/docker-selenium/issues/147).
-
-Put that firewall stuff aside, a file [scm-source.json](./scm-source.json) is included at the root directory of the generated image with information that helps to comply with auditing requirements to trace the creation of this docker image.
-
-Note [scm-source.json](./scm-source.json) file will always be 1 commit outdated in the repo but will be correct inside the container.
-
-This is how the file looks like:
-
-```
-cat scm-source.json #=> { "url": "https://github.com/elgalu/docker-selenium",
-                          "revision": "8d2e03d8b4c45c72e0c73481d5141850d54122fe",
-                          "author": "lgallucci",
-                          "status": "" }
-```
-
-There are also additional steps you can take to ensure you're using the correct image:
-
-### Option 1 - Check the Full Image Id
-
-You can simply verify that image id is indeed the correct one.
-
-    # e.g. full image id for some specific tag version
-    export IMGID="<<Please see CHANGELOG.md>>"
-    if docker inspect -f='{{.Id}}' elgalu/selenium:latest |grep ${IMGID} &> /dev/null; then
-        echo "Image ID tested ok"
-    else
-        echo "Image ID doesn't match"
-    fi
-
-### Option 2 - Use immutable image digests
-
-Given docker.io currently allows to push the same tag image twice this represent a security concern but since docker >= 1.6.2 is possible to fetch the digest sha256 instead of the tag so you can be sure you're using the exact same docker image every time:
-
-    # e.g. sha256 for some specific tag
-    export SHA=<<Please see CHANGELOG.md>>
-    docker pull elgalu/selenium@sha256:${SHA}
-
-You can find all digests sha256 and image ids per tag in the [CHANGELOG](./CHANGELOG.md) so as of now you just need to trust the sha256 in the CHANGELOG. Bullet proof is to fork this project and build the images yourself if security is a big concern.
-
 ## Cloud Testing Platforms
 
 ### Sauce Labs
@@ -487,6 +442,9 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/xterm-stdout.log
     /var/log/cont/xvfb-stderr.log
     /var/log/cont/xvfb-stdout.log
+
+## Security
+See [SECURITY.md](./SECURITY.md)
 
 ## License
 See [LICENSE.md](./LICENSE.md)
