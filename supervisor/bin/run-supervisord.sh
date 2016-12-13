@@ -21,7 +21,7 @@ ga_track_shutdown () {
         --max-time 10
         --data v=${GA_API_VERSION}
         --data aip=1
-        --data t=screenview
+        --data t="screenview"
         --data tid="${GA_TRACKING_ID}"
         --data cid="${RANDOM_USER_GA_ID}"
         --data an="dosel"

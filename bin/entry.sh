@@ -301,17 +301,21 @@ ga_track_start () {
     START_META_DATA="${START_META_DATA} TRAVIS_REPO_SLUG='${TRAVIS_REPO_SLUG}'"
     START_META_DATA="${START_META_DATA} TRAVIS_JOB_NUMBER='${TRAVIS_JOB_NUMBER}'"
 
+    # https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
     local args=(
         --max-time 10
         --data v=${GA_API_VERSION}
         --data aip=1
-        --data t=screenview
+        --data t="screenview"
         --data tid="${GA_TRACKING_ID}"
         --data cid="${RANDOM_USER_GA_ID}"
         --data an="dosel"
         --data av="${DOSEL_VERSION}"
         --data sc="start"
         --data ds="docker"
+        --data sr="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+        --data sd="${SCREEN_SUB_DEPTH}"
+        --data ul="${TZ}"
         --data cd="start ${START_META_DATA}"
         --data cd1="${USE_SELENIUM}"
         --data cd2="${CHROME_VESION}"
