@@ -3,16 +3,17 @@
 ## Local
 For pull requests or local commits:
 
+    git checkout -b tmp-`cat VERSION`
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mkv
     open test/seleIDE/videos/rc/sele_ide.mkv
-    git checkout -b tmp-`cat VERSION` && git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
+    git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Add Google Analytics anonymous usage statistics tracking"
+    git commit -m "Upgrade Chrome patch to 55.0.2883.87"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
@@ -28,7 +29,7 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd ~/tmp_binaries && VER="55.0.2883.75" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    cd ~/tmp_binaries && VER="55.0.2883.87" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha && cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
 
