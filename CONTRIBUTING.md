@@ -13,7 +13,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Upgrade Firefox minor from 50.0.2 to 50.1.0"
+    git commit -m "Upgrade Chromedriver minor from 2.26 to 2.27"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
