@@ -95,9 +95,14 @@ docker exec -t grid3 run_test
 docker exec grid3 errors || true
 docker cp grid3:/test/console.png ./images/grid3_console.png
 
-# cleanup
-docker stop grid3 || true
-docker rm grid3 || true
+# Separate capabilities2.json from capabilities3.json
+docker cp grid:/capabilities.json .
+docker cp grid:/capabilities2.json .
+docker cp grid3:/capabilities3.json .
+
+# cleanup (not yet because we need to extract the capabilities)
+# docker stop grid3 || true
+# docker rm grid3 || true
 
 echo "#==================================================================="
 echo "# Scenario 1d [basic]: Selenium IDE RC"

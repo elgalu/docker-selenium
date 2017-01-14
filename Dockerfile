@@ -130,7 +130,7 @@ RUN locale-gen ${LANGUAGE} \
 # Full list at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 #  e.g. "US/Pacific" for Los Angeles, California, USA
 # e.g. ENV TZ "US/Pacific"
-ENV TZ "Europe/Berlin"
+ENV TZ="Europe/Berlin"
 # Apply TimeZone
 # Layer size: tiny: 1.339 MB
 RUN echo "Setting time zone to '${TZ}'" \
@@ -305,14 +305,11 @@ RUN apt-get -qqy update \
 # RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     supervisor \
+# 2017-01-05 commit: 8be5bc15e83f0f, supervisor/version.txt: 4.0.0.dev0
 # 2016-11-05 commit: cbebb93f58f4a9, supervisor/version.txt: 4.0.0.dev0
 # 2016-10-09 commit: 427eb2bc6b08f7, supervisor/version.txt: 4.0.0.dev0
-# 2016-08-24 commit: 304b4f388d3e3f, supervisor/version.txt: 4.0.0.dev0
-# 2016-06-28 commit: 154cb4c84f28ac, supervisor/version.txt: 4.0.0.dev0
-# 2016-04-11 commit: 3e541a34a4ab74, supervisor/version.txt: 4.0.0.dev0
-# 2016-02-01 commit: eb904ccdb3573e, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
-RUN SHA="cbebb93f58f4a90963abd96d849395a58d5f034b" \
+RUN SHA="8be5bc15e83f0f261fa50ef28de814dd14f7c25e" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/*
@@ -578,7 +575,7 @@ USER root
 # GeckoDriver
 #============
 # Layer size: tiny: 4.088 MB
-ENV GECKOD_VER="0.11.1" \
+ENV GECKOD_VER="0.13.0" \
     GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
@@ -874,8 +871,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
-  RC_CHROME="true" \
-  RC_FIREFOX="true" \
+  RC_CHROME="false" \
+  RC_FIREFOX="false" \
   VIDEO_FILE_EXTENSION="mkv" \
   VIDEO_FILE_NAME="" \
   VIDEO_CHUNK_SECS="00:05:00" \
@@ -948,14 +945,24 @@ COPY Analytics.md /home/seluser/
 # Fix dirs (again) and final chores
 #===================================
 # The .X11-unix stuff is useful when using Xephyr
-RUN sudo touch /capabilities.json \
-  && sudo chown seluser:seluser /capabilities.json \
-  && generate_capabilities_json > /capabilities.json \
-  && cp /capabilities.json /home/seluser/capabilities.json \
-  && cp /capabilities.json /home/seluser/capabilities \
-  && cp /capabilities.json /home/seluser/caps.json \
-  && cp /capabilities.json /home/seluser/caps \
-  && mkdir -p /home/seluser/.vnc \
+RUN mkdir -p /home/seluser/.vnc \
+  && sudo touch /capabilities2.json \
+  && sudo chown seluser:seluser /capabilities2.json \
+  && generate_capabilities2_json > /capabilities2.json \
+  && cp /capabilities2.json /home/seluser/capabilities2.json \
+  && cp /capabilities2.json /home/seluser/capabilities2 \
+  && cp /capabilities2.json /home/seluser/caps2.json \
+  && cp /capabilities2.json /home/seluser/caps2 \
+  && sudo touch /capabilities3.json \
+  && sudo chown seluser:seluser /capabilities3.json \
+  && generate_capabilities3_json > /capabilities3.json \
+  && cp /capabilities3.json /home/seluser/capabilities3.json \
+  && cp /capabilities3.json /home/seluser/capabilities3 \
+  && cp /capabilities3.json /home/seluser/caps3.json \
+  && cp /capabilities3.json /home/seluser/caps3 \
+  && sudo cp /capabilities2.json /capabilities.json \
+  && sudo cp /capabilities2.json /home/seluser/capabilities.json \
+  && sudo cp /capabilities2.json /home/seluser/caps.json \
   && mkdir -p ${VIDEOS_DIR} \
   && sudo ln -s ${VIDEOS_DIR} /videos \
   && sudo chown seluser:seluser /videos \

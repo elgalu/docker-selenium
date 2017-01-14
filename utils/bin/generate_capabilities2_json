@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# docker exec grid cat caps
+
+gen_caps_json() {
+  CHROME_STABLE=$(chrome_stable_version)
+  FIREFOX_STABLE=$(firefox-for-sel-2_version)
+
+  cat << EOF
+{
+  "caps": [
+    {
+      "BROWSER_NAME": "chrome",
+      "VERSION": "${CHROME_STABLE}",
+      "PLATFORM": "LINUX"
+    },
+    {
+      "BROWSER_NAME": "firefox",
+      "VERSION": "${FIREFOX_STABLE}",
+      "PLATFORM": "LINUX"
+    }
+  ]
+}
+EOF
+}
+
+gen_caps_json

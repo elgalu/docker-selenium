@@ -223,10 +223,9 @@ git_push_tag_push() {
 ########
 # Main #
 ########
-# `docker cp` or `docker exec cat` ...
-#   docker cp grid:/capabilities.json .
-#   docker exec grid cat /capabilities.json
-docker cp grid:/capabilities.json .
+# docker cp grid:/capabilities.json .
+# docker cp grid:/capabilities2.json .
+# docker cp grid3:/capabilities3.json .
 if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then
   echo "This is a pull request so no docker push."
 elif [ "${DOCKER_PUSH}" != "true" ]; then

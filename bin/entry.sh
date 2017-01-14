@@ -38,6 +38,16 @@ if [ "${USE_SELENIUM}" == "3" ]; then
   fi
 fi
 
+if [ "${USE_SELENIUM}" == "3" ]; then
+  sudo cp /capabilities3.json /capabilities.json
+  sudo cp /capabilities3.json /home/seluser/capabilities.json
+  sudo cp /capabilities3.json /home/seluser/caps.json
+else
+  sudo cp /capabilities2.json /capabilities.json
+  sudo cp /capabilities2.json /home/seluser/capabilities.json
+  sudo cp /capabilities2.json /home/seluser/caps.json
+fi
+
 # We need larger screens for Selenium IDE RC tests
 # if [ "${RC_CHROME}" = "true" ] || [ "${RC_FIREFOX}" = "true" ]; then
 #   export SCREEN_HEIGHT=$((SCREEN_HEIGHT*2))
@@ -149,6 +159,9 @@ fi
 if [ "${PICK_ALL_RANDMON_PORTS}" == "true" ]; then
   export PICK_ALL_RANDOM_PORTS="${PICK_ALL_RANDMON_PORTS}"
 fi
+
+# Fix extra quotes in Time zone $TZ env var
+export TZ=$(echo ${TZ} | sed "s/^\([\"']\)\(.*\)\1\$/\2/g")
 
 # TODO: Remove this duplicated logic
 if [ "${SELENIUM_HUB_PORT}" = "0" ]; then

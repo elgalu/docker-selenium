@@ -15,9 +15,9 @@
   + Python: TBD_PYTHON_VERSION
   + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
   + BrowserStack Local version TBD_BROWSER_STACK_VERSION
-  + Tested on kernel dev host: 4.4.0-57-generic x86_64
+  + Tested on kernel dev host: 4.4.0-59-generic x86_64
   + Tested on kernel CI  host: TBD_HOST_UNAME
-  + Built at dev host with: Docker version 1.13.0-rc4, build 88862e7
+  + Built at dev host with: Docker version 1.12.6, build 78d1802
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
   + Built at dev host with: Docker Compose version 1.9.0, build 2585387
   + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD

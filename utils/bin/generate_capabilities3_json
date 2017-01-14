@@ -4,7 +4,7 @@
 
 gen_caps_json() {
   CHROME_STABLE=$(chrome_stable_version)
-  FIREFOX_STABLE=$(firefox_version)
+  FIREFOX_STABLE=$(firefox-for-sel-3_version)
 
   cat << EOF
 {
