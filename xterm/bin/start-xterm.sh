@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# set -e: exit asap if a command exits with a non-zero status
+set -e
+
 # Open new file descriptors that redirects to stderr/stdout
 exec 3>&1
 exec 4>&2
@@ -51,10 +54,6 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-rc-chrome.sh || \
   shutdown "Failed while waiting for selenium RC node chrome to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-rc-firefox.sh || \
   shutdown "Failed while waiting for selenium RC node firefox to start!"
-timeout --foreground ${SAUCE_WAIT_RETRY_TIMEOUT} wait-saucelabs.sh || \
-  shutdown "Failed while waiting for Sauce Labs tunnel to start!"
-timeout --foreground ${BSTACK_WAIT_RETRY_TIMEOUT} wait-browserstack.sh || \
-  shutdown "Failed while waiting for BrowserStack tunnel to start!"
 
 if [ "${VIDEO}" = "true" ]; then
   start-video &
@@ -87,10 +86,13 @@ fi
 
 # Start a GUI xTerm to help debugging when VNC into the container
 # with a random geometry so we can differentiate multiple nodes
-GEOM1=$(python -c 'import random; print(random.randint(80,140))')
-GEOM2=$(python -c 'import random; print(random.randint(30,50))')
+GEOM1="$(python -c 'import random; print(random.randint(80,140))')"
+GEOM2="$(python -c 'import random; print(random.randint(30,50))')"
+# Do some match to position it on the bottom right corner
+POS_X="$((${SCREEN_WIDTH}-500-${GEOM1}))"
+POS_Y="$((${SCREEN_HEIGHT}-500-${GEOM2}))"
 x-terminal-emulator -ls  \
-  -geometry ${GEOM1}x${GEOM2}+10+10 \
+  -geometry ${GEOM1}x${GEOM2}+${POS_X}+${POS_Y} \
   -title "x-terminal-emulator" \
   &
 
