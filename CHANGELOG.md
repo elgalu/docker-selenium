@@ -7,8 +7,8 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.0.1-p5
+ + Date: 2017-01-23
  + Breaking Change: Remove Sauce Labs & BrowserStack binaries
  + Allow to position Browsers in the top left by default closes #140
  + Upgrade Ubuntu xenial date from 20161213 to 20170119
@@ -17,26 +17,26 @@ Note image ids also change after scm-source.json has being updated which trigger
  + Chore: Add docker image LABEL selenium3_chrome_version
  + Chore: Add docker image LABEL selenium3_firefox_version
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.0.1 (1969d75)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
+  + Chrome stable:  55.0.2883.87
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 50.1.0
+  + Geckodriver: 0.13.0
+  + Chromedriver: 2.27.440175 (9bc1d90b8bfa4dd181fbbf769a5eb5e575574320)
+  + Java: OpenJDK Java 1.8.0_111-8u111-b14-2ubuntu0.16.04.2-b14
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20170119
+  + Python: 2.7.12
   + Tested on kernel dev host: 4.4.0-59-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-51-generic x86_64
   + Built at dev host with: Docker version 1.13.0, build 49bf474
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.13.0, build 49bf474
   + Built at dev host with: Docker Compose version 1.10.0, build 4bd6f1a
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.9.0, build 2585387
+  + Image size: 1.25 GB
+  + Digest: sha256:3b4224890bf97203182f17df9f6c34aaa48ba4eaf5689c69cf53bd5b2a1d6b2d
+  + Image ID: sha256:4753db5dcc644a4da236accc5d73117fbda8812a287b3a1e27a38bdf2bd1dac9
 
 ## 3.0.1-p4
  + Date: 2017-01-14
