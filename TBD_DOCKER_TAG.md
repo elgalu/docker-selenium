@@ -13,13 +13,11 @@
   + Timezone: TBD_TIME_ZONE
   + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
   + Python: TBD_PYTHON_VERSION
-  + Sauce Connect TBD_SAUCE_CONNECT_VERS, build TBD_SAUCE_CONNECT_BUILD TBD_SAUCE_CONNECT_REVISION
-  + BrowserStack Local version TBD_BROWSER_STACK_VERSION
   + Tested on kernel dev host: 4.4.0-59-generic x86_64
   + Tested on kernel CI  host: TBD_HOST_UNAME
-  + Built at dev host with: Docker version 1.12.6, build 78d1802
+  + Built at dev host with: Docker version 1.13.0, build 49bf474
   + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-  + Built at dev host with: Docker Compose version 1.9.0, build 2585387
+  + Built at dev host with: Docker Compose version 1.10.0, build 4bd6f1a
   + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
   + Image size: TBD_IMAGE_SIZE
   + Digest: TBD_DIGEST

@@ -16,12 +16,6 @@ chromedriver --version
 echo "geckodriver_version=$(geckodriver_version)"
 /opt/geckodriver --version
 
-echo "sauce_connect_version=$(sauce_connect_version)"
-sc | grep build
-
-echo "browser_stack_version=$(browser_stack_version)"
-BrowserStackLocal -version
-
 echo "java_build_version=$(java_build_version)"
 java -version
 

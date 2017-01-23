@@ -69,8 +69,6 @@ echo "-- INFO: Selenium... Version: ${USE_SELENIUM}"
 echo "-- INFO: Dosel...... Version: ${DOSEL_VERSION}"
 
 # export PATH="${PATH}:${BIN_UTILS}"
-export SAUCE_LOG_FILE="${LOGS_DIR}/saucelabs-stdout.log"
-export BSTACK_LOG_FILE="${LOGS_DIR}/browserstack-stdout.log"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
 export DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log"
 export VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr"
@@ -140,14 +138,6 @@ fi
 
 if [ "${RC_FIREFOX}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-rc-firefox"
-fi
-
-if [ "${SAUCE_TUNNEL}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|saucelabs"
-fi
-
-if [ "${BSTACK_TUNNEL}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|browserstack"
 fi
 
 if [ "${SELENIUM_HUB_PORT}" = "" ]; then
@@ -258,15 +248,6 @@ elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   fi
 fi
 
-if [ "${SAUCE_LOCAL_SEL_PORT}" = "0" ]; then
-  export SAUCE_LOCAL_SEL_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
-  # User want to pick random ports but may also want to fix some others
-  if [ "${SAUCE_LOCAL_SEL_PORT}" = "${DEFAULT_SAUCE_LOCAL_SEL_PORT}" ]; then
-    export SAUCE_LOCAL_SEL_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-  fi
-fi
-
 if [ "${SUPERVISOR_HTTP_PORT}" = "0" ]; then
   export SUPERVISOR_HTTP_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
@@ -304,8 +285,6 @@ ga_track_start () {
     START_META_DATA="${START_META_DATA} SELENIUM_NODE_PARAMS='${SELENIUM_NODE_PARAMS}'"
     START_META_DATA="${START_META_DATA} RC_CHROME='${RC_CHROME}'"
     START_META_DATA="${START_META_DATA} RC_FIREFOX='${RC_FIREFOX}'"
-    START_META_DATA="${START_META_DATA} SAUCE_TUNNEL='${SAUCE_TUNNEL}'"
-    START_META_DATA="${START_META_DATA} SAUCE_LOCAL_SEL_PORT='${SAUCE_LOCAL_SEL_PORT}'"
     START_META_DATA="${START_META_DATA} MEM_JAVA_PERCENT='${MEM_JAVA_PERCENT}'"
     START_META_DATA="${START_META_DATA} WAIT_TIMEOUT='${WAIT_TIMEOUT}'"
     START_META_DATA="${START_META_DATA} WAIT_FOREGROUND_RETRY='${WAIT_FOREGROUND_RETRY}'"
@@ -523,7 +502,6 @@ echo "${SELENIUM_NODE_RC_FF_PORT}" > RC_FF_PORT
 echo "${DISPLAY}" > DISPLAY
 echo "${VNC_PORT}" > VNC_PORT
 echo "${NOVNC_PORT}" > NOVNC_PORT
-echo "${SAUCE_LOCAL_SEL_PORT}" > SAUCE_LOCAL_SEL_PORT
 echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
 echo "${FIREFOX_DEST_BIN}" > FIREFOX_DEST_BIN
 echo "${USE_SELENIUM}" > USE_SELENIUM

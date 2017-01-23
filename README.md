@@ -38,7 +38,7 @@ Even though both projects share the same purpose is good to have alternatives, s
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
 [Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however still requires a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
 You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
-A [new chromium headless project](https://github.com/electron/electron/issues/228#issuecomment-223797342) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
+A [new chrome --headless feature](https://chromium.googlesource.com/chromium/src/+/master/headless/README.md) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
 
 ### Requisites
 This project is normally tested in the last version of Docker and docker-compose and also in the release candidates.
@@ -287,12 +287,7 @@ In Protrator
 However this is now the default of this image, see `CHROME_ARGS="--no-sandbox"` in the Dockerfile so don't be surprised to see the "Stability and security will suffer" banner when opening Chrome inside the container.
 
 ## Cloud Testing Platforms
-
-### Sauce Labs
-To open the [Sauce Labs][] tunnel while starting the docker container pass in the arguments `-e SAUCE_TUNNEL=true -e SAUCE_USER_NAME=leo -e SAUCE_API_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
-
-### BrowserStack
-To open the [BrowserStack][] tunnel while starting the docker container pass in the arguments `-e BSTACK_TUNNEL=true -e BSTACK_ACCESS_KEY=secret` that will also require the tunnel to open successfully, else the container will exit so you can be sure your tunnel is up and running before starting to test.
+We now have a better suited product for this use case, is called [Zalenium](https://github.com/zalando/zalenium)
 
 ## Additional Uses
 

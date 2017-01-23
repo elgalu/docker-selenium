@@ -1,9 +1,9 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
 # Layer size: big: 127.2 MB
-FROM ubuntu:xenial-20161213
+FROM ubuntu:xenial-20170119
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20161213"
+    UBUNTU_DATE="20170119"
 
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
@@ -477,33 +477,12 @@ RUN apt-get -qqy update \
 # ------------------------#
 # Sauce Connect Tunneling #
 # ------------------------#
-# https://docs.saucelabs.com/reference/sauce-connect/
-# Layer size: medium: 12.42 MB
-ENV SAUCE_CONN_VER="sc-4.4.2-linux" \
-    SAUCE_CONN_DOWN_URL="https://saucelabs.com/downloads"
-RUN cd /tmp \
-  && wget -nv "${SAUCE_CONN_DOWN_URL}/${SAUCE_CONN_VER}.tar.gz" \
-  && tar -zxf "${SAUCE_CONN_VER}.tar.gz" \
-  && rm -rf /usr/local/${SAUCE_CONN_VER} \
-  && mv ${SAUCE_CONN_VER} /usr/local \
-  && rm "${SAUCE_CONN_VER}.tar.gz" \
-  && ln -sf /usr/local/${SAUCE_CONN_VER}/bin/sc /usr/local/bin/sc \
-  && which sc
+# Please use https://github.com/zalando/zalenium
 
 # -----------------------#
 # BrowserStack Tunneling #
 # -----------------------#
-# https://www.browserstack.com/local-testing
-# Layer size: medium: 16.02 MB
-ENV BSTACK_TUNNEL_URL="https://www.browserstack.com/browserstack-local" \
-    BSTACK_TUNNEL_ZIP="BrowserStackLocal-linux-x64.zip"
-RUN cd /tmp \
-  && wget -nv "${BSTACK_TUNNEL_URL}/${BSTACK_TUNNEL_ZIP}" \
-  && unzip "${BSTACK_TUNNEL_ZIP}" \
-  && chmod 755 BrowserStackLocal \
-  && rm "${BSTACK_TUNNEL_ZIP}" \
-  && mv BrowserStackLocal /usr/local/bin \
-  && which BrowserStackLocal
+# Please use https://github.com/zalando/zalenium
 
 #-----------------#
 # Mozilla Firefox #
@@ -566,6 +545,9 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && mv firefox firefox-for-sel-2 \
   && sudo ln -fs /home/seluser/firefox-for-sel-2/firefox /usr/bin/firefox
 
+LABEL selenium2_firefox_version "47.0.1"
+LABEL selenium3_firefox_version "50.1.0"
+
 #=============================
 # sudo by default from now on
 #=============================
@@ -593,6 +575,10 @@ ENV CHROME_VERSION_TRIGGER="55.0.2883.87" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
+
+LABEL selenium2_chrome_version "55.0.2883.87"
+LABEL selenium3_chrome_version "55.0.2883.87"
+
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
   && mkdir -p chrome-deb \
@@ -658,7 +644,6 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
     DEFAULT_SELENIUM_NODE_RC_FF_PORT="25553" \
     DEFAULT_VNC_PORT="25900" \
     DEFAULT_NOVNC_PORT="26080" \
-    DEFAULT_SAUCE_LOCAL_SEL_PORT="4445" \
     DEFAULT_SUPERVISOR_HTTP_PORT="19001"
 
 # Commented for now; all these versions are still available at
@@ -758,10 +743,6 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #   true/false which services should start upon docker run
 # VIDEO_FILE_EXTENSION
 #   Video file and extension, e.g. mp4, mkv
-# SAUCE_TUNNEL SAUCE_TUNNEL_ID SAUCE_USER_NAME SAUCE_API_KEY
-#   Sauce Labs tunneling. Naming is required: SAUCE_TUNNEL_ID
-# BSTACK_TUNNEL BSTACK_TUNNEL_ID BSTACK_ACCESS_KEY
-#   BrowserStack tunneling. Naming is required: BSTACK_TUNNEL_ID
 # TAIL_LOG_LINES
 #   Amount of lines to display when startup errors
 # SHM_TRY_MOUNT_UNMOUNT
@@ -777,9 +758,6 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 # VNC_STOP_SIGNAL
 # NOVNC_STOP_SIGNAL
 # VIDEO_REC_STOP_SIGNAL
-# BROWSERSTACK_STOP_SIGNAL
-# SAUCELABS_STOP_SIGNAL
-#   Supervisord stop signals
 # DOCKER_SOCK
 #   Run docker from inside docker
 #   Usage: docker run -v /var/run/docker.sock:/var/run/docker.sock
@@ -882,22 +860,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VIDEOS_DIR="/home/seluser/videos" \
   XMANAGER="fluxbox" \
   FLUXBOX_START_MAX_RETRIES=5 \
-  SAUCE_TUNNEL="false" \
-  SAUCE_USER_NAME="" \
-  SAUCE_API_KEY="" \
-  SAUCE_TUNNEL_DOCTOR_TEST="false" \
-  SAUCE_TUNNEL_ID="docker-selenium" \
-  SAUCE_TUNNEL_READY_FILE="/tmp/sauce-connect-ready" \
-  SAUCE_LOCAL_SEL_PORT="${DEFAULT_SAUCE_LOCAL_SEL_PORT}" \
-  SAUCE_WAIT_TIMEOUT="2m" \
-  SAUCE_WAIT_RETRY_TIMEOUT="3m" \
-  SAUCE_TUNNEL_MAX_RETRY_ATTEMPTS="1" \
-  BSTACK_TUNNEL="false" \
-  BSTACK_ACCESS_KEY="" \
-  BSTACK_TUNNEL_ID="docker-selenium" \
-  BSTACK_TUNNEL_OPTS="-skipCheck -v -forcelocal" \
-  BSTACK_WAIT_TIMEOUT="2m" \
-  BSTACK_WAIT_RETRY_TIMEOUT="3m" \
   TAIL_LOG_LINES="15" \
   SHM_TRY_MOUNT_UNMOUNT="false" \
   SHM_SIZE="512M" \
@@ -911,8 +873,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_STOP_SIGNAL="TERM" \
   NOVNC_STOP_SIGNAL="TERM" \
   VIDEO_REC_STOP_SIGNAL="INT" \
-  BROWSERSTACK_STOP_SIGNAL="INT" \
-  SAUCELABS_STOP_SIGNAL="INT" \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.5" \
   SEND_ANONYMOUS_USAGE_INFO="true" \

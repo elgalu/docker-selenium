@@ -132,14 +132,6 @@ update_changelog() {
     || die "while trying to get UBUNTU_FLAVOR"
   UBUNTU_DATE=$(docker exec grid printenv UBUNTU_DATE) \
     || die "while trying to get UBUNTU_DATE"
-  TBD_BROWSER_STACK_VERSION=$(docker exec grid browser_stack_version) \
-    || die "while trying to get TBD_BROWSER_STACK_VERSION"
-  TBD_SAUCE_CONNECT_VERS=$(docker exec grid sauce_connect_version) \
-    || die "while trying to get TBD_SAUCE_CONNECT_VERS"
-  TBD_SAUCE_CONNECT_BUILD=$(docker exec grid sauce_connect_build_version) \
-    || die "while trying to get TBD_SAUCE_CONNECT_BUILD"
-  TBD_SAUCE_CONNECT_REVISION=$(docker exec grid sauce_connect_revision_version) \
-    || die "while trying to get TBD_SAUCE_CONNECT_REVISION"
   sed -i -- "s/TBD_DOCKER_TAG/${TBD_DOCKER_TAG}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_DIGEST/${TBD_DIGEST}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_IMAGE_ID/${TBD_IMAGE_ID}/g" CHANGELOG.md || true
@@ -164,10 +156,6 @@ update_changelog() {
   sed -i -- "s/TBD_TIME_ZONE/${TBD_TIME_ZONE}/g" CHANGELOG.md || true
   sed -i -- "s/UBUNTU_FLAVOR/${UBUNTU_FLAVOR}/g" CHANGELOG.md || true
   sed -i -- "s/UBUNTU_DATE/${UBUNTU_DATE}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_BROWSER_STACK_VERSION/${TBD_BROWSER_STACK_VERSION}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SAUCE_CONNECT_VERS/${TBD_SAUCE_CONNECT_VERS}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SAUCE_CONNECT_BUILD/${TBD_SAUCE_CONNECT_BUILD}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SAUCE_CONNECT_REVISION/${TBD_SAUCE_CONNECT_REVISION}/g" CHANGELOG.md || true
 }
 
 ####################################

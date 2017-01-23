@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# Example:
-#  sc 2>&1 | grep build
-#=> 14 Apr 15:16:43 - Sauce Connect 4.3.14, build 2010 d6099dc
-
-# Example:
-#=> 4.3.14
-sc 2>&1 | grep build | grep -Po '(?<=Sauce Connect )([a-z0-9\.]+)'

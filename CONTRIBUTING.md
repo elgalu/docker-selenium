@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Upgrade Geckodriver minor from 0.11.1 to 0.13.0"
+    git commit -m "Breaking Change: Remove Sauce Labs & BrowserStack binaries"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

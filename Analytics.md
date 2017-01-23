@@ -33,9 +33,8 @@ Docker-selenium's analytics are accessible to Docker-selenium's current maintain
 
 ## How?
 The code is viewable in:
-* [Docker-selenium start](./scripts/dosel.sh#L267)
-* [Docker-selenium stop](./scripts/dosel.sh#L98)
-* [Start, stop tests and exceptions](./src/main/java/de/elgalu/tip/dosel/util/GoogleAnalyticsApi.java)
+* [Docker-selenium start](./bin/entry.sh#300)
+* [Docker-selenium stop](./supervisor/bin/run-supervisord.sh#16)
 
 The code is implemented so it gets executed in a background process, without delaying normal execution. If it fails, it will do it immediately and silently.
 
