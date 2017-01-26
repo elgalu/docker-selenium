@@ -523,7 +523,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ENV FF_VER="50.1.0"
+ENV FF_VER="51.0"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
@@ -546,7 +546,7 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && sudo ln -fs /home/seluser/firefox-for-sel-2/firefox /usr/bin/firefox
 
 LABEL selenium2_firefox_version "47.0.1"
-LABEL selenium3_firefox_version "50.1.0"
+LABEL selenium3_firefox_version "51.0"
 
 #=============================
 # sudo by default from now on
@@ -571,13 +571,13 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="55.0.2883.87" \
+ENV CHROME_VERSION_TRIGGER="56.0.2924.76" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium2_chrome_version "55.0.2883.87"
-LABEL selenium3_chrome_version "55.0.2883.87"
+LABEL selenium2_chrome_version "56.0.2924.76"
+LABEL selenium3_chrome_version "56.0.2924.76"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \

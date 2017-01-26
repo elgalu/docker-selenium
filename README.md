@@ -38,7 +38,7 @@ Even though both projects share the same purpose is good to have alternatives, s
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
 [Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however still requires a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
 You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
-A [new chrome --headless feature](https://chromium.googlesource.com/chromium/src/+/master/headless/README.md) looks very promising so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
+A [new chrome --headless feature](https://chromium.googlesource.com/chromium/src/+/master/headless/README.md) looks quite [promising](https://github.com/SeleniumHQ/docker-selenium/issues/370#issuecomment-274810190) so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
 
 ### Requisites
 This project is normally tested in the last version of Docker and docker-compose and also in the release candidates.
