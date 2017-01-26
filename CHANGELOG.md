@@ -7,31 +7,31 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.0.1-p6
+ + Date: 2017-01-26
  + Upgrade Firefox (for selenium 3) from 50.1.0 to 51.0
  + Upgrade Chrome major from 55.0.2883.87 to 56.0.2924.76
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.0.1 (1969d75)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
+  + Chrome stable:  56.0.2924.76
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 51.0
+  + Geckodriver: 0.13.0
+  + Chromedriver: 2.27.440175 (9bc1d90b8bfa4dd181fbbf769a5eb5e575574320)
+  + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20170119
+  + Python: 2.7.12
   + Tested on kernel dev host: 4.4.0-59-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-51-generic x86_64
   + Built at dev host with: Docker version 1.13.0, build 49bf474
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.13.0, build 49bf474
   + Built at dev host with: Docker Compose version 1.10.0, build 4bd6f1a
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.9.0, build 2585387
+  + Image size: 1.24 GB
+  + Digest: sha256:8c8466fbfcb5e1140c3f69894eae464396d397fdcbc63ed79b1bb26a7be2ac79
+  + Image ID: sha256:907f8ec199bdd14aa2a611ef71c8d1d1440bb30c2eaafec2c2035d4d21c85744
 
 ## 3.0.1-p5
  + Date: 2017-01-23
