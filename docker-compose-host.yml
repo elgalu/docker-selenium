@@ -1,11 +1,11 @@
-version: '2'
+version: '3'
 
 services:
   hub:
     image: elgalu/selenium
     network_mode: host
     environment:
-      - SELENIUM_HUB_PORT
+      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT-4444}
       - PICK_ALL_RANDOM_PORTS=true
       - GRID=true
       - CHROME=false
@@ -18,7 +18,7 @@ services:
     network_mode: host
     shm_size: 1g
     environment:
-      - SELENIUM_HUB_PORT
+      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT-4444}
       - PICK_ALL_RANDOM_PORTS=true
       - GRID=false
       - CHROME=true
@@ -30,7 +30,7 @@ services:
     image: elgalu/selenium
     network_mode: host
     environment:
-      - SELENIUM_HUB_PORT
+      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT-4444}
       - PICK_ALL_RANDOM_PORTS=true
       - GRID=false
       - CHROME=false
@@ -43,7 +43,7 @@ services:
     network_mode: host
     shm_size: 1g
     environment:
-      - SELENIUM_HUB_PORT
+      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT-4444}
       - PICK_ALL_RANDOM_PORTS=true
       - GRID=false
       - CHROME=false
@@ -55,7 +55,7 @@ services:
     image: elgalu/selenium
     network_mode: host
     environment:
-      - SELENIUM_HUB_PORT
+      - SELENIUM_HUB_PORT=${SELENIUM_HUB_PORT-4444}
       - PICK_ALL_RANDOM_PORTS=true
       - GRID=false
       - CHROME=false

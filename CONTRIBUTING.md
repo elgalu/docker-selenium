@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Upgrade Geckodriver minor from 0.13.0 to 0.14.0"
+    git commit -m "Fix docker-compose issue closes #141"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

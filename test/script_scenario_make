@@ -10,14 +10,13 @@ echo "#================================================"
 # set -x: print each command right before it is executed
 set -xe
 
-export TESTING_MAKE="true"
+export TESTING_MAKE="true" \
+       VNC_FROM_PORT="5010" VNC_TO_PORT="5030"
 
 if [ "${CI}" = "true" ]; then
-  export VNC_FROM_PORT="5010" VNC_TO_PORT="5030"
   make setup compose chrome=2 firefox=1
 else
   # My local laptop has more power so hit it harder
-  export VNC_FROM_PORT="5010" VNC_TO_PORT="5020"
   if [ "$(uname)" = 'Darwin' ]; then
     # Increase by 1 in OSX
     make setup compose chrome=2 firefox=1

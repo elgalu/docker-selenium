@@ -45,8 +45,8 @@ This project is normally tested in the last version of Docker and docker-compose
 To figure out the currently used specific versions it surely works on,
 see file [.travis.yml](./.travis.yml) example values:
 
-    docker --version         #=> 1.11.2
-    docker-compose --version #=> 1.7.1
+    docker --version         #=> 1.13.0
+    docker-compose --version #=> 1.10.0
 
 If you need to use docker-machine to run docker
 (like for example on a Mac before the Docker native version 1.12),
@@ -122,11 +122,15 @@ See [docker-compose](./docs/docker-compose.md)
 See [jenkins](./docs/jenkins.md)
 
 ### Parallel
-This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel you can still do so, there are some ways to do this:
+We now have a better suited product for this use case, is called [Zalenium][]
+
+This image is designed to run one test on each docker container but if you still want to run multiple tests in parallel you can still do so with [Zalenium][]
+
+If you want to limit yourself to this project, you still can. There are some ways to do it:
 
 1. The recommended way is via [docker-compose](./docs/docker-compose.md) and you should replace `mock` with your web service under test within the [docker-compose.yml][] file.
 
-        export SELENIUM_HUB_PORT=4444 VNC_FROM_PORT=40650 VNC_TO_PORT=40700 VIDEO=false
+        docker-compose -p grid up --force-recreate
         docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3
 
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
@@ -287,7 +291,7 @@ In Protrator
 However this is now the default of this image, see `CHROME_ARGS="--no-sandbox"` in the Dockerfile so don't be surprised to see the "Stability and security will suffer" banner when opening Chrome inside the container.
 
 ## Cloud Testing Platforms
-We now have a better suited product for this use case, is called [Zalenium](https://github.com/zalando/zalenium)
+We now have a better suited product for this use case, is called [Zalenium][]
 
 ## Additional Uses
 
@@ -451,3 +455,4 @@ See [LICENSE.md](./LICENSE.md)
 [BrowserStack]: https://www.browserstack.com/automate
 [xvfb-electron]: http://electron.atom.io/docs/tutorial/testing-on-headless-ci
 [docker-compose.yml]: ./docker-compose.yml
+[Zalenium]: https://github.com/zalando/zalenium

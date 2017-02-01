@@ -17,7 +17,6 @@ die () {
 # Required params or defaults
 [ -z "${NUM_NODES}" ] && die "Required env var NUM_NODES"
 [ -z "${PARAL_TESTS}" ] && die "Required env var PARAL_TESTS"
-[ -z "${SELENIUM_HUB_PORT}" ] && die "Required env var SELENIUM_HUB_PORT"
 [ -z "${WAIT_ALL_DONE}" ] && export WAIT_ALL_DONE="40s"
 [ -z "${PAUSE_SECS_BETWEEN_RUN_TEST}" ] && export PAUSE_SECS_BETWEEN_RUN_TEST="0"
 [ -z "${SLEEP_TIME}" ] && die "Required env var SLEEP_TIME"

@@ -16,7 +16,7 @@ Either clone this repository or download the file [docker-compose-host.yml][] us
 Either start with `docker-compose ... scale` as shown in below example or you can also use `docker-compose up` and scale after in a second command.
 You should replace `mock` with your web service under test within the [docker-compose-host.yml][] file..
 
-    export SELENIUM_HUB_PORT=4444 NODES=3
+    export NODES=3
     docker-compose -p grid scale mock=1 hub=1 chrome=${NODES} firefox=${NODES}
 
 Wait until the grid starts properly before starting the tests _(Optional but recommended)_

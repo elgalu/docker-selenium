@@ -9,8 +9,7 @@ echo "#===================================================================="
 # set -u: treat unset variables as an error and exit immediately
 set -xe
 
-export SELENIUM_HUB_PORT="4444" \
-       NUM_NODES=1 PARAL_TESTS=1 \
+export NUM_NODES=1 PARAL_TESTS=1 \
        VNC_FROM_PORT="41800" VNC_TO_PORT="41850" \
        VIDEO="false"
 
