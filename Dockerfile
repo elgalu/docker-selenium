@@ -557,7 +557,7 @@ USER root
 # GeckoDriver
 #============
 # Layer size: tiny: 4.088 MB
-ENV GECKOD_VER="0.13.0" \
+ENV GECKOD_VER="0.14.0" \
     GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \

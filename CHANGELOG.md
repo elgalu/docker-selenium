@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + Date: TBD_DATE
  + Upgrade Firefox (for selenium 3) from 51.0 to 51.0.1
+ + Upgrade Geckodriver minor from 0.13.0 to 0.14.0
  + Image tag details:
   + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
   + Selenium 3: 3.0.1 (1969d75)
