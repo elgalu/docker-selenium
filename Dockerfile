@@ -523,7 +523,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ENV FF_VER="51.0"
+ENV FF_VER="51.0.1"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
@@ -546,7 +546,7 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && sudo ln -fs /home/seluser/firefox-for-sel-2/firefox /usr/bin/firefox
 
 LABEL selenium2_firefox_version "47.0.1"
-LABEL selenium3_firefox_version "51.0"
+LABEL selenium3_firefox_version "51.0.1"
 
 #=============================
 # sudo by default from now on

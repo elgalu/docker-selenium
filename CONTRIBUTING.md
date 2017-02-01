@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Bump Chrome 56.0.2924.76 Firefox 51.0"
+    git commit -m "Upgrade Firefox (for selenium 3) from 51.0 to 51.0.1"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
