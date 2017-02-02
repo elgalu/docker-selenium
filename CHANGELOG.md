@@ -7,12 +7,37 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + Upgrade Chrome patch to 56.0.2924.87
+ + Image tag details:
+  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 3: 3.0.1 (1969d75)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+  + Geckodriver: TBD_GECKO_DRIVER
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Tested on kernel dev host: 4.4.0-59-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 1.13.0, build 49bf474
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at dev host with: Docker Compose version 1.10.1, build b252738
+  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 3.0.1-p7
  + Date: 2017-02-01
  + Upgrade Firefox (for selenium 3) from 51.0 to 51.0.1
  + Upgrade Geckodriver minor from 0.13.0 to 0.14.0
  + Fix docker-compose issue closes #141
- + Remove Selenium RC from tests are the feature is not being used
+ + Remove Selenium RC from tests as the feature is not being used
  + Image tag details:
   + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.0.1 (1969d75)
