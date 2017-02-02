@@ -7,30 +7,30 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.0.1-p8
+ + Date: 2017-02-02
  + Upgrade Chrome patch to 56.0.2924.87
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.0.1 (1969d75)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
+  + Chrome stable:  56.0.2924.87
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 51.0.1
+  + Geckodriver: 0.14.0
+  + Chromedriver: 2.27.440175 (9bc1d90b8bfa4dd181fbbf769a5eb5e575574320)
+  + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20170119
+  + Python: 2.7.12
   + Tested on kernel dev host: 4.4.0-59-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-51-generic x86_64
   + Built at dev host with: Docker version 1.13.0, build 49bf474
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 1.13.0, build 49bf474
   + Built at dev host with: Docker Compose version 1.10.1, build b252738
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.10.1, build b252738
+  + Image size: 1.25 GB
+  + Digest: sha256:c8a43173a1d8ec011862098dc98bf16a339f83592c8f30a1d838977c55ff8c0b
+  + Image ID: sha256:2157d0edc109c00dadfff9d73f0f9093dd8c377521b1164546ca93e0953ca94a
 
 ## 3.0.1-p7
  + Date: 2017-02-01
