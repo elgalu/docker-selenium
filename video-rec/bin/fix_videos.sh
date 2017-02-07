@@ -6,7 +6,12 @@ set -e
 # Optimize for HTTP streaming and fix end time
 for f in *.mp4; do
   echo "Optimizing ${f} for HTTP streaming..."
-  MP4Box -isma -inter 500 ${f}
+  # -inter Duration : interleaves media data in chunks of
+  # desired duration (in seconds). This is useful
+  # to optimize the file for HTTP/FTP streaming
+  # or reducing disk access.
+  # https://gpac.wp.imt.fr/mp4box/mp4box-documentation/
+  MP4Box -isma -inter ${MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS} ${f}
 done
 
 # May need to fix perms when mounting volumes

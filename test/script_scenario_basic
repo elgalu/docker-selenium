@@ -109,7 +109,7 @@ echo "# Scenario 1d [basic]: Selenium IDE RC and mount videos"
 echo "#==================================================================="
 
 rm -rf ./videos/mounted
-mkdir ./videos/mounted
+mkdir -p ./videos/mounted
 docker run --name=gridrc -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
