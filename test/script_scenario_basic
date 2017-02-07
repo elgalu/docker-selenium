@@ -105,9 +105,11 @@ docker cp grid3:/capabilities3.json .
 # docker rm grid3 || true
 
 echo "#==================================================================="
-echo "# Scenario 1d [basic]: Selenium IDE RC"
+echo "# Scenario 1d [basic]: Selenium IDE RC and mount videos"
 echo "#==================================================================="
 
+rm -rf ./videos/mounted
+mkdir ./videos/mounted
 docker run --name=gridrc -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
@@ -116,8 +118,10 @@ docker run --name=gridrc -d -e VIDEO=true \
   -e CHROME=true -e FIREFOX=true \
   -e RC_CHROME=true -e RC_FIREFOX=true \
   -e VIDEO_FILE_NAME=sele_ide \
+  -e HOST_GID=$(id -g) -e HOST_UID=$(id -u) \
   --shm-size=1g \
   -p 4444:24444 \
+  -v ${PWD}/videos/mounted:/home/seluser/videos \
   selenium
 
 sleep ${ADDED_TEST_SLEEP} && docker logs gridrc
@@ -134,8 +138,11 @@ RUBYOPT=W0 bundle exec ./seleIDE *.rb
 
 docker exec gridrc stop-video
 docker exec gridrc errors || true
+cd ../..
 mkdir -p ./videos/rc
-docker cp gridrc:/videos/sele_ide.mkv ./videos/rc/
+docker cp gridrc:/videos/sele_ide.mp4 ./videos/rc/
+ls -la ./videos/rc/sele_ide.mp4
+ls -la ./videos/mounted/sele_ide.mp4
 
 # cleanup
 docker stop gridrc || true

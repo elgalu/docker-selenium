@@ -45,7 +45,7 @@ However is better to stop the video service first then copy the videos to the ho
 ### View
 Check your video, note it may be splitted in many files if is too long
 
-    vlc videos/test.mkv
+    vlc videos/test.mp4
 
 ## Customizations
 

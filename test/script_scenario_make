@@ -38,7 +38,7 @@ else
 fi
 
 make test
-rm -f videos/*.mkv
+rm -f videos/*.mp4
 make videos
 make cleanup
 make down

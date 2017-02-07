@@ -46,5 +46,5 @@ fi
 
 # How to archive console.png and videos from the docker host:
 #  docker cp grid:/test/console.png .
-#  docker cp grid:/test/videos/chrome/test.mkv chrome.mkv
-#  docker cp grid:/test/videos/firefox/test.mkv firefox.mkv
+#  docker cp grid:/test/videos/chrome/test.mp4 chrome.mp4
+#  docker cp grid:/test/videos/firefox/test.mp4 firefox.mp4

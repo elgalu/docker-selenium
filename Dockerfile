@@ -440,6 +440,7 @@ RUN apt-get -qqy update \
 #=================================================
 # ffmpeg/libav/avconv video codecs & dependencies
 #=================================================
+# MP4Box (gpac) to clean the video credits to @taskworld @dtinth
 # Layer size: medium: 11.56 MB (with --no-install-recommends)
 # Layer size: medium: 20.76 MB
 RUN apt-get -qqy update \
@@ -447,6 +448,7 @@ RUN apt-get -qqy update \
     libx264-dev \
     libvorbis-dev \
     libx11-dev \
+    gpac \
   && rm -rf /var/lib/apt/lists/*
 
 #========
@@ -851,7 +853,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   FIREFOX="true" \
   RC_CHROME="false" \
   RC_FIREFOX="false" \
-  VIDEO_FILE_EXTENSION="mkv" \
+  VIDEO_FILE_EXTENSION="mp4" \
   VIDEO_FILE_NAME="" \
   VIDEO_CHUNK_SECS="00:05:00" \
   VIDEO_CHUNKS_MAX=999 \

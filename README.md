@@ -6,7 +6,7 @@
 [![Docker](https://images.microbadger.com/badges/version/elgalu/selenium.svg)](https://microbadger.com/images/elgalu/selenium "Docker Badge")
 
 * selenium server grid with 2 nodes (chrome & firefox)
-* mkv video recording
+* mp4 video recording
 * VNC access (useful for debugging the container)
 * google-chrome-stable
 * google-chrome-beta: no longer provided but [can still be found here][2.47.1m]
@@ -214,10 +214,10 @@ Relevant environment variables to customize it are:
 
     FFMPEG_FRAME_RATE=25
     VIDEO_FILE_NAME="test"
-    VIDEO_FILE_EXTENSION=mkv
+    VIDEO_FILE_EXTENSION=mp4
     FFMPEG_CODEC_ARGS=""
 
-It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mkv* is selected.
+It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mp4* is selected.
 
 ### VNC
 

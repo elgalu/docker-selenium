@@ -5,14 +5,14 @@ For pull requests or local commits:
 
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
     docker exec grid versions && ./test/after_script && travis lint
-    open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mkv
+    open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
     git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
     git checkout -b tmp-`cat VERSION`
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome patch to 56.0.2924.87"
+    git commit -m "Add MP4Box (gpac) to clean the video credits to @taskworld @dtinth"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

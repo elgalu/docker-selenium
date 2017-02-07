@@ -86,11 +86,11 @@ fi
 
 # Start a GUI xTerm to help debugging when VNC into the container
 # with a random geometry so we can differentiate multiple nodes
-GEOM1="$(python -c 'import random; print(random.randint(80,140))')"
-GEOM2="$(python -c 'import random; print(random.randint(30,50))')"
+GEOM1="$(python -c 'import random; print(random.randint(30,80))')"
+GEOM2="$(python -c 'import random; print(random.randint(3,12))')"
 # Do some match to position it on the bottom right corner
-POS_X="$((${SCREEN_WIDTH}-500-${GEOM1}))"
-POS_Y="$((${SCREEN_HEIGHT}-500-${GEOM2}))"
+POS_X="$((${SCREEN_WIDTH}-160-${GEOM1}))"
+POS_Y="$((${SCREEN_HEIGHT}-70-${GEOM2}))"
 x-terminal-emulator -ls  \
   -geometry ${GEOM1}x${GEOM2}+${POS_X}+${POS_Y} \
   -title "x-terminal-emulator" \
