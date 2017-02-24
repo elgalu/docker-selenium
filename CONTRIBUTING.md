@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Add MP4Box (gpac) to clean the video credits to @taskworld @dtinth"
+    git commit -m "Upgrade Selenium minor from 3.0.1 to 3.1.0"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

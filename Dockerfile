@@ -236,8 +236,8 @@ RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
 # Selenium 3
 #============
 # Layer size: medium: 22.14 MB
-ENV SEL_DIRECTORY="3.0" \
-    SEL_VER="3.0.1"
+ENV SEL_DIRECTORY="3.1" \
+    SEL_VER="3.1.0"
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
@@ -328,6 +328,8 @@ RUN SHA="8be5bc15e83f0f261fa50ef28de814dd14f7c25e" \
 # fonts-ipafont-gothic     13.09 MB
 # xfonts-100dpi            5.939 MB
 # xfonts-75dpi             5.509 MB
+# Regarding fonts-liberation see:
+#  https://github.com/SeleniumHQ/docker-selenium/issues/383#issuecomment-278367069
 # Layer size: small: 6.898 MB (with --no-install-recommends)
 # Layer size: small: 6.898 MB
 RUN apt-get -qqy update \
@@ -699,6 +701,10 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #     WEBDRIVER_NODE_CHROME_PARAMS='-Dwebdriver.chrome.args="--no-sandbox"' \
 #     Selenium capabilities descriptive (to avoid opera/ie warnings)
 #      docs at https://code.google.com/p/selenium/wiki/Grid2
+# SEL_RELEASE_TIMEOUT_SECS
+#   -timeout AKA GRID_TIMEOUT TODO fix with, ping @allanatadministrate
+#   https://github.com/SeleniumHQ/docker-selenium/pull/393
+# SEL_BROWSER_TIMEOUT_SECS
 # SELENIUM_NODE_REGISTER_CYCLE
 #   How often in ms the node will try to register itself again.
 #   Allow to restart the hub without having to restart the nodes.
