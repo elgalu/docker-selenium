@@ -25,8 +25,9 @@ fi
 # Stop video recording
 #----------------------
 export VIDEO=false
+sleep ${VIDEO_STOP_SLEEP_SECS}
 supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec
-# sleep ${VIDEO_STOP_SLEEP_SECS}
+sleep ${VIDEO_STOP_SLEEP_SECS}
 
 # Avoid waiting forever using the `timeout` command
 if timeout --foreground ${WAIT_TIME_OUT_VIDEO_STOP} \

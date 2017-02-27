@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Upgrade Selenium minor from 3.0.1 to 3.1.0"
+    git commit -m "Re-enable VIDEO_STOP_SLEEP_SECS="1" for 1 sec video fix"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
