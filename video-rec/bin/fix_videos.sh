@@ -5,6 +5,9 @@ set -e
 
 # Optimize for HTTP streaming and fix end time
 for f in *.mp4; do
+  # ponchio/untrunc is used to restore a damaged (truncated) video
+  # untrunc /home/seluser/working_video.mp4 ${f}
+
   echo "Optimizing ${f} for HTTP streaming..."
   # -inter Duration : interleaves media data in chunks of desired
   # duration (in seconds). This is useful to optimize the file for

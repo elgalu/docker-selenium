@@ -444,3 +444,22 @@ If you also want windows manager support, i.e. want to `make move` _(optional bu
     cd binaries && wget -O stable_updates.html "http://googlechromereleases.blogspot.de/search/label/Stable%20updates"
     VER=$(grep -Po '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)' stable_updates.html | head -1)
     rm -f stable_updates.html && cd ..
+
+### videos
+
+##################################################
+# untrunc to restore a damaged (truncated) video #
+##################################################
+# Download ponchio/untrunc dated 2015-09-08 commit 07be275f02927417e81da7d3729a3854b9d98b37
+ENV UNTRUNC_SHA="07be275f02927417e81da7d3729a3854b9d98b37"
+RUN  wget -nv -O unTrunc.zip \
+       "https://github.com/ponchio/untrunc/archive/${UNTRUNC_SHA}.zip" \
+  && unzip -x unTrunc.zip \
+  && mv untrunc-${UNTRUNC_SHA} untrunc \
+  && rm unTrunc.zip \
+  && cd untrunc \
+  && g++ -o untrunc file.cpp main.cpp \
+            track.cpp atom.cpp mp4.cpp \
+            -L/usr/local/lib -lavformat \
+            -lavcodec -lavutil \
+  && mv untrunc /usr/bin

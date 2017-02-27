@@ -443,6 +443,8 @@ RUN apt-get -qqy update \
 # ffmpeg/libav/avconv video codecs & dependencies
 #=================================================
 # MP4Box (gpac) to clean the video credits to @taskworld @dtinth
+# ponchio/untrunc dependencies to restore a damaged (truncated) video
+#   libavformat-dev libavcodec-dev libavutil-dev libqt4-dev make g++ libz-dev
 # Layer size: medium: 11.56 MB (with --no-install-recommends)
 # Layer size: medium: 20.76 MB
 RUN apt-get -qqy update \
@@ -860,11 +862,11 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   RC_CHROME="false" \
   RC_FIREFOX="false" \
   VIDEO_FILE_EXTENSION="mp4" \
-  MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS="500" \
+  MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS="50" \
   VIDEO_FILE_NAME="" \
-  VIDEO_CHUNK_SECS="00:05:00" \
-  VIDEO_CHUNKS_MAX=999 \
-  VIDEO_STOP_SLEEP_SECS="1" \
+  VIDEO_CHUNK_SECS="00:15:00" \
+  VIDEO_BEFORE_STOP_SLEEP_SECS="1" \
+  VIDEO_AFTER_STOP_SLEEP_SECS="0.5" \
   WAIT_TIME_OUT_VIDEO_STOP="20s" \
   VIDEOS_DIR="/home/seluser/videos" \
   XMANAGER="fluxbox" \
@@ -882,6 +884,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_STOP_SIGNAL="TERM" \
   NOVNC_STOP_SIGNAL="TERM" \
   VIDEO_REC_STOP_SIGNAL="INT" \
+  VIDEO_STOPWAITSECS=20 \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.5" \
   SEND_ANONYMOUS_USAGE_INFO="true" \

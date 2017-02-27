@@ -3,7 +3,7 @@
 ## Local
 For pull requests or local commits:
 
-    time (./test/bef && ./test/install && ./test/script_start && ./test/script_end) ; beep
+    time (./test/bef && ./test/install && ./test/script_start && ./test/script_end)
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
     git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Re-enable VIDEO_STOP_SLEEP_SECS="1" for 1 sec video fix"
+    git commit -m "Add VIDEO_BEFORE_STOP_SLEEP_SECS and VIDEO_AFTER_STOP_SLEEP_SECS"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

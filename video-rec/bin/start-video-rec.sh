@@ -22,9 +22,7 @@ VID_TOOL_PID=$!
 # sudo killall -SIGINT avconv
 function shutdown {
   echo "Trapped SIGTERM or SIGINT so shutting down ffmpeg gracefully..."
-  sleep ${VIDEO_STOP_SLEEP_SECS}
-  kill -SIGTERM ${VID_TOOL_PID} || true
-  sleep ${VIDEO_STOP_SLEEP_SECS}
+  kill -SIGINT ${VID_TOOL_PID} || true
   wait ${VID_TOOL_PID}
   fix_videos.sh
   echo "ffmpeg shutdown complete."
