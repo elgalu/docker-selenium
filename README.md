@@ -24,6 +24,10 @@ Selenium 3  `docker run ... -e USE_SELENIUM=3`
 ### Purpose
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
 
+This purpose is augmented by [Zalenium][] a project which uses this one to provide docker-selenium(s) on-demand.
+
+[Zalenium][] also forwards tests to a Cloud Provider (Sauce Labs, BrowserStack, TestingBot) when necessary.
+
 <h2 id="official">Official repo</h2>
 
 Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium) and this one share the same purpose however both projects have diverged considerably in the last two years, some major differences are:
