@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Add VIDEO_BEFORE_STOP_SLEEP_SECS and VIDEO_AFTER_STOP_SLEEP_SECS"
+    git commit -m "#144 @christopheg Splitting the images is no longer supported"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
