@@ -43,7 +43,6 @@ avconv -f x11grab \
   -video_size ${FFMPEG_FRAME_SIZE} \
   -i "${DISPLAY}.0+0,0" \
   ${FFMPEG_CODEC_ARGS} \
-  -t "${VIDEO_CHUNK_SECS}" \
   -segment_format_options movflags=+faststart \
   -y -an "${video_path}" 2>&1 &
 LAST_FFMPEG_PID=$!
