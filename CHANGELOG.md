@@ -7,32 +7,32 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.1.0-p3
+ + Date: 2017-03-02
  + #144 @christopheg Splitting the images is no longer supported:
  +                     Cleanup of unused variable
  +                     Update of documentation
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.1.0 (86a5d70)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
+  + Chrome stable:  56.0.2924.87
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 51.0.1
+  + Geckodriver: 0.14.0
+  + Chromedriver: 2.27.440175 (9bc1d90b8bfa4dd181fbbf769a5eb5e575574320)
+  + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20170119
+  + Python: 2.7.12
   + Tested on kernel dev host: 4.4.0-64-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-51-generic x86_64
   + Built at dev host with: Docker version 1.13.1, build 092cba3
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 17.03.0, build 60ccb22
   + Built at dev host with: Docker Compose version 1.11.2, build dfed245
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.11.2, build dfed245
+  + Image size: 1.26 GB
+  + Digest: sha256:0b8001f8a65e55b283f59dd4bf208fb2ca4cbe5949c17c91bc078d56869b2977
+  + Image ID: sha256:c245d78e8b1946d0d3685010477baa02770fe973b7c0cc1c5b69c799720521d8
 
 ## 3.1.0-p2
  + Date: 2017-02-27
