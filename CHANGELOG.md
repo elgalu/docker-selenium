@@ -7,6 +7,34 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + Date: TBD_DATE
+ + Upgrade Selenium minor from 3.1.0 to 3.2.0
+ + Upgrade Chrome major from 56 to 57.0.2987.98
+ + Upgrade Chromedriver minor from 2.27 to 2.28
+ + Upgrade Ubuntu xenial-20170214
+ + Image tag details:
+  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 3: 3.2.0 (8c03df6)
+  + Chrome stable:  TBD_CHROME_STABLE
+  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+  + Geckodriver: TBD_GECKO_DRIVER
+  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+  + Timezone: TBD_TIME_ZONE
+  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+  + Python: TBD_PYTHON_VERSION
+  + Tested on kernel dev host: 4.4.0-66-generic x86_64
+  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Built at dev host with: Docker version 17.03.0-ce, build 60ccb22
+  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at dev host with: Docker Compose version 1.11.2, build dfed245
+  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+  + Image size: TBD_IMAGE_SIZE
+  + Digest: TBD_DIGEST
+  + Image ID: TBD_IMAGE_ID
+
 ## 3.1.0-p3
  + Date: 2017-03-02
  + #144 @christopheg Splitting the images is no longer supported:

@@ -1,9 +1,9 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
 # Layer size: big: 127.2 MB
-FROM ubuntu:xenial-20170119
+FROM ubuntu:xenial-20170214
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20170119"
+    UBUNTU_DATE="20170214"
 
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
@@ -236,8 +236,8 @@ RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
 # Selenium 3
 #============
 # Layer size: medium: 22.14 MB
-ENV SEL_DIRECTORY="3.1" \
-    SEL_VER="3.1.0"
+ENV SEL_DIRECTORY="3.2" \
+    SEL_VER="3.2.0"
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
@@ -577,13 +577,13 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="56.0.2924.87" \
+ENV CHROME_VERSION_TRIGGER="57.0.2987.98" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium2_chrome_version "56.0.2924.87"
-LABEL selenium3_chrome_version "56.0.2924.87"
+LABEL selenium2_chrome_version "57.0.2987.98"
+LABEL selenium3_chrome_version "57.0.2987.98"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
@@ -612,7 +612,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ENV CHROME_DRIVER_VERSION="2.27" \
+ENV CHROME_DRIVER_VERSION="2.28" \
     CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"

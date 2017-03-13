@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "#144 @christopheg Splitting the images is no longer supported"
+    git commit -m "Upgrade Selenium from 3.1.0 to 3.2.0"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
