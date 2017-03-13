@@ -7,33 +7,33 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + Date: TBD_DATE
+## 3.2.0-p0
+ + Date: 2017-03-13
  + Upgrade Selenium minor from 3.1.0 to 3.2.0
  + Upgrade Chrome major from 56 to 57.0.2987.98
  + Upgrade Chromedriver minor from 2.27 to 2.28
  + Upgrade Ubuntu xenial-20170214
  + Image tag details:
-  + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+  + Selenium 2: 2.53.1 (a36b8b1)
   + Selenium 3: 3.2.0 (8c03df6)
-  + Chrome stable:  TBD_CHROME_STABLE
-  + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-  + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-  + Geckodriver: TBD_GECKO_DRIVER
-  + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-  + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-  + Timezone: TBD_TIME_ZONE
-  + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-  + Python: TBD_PYTHON_VERSION
+  + Chrome stable:  57.0.2987.98
+  + Firefox for Selenium 2: 47.0.1
+  + Firefox for Selenium 3: 51.0.1
+  + Geckodriver: 0.14.0
+  + Chromedriver: 2.28.455506 (18f6627e265f442aeec9b6661a49fe819aeeea1f)
+  + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+  + Timezone: Europe/Berlin
+  + FROM ubuntu:xenial-20170214
+  + Python: 2.7.12
   + Tested on kernel dev host: 4.4.0-66-generic x86_64
-  + Tested on kernel CI  host: TBD_HOST_UNAME
+  + Tested on kernel CI  host: 4.4.0-51-generic x86_64
   + Built at dev host with: Docker version 17.03.0-ce, build 60ccb22
-  + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+  + Built at CI  host with: Docker version 17.03.0, build 60ccb22
   + Built at dev host with: Docker Compose version 1.11.2, build dfed245
-  + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-  + Image size: TBD_IMAGE_SIZE
-  + Digest: TBD_DIGEST
-  + Image ID: TBD_IMAGE_ID
+  + Built at CI  host with: Docker Compose version 1.11.2, build dfed245
+  + Image size: 1.25 GB
+  + Digest: sha256:21ba388f969f4b48db67d351a448a4ff849c6109e50999c10b092cb0ff0e813c
+  + Image ID: sha256:94c02ed940137d1365f15fd7e14d6a4465c23162bd5d401b7e54438c6a66faf9
 
 ## 3.1.0-p3
  + Date: 2017-03-02
