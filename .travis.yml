@@ -2,8 +2,8 @@
 # us to pick a language else it will pick Ruby by default
 # Choose a lightweight base image; we provide our own build tools.
 # https://github.com/lukasmartinelli/hadolint/blob/master/.travis.yml#L1
-# `language: generic` was failing in OSX
-language: c
+# language: generic was failing in OSX so in that case you can use language: c
+language: generic
 
 # Omit running tests on temporal branches,
 #  i.e. branches with names that start with "tmp"
@@ -17,20 +17,11 @@ env:
     - ADDED_TEST_SLEEP="6.5"
 
 matrix:
-  # allow_failures:
-  #   # Currently erroring in Mac (OSX):
-  #   #  https://travis-ci.org/elgalu/docker-selenium/jobs/143553463#L636
-  #   #   com.docker.docker Incompatible CPU detected
-  #   #   Docker requires a processor with virtualization capabilities
-  #   - env:
-  #       - DOCKER_VERSION="stable"
-  #         DOCKER_COMPOSE_VERSION="stable"
-  #         OPERATING_SYSTEM="osx"
   include:
     # Linux with docker:stable compose:stable
     # Use DOCKER_PUSH_LATEST=false to debug
     - os: linux
-      language: c
+      language: generic
       sudo: required
       dist: trusty
       services:
@@ -40,19 +31,9 @@ matrix:
           DOCKER_COMPOSE_VERSION="1.11.2"
           DOCKER_PUSH=true
           DOCKER_PUSH_LATEST=true
-    # Linux with docker:beta/older compose:beta/older
-    - os: linux
-      language: c
-      sudo: required
-      dist: trusty
-      services:
-        - docker
-      env:
-        - DOCKER_VERSION="1.13.1-rc1"
-          DOCKER_COMPOSE_VERSION="1.11.2"
     # Linux with docker:stable compose:beta/older
     - os: linux
-      language: c
+      language: generic
       sudo: required
       dist: trusty
       services:
@@ -60,23 +41,6 @@ matrix:
       env:
         - DOCKER_VERSION="stable"
           DOCKER_COMPOSE_VERSION="1.11.2"
-    # Linux with docker:beta/older compose:stable
-    - os: linux
-      language: c
-      sudo: required
-      dist: trusty
-      services:
-        - docker
-      env:
-        - DOCKER_VERSION="1.13.1-rc1"
-          DOCKER_COMPOSE_VERSION="1.11.2"
-    # Mac OSX: only test native docker version
-    # - os: osx
-    #   osx_image: xcode8
-    #   env:
-    #     - DOCKER_VERSION="stable"
-    #       DOCKER_COMPOSE_VERSION="stable"
-    #       OPERATING_SYSTEM="osx"
 
 before_install:
   - travis_retry ./test/before_install_setup
