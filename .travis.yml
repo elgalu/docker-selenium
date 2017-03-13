@@ -40,7 +40,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.11.2"
+          DOCKER_COMPOSE_VERSION="1.11.1"
 
 before_install:
   - travis_retry ./test/before_install_setup
