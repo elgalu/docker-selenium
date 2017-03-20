@@ -235,7 +235,7 @@ RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
 #============
 # Selenium 3
 #============
-# Layer size: medium: 22.14 MB
+# Layer size: medium ~22 MB
 ENV SEL_DIRECTORY="3.2" \
     SEL_VER="3.2.0"
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -243,6 +243,8 @@ RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && wget -nv ${SELBASE}/${SELPATH} \
   && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
            "selenium-server-standalone-3.jar"
+
+LABEL selenium_version "3.2.0"
 
 #=============================
 # sudo by default from now on
@@ -553,6 +555,7 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
 
 LABEL selenium2_firefox_version "47.0.1"
 LABEL selenium3_firefox_version "51.0.1"
+LABEL selenium_firefox_version "51.0.1"
 
 #=============================
 # sudo by default from now on
@@ -577,13 +580,14 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="57.0.2987.98" \
+ENV CHROME_VERSION_TRIGGER="57.0.2987.110" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium2_chrome_version "57.0.2987.98"
-LABEL selenium3_chrome_version "57.0.2987.98"
+LABEL selenium2_chrome_version "57.0.2987.110"
+LABEL selenium3_chrome_version "57.0.2987.110"
+LABEL selenium_chrome_version "57.0.2987.110"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
