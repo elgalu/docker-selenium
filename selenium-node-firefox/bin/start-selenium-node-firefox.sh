@@ -39,7 +39,10 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 # See node defaults at
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 # TODO: how to set default firefox to latest?
-export FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS},version=${FIREFOX_VERSION},firefox_binary=${FIREFOX_DEST_BIN}"
+FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS}"
+FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},version=${FIREFOX_VERSION}"
+FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},firefox_binary=${FIREFOX_DEST_BIN}"
+
 java \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \

@@ -34,7 +34,10 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/GridParameters.properties
 # See node defaults at
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
-CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
+CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS}"
+CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},version=${CHROME_VERSION}"
+CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},chrome_binary=${CHROME_PATH}"
+
 java \
   -Dwebdriver.chrome.driver="/home/seluser/chromedriver" \
   -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \

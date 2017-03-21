@@ -7,8 +7,44 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (TBD_DATE)
+    + Add screen resolution aliases as capabilities for Zalenium
+        screenResolution
+        resolution
+        screen-resolution
+
+      e.g.
+        12:50:55.546 INFO - Adding browserName=chrome,maxInstances=1,platform=LINUX,acceptSslCerts=true,screenResolution=1900x1880,resolution=1900x1880,screen-resolution=1900x1880,version=57.0.2987.110 ,chrome_binary=/usr/bin/google-chrome-stable
+
+        12:50:55.543 INFO - Adding browserName=firefox,maxInstances=1,platform=LINUX,acceptSslCerts=true,screenResolution=1900x1880,resolution=1900x1880,screen-resolution=1900x1880,version=47.0.1,firefox_binary=/home/seluser/firefox-for-sel-2/firefox
+
+    + Remove docker:stable compose:beta/older TravisCI test as is not providing any value
+    + Bump Supervisor up to 2017-03-07 commit: 23925d017f8ecc
+ + **Image tag details:**
+    + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+    + Selenium 3: 3.2.0 (8c03df6)
+    + Chrome stable:  TBD_CHROME_STABLE
+    + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+    + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+    + Geckodriver: TBD_GECKO_DRIVER
+    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+    + Timezone: TBD_TIME_ZONE
+    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+    + Python: TBD_PYTHON_VERSION
+    + Tested on kernel dev host: 4.4.0-66-generic x86_64
+    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Built at dev host with: Docker version 17.03.0-ce, build 60ccb22
+    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at dev host with: Docker Compose version 1.11.2, build dfed245
+    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+    + Image size: TBD_IMAGE_SIZE
+    + Digest: TBD_DIGEST
+    + Image ID: TBD_IMAGE_ID
+
 ## 3.2.0-p1
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (2017-03-20)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/b87af04d2d7f767c65d666d...6bf62d977c15c77084e3b2b (2017-03-20)
     + Upgrade Chrome patch to 57.0.2987.110
     + Add Dockerfile `LABEL selenium_version`
  + **Image tag details:**

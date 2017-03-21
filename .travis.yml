@@ -31,16 +31,6 @@ matrix:
           DOCKER_COMPOSE_VERSION="1.11.2"
           DOCKER_PUSH=true
           DOCKER_PUSH_LATEST=true
-    # Linux with docker:stable compose:beta/older
-    - os: linux
-      language: generic
-      sudo: required
-      dist: trusty
-      services:
-        - docker
-      env:
-        - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.11.1"
 
 before_install:
   - travis_retry ./test/before_install_setup

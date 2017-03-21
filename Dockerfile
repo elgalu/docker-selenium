@@ -307,11 +307,11 @@ RUN apt-get -qqy update \
 # RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     supervisor \
+# 2017-03-07 commit: 23925d017f8ecc, supervisor/version.txt: 4.0.0.dev0
 # 2017-01-05 commit: 8be5bc15e83f0f, supervisor/version.txt: 4.0.0.dev0
 # 2016-11-05 commit: cbebb93f58f4a9, supervisor/version.txt: 4.0.0.dev0
-# 2016-10-09 commit: 427eb2bc6b08f7, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
-RUN SHA="8be5bc15e83f0f261fa50ef28de814dd14f7c25e" \
+RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/*

@@ -74,15 +74,30 @@ export DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log"
 export VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr"
 export VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
 touch ${DOCKER_SELENIUM_STATUS}
+
 # We recalculate screen dimensions because docker run supports changing them
 export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
 export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
+
 # These values are only available when the container started
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
-export COMMON_CAPS="maxInstances=${MAX_INSTANCES},platform=LINUX,acceptSslCerts=true"
+
+# Common capabilities for both nodes (Chrome/Firefox)
+export COMMON_CAPS="maxInstances=${MAX_INSTANCES}"
+export COMMON_CAPS="${COMMON_CAPS},platform=LINUX"
+export COMMON_CAPS="${COMMON_CAPS},acceptSslCerts=true"
+# https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-SpecifyingtheScreenResolution
+export COMMON_CAPS="${COMMON_CAPS},screenResolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+# https://www.browserstack.com/automate/capabilities
+export COMMON_CAPS="${COMMON_CAPS},resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+# https://testingbot.com/support/other/test-options#screenresolution
+export COMMON_CAPS="${COMMON_CAPS},screen-resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+
+# CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
 export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
 export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
+
 # Video
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
