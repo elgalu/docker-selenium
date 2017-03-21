@@ -8,16 +8,16 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.2.0-p2
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (2017-03-21)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/6bf62d977c15c77084e3b2b...1fc47f3ae9194f3192ed17 (2017-03-21)
     + Add screen resolution aliases as capabilities for Zalenium
-        screenResolution
-        resolution
-        screen-resolution
+        **screenResolution**
+        **resolution**
+        **screen-resolution**
 
       e.g.
-        12:50:55.546 INFO - Adding browserName=chrome,maxInstances=1,platform=LINUX,acceptSslCerts=true,screenResolution=1900x1880,resolution=1900x1880,screen-resolution=1900x1880,version=57.0.2987.110 ,chrome_binary=/usr/bin/google-chrome-stable
+        `12:50:55.546 INFO - Adding browserName=chrome,maxInstances=1,platform=LINUX,acceptSslCerts=true,screenResolution=1900x1880,resolution=1900x1880,screen-resolution=1900x1880,version=57.0.2987.110 ,chrome_binary=/usr/bin/google-chrome-stable`
 
-        12:50:55.543 INFO - Adding browserName=firefox,maxInstances=1,platform=LINUX,acceptSslCerts=true,screenResolution=1900x1880,resolution=1900x1880,screen-resolution=1900x1880,version=47.0.1,firefox_binary=/home/seluser/firefox-for-sel-2/firefox
+        `12:50:55.543 INFO - Adding browserName=firefox,maxInstances=1,platform=LINUX,acceptSslCerts=true,screenResolution=1900x1880,resolution=1900x1880,screen-resolution=1900x1880,version=47.0.1,firefox_binary=/home/seluser/firefox-for-sel-2/firefox`
 
     + Remove docker:stable compose:beta/older TravisCI test as is not providing any value
     + Bump Supervisor up to 2017-03-07 commit: 23925d017f8ecc
