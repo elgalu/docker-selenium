@@ -3,20 +3,6 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-# Optimize for HTTP streaming and fix end time
-for f in *.mp4; do
-  # ponchio/untrunc is used to restore a damaged (truncated) video
-  # untrunc /home/seluser/working_video.mp4 ${f}
-
-  echo "Optimizing ${f} for HTTP streaming..."
-  # -inter Duration : interleaves media data in chunks of desired
-  # duration (in seconds). This is useful to optimize the file for
-  # HTTP/FTP streaming or reducing disk access.
-  # https://gpac.wp.imt.fr/mp4box/mp4box-documentation/
-  MP4Box -isma -inter ${MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS} ${f}
-  # Credits to @taskworld @dtinth https://goo.gl/JhJRI8
-done
-
 # May need to fix perms when mounting volumes
 #  Issue: http://stackoverflow.com/questions/23544282/
 #  Solution: http://stackoverflow.com/a/28596874/511069
@@ -41,3 +27,17 @@ fi
 
 echo "Fixing perms for "${VIDEO_BASE_PATH}"*"
 sudo chown ${HOST_UID}:${HOST_GID} "${VIDEO_BASE_PATH}"*
+
+# Optimize for HTTP streaming and fix end time
+for f in "${VIDEO_BASE_PATH}"*; do
+  # ponchio/untrunc is used to restore a damaged (truncated) video
+  # untrunc /home/seluser/working_video.mp4 ${f}
+
+  echo "Optimizing ${f} for HTTP streaming..."
+  # -inter Duration : interleaves media data in chunks of desired
+  # duration (in seconds). This is useful to optimize the file for
+  # HTTP/FTP streaming or reducing disk access.
+  # https://gpac.wp.imt.fr/mp4box/mp4box-documentation/
+  MP4Box -isma -inter ${MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS} ${f}
+  # Credits to @taskworld @dtinth https://goo.gl/JhJRI8
+done

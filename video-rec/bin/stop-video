@@ -40,3 +40,10 @@ else
 
   die "Were unable to stop video recording within '${WAIT_TIME_OUT_VIDEO_STOP}'"
 fi
+
+# Include videos log in the output
+echo "DEBUG: video-rec-stdout.log ----"
+tail -n 30 ${LOGS_DIR}/video-rec-stdout.log || true
+
+echo "DEBUG: video-rec-stderr.log ----"
+tail -n 30 ${LOGS_DIR}/video-rec-stderr.log || true
