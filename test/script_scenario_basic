@@ -62,6 +62,14 @@ docker exec grid versions
 docker exec grid errors || true
 docker logs grid
 
+# Test videos
+docker exec grid stop-video
+docker logs grid
+docker exec -t grid log "-- DEBUG: video-rec-stdout.log ----"
+docker exec -t grid tail -n 40 /var/log/cont/video-rec-stdout.log || true
+docker exec -t grid log "-- DEBUG: video-rec-stderr.log ----"
+docker exec -t grid tail -n 40 /var/log/cont/video-rec-stderr.log || true
+
 echo "#==================================================================="
 echo "# Scenario 1b [basic]: Run tests right after the container started"
 echo "#==================================================================="

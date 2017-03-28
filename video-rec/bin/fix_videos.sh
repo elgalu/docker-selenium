@@ -3,10 +3,25 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+echoerr() { printf "%s\n" "$*" >&2; }
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
+  errnum=${2-115}
+  exit $errnum
+}
+
+# Required params
+[ -z "${tmp_video_path}" ] && die "Need env var set \$tmp_video_path"
+[ -z "${final_video_path}" ] && die "Need env var set \$final_video_path"
+
 # May need to fix perms when mounting volumes
 #  Issue: http://stackoverflow.com/questions/23544282/
 #  Solution: http://stackoverflow.com/a/28596874/511069
 if [ -z "${HOST_GID}" ] && [ -z "${HOST_UID}" ]; then
+  [ -z "${VIDEOS_DIR}" ] && die "Need env var set \$VIDEOS_DIR"
   export HOST_GID=$(stat -c "%g" ${VIDEOS_DIR})
   export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
 else
@@ -22,22 +37,31 @@ else
   fi
 fi
 
-[ -z "${VIDEO_BASE_PATH}" ] && export \
-    VIDEO_BASE_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}"
+# Portable defaults
+# [ -z "${VIDEO_BASE_PATH}" ] && export \
+#     VIDEO_BASE_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}"
 
-echo "Fixing perms for "${VIDEO_BASE_PATH}"*"
-sudo chown ${HOST_UID}:${HOST_GID} "${VIDEO_BASE_PATH}"*
+log "Fixing perms for "${tmp_video_path}"*"
+sudo chown ${HOST_UID}:${HOST_GID} "${tmp_video_path}"* || true
 
-# Optimize for HTTP streaming and fix end time
-for f in "${VIDEO_BASE_PATH}"*; do
-  # ponchio/untrunc is used to restore a damaged (truncated) video
-  # untrunc /home/seluser/working_video.mp4 ${f}
+if [ "${VIDEO_TMP_FILE_EXTENSION}" != "${VIDEO_FILE_EXTENSION}" ]; then
+  log "Changing video encoding from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION}..."
+  # ffmpeg -i ${tmp_video_path} -vcodec libx264 -crf ${FFMPEG_FINAL_CRF} ${final_video_path}
+  ffmpeg -i ${tmp_video_path} ${final_video_path}
+  log "Conversion from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION} completed, cleaning up ${tmp_video_path} ..."
+  rm -f "${tmp_video_path}"
+fi
 
-  echo "Optimizing ${f} for HTTP streaming..."
-  # -inter Duration : interleaves media data in chunks of desired
-  # duration (in seconds). This is useful to optimize the file for
-  # HTTP/FTP streaming or reducing disk access.
-  # https://gpac.wp.imt.fr/mp4box/mp4box-documentation/
-  MP4Box -isma -inter ${MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS} ${f}
-  # Credits to @taskworld @dtinth https://goo.gl/JhJRI8
-done
+if [ "${VIDEO_FILE_EXTENSION}" == "mp4" ]; then
+  log "Optimizing ${final_video_path} for HTTP streaming..."
+
+  # Portable defaults
+  [ -z "${VIDEO_MP4_FIX_MAX_WAIT}" ] && export \
+      VIDEO_MP4_FIX_MAX_WAIT="7s"
+
+  if timeout --foreground "${VIDEO_MP4_FIX_MAX_WAIT}" mp4box_retry.sh; then
+    log "Succeeded to mp4box_retry.sh within ${VIDEO_MP4_FIX_MAX_WAIT}"
+  else
+    log "Failed! to mp4box_retry.sh within ${VIDEO_MP4_FIX_MAX_WAIT}"
+  fi
+fi

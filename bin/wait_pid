@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# WAIT for “any process” to finish
+# http://stackoverflow.com/questions/1058047/wait-for-any-process-to-finish
+for pid in "$@"; do
+    while kill -0 "$pid" 2>/dev/null; do
+        sleep 0.5
+    done
+done

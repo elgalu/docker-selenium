@@ -42,6 +42,15 @@ if [ "${VIDEO}" = "true" ]; then
   stop-video
   mkdir -p /test/videos/${browser_name}
   mv /videos/* /test/videos/${browser_name}/
+
+  for f in /test/videos/${browser_name}/*; do
+    # Validate the videos are correctly encoded
+    if MP4Box -isma -inter \
+           ${MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS} ${f} 2>&1 | \
+           grep "Error opening"; then
+      die "MP4Box got errors meaning the mp4 video file is corrupted!"
+    fi
+  done
 fi
 
 # How to archive console.png and videos from the docker host:

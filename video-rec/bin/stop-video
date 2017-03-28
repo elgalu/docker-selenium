@@ -25,9 +25,7 @@ fi
 # Stop video recording
 #----------------------
 export VIDEO=false
-sleep ${VIDEO_BEFORE_STOP_SLEEP_SECS}
 supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec
-sleep ${VIDEO_AFTER_STOP_SLEEP_SECS}
 
 # Avoid waiting forever using the `timeout` command
 if timeout --foreground ${WAIT_TIME_OUT_VIDEO_STOP} \
@@ -42,8 +40,8 @@ else
 fi
 
 # Include videos log in the output
-echo "DEBUG: video-rec-stdout.log ----"
-tail -n 30 ${LOGS_DIR}/video-rec-stdout.log || true
+log "-- DEBUG: video-rec-stdout.log ----"
+tail -n 40 ${LOGS_DIR}/video-rec-stdout.log || true
 
-echo "DEBUG: video-rec-stderr.log ----"
-tail -n 30 ${LOGS_DIR}/video-rec-stderr.log || true
+log "-- DEBUG: video-rec-stderr.log ----"
+tail -n 40 ${LOGS_DIR}/video-rec-stderr.log || true

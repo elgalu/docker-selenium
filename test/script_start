@@ -6,6 +6,7 @@ set -xe
 
 [ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
 
+rm -rf ./videos
 ./test/script_bats
 ./test/script_scenario_basic
 ./test/script_scenario_restart
