@@ -286,6 +286,17 @@ else
   export CUSTOM_SELENIUM_NODE_REGISTER_CYCLE=""
 fi
 
+# -ge # greater than or equal
+if [ "${SELENIUM_NODE_CH_PORT}" -ge "40000" ] && \
+   [ "${SELENIUM_NODE_CH_PORT}" != "${DEFAULT_SELENIUM_NODE_CH_PORT}" ];then
+    SELENIUM_FIRST_NODE_PORT=${SELENIUM_NODE_CH_PORT}
+fi
+
+if [ "${SELENIUM_NODE_FF_PORT}" -ge "40000" ] && \
+   [ "${SELENIUM_NODE_FF_PORT}" != "${DEFAULT_SELENIUM_NODE_FF_PORT}" ];then
+    export SELENIUM_FIRST_NODE_PORT=${SELENIUM_NODE_FF_PORT}
+fi
+
 ga_track_start () {
   if [ "${SEND_ANONYMOUS_USAGE_INFO}" == "true" ]; then
     DisplayDataProcessingAgreement

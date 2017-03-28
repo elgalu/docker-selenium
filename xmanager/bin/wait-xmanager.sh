@@ -19,7 +19,7 @@ die () {
 # It happens that the process name of the X manager is the same as
 #  the $XMANAGER variable so this just works `ps -A | grep "${XMANAGER}"`
 echo "Waiting for X Manager '${XMANAGER}' to be ready..."
-while ! ps -A | grep "${XMANAGER}" > /dev/null 2>&1; do
+while ! ps -A | grep "${XMANAGER}" >/dev/null 2>&1; do
   echo -n '.'
   sleep 0.1
 done

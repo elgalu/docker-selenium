@@ -447,27 +447,29 @@ RUN apt-get -qqy update \
 # MP4Box (gpac) to clean the video credits to @taskworld @dtinth
 # ponchio/untrunc dependencies to restore a damaged (truncated) video
 #   libavformat-dev libavcodec-dev libavutil-dev libqt4-dev make g++ libz-dev
-# Layer size: medium: 11.56 MB (with --no-install-recommends)
-# Layer size: medium: 20.76 MB
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
-    libx264-dev \
-    libvorbis-dev \
-    libx11-dev \
-    gpac \
-  && rm -rf /var/lib/apt/lists/*
+# Layer size: medium: ~12 MB (with --no-install-recommends)
+# Layer size: medium: ~21 MB
+# RUN apt-get -qqy update \
+#   && apt-get -qqy --no-install-recommends install \
+#     libx264-dev \
+#     libvorbis-dev \
+#     libx11-dev \
+#     gpac \
+#   && rm -rf /var/lib/apt/lists/*
 
 #========
 # ffmpeg
 #========
+# MP4Box (gpac) to clean the video credits to @taskworld @dtinth
 # ffmpeg (ffmpeg): Is a better alternative to Pyvnc2swf
 #   (use in Ubuntu >= 15) packages: ffmpeg
-# Layer size: medium: 11.54 MB (with --no-install-recommends)
-# Layer size: medium: 16.7 MB
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
-#     ffmpeg \
-#   && rm -rf /var/lib/apt/lists/*
+# Layer size: medium: ~12 MB (with --no-install-recommends)
+# Layer size: medium: ~17 MB
+RUN apt-get -qqy update \
+  && apt-get -qqy install \
+    ffmpeg \
+    gpac \
+  && rm -rf /var/lib/apt/lists/*
 
 #==============
 # libav/avconv
@@ -497,6 +499,11 @@ RUN apt-get -qqy update \
 #-----------------#
 # Install all Firefox dependencies
 # Layer size: big: 83.51 MB
+# Adding libasound2 and others, credits to @jackTheRipper
+#  https://github.com/SeleniumHQ/docker-selenium/pull/418
+    # libasound2 \
+    # libpulse-dev \
+    # xul-ext-ubufox \
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     `apt-cache depends firefox | awk '/Depends:/{print$2}'` \
@@ -857,19 +864,29 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   LOGFILE_MAXBYTES=10MB \
   LOGFILE_BACKUPS=5 \
   LOGS_DIR="/var/log/cont" \
-  FFMPEG_FRAME_RATE=15 \
-  FFMPEG_CODEC_ARGS="-vcodec libx264 -crf 0 -preset ultrafast" \
+  FFMPEG_FRAME_RATE=10 \
+  FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0" \
+  FFMPEG_FINAL_CRF=0 \
   VIDEO="false" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
   RC_CHROME="false" \
   RC_FIREFOX="false" \
+  VIDEO_TMP_FILE_EXTENSION="mkv" \
   VIDEO_FILE_EXTENSION="mp4" \
-  MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS="50" \
+  MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS="500" \
   VIDEO_FILE_NAME="" \
-  VIDEO_BEFORE_STOP_SLEEP_SECS="1" \
-  VIDEO_AFTER_STOP_SLEEP_SECS="0.5" \
+  VIDEO_BEFORE_STOP_SLEEP_SECS="0" \
+  VIDEO_AFTER_STOP_SLEEP_SECS="0" \
+  VIDEO_MP4_FIX_MAX_WAIT="3s" \
+  VIDEO_WAIT_VID_TOOL_PID_1st_sig_UP_TO_SECS="6s" \
+  VIDEO_WAIT_VID_TOOL_PID_2nd_sig_UP_TO_SECS="2s" \
+  VIDEO_WAIT_VID_TOOL_PID_3rd_sig_UP_TO_SECS="1s" \
+  VIDEO_STOP_1st_sig_TYPE="SIGINT" \
+  VIDEO_STOP_2nd_sig_TYPE="SIGTERM" \
+  VIDEO_STOP_3rd_sig_TYPE="SIGKILL" \
+  VIDEO_STOPWAITSECS=20 \
   WAIT_TIME_OUT_VIDEO_STOP="20s" \
   VIDEOS_DIR="/home/seluser/videos" \
   XMANAGER="fluxbox" \
@@ -887,7 +904,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_STOP_SIGNAL="TERM" \
   NOVNC_STOP_SIGNAL="TERM" \
   VIDEO_REC_STOP_SIGNAL="INT" \
-  VIDEO_STOPWAITSECS=20 \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.5" \
   SEND_ANONYMOUS_USAGE_INFO="true" \
