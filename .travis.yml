@@ -41,11 +41,16 @@ install:
 
 script:
   - ./test/script_start
+  - travis_retry ./test/script_scenario_basic
+  - travis_retry ./test/script_scenario_restart
+  - travis_retry ./test/script_scenario_node_dies
   - travis_retry ./test/script_scenario_make
   - travis_retry ./test/script_scenario_compose_1_1
   - travis_retry ./test/script_scenario_compose_N_N
-  - ./test/script_end
 
 # cleanup though doesn't seem to be necessary in Travis infra
 after_script:
   - ./test/after_script
+
+after_success:
+  - ./test/script_end
