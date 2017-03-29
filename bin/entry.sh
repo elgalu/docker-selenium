@@ -65,8 +65,8 @@ export DOSEL_VERSION=$(cat VERSION)
 
 echo "-- INFO: Chrome..... Version: ${CHROME_VESION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
-echo "-- INFO: Selenium... Version: ${USE_SELENIUM}"
-echo "-- INFO: Dosel...... Version: ${DOSEL_VERSION}"
+echo "-- INFO: Using Selenium.....: ${USE_SELENIUM}"
+echo "-- INFO: Docker Img. Version: ${DOSEL_VERSION}"
 
 # export PATH="${PATH}:${BIN_UTILS}"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
