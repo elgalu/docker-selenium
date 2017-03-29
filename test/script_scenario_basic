@@ -53,7 +53,7 @@ docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
   -e CI \
-  -e VIDEO_CONVERSION_MAX_WAIT="40s"
+  -e VIDEO_CONVERSION_MAX_WAIT="40s" \
   --shm-size=1g \
   selenium
 
