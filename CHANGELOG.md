@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.2.0-p4
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (2017-03-29)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/b2f04d2c7a4c109413...326af92110685041616f79b4 (2017-03-29)
     + Improve stop-video functionality via VIDEO_TMP_FILE_EXTENSION & others
     + Avoid wait video shutdown from halting in Zalenium / in general
     + Improve video stopping workflow by grabbing mkv and converting to mp4 after that
@@ -36,7 +36,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Image ID: sha256:f2df1c4395ffa0ee42e509c0437b6ffe90c75f334d571a0a996154ec83b71c68
 
 ## 3.2.0-p3
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (2017-03-21)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/1fc47f3ae9194f3192ed17...b2f04d2c7a4c109413 (2017-03-21)
     + Enable MP4Box as it was incorrectly targeting the files
  + **Image tag details:**
     + Selenium 2: 2.53.1 (a36b8b1)
