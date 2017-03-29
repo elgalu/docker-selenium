@@ -46,10 +46,21 @@ sudo chown ${HOST_UID}:${HOST_GID} "${tmp_video_path}"* || true
 
 if [ "${VIDEO_TMP_FILE_EXTENSION}" != "${VIDEO_FILE_EXTENSION}" ]; then
   log "Changing video encoding from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION}..."
-  # ffmpeg -i ${tmp_video_path} -vcodec libx264 -crf ${FFMPEG_FINAL_CRF} ${final_video_path}
-  ffmpeg -i ${tmp_video_path} ${final_video_path}
-  log "Conversion from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION} completed, cleaning up ${tmp_video_path} ..."
-  rm -f "${tmp_video_path}"
+
+  # TODO: Move this mkv to mp4 conversion to a post-processing Zalenium thread
+  # ffmpeg -i ${tmp_video_path} ${final_video_path}
+  if timeout --foreground "${VIDEO_CONVERSION_MAX_WAIT}" \
+        ffmpeg -i ${tmp_video_path} -vcodec libx264 ${FFMPEG_CODEC_ARGS} ${final_video_path}; \
+        then
+    log "Conversion from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION} succeeded!"
+    log "Cleaning up ${tmp_video_path} ..."
+    rm -f "${tmp_video_path}"
+  else
+    log "Conversion from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION} FAILED! in within the ${VIDEO_CONVERSION_MAX_WAIT}"
+    rm -f "${final_video_path}"
+    mv "${tmp_video_path}" "${final_video_path}"
+  fi
+
 fi
 
 if [ "${VIDEO_FILE_EXTENSION}" == "mp4" ]; then

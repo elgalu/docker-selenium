@@ -55,9 +55,9 @@ function shutdown {
   local __2nd_sig="${VIDEO_STOP_2nd_sig_TYPE}"
   local __3rd_sig="${VIDEO_STOP_3rd_sig_TYPE}"
 
-  kill -${__1st_sig} ${VID_TOOL_PID} || log "Failed on kill -${__1st_sig} VID_TOOL_PID=${VID_TOOL_PID}"
-  # killall -${__1st_sig} ffmpeg || log "Failed on killall -${__1st_sig} ffmpeg"
   sleep ${VIDEO_BEFORE_STOP_SLEEP_SECS}
+  kill -${__1st_sig} ${VID_TOOL_PID} || log "Tried to kill -${__1st_sig} VID_TOOL_PID=${VID_TOOL_PID}"
+  # killall -${__1st_sig} ffmpeg || log "Tried to killall -${__1st_sig} ffmpeg"
 
   local __secs=${VIDEO_WAIT_VID_TOOL_PID_1st_sig_UP_TO_SECS}
   log "Waiting up to ${__secs} for VID_TOOL_PID=${VID_TOOL_PID} to end with ${__1st_sig}..."
@@ -68,7 +68,7 @@ function shutdown {
     log "Failed VID_TOOL_PID=${VID_TOOL_PID} took longer than ${__secs} ! will try to kill it again..."
 
     local __secs=${VIDEO_WAIT_VID_TOOL_PID_2nd_sig_UP_TO_SECS}
-    kill -${__2nd_sig} ${VID_TOOL_PID} || log "Failed (2nd) on kill -${__2nd_sig} VID_TOOL_PID=${VID_TOOL_PID}"
+    kill -${__2nd_sig} ${VID_TOOL_PID} || log "Tried tond) on kill -${__2nd_sig} VID_TOOL_PID=${VID_TOOL_PID}"
     log "Waiting (again) up to ${__secs} for VID_TOOL_PID=${VID_TOOL_PID} to end with ${__2nd_sig}..."
     if timeout --foreground "${__secs}" \
           wait_pid ${VID_TOOL_PID}; then
@@ -77,13 +77,13 @@ function shutdown {
       log "Failed (3rd) VID_TOOL_PID=${VID_TOOL_PID} took longer than ${__secs} ! will try to kill it again..."
 
       local __secs=${VIDEO_WAIT_VID_TOOL_PID_3rd_sig_UP_TO_SECS}
-      kill -${__3rd_sig} ${VID_TOOL_PID} || log "Failed (4th) on kill -${__3rd_sig} VID_TOOL_PID=${VID_TOOL_PID}"
+      kill -${__3rd_sig} ${VID_TOOL_PID} || log "Tried toth) on kill -${__3rd_sig} VID_TOOL_PID=${VID_TOOL_PID}"
       if timeout --foreground "${__secs}" \
             wait_pid ${VID_TOOL_PID}; then
         log "wait_pid (4th) successfully managed to ${__3rd_sig}:VID_TOOL_PID=${VID_TOOL_PID} within less than ${__secs}"
       else
         log "Failed (4th) VID_TOOL_PID=${VID_TOOL_PID} took longer than ${__secs} ! will try to kill it again..."
-        kill -9 ${VID_TOOL_PID} || log "Failed (4th) on kill -9 VID_TOOL_PID=${VID_TOOL_PID}"
+        kill -9 ${VID_TOOL_PID} || log "Tried toth) on kill -9 VID_TOOL_PID=${VID_TOOL_PID}"
       fi
     fi
   fi
