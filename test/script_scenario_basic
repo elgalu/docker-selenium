@@ -92,6 +92,7 @@ docker run --name=grid3 -d -e VIDEO=true \
   -e MOCK_SERVER_PORT \
   -e USE_SELENIUM="3" \
   -e CI \
+  -e VIDEO_CONVERSION_MAX_WAIT="40s" \
   --shm-size=1g \
   selenium
 
@@ -123,6 +124,7 @@ docker run --name=gridrc -d -e VIDEO=true \
   -e MOCK_SERVER_HOST="d.host.loc.dev" \
   -e MOCK_SERVER_PORT \
   -e CI \
+  -e VIDEO_CONVERSION_MAX_WAIT="40s" \
   -e USE_SELENIUM="2" \
   -e CHROME=true -e FIREFOX=true \
   -e RC_CHROME=true -e RC_FIREFOX=true \
