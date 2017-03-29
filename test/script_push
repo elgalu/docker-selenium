@@ -29,7 +29,23 @@ docker_login_tag_push() {
   echo "docker tag and docker push using TRAVIS_TAG=${TRAVIS_TAG}"
   docker tag selenium:latest elgalu/selenium:${TRAVIS_TAG}
   docker tag selenium:latest elgalu/selenium:latest
+
+  # e.g. TAG_VERSION_MAJOR="3"
+  TAG_VERSION_MAJOR="${testString::1}"
+  docker tag selenium:latest elgalu/selenium:${TAG_VERSION_MAJOR}
+  # e.g. TAG_VERSION_MAJ_MINOR="3.3"
+  TAG_VERSION_MAJ_MINOR="${testString::3}"
+  docker tag selenium:latest elgalu/selenium:${TAG_VERSION_MAJ_MINOR}
+  # e.g. TAG_VERSION_MAJ_MIN_PATCH="3.3.1"
+  TAG_VERSION_MAJ_MIN_PATCH="${testString::5}"
+  docker tag selenium:latest elgalu/selenium:${TAG_VERSION_MAJ_MIN_PATCH}
+
+  # Push them all
+  docker push elgalu/selenium:${TAG_VERSION_MAJOR}
+  docker push elgalu/selenium:${TAG_VERSION_MAJ_MINOR}
+  docker push elgalu/selenium:${TAG_VERSION_MAJ_MIN_PATCH}
   docker push elgalu/selenium:${TRAVIS_TAG} | tee docker_push.log
+
   if [ "${DOCKER_PUSH_LATEST}" != "true" ]; then
     echo "DOCKER_PUSH_LATEST is false (probably a beta release) so don't update tag ':latest'"
   else
@@ -116,10 +132,14 @@ update_changelog() {
     || die "while trying to get TBD_FIREFOX_FOR_SEL2"
   TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox-for-sel-3_version) \
     || die "while trying to get TBD_FIREFOX_FOR_SEL3"
-  TBD_SELENIUM_2_VERSION=$(docker exec grid selenium_version) \
+  TBD_SELENIUM_2_VERSION=$(docker exec grid selenium_2_version) \
     || die "while trying to get TBD_SELENIUM_2_VERSION"
-  TBD_SELENIUM_2_REVISION=$(docker exec grid selenium_revision_version) \
+  TBD_SELENIUM_2_REVISION=$(docker exec grid selenium_2_revision_version) \
     || die "while trying to get TBD_SELENIUM_2_REVISION"
+  TBD_SELENIUM_3_VERSION=$(docker exec grid selenium_version) \
+    || die "while trying to get TBD_SELENIUM_3_VERSION"
+  TBD_SELENIUM_3_REVISION=$(docker exec grid selenium_revision_version) \
+    || die "while trying to get TBD_SELENIUM_3_REVISION"
   TBD_PYTHON_VERSION=$(docker exec grid python_version) \
     || die "while trying to get TBD_PYTHON_VERSION"
   TBD_JAVA_BUILD=$(docker exec grid java_build_version) \
