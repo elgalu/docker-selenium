@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Video stopping resilience from Zalenium side"
+    git commit -m "Upgrade Selenium minor to from 3.2.0 to 3.3.1"
     git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

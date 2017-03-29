@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-echo "selenium_version=$(selenium_version) selenium_revision_version=$(selenium_revision_version)"
+echo "selenium 3 version=$(selenium_version) revision=$(selenium_revision_version)"
+echo "selenium 2 version=$(selenium_2_version) revision=$(selenium_2_revision_version)"
 
 echo "chrome_stable_version=$(chrome_stable_version)"
 google-chrome-stable --version

@@ -15,11 +15,5 @@ set -e
 [ -z "${SELENIUM_HUB_PORT}" ] && export SELENIUM_HUB_PORT="$(cat SELENIUM_HUB_PORT)"
 [ -z "${LOGS_DIR}" ] && export LOGS_DIR="$(cat LOGS_DIR)"
 
-# Selenium 3 - Example:
-#=> 3.3.1
-if [ "${USE_SELENIUM}" == "3" ]; then
-  java -jar ${SELENIUM_JAR_PATH} --version \
-    | grep version \
-    | grep -Po '(?<=version: )([a-z0-9\.]+)' \
-    | sed 's/\.$//'
-fi
+# --version not supported here so hard-coding
+echo "a36b8b1"

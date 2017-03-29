@@ -15,19 +15,10 @@ set -e
 [ -z "${SELENIUM_HUB_PORT}" ] && export SELENIUM_HUB_PORT="$(cat SELENIUM_HUB_PORT)"
 [ -z "${LOGS_DIR}" ] && export LOGS_DIR="$(cat LOGS_DIR)"
 
-if [ "${USE_SELENIUM}" == "2" ]; then
-  # Selenium 2 - Example:
-  #=> 35ae25b
-  java -jar ${SELENIUM_JAR_PATH} -port ${SELENIUM_HUB_PORT} 2>&1 \
+# Selenium 3 - Example:
+#=> 5234b32
+if [ "${USE_SELENIUM}" == "3" ]; then
+  java -jar ${SELENIUM_JAR_PATH} --version \
     | grep revision \
-    | grep -Po '(?<=revision )([a-z0-9\.]+)'
-else
-  # Selenium 3 - Example:
-  #=> 3169782
-  log_file="${LOGS_DIR}/selenium-hub-stderr.log"
-  cat ${log_file} \
-    | grep revision \
-    | grep -Po "(?<=revision: ')([a-z0-9\.]+)" \
-    | sed "s/'//g" \
-    | sed "s/,//g"
+    | grep -Po '(?<=revision: )([a-z0-9\.]+)'
 fi
