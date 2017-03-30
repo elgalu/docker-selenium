@@ -12,8 +12,8 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Upgrade Selenium minor to from 3.2.0 to 3.3.1"
-    git tag -d latest && git tag `cat VERSION` && git push origin tmp-`cat VERSION` && git push --tags
+    git commit -m "Upgrade Chrome patch to 57.0.2987.133"
+    git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
 -- Make sure changes got merged into master by elgalubot
@@ -28,16 +28,9 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd ~/tmp_binaries && VER="57.0.2987.110" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    cd ~/tmp_binaries && VER="57.0.2987.133" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha && cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
-
-## Retry
-Failed in Travis? retry
-
-    git tag -d `cat VERSION` && git push origin :`cat VERSION`
-    #git add ...
-    git commit --amend && git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 ## Docker push from Travis CI
 Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.

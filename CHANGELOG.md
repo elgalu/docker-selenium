@@ -12,6 +12,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Upgrade Selenium minor to from 3.2.0 to 3.3.1
     + Upgrade Firefox major from 51.0.1 to 52.0.2
     + Upgrade GeckoDriver from 0.14.0 to 0.15.0
+    + Upgrade Chrome patch to 57.0.2987.133
     + Chore: Grab Selenium 3 version using `--version`
     + Docker push major tags: e.g. 3, 3.2, 3.2.0 and of course the specific one
  + **Image tag details:**
