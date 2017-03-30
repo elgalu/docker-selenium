@@ -31,13 +31,16 @@ docker_login_tag_push() {
   docker tag selenium:latest elgalu/selenium:latest
 
   # e.g. TAG_VERSION_MAJOR="3"
-  TAG_VERSION_MAJOR="${testString::1}"
+  TAG_VERSION_MAJOR="${TRAVIS_TAG::1}"
+  echo "TAG_VERSION_MAJOR=${TAG_VERSION_MAJOR}"
   docker tag selenium:latest elgalu/selenium:${TAG_VERSION_MAJOR}
   # e.g. TAG_VERSION_MAJ_MINOR="3.3"
-  TAG_VERSION_MAJ_MINOR="${testString::3}"
+  TAG_VERSION_MAJ_MINOR="${TRAVIS_TAG::3}"
+  echo "TAG_VERSION_MAJ_MINOR=${TAG_VERSION_MAJ_MINOR}"
   docker tag selenium:latest elgalu/selenium:${TAG_VERSION_MAJ_MINOR}
   # e.g. TAG_VERSION_MAJ_MIN_PATCH="3.3.1"
-  TAG_VERSION_MAJ_MIN_PATCH="${testString::5}"
+  TAG_VERSION_MAJ_MIN_PATCH="${TRAVIS_TAG::5}"
+  echo "TAG_VERSION_MAJ_MIN_PATCH=${TAG_VERSION_MAJ_MIN_PATCH}"
   docker tag selenium:latest elgalu/selenium:${TAG_VERSION_MAJ_MIN_PATCH}
 
   # Push them all
