@@ -1,25 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-# log_file="selenium_version.log"
-# java -jar ${SELENIUM_JAR_PATH} \
-#   -port ${SELENIUM_HUB_PORT} \
-#   -log ${log_file} \
-#   >/dev/null 2>&1 &
-# pid=$!
-# sleep 1 && kill ${pid} || true
-# rm -f ${log_file}
-
-[ -z "${USE_SELENIUM}" ] && export USE_SELENIUM="$(cat USE_SELENIUM)"
-[ -z "${SELENIUM_JAR_PATH}" ] && export SELENIUM_JAR_PATH="$(cat SELENIUM_JAR_PATH)"
-[ -z "${SELENIUM_HUB_PORT}" ] && export SELENIUM_HUB_PORT="$(cat SELENIUM_HUB_PORT)"
-[ -z "${LOGS_DIR}" ] && export LOGS_DIR="$(cat LOGS_DIR)"
+SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-3.jar"
 
 # Selenium 3 - Example:
 #=> 3.3.1
-if [ "${USE_SELENIUM}" == "3" ]; then
-  java -jar ${SELENIUM_JAR_PATH} --version \
-    | grep version \
-    | grep -Po '(?<=version: )([a-z0-9\.]+)' \
-    | sed 's/\.$//'
-fi
+java -jar ${SELENIUM_JAR_PATH} --version \
+  | grep version \
+  | grep -Po '(?<=version: )([a-z0-9\.]+)' \
+  | sed 's/\.$//'

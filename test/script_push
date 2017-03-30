@@ -173,6 +173,8 @@ update_changelog() {
   sed -i -- "s/TBD_FIREFOX_FOR_SEL3/${TBD_FIREFOX_FOR_SEL3}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_SELENIUM_2_VERSION/${TBD_SELENIUM_2_VERSION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_SELENIUM_2_REVISION/${TBD_SELENIUM_2_REVISION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_SELENIUM_3_VERSION/${TBD_SELENIUM_3_VERSION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_SELENIUM_3_REVISION/${TBD_SELENIUM_3_REVISION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_PYTHON_VERSION/${TBD_PYTHON_VERSION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_JAVA_BUILD/${TBD_JAVA_BUILD}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_JAVA_VENDOR/${TBD_JAVA_VENDOR}/g" CHANGELOG.md || true
