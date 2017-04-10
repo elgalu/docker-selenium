@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (TBD_DATE)
     + Upgrade Chromedriver minor from 2.28 to 2.29
+    + Tests: Fix python KeyError: 'message' on check_response line 110
  + **Image tag details:**
     + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
     + Selenium 3: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
