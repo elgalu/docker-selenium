@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p1
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (2017-04-11)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/236b861177bd2917d86...273a2e5e236f854eaace315 (2017-04-11)
     + Upgrade Chromedriver minor from 2.28 to 2.29
     + Add /var/log/cont/firefox_browser.log for Firefox browser logs
     + Add /var/log/cont/firefox_driver.log  for Firefox driver logs
