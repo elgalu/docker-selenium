@@ -140,7 +140,7 @@ If you want to limit yourself to this project, you still can. There are some way
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            --shm-size=1g -e VNC_PASSWORD=hola \
+            --shm-size=1g \
             -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
             elgalu/selenium
 
@@ -163,7 +163,7 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
     docker pull elgalu/selenium
 
     docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-      --shm-size=1g -e VNC_PASSWORD=hola \
+      --shm-size=1g \
       -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
       elgalu/selenium
 
@@ -175,7 +175,7 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
 You can control and modify the timezone on a container by using the [TZ](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) environment variable through the `docker run` command, e.g. by adding `-e TZ="US/Pacific"`
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
-        -e TZ="US/Pacific" -e VNC_PASSWORD=hola \
+        -e TZ="US/Pacific" \
         --shm-size=1g elgalu/selenium
 
 Examples:
@@ -225,14 +225,7 @@ It is important to note that `ffmpeg` video recording takes an important amount 
 
 ### VNC
 
-When you don't specify a VNC password, a random one will be generated. That password can be seeing by grepping the logs:
-
-    docker exec grid wait_all_done 30s
-    #=> ... a VNC password was generated for you: ooGhai0aesaesh
-
-You can connect to see what's happening
-
-    open vnc://:ooGhai0aesaesh@localhost:5900
+When you don't specify a VNC password, the new default `VNC_PASSWORD=no` will make it VNC passwordless accessible.
 
 ### noVNC
 
