@@ -463,3 +463,24 @@ RUN  wget -nv -O unTrunc.zip \
             -L/usr/local/lib -lavformat \
             -lavcodec -lavutil \
   && mv untrunc /usr/bin
+
+### Log files
+Everything I tried before coming up with
+
+> webdriver.log.file has been discontinued. Please send us a PR if you know how to set the path for the Firefox browser logs
+
+Tried:
+
+```sh
+FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},log_path=${LOGS_DIR}/firefox_browser.log"
+-Dwebdriver.log.path="${LOGS_DIR}/firefox_browser.log" \
+-Dwebdriver.log.file="${LOGS_DIR}/firefox_browser.log" \
+-Dwebdriver.gecko.log_path="${LOGS_DIR}/firefox_browser.log" \
+export BROWSER_LOGFILE="${LOGS_DIR}/firefox_browser.log"
+```
+
+TODO: Figure out how to set `log_path`:
+https://github.com/mozilla/geckodriver/issues/362#issuecomment-273948335
+https://github.com/SeleniumHQ/selenium/commit/40a5d80e995071fb85f86e70e15e4b96cc692d11
+
+Outside of the running tests.

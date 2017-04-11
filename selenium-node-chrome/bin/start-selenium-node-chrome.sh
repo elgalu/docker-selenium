@@ -40,7 +40,7 @@ CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},chrome_binary=${CHROME_PATH}"
 
 java \
   -Dwebdriver.chrome.driver="/home/seluser/chromedriver" \
-  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
+  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chrome_driver.log" \
   -Dwebdriver.chrome.verboseLogging="${CHROME_VERBOSELOGGING}" \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \

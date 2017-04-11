@@ -43,9 +43,11 @@ FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS}"
 FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},version=${FIREFOX_VERSION}"
 FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},firefox_binary=${FIREFOX_DEST_BIN}"
 
+# public static final String BROWSER_LOGFILE = "webdriver.firefox.logfile";
+#   System property that defines the location of the file where Firefox log should be stored.
+
 java \
-  -Dwebdriver.firefox.logfile="${LOGS_DIR}/firefox_browser.log" \
-  -Dwebdriver.log.file="${LOGS_DIR}/firefox_driver.log" \
+  -Dwebdriver.firefox.logfile="${LOGS_DIR}/firefox_driver.log" \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \
   -port ${SELENIUM_NODE_FF_PORT} \

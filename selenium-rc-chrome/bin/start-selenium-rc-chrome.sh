@@ -33,7 +33,7 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 CHROME_BROWSER_CAPS="browserName=*chrome,${COMMON_CAPS},version=${CHROME_VERSION},chrome_binary=${CHROME_PATH}"
 java \
   -Dwebdriver.chrome.driver="/home/seluser/chromedriver" \
-  -Dwebdriver.chrome.logfile="${LOGS_DIR}/chromedriver.log" \
+  -Dwebdriver.chrome.logfile="${LOGS_DIR}/rc_chromedriver.log" \
   -Dwebdriver.chrome.verboseLogging="${CHROME_VERBOSELOGGING}" \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \

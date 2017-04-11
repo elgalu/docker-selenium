@@ -75,6 +75,11 @@ export VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr"
 export VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
 touch ${DOCKER_SELENIUM_STATUS}
 
+# https://github.com/SeleniumHQ/selenium/issues/2078#issuecomment-218320864
+# https://github.com/SeleniumHQ/selenium/blob/master/py/selenium/webdriver/firefox/firefox_binary.py#L27
+echo "webdriver.log.file has been discontinued. Please send us a PR if you know how to set the path for the Firefox browser logs" \
+  > "${LOGS_DIR}/firefox_browser.log"
+
 # We recalculate screen dimensions because docker run supports changing them
 export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
 export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
