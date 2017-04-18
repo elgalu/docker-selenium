@@ -3,13 +3,13 @@ Miscellaneous internal notes, do not read!
 ## Build
 
     time (docker build -t elgalu/selenium . ;echo $?;beep)
-    docker run --rm -ti --name=local -e SELENIUM_HUB_PORT=5555 -p=5555:5555 -p=5900:25900 -e VIDEO=true -e VNC_PASSWORD=no --shm-size=1g elgalu/selenium
+    docker run --rm -ti --name=grid -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e VNC_PASSWORD=no --shm-size=1g elgalu/selenium
 
 ### Wait
 Wait and get versions
 
-    docker exec local wait_all_done 30s
-    docker exec local versions
+    docker exec grid wait_all_done 30s
+    docker exec grid versions
 
 ### Tests
 See [CONTRIBUTING](./CONTRIBUTING.md)
@@ -25,13 +25,13 @@ Push setup, first time only:
 
 Build a grid with extra nodes
 
-    docker run --rm --name=local -p 4444:24444 -p 5900:25900 --shm-size=1g -e VNC_PASSWORD=hola elgalu/selenium
+    docker run --rm --name=grid -p 4444:24444 -p 5900:25900 --shm-size=1g -e VNC_PASSWORD=hola elgalu/selenium
 
     docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container elgalu/selenium
 
 See logs
 
-    docker exec -ti local bash -c "ls -lah /var/log/cont/"
+    docker exec -ti grid bash -c "ls -lah /var/log/cont/"
 
 ## Transfer used browser source artifacts to keep them in the cloud
 
@@ -41,11 +41,11 @@ See logs
 
 List chrome versions via docker exec
 
-    docker exec -ti local bash -c "ls -lah /home/application/chrome-deb/"
+    docker exec -ti grid bash -c "ls -lah /home/application/chrome-deb/"
 
 List firefox versions via docker exe
 
-    docker exec -ti local bash -c "ls -lah /home/application/firefox-src/ && ls -lah /home/application/selenium/firefox**/firefox/firefox"
+    docker exec -ti grid bash -c "ls -lah /home/application/firefox-src/ && ls -lah /home/application/selenium/firefox**/firefox/firefox"
 
 ## Transfer the other way around
 
