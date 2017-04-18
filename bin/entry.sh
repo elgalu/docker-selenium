@@ -173,6 +173,11 @@ fi
 # Fix extra quotes in Time zone $TZ env var
 export TZ=$(echo ${TZ} | sed "s/^\([\"']\)\(.*\)\1\$/\2/g")
 
+# When running for Zalenium prepare certain customizations
+if [ "${ZALENIUM}" == "true" ]; then
+  export CHROME_ADDITIONAL_ARGS="--user-data-dir=/home/seluser/chrome-user-data-dir"
+fi
+
 # TODO: Remove this duplicated logic
 if [ "${SELENIUM_HUB_PORT}" = "0" ]; then
   export SELENIUM_HUB_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})

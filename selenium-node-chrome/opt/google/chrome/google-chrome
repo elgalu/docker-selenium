@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-exec /opt/google/chrome/google-chrome-base "$@" ${CHROME_ARGS}
+exec /opt/google/chrome/google-chrome-base "$@" ${CHROME_ARGS} ${CHROME_ADDITIONAL_ARGS}
 
 # See: On How To Turn Chrome or Firefox Into A Single-Site Browser
 # Google Chrome users can make use of the --host-rules parameter to block all domain connections except the ones they whitelist. The general parameter looks like this:

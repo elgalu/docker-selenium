@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Fix tzdata not installed credits @dubner @tnguyen14 @eitany https://goo.gl/n84gJl"
+    git commit -m "Set --user-data-dir using CHROME_ADDITIONAL_ARGS when -e ZALENIUM=true"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
