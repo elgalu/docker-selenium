@@ -1,0 +1,29 @@
+Placeholder to allow forks to build this image.
+
+This meta file is in JSON format and should reference the SCM source location the Docker image was built from.
+
+The JSON file should contain a single JSON dictionary with the following keys:
+
+url
+The SCM URL in the format <SCM-PROVIDER>:<PROVIDER-SPECIFIC-REPO-LOCATION>.
+
+revision
+The SCM revision, e.g. the full git commit sha1. The revision should end with the marker text 
+” (locally modified)” for unclean working directories.
+This marker text ensures that no exact match for such revisions can be found in the remote SCM repository.
+
+author
+Name of the file’s author. The author is responsible for the correctness of the file’s contents.
+
+status
+Optional SCM working directory status information.
+Might contain git status output for example.
+
+Example file:
+
+{
+    "url": "git:git@github.com:elgalu/docker-selenium.git",
+    "revision": "4af973351e7d418b67e3eba9de3dc889a71000ea",
+    "author": "elgalu",
+    "status": ""
+}
