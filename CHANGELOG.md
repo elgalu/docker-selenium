@@ -9,6 +9,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/4af973351e7d418b67e3...master (TBD_DATE)
+    + Upgrade Chrome major from 57 to 58.0.3029.81
     + Add node capability: tz=Europe/Berlin / custom value
  + **Image tag details:**
     + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
