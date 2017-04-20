@@ -15,9 +15,6 @@ docker tag selenium:latest elgalu/selenium:latest
 
 # Ensure clean env
 docker rm -vf grid || true
-docker rm -vf grid2 || true
-docker rm -vf grid3 || true
-docker rm -vf gridrc || true
 # Some dummy log files
 rm -rf **/*"conflicted copy"*.log
 
@@ -82,79 +79,6 @@ if ! docker exec -t grid run_test; then
 fi
 
 docker exec grid errors || true
-
-echo "#==================================================================="
-echo "# Scenario 1c [basic]: Test Selenium 3"
-echo "#==================================================================="
-
-docker run --name=grid3 -d -e VIDEO=true \
-  -e MOCK_SERVER_HOST="d.host.loc.dev" \
-  -e MOCK_SERVER_PORT \
-  -e USE_SELENIUM="3" \
-  -e CI \
-  -e VIDEO_CONVERSION_MAX_WAIT="40s" \
-  --shm-size=1g \
-  selenium
-
-sleep ${ADDED_TEST_SLEEP} && docker logs grid3
-docker exec grid3 wait_all_done 70s
-docker exec grid3 versions
-docker exec grid3 errors || true
-docker logs grid3
-docker exec -t grid3 run_test
-docker exec grid3 errors || true
-docker cp grid3:/test/console.png ./images/grid3_console.png
-
-# Separate capabilities2.json from capabilities3.json
+docker cp grid:/test/console.png ./images/grid3_console.png
 docker cp grid:/capabilities.json .
-docker cp grid:/capabilities2.json .
-docker cp grid3:/capabilities3.json .
-
-# cleanup (not yet because we need to extract the capabilities)
-# docker stop grid3 || true
-# docker rm grid3 || true
-
-echo "#==================================================================="
-echo "# Scenario 1d [basic]: Selenium IDE RC and mount videos"
-echo "#==================================================================="
-
-rm -rf ./videos/mounted
-mkdir -p ./videos/mounted
-docker run --name=gridrc -d -e VIDEO=true \
-  -e MOCK_SERVER_HOST="d.host.loc.dev" \
-  -e MOCK_SERVER_PORT \
-  -e CI \
-  -e VIDEO_CONVERSION_MAX_WAIT="40s" \
-  -e USE_SELENIUM="2" \
-  -e CHROME=true -e FIREFOX=true \
-  -e RC_CHROME=true -e RC_FIREFOX=true \
-  -e VIDEO_FILE_NAME=sele_ide \
-  -e HOST_GID=$(id -g) -e HOST_UID=$(id -u) \
-  --shm-size=1g \
-  -p 4444:24444 \
-  -v ${PWD}/videos/mounted:/home/seluser/videos \
-  selenium
-
-sleep ${ADDED_TEST_SLEEP} && docker logs gridrc
-docker exec gridrc wait_all_done 70s
-docker exec gridrc versions
-docker exec gridrc errors || true
-docker logs gridrc
-
-# Run tests
-cd test/seleIDE
-gem install bundler -v=1.13.2
-bundle install
-RUBYOPT=W0 bundle exec ./seleIDE *.rb
-
-docker exec gridrc stop-video
-docker exec gridrc errors || true
-cd ../..
-mkdir -p ./videos/rc
-docker cp gridrc:/videos/sele_ide.mp4 ./videos/rc/
-ls -la ./videos/rc/sele_ide.mp4
-ls -la ./videos/mounted/sele_ide.mp4
-
-# cleanup
-docker stop gridrc || true
-docker rm gridrc || true
+docker cp grid:/capabilities3.json .

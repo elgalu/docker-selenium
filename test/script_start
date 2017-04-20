@@ -16,6 +16,5 @@ if [ "${CI}" != "true" ]; then
   ./test/script_scenario_restart
   ./test/script_scenario_node_dies
   ./test/script_scenario_make
-  ./test/script_scenario_compose_1_1
   ./test/script_scenario_compose_N_N
 fi

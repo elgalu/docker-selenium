@@ -195,7 +195,6 @@ git_diff_add_commit() {
   git status
   git add CHANGELOG.md
   git add capabilities.json
-  git add images/grid2_console.png
   git add images/grid3_console.png
   git commit -m "${TRAVIS_TAG}: Update image id, digest & png [ci skip]"
   git --no-pager log -n3
@@ -236,9 +235,6 @@ git_push_tag_push() {
 ########
 # Main #
 ########
-# docker cp grid:/capabilities.json .
-# docker cp grid:/capabilities2.json .
-# docker cp grid3:/capabilities3.json .
 if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then
   echo "This is a pull request so no docker push."
 elif [ "${DOCKER_PUSH}" != "true" ]; then

@@ -91,7 +91,7 @@ docker rm -vf grid_mock || true
 
 # Create container for Firefox
 docker run --name=mynodes -d \
-  -e CHROME=false -e RC_CHROME=false -e RC_FIREFOX=false -e CI \
+  -e CHROME=false -e CI \
   -e SELENIUM_NODE_FF_PORT -p ${SELENIUM_NODE_FF_PORT}:${SELENIUM_NODE_FF_PORT} \
   selenium
 

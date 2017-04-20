@@ -5,14 +5,14 @@ For pull requests or local commits:
 
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end)
     docker exec grid versions && ./test/after_script && travis lint
-    open ./images/grid2_console.png && open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
-    git checkout ./images/grid2_console.png && git checkout ./images/grid3_console.png
+    open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
+    git checkout ./images/grid3_console.png scm-source.json
     git checkout -b tmp-`cat VERSION`
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome major from 57 to 58.0.3029.81"
+    git commit -m "Breaking change! New default: USE_SELENIUM=3"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

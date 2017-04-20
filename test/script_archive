@@ -7,7 +7,7 @@ echo "#=================="
 echo "# Archive artifacts"
 echo "#=================="
 # pending to upload to S3 bucket
-docker cp grid:/test/console.png ./images/grid2_console.png
+docker cp grid:/test/console.png ./images/grid3_console.png
 ls -la ./images/
 mkdir -p ./videos
 docker cp grid:/test/videos/chrome ./videos/

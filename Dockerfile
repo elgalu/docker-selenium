@@ -793,7 +793,7 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 # GA_API_VERSION
 #   All Google Analytics related, see LICENSE.md & Analytics.md for more info
 ENV FIREFOX_VERSION="${FF_VER}" \
-  USE_SELENIUM="2" \
+  USE_SELENIUM="3" \
   CHROME_FLAVOR="stable" \
   PICK_ALL_RANDOM_PORTS="false" \
   RANDOM_PORT_FROM="23100" \
