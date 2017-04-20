@@ -98,6 +98,7 @@ export COMMON_CAPS="${COMMON_CAPS},screenResolution=${SCREEN_WIDTH}x${SCREEN_HEI
 export COMMON_CAPS="${COMMON_CAPS},resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 # https://testingbot.com/support/other/test-options#screenresolution
 export COMMON_CAPS="${COMMON_CAPS},screen-resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
+export COMMON_CAPS="${COMMON_CAPS},tz=${TZ}"
 
 # CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
 export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
