@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
-
 echo "#================================================"
 echo "# Scenario 4a [make]: Docker Compose many nodes"
 echo "#================================================"

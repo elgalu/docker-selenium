@@ -8,7 +8,6 @@ echo "#==================================================================="
 echo "# Scenario 1a [basic]: SETUP: Run tests right after the cont started"
 echo "#==================================================================="
 
-[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
 [ -z "${ADDED_TEST_SLEEP}" ] && export ADDED_TEST_SLEEP="0.5"
 
 docker tag selenium:latest elgalu/selenium:latest

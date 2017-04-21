@@ -7,8 +7,35 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/e5f198e1486630c19283d...master (TBD_DATE)
+    + Guard transfer-logs.sh when -e CHROME=false
+    + Chore: Tests minor cleanups
+    + Chore: Add /logo.png so some apps can grab it
+ + **Image tag details:**
+    + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
+    + Selenium 3: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
+    + Chrome stable:  TBD_CHROME_STABLE
+    + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
+    + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
+    + Geckodriver: TBD_GECKO_DRIVER
+    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+    + Timezone: TBD_TIME_ZONE
+    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+    + Python: TBD_PYTHON_VERSION
+    + Tested on kernel dev host: 4.4.0-72-generic x86_64
+    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Built at dev host with: Docker version 17.03.1-ce, build c6d412e
+    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at dev host with: Docker Compose version 1.11.2, build dfed245
+    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+    + Image size: TBD_IMAGE_SIZE
+    + Digest: TBD_DIGEST
+    + Image ID: TBD_IMAGE_ID
+
 ## 3.3.1-p4
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/4af973351e7d418b67e3...master (2017-04-20)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/4af973351e7d418b67e3...e5f198e1486630c19283d (2017-04-20)
     + Upgrade Chrome major from 57 to 58.0.3029.81
     + Add node capability: tz=Europe/Berlin / custom value
     + Breaking change! New default: USE_SELENIUM="3"

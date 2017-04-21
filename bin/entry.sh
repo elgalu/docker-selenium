@@ -546,6 +546,10 @@ echo "${SELENIUM_JAR_PATH}" > SELENIUM_JAR_PATH
 echo "${LOGS_DIR}" > LOGS_DIR
 echo "${FIREFOX_VERSION}" > FIREFOX_VERSION
 echo "${CHROME_VESION}" > CHROME_VESION
+echo "${CHROME}" > CHROME
+echo "${FIREFOX}" > FIREFOX
+echo "${RC_CHROME}" > RC_CHROME
+echo "${RC_FIREFOX}" > RC_FIREFOX
 env > env
 
 #------

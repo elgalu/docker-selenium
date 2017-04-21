@@ -321,17 +321,17 @@ RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
 #================
 # Font libraries
 #================
-# libfontconfig            0.400 MB
-# libfreetype6             0.400 MB
-# xfonts-cyrillic          2.271 MB
-# xfonts-scalable          2.318 MB
-# fonts-liberation         3.343 MB
-# ttf-ubuntu-font-family   4.742 MB
+# libfontconfig            ~1 MB
+# libfreetype6             ~1 MB
+# xfonts-cyrillic          ~2 MB
+# xfonts-scalable          ~2 MB
+# fonts-liberation         ~3 MB
+# ttf-ubuntu-font-family   ~5 MB
 #   Ubuntu Font Family, sans-serif typeface hinted for clarity
 # Removed packages:
-# fonts-ipafont-gothic     13.09 MB
-# xfonts-100dpi            5.939 MB
-# xfonts-75dpi             5.509 MB
+# fonts-ipafont-gothic     ~13 MB
+# xfonts-100dpi            ~6 MB
+# xfonts-75dpi             ~6 MB
 # Regarding fonts-liberation see:
 #  https://github.com/SeleniumHQ/docker-selenium/issues/383#issuecomment-278367069
 # Layer size: small: 6.898 MB (with --no-install-recommends)

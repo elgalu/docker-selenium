@@ -18,8 +18,7 @@ parser.add_argument('browser', choices=['chrome', 'firefox', 'mobile_emulation']
                     help='in which browser to test')
 args = parser.parse_args()
 
-# Selenium 2 or 3?
-current_selenium = os.environ.get('USE_SELENIUM', '2')
+current_selenium = os.environ.get('USE_SELENIUM', '3')
 
 # http://selenium-python.readthedocs.org/en/latest/api.html
 if args.browser == 'chrome':
@@ -31,13 +30,6 @@ elif args.browser == 'mobile_emulation':
     caps = opts.to_capabilities()
 elif args.browser == 'firefox':
     caps = DesiredCapabilities.FIREFOX
-    # if current_selenium == '3':
-        # BREAKING CHANGE!
-        #  With selenium 3 & Firfox >= 48 you need to set marionette=true
-        #  when still using selenium 2 driver bindings (in selenium 3 is transparent)
-        # UPDATE! no longer needed since selenium 3.0.1 is now the stable version:
-        #  https://pypi.python.org/pypi/selenium
-        # caps['marionette'] = True
 else:
     raise ValueError("Invalid browser '%s'" % args.browser)
 

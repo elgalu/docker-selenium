@@ -4,8 +4,6 @@
 # set -x: print each command right before it is executed
 set -xe
 
-[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
-
 SLEEP_RACE_COND_SECS=2
 WAIT_ALL_DONE="40s"
 

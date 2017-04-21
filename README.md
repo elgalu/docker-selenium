@@ -15,11 +15,11 @@
 * firefox stable [last 18 versions can be found here][2.47.1m]
 * fluxbox (openbox window manager can still be found [here](https://github.com/elgalu/docker-selenium/releases/tag/3.0.1c))
 
-Selenium 2  `docker run ... -e USE_SELENIUM=2 elgalu/selenium:2`
-![docker-selenium-grid](./images/grid2_console.png)
-
 Selenium 3  `docker run ... -e USE_SELENIUM=3 elgalu/selenium:latest`
 ![docker-selenium-grid](./images/grid3_console.png)
+
+Selenium 2  `docker run ... -e USE_SELENIUM=2 elgalu/selenium:2` *no longer maintained*
+![docker-selenium-grid](./images/grid2_console.png)
 
 ### Purpose
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
@@ -97,27 +97,6 @@ Shutdown gracefully
 Shutdown immediately, no mercy
 
     docker rm -vf grid
-
-### Selenium 3
-Is now possible to choose Selenium 2 or Selenium 3 via docker run `-e USE_SELENIUM=2` (default) or `-e USE_SELENIUM=3`
-Be ready for seeing your tests failing in Firefox.
-Please google those errors first before opening an issue in this project.
-
-### e.g. Selenium 2 with FF 47.0.1
-```sh
-# capabilities['marionette'] = False
-docker run --rm -ti --name=grid2 -p 4444:24444 -p 5900:25900 \
-  -e USE_SELENIUM=2 \
-  --shm-size=1g elgalu/selenium
-```
-
-### e.g. Selenium 3 with FF 49.0.1
-```sh
-# capabilities['marionette'] = True
-docker run --rm -ti --name=grid3 -p 4444:24444 -p 5900:25900 \
-  -e USE_SELENIUM=3 \
-  --shm-size=1g elgalu/selenium
-```
 
 ### Docker Compose
 See [docker-compose](./docs/docker-compose.md)

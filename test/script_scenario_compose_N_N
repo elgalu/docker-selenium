@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-[ "${TRAVIS_OS_NAME}" = "osx" ] && eval "$(docker-machine env default)" || true
-
 echo "#===================================================="
 echo "# Scenario 6a [compose_N_N]: Docker Compose many nodes"
 echo "#===================================================="
@@ -12,14 +10,8 @@ set -xe
 
 export VNC_FROM_PORT="43900" VNC_TO_PORT="43950"
 
-if [ "${CI}" = "true" ]; then
-  export NUM_NODES=2 PARAL_TESTS=2 WAIT_ALL_DONE="390s" SLEEP_TIME=23 \
-         PAUSE_SECS_BETWEEN_RUN_TEST="0"
-else
-  # My local laptop has more power so hit it harder
-  export NUM_NODES=3 PARAL_TESTS=3 WAIT_ALL_DONE="90s" SLEEP_TIME=13 \
-         PAUSE_SECS_BETWEEN_RUN_TEST="0"
-fi
+export NUM_NODES=2 PARAL_TESTS=2 WAIT_ALL_DONE="390s" SLEEP_TIME=23 \
+     PAUSE_SECS_BETWEEN_RUN_TEST="0"
 
 export COMPOSE_FILE="docker-compose-host.yml" \
        DO_COMPOSE_UP="false"
