@@ -7,32 +7,32 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/e5f198e1486630c19283d...master (TBD_DATE)
+## 3.3.1-p5
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/e5f198e1486630c19283d...master (2017-04-24)
     + Guard transfer-logs.sh when -e CHROME=false
     + Chore: Tests minor cleanups
     + Chore: Add /logo.png so some apps can grab it
  + **Image tag details:**
-    + Selenium 2: TBD_SELENIUM_2_VERSION (TBD_SELENIUM_2_REVISION)
-    + Selenium 3: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
-    + Chrome stable:  TBD_CHROME_STABLE
-    + Firefox for Selenium 2: TBD_FIREFOX_FOR_SEL2
-    + Firefox for Selenium 3: TBD_FIREFOX_FOR_SEL3
-    + Geckodriver: TBD_GECKO_DRIVER
-    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-    + Timezone: TBD_TIME_ZONE
-    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-    + Python: TBD_PYTHON_VERSION
+    + Selenium 2: 2.53.1 (a36b8b1)
+    + Selenium 3: 3.3.1 (5234b32)
+    + Chrome stable:  58.0.3029.81
+    + Firefox for Selenium 2: 47.0.1
+    + Firefox for Selenium 3: 52.0.2
+    + Geckodriver: 0.15.0
+    + Chromedriver: 2.29.461571 (8a88bbe0775e2a23afda0ceaf2ef7ee74e822cc5)
+    + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170410
+    + Python: 2.7.12
     + Tested on kernel dev host: 4.4.0-72-generic x86_64
-    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.03.1-ce, build c6d412e
-    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at CI  host with: Docker version 17.04.0, build 4845c56
     + Built at dev host with: Docker Compose version 1.11.2, build dfed245
-    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-    + Image size: TBD_IMAGE_SIZE
-    + Digest: TBD_DIGEST
-    + Image ID: TBD_IMAGE_ID
+    + Built at CI  host with: Docker Compose version 1.11.2, build dfed245
+    + Image size: 1.28GB
+    + Digest: sha256:57ee136fc94139d41dc30a3d12eddf3a470b26b2c4bab5a557be2a60a160d455
+    + Image ID: sha256:b62ee67b5d44eb7925f05eec2abb16c515619829e7ec0ecc5f8b31ee1b763daa
 
 ## 3.3.1-p4
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/4af973351e7d418b67e3...e5f198e1486630c19283d (2017-04-20)
