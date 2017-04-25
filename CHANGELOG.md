@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p5
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/e5f198e1486630c19283d...master (2017-04-24)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/e5f198e1486630c19283d...c4e8df12781eb031795ea6 (2017-04-24)
     + Guard transfer-logs.sh when -e CHROME=false
     + Chore: Tests minor cleanups
     + Chore: Add /logo.png so some apps can grab it
