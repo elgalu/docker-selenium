@@ -1,4 +1,5 @@
 <img id="header" width="760" src="./images/icons/logo_wide.jpg" />
+
 # Selenium in Docker with Chrome and Firefox
 
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium "Travis CI")
