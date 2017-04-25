@@ -2,7 +2,7 @@
 # Selenium in Docker with Chrome and Firefox
 
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium "Travis CI")
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/elgalu/docker-selenium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge "Chat support")
+[![Gitter](https://badges.gitter.im/elgalu/selenium.svg)](https://gitter.im/elgalu/docker-selenium "Chat support")
 [![Docker Pulls](https://img.shields.io/docker/pulls/elgalu/selenium.svg)](https://hub.docker.com/r/elgalu/selenium/tags/)
 [![Docker](https://images.microbadger.com/badges/version/elgalu/selenium.svg)](https://microbadger.com/images/elgalu/selenium "Docker Badge")
 
