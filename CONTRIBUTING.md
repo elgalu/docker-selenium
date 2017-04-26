@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Guard transfer-logs.sh when -e CHROME=false"
+    git commit -m "Fix: Do not set --user-data-dir"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

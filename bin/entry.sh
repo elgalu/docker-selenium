@@ -75,11 +75,6 @@ export VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr"
 export VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
 touch ${DOCKER_SELENIUM_STATUS}
 
-# https://github.com/SeleniumHQ/selenium/issues/2078#issuecomment-218320864
-# https://github.com/SeleniumHQ/selenium/blob/master/py/selenium/webdriver/firefox/firefox_binary.py#L27
-echo "webdriver.log.file has been discontinued. Please send us a PR if you know how to set the path for the Firefox browser logs" \
-  > "${LOGS_DIR}/firefox_browser.log"
-
 # We recalculate screen dimensions because docker run supports changing them
 export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
 export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
@@ -174,10 +169,18 @@ fi
 # Fix extra quotes in Time zone $TZ env var
 export TZ=$(echo ${TZ} | sed "s/^\([\"']\)\(.*\)\1\$/\2/g")
 
+# https://github.com/SeleniumHQ/selenium/issues/2078#issuecomment-218320864
+# https://github.com/SeleniumHQ/selenium/blob/master/py/selenium/webdriver/firefox/firefox_binary.py#L27
+echo "webdriver.log.file has been discontinued." > "${LOGS_DIR}/firefox_browser.log"
+echo "Please send us a PR if you know how to set the path for the Firefox browser logs." >> "${LOGS_DIR}/firefox_browser.log"
+
+echo "Setting --user-data-dir=/home/seluser/chrome-user-data-dir" > "${LOGS_DIR}/chrome_browser.log"
+echo "breaks the ability of clients to set Chrome options via the capabilities."   >> "${LOGS_DIR}/chrome_browser.log"
+echo "Please send us a PR if you know how to set the path for the Firefox browser logs." >> "${LOGS_DIR}/chrome_browser.log"
 # When running for Zalenium prepare certain customizations
-if [ "${ZALENIUM}" == "true" ]; then
-  export CHROME_ADDITIONAL_ARGS="--user-data-dir=/home/seluser/chrome-user-data-dir"
-fi
+# if [ "${ZALENIUM}" == "true" ]; then
+#   export CHROME_ADDITIONAL_ARGS="--user-data-dir=/home/seluser/chrome-user-data-dir"
+# fi
 
 # TODO: Remove this duplicated logic
 if [ "${SELENIUM_HUB_PORT}" = "0" ]; then
