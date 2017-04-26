@@ -17,10 +17,10 @@
 * firefox stable [last 18 versions can be found here][2.47.1m]
 * fluxbox (openbox window manager can still be found [here](https://github.com/elgalu/docker-selenium/releases/tag/3.0.1c))
 
-Selenium 3  `docker run ... -e USE_SELENIUM=3 elgalu/selenium:latest`
+Selenium 3  `docker run ... elgalu/selenium:latest`
 ![docker-selenium-grid](./images/grid3_console.png)
 
-Selenium 2  `docker run ... -e USE_SELENIUM=2 elgalu/selenium:2` *no longer maintained*
+Selenium 2  `docker run ... elgalu/selenium:2` *no longer maintained*
 ![docker-selenium-grid](./images/grid2_console.png)
 
 ### Purpose

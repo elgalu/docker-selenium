@@ -27,26 +27,17 @@ stop >/dev/null 2>&1 || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
-# Selenium IDE RC (legacy) doesn't seem to keep working on Selenium 3
-if [ "${USE_SELENIUM}" == "3" ]; then
-  export RC_CHROME="false"
-  export RC_FIREFOX="false"
-  # Support restart docker container for selenium 3 @aituganov
-  if [ ! -f /usr/bin/geckodriver ]; then
-    sudo mv /opt/geckodriver /usr/bin/geckodriver
-    sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
-  fi
+export RC_CHROME="false"
+export RC_FIREFOX="false"
+# Support restart docker container for selenium 3 @aituganov
+if [ ! -f /usr/bin/geckodriver ]; then
+  sudo mv /opt/geckodriver /usr/bin/geckodriver
+  sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
 fi
 
-if [ "${USE_SELENIUM}" == "3" ]; then
-  sudo cp /capabilities3.json /capabilities.json
-  sudo cp /capabilities3.json /home/seluser/capabilities.json
-  sudo cp /capabilities3.json /home/seluser/caps.json
-else
-  sudo cp /capabilities2.json /capabilities.json
-  sudo cp /capabilities2.json /home/seluser/capabilities.json
-  sudo cp /capabilities2.json /home/seluser/caps.json
-fi
+sudo cp /capabilities3.json /capabilities.json
+sudo cp /capabilities3.json /home/seluser/capabilities.json
+sudo cp /capabilities3.json /home/seluser/caps.json
 
 # We need larger screens for Selenium IDE RC tests
 # if [ "${RC_CHROME}" = "true" ] || [ "${RC_FIREFOX}" = "true" ]; then

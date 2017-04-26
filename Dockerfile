@@ -942,13 +942,6 @@ COPY Analytics.md /home/seluser/
 #===================================
 # The .X11-unix stuff is useful when using Xephyr
 RUN mkdir -p /home/seluser/.vnc \
-  && sudo touch /capabilities2.json \
-  && sudo chown seluser:seluser /capabilities2.json \
-  && generate_capabilities2_json > /capabilities2.json \
-  && cp /capabilities2.json /home/seluser/capabilities2.json \
-  && cp /capabilities2.json /home/seluser/capabilities2 \
-  && cp /capabilities2.json /home/seluser/caps2.json \
-  && cp /capabilities2.json /home/seluser/caps2 \
   && sudo touch /capabilities3.json \
   && sudo chown seluser:seluser /capabilities3.json \
   && generate_capabilities3_json > /capabilities3.json \
@@ -956,9 +949,9 @@ RUN mkdir -p /home/seluser/.vnc \
   && cp /capabilities3.json /home/seluser/capabilities3 \
   && cp /capabilities3.json /home/seluser/caps3.json \
   && cp /capabilities3.json /home/seluser/caps3 \
-  && sudo cp /capabilities2.json /capabilities.json \
-  && sudo cp /capabilities2.json /home/seluser/capabilities.json \
-  && sudo cp /capabilities2.json /home/seluser/caps.json \
+  && sudo cp /capabilities3.json /capabilities.json \
+  && sudo cp /capabilities3.json /home/seluser/capabilities.json \
+  && sudo cp /capabilities3.json /home/seluser/caps.json \
   && mkdir -p ${VIDEOS_DIR} \
   && sudo ln -s ${VIDEOS_DIR} /videos \
   && sudo chown seluser:seluser /videos \
