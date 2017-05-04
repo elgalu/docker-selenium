@@ -11,14 +11,14 @@ set -e
 #  - this gives less erros: DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null"
 sudo rm -f /var/lib/dbus/machine-id
 sudo mkdir -p /var/run/dbus
-sudo service dbus restart
+sudo service dbus restart >dbus_service.log
 # Test dbus works
-service dbus status
+service dbus status >dbus_service_status.log
 export $(dbus-launch)
 export NSS_USE_SHARED_DB=ENABLED
-echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
+# echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
 #=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
-echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
+# echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
 #=> e.g. DBUS_SESSION_BUS_PID=44
 #
 #-----------------------------------------------
@@ -54,10 +54,23 @@ export FIREFOX_VERSION=$(firefox_version)
 export CHROME_VESION=$(chrome_stable_version)
 export DOSEL_VERSION=$(cat VERSION)
 
+echo "-- INFO: Docker Img. Version: ${DOSEL_VERSION}"
 echo "-- INFO: Chrome..... Version: ${CHROME_VESION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
-echo "-- INFO: Using Selenium.....: ${USE_SELENIUM}"
-echo "-- INFO: Docker Img. Version: ${DOSEL_VERSION}"
+
+if [ "${USE_SELENIUM}" == "2" ]; then
+  # In the future this warning will be changed to an error and exit command
+  echo "-- INFO: Using Selenium.....: ${USE_SELENIUM}"
+  echo -e "\n\n\n\n"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!! WARNING!!! You are using the unmaintained Selenium 2 !!!"
+  echo "!!! to continue using Selenium 2 please use the proper tag:"
+  echo "!!! docker pull elgalu/selenium:2                        !!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo -e "\n\n\n\n"
+else
+  echo "-- INFO: Using Selenium.....: ${SEL_VER}"
+fi
 
 # export PATH="${PATH}:${BIN_UTILS}"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
@@ -390,8 +403,8 @@ function get_free_display() {
   local find_display_num=-1
 
   # Get a list of socket DISPLAYs already used
-  netstat -nlp | grep -Po '(?<=\/tmp\/\.X11-unix\/X)([0-9]+)' | sort -u > /tmp/netstatX11.log
-  [ ! -s /tmp/netstatX11.log ] && echo "-- INFO: Emtpy file /tmp/netstatX11.log" 1>&3
+  netstat -nlp 2>/dev/null | grep -Po '(?<=\/tmp\/\.X11-unix\/X)([0-9]+)' | sort -u > /tmp/netstatX11.log
+  # [ ! -s /tmp/netstatX11.log ] && echo "-- INFO: Emtpy file /tmp/netstatX11.log" 1>&3
 
   # important: while loops are executed in a subshell
   #  var assignments will be lost unless using <<<
@@ -441,7 +454,7 @@ function get_free_display() {
       break
     fi
   done
-  [ "${selected_disp_num}" = "-1" ] || echo "-- INFO: Found free DISPLAY=:${selected_disp_num}" 1>&3
+  [ "${selected_disp_num}" = "-1" ] #|| echo "-- INFO: Found free DISPLAY=:${selected_disp_num}" 1>&3
 
   echo ${selected_disp_num}
 }
@@ -449,7 +462,7 @@ function get_free_display() {
 function start_xvfb() {
   # Start the X server that can run on machines with no real display
   # using Xvfb instead of Xdummy
-  echo "-- INFO: Will try to start Xvfb at DISPLAY=${DISPLAY}" 1>&3
+  # echo "-- INFO: Will try to start Xvfb at DISPLAY=${DISPLAY}" 1>&3
   # if DEBUG = true ...
   # echo "Will use the following values for Xvfb"
   # echo "  screen=${SCREEN_NUM} geometry=${GEOMETRY}"

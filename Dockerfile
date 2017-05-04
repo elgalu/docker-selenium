@@ -219,9 +219,9 @@ RUN apt-get -qqy update \
 USER seluser
 WORKDIR /home/seluser
 
-#======================
-# Selenium 2 (default)
-#======================
+#========================
+# Selenium 2 (deprecated)
+#========================
 # Layer size: medium: 21.23 MB
 ENV SEL_MAJOR_VER="2.53" \
     SEL_PATCH_LEVEL_VER="1"
