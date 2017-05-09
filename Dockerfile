@@ -102,7 +102,8 @@ RUN apt-get -qqy update \
     wget \
     curl \
   && apt-get -qyy autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #==============================
 # Locale and encoding settings
@@ -124,7 +125,8 @@ RUN apt-get -qqy update \
   && locale-gen ${LANGUAGE} \
   && dpkg-reconfigure --frontend noninteractive locales \
   && apt-get -qyy autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #===================
 # Timezone settings
@@ -168,7 +170,8 @@ RUN apt-get -qqy update \
   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
   && apt-get -qyy autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #==================
 # Java8 - Oracle
@@ -196,7 +199,8 @@ RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     oracle-java8-set-default \
 #   && apt-get -qyy autoremove \
-#   && rm -rf /var/lib/apt/lists/*
+#   && rm -rf /var/lib/apt/lists/* \
+#   && apt-get -qyy clean
 
 #==============================================
 # Java blocks until kernel have enough entropy
@@ -211,7 +215,8 @@ RUN apt-get -qqy update \
   && service haveged start \
   && update-rc.d haveged defaults \
   && apt-get -qyy autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -267,7 +272,8 @@ RUN apt-get -qqy update \
     libffi-dev \
   && pip install --upgrade pip \
   && pip install --upgrade setuptools \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #=========================================================
 # Python3 for Supervisor, selenium tests, and other stuff
@@ -288,7 +294,8 @@ RUN apt-get -qqy update \
 #     libssl-dev libffi-dev \
 #   && pip3 install --upgrade pip \
 #   && pip3 install --upgrade setuptools \
-#   && rm -rf /var/lib/apt/lists/*
+#   && rm -rf /var/lib/apt/lists/* \
+#   && apt-get -qyy clean
 # RUN cd /usr/local/bin \
 #   && { [ -e easy_install ] || ln -s easy_install-* easy_install; } \
 #   && ln -s idle3 idle \
@@ -316,7 +323,8 @@ ENV RUN_DIR="/var/run/sele"
 RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #================
 # Font libraries
@@ -347,7 +355,8 @@ RUN apt-get -qqy update \
     fonts-ipafont-gothic \
     fonts-wqy-zenhei \
     ttf-ubuntu-font-family \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #=========
 # Openbox
@@ -359,7 +368,8 @@ RUN apt-get -qqy update \
 # RUN apt-get -qqy update \
 #   && apt-get -qqy --no-install-recommends install \
 #     openbox obconf menu \
-#   && rm -rf /var/lib/apt/lists/*
+#   && rm -rf /var/lib/apt/lists/* \
+#   && apt-get -qyy clean
 
 #=========
 # fluxbox
@@ -370,7 +380,8 @@ RUN apt-get -qqy update \
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     fluxbox \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #============================
 # Xvfb X virtual framebuffer
@@ -388,7 +399,8 @@ RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     xvfb \
     xorg \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #============
 # VNC Server
@@ -398,7 +410,8 @@ RUN apt-get -qqy update \
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     x11vnc \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -444,7 +457,8 @@ USER root
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     gstreamer1.0-libav \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #=================================================
 # ffmpeg/libav/avconv video codecs & dependencies
@@ -460,7 +474,8 @@ RUN apt-get -qqy update \
 #     libvorbis-dev \
 #     libx11-dev \
 #     gpac \
-#   && rm -rf /var/lib/apt/lists/*
+#   && rm -rf /var/lib/apt/lists/* \
+#   && apt-get -qyy clean
 
 #========
 # ffmpeg
@@ -474,7 +489,8 @@ RUN apt-get -qqy update \
   && apt-get -qqy install \
     ffmpeg \
     gpac \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #==============
 # libav/avconv
@@ -487,7 +503,8 @@ RUN apt-get -qqy update \
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     libav-tools \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 # ------------------------#
 # Sauce Connect Tunneling #
@@ -512,7 +529,8 @@ RUN apt-get -qqy update \
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     `apt-cache depends firefox | awk '/Depends:/{print$2}'` \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -612,6 +630,7 @@ RUN apt-get -qqy update \
   && rm -rf ./chrome-deb \
   && apt-get -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean \
   && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
   && echo "${CH_STABLE_VER}"
 # We have a wrapper for /opt/google/chrome/google-chrome

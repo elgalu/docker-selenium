@@ -10,6 +10,8 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
     + Support Japanese/Chinese fonts #153 credits @katryo
+    + Chore: Rename requirements-sele-3.txt to requirements.txt
+    + Chore: Use `apt-get clean` for RHEL 7.3 credits @tnguyen14
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
