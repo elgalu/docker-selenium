@@ -335,8 +335,8 @@ RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
 # xfonts-75dpi             ~6 MB
 # Regarding fonts-liberation see:
 #  https://github.com/SeleniumHQ/docker-selenium/issues/383#issuecomment-278367069
-# Layer size: small: 6.898 MB (with --no-install-recommends)
-# Layer size: small: 6.898 MB
+# Layer size: small: 36.28 MB (with --no-install-recommends)
+# Layer size: small: 36.28 MB
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     libfontconfig \
