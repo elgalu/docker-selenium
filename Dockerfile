@@ -326,16 +326,17 @@ RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
 # xfonts-cyrillic          ~2 MB
 # xfonts-scalable          ~2 MB
 # fonts-liberation         ~3 MB
+# fonts-ipafont-gothic     ~13 MB
+# fonts-wqy-zenhei         ~17 MB
 # ttf-ubuntu-font-family   ~5 MB
 #   Ubuntu Font Family, sans-serif typeface hinted for clarity
 # Removed packages:
-# fonts-ipafont-gothic     ~13 MB
 # xfonts-100dpi            ~6 MB
 # xfonts-75dpi             ~6 MB
 # Regarding fonts-liberation see:
 #  https://github.com/SeleniumHQ/docker-selenium/issues/383#issuecomment-278367069
-# Layer size: small: 6.898 MB (with --no-install-recommends)
-# Layer size: small: 6.898 MB
+# Layer size: small: 36.28 MB (with --no-install-recommends)
+# Layer size: small: 36.28 MB
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     libfontconfig \
@@ -343,6 +344,8 @@ RUN apt-get -qqy update \
     xfonts-cyrillic \
     xfonts-scalable \
     fonts-liberation \
+    fonts-ipafont-gothic \
+    fonts-wqy-zenhei \
     ttf-ubuntu-font-family \
   && rm -rf /var/lib/apt/lists/*
 
