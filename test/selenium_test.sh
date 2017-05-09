@@ -31,10 +31,7 @@ fi
 # How to find old versions?
 #  https://pypi.python.org/simple/selenium/
 mkdir -p ${HOME}/.local
-pip install --user -r /test/requirements-sele-${USE_SELENIUM}.txt
-# pip install --install-option="--prefix=${HOME}/.local" -r /test/requirements-sele-${USE_SELENIUM}.txt
-#  export PATH=$PATH:~/.local/bin
-#  echo "PATH=\$PATH:~/.local/bin" >> ~/.bashrc
+pip install --user --requirement /test/requirements.txt
 
 python_test ${browser_name}
 
