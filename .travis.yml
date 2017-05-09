@@ -28,7 +28,7 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.11.2"
+          DOCKER_COMPOSE_VERSION="1.13.0"
           DOCKER_PUSH=true
           DOCKER_PUSH_LATEST=true
 

@@ -1,5 +1,5 @@
 ## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (TBD_DATE)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
     + TBD_COMMIT_MSG
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
@@ -13,7 +13,7 @@
     + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-77-generic x86_64
     + Tested on kernel CI  host: TBD_HOST_UNAME
-    + Built at dev host with: Docker version 17.04.0-ce, build 4845c56
+    + Built at dev host with: Docker version 17.05.0-ce, build 89658be
     + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
     + Built at dev host with: Docker Compose version 1.13.0, build 1719ceb
     + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
