@@ -327,6 +327,7 @@ RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
 # xfonts-scalable          ~2 MB
 # fonts-liberation         ~3 MB
 # fonts-ipafont-gothic     ~13 MB
+# fonts-wqy-zenhei         ~17 MB
 # ttf-ubuntu-font-family   ~5 MB
 #   Ubuntu Font Family, sans-serif typeface hinted for clarity
 # Removed packages:
@@ -344,6 +345,7 @@ RUN apt-get -qqy update \
     xfonts-scalable \
     fonts-liberation \
     fonts-ipafont-gothic \
+    fonts-wqy-zenhei \
     ttf-ubuntu-font-family \
   && rm -rf /var/lib/apt/lists/*
 
