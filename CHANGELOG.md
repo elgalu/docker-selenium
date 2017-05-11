@@ -9,6 +9,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
+    + Upgrade Chrome patch to 58.0.3029.110
     + Support Japanese/Chinese fonts #153 credits @katryo
     + Chore: Rename requirements-sele-3.txt to requirements.txt
     + Chore: Use `apt-get clean` for RHEL 7.3 credits @tnguyen14
