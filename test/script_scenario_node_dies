@@ -46,7 +46,8 @@ docker run --name=mynodes -d \
   -e FIREFOX=false \
   -e CI \
   -e SELENIUM_NODE_CH_PORT -p ${SELENIUM_NODE_CH_PORT}:${SELENIUM_NODE_CH_PORT} \
-  --shm-size=1g \
+  -v /dev/shm:/dev/shm \
+  --privileged \
   selenium
   # -v /var/run/dbus:/var/run/dbus \
 
@@ -91,6 +92,8 @@ docker rm -vf grid_mock || true
 
 # Create container for Firefox
 docker run --name=mynodes -d \
+  -v /dev/shm:/dev/shm \
+  --privileged \
   -e CHROME=false -e CI \
   -e SELENIUM_NODE_FF_PORT -p ${SELENIUM_NODE_FF_PORT}:${SELENIUM_NODE_FF_PORT} \
   selenium

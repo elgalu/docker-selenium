@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/a219926522070fb44317...master (TBD_DATE)
     + Make proper use of haveged for random entropy
+    + Require `--privileged` else we get: `haveged: RNDADDENTROPY failed!`
     + Add HEALTHCHECK docker instruction, closes #100
     + Prefer -v /dev/shm:/dev/shm over --shm-size
     + New --shm-size=2g suggested for Firefox credits @peterstory @cvakiitho https://goo.gl/5UzpDq

@@ -1,8 +1,7 @@
-# This requires docker-compose >= 1.10.0
 # Usage:
 #  docker-compose -p grid up --force-recreate
 #  docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3
-version: '3'
+version: '2.1'
 
 services:
   hub:
@@ -17,6 +16,9 @@ services:
       - ${VNC_FROM_PORT-40650}-${VNC_TO_PORT-40700}:${VNC_FROM_PORT-40650}-${VNC_TO_PORT-40700}
       # e.g. (hard-coded)
       # - 40650-40700:40650-40700
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
     environment:
       - PICK_ALL_RANDOM_PORTS=true
       - SELENIUM_HUB_PORT=4444
@@ -29,7 +31,9 @@ services:
     network_mode: "service:hub"
     depends_on:
       - hub
-    shm_size: 1g
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
     environment:
       - PICK_ALL_RANDOM_PORTS=true
       - SELENIUM_HUB_PORT=4444
@@ -47,6 +51,9 @@ services:
     network_mode: "service:hub"
     depends_on:
       - hub
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
     environment:
       - PICK_ALL_RANDOM_PORTS=true
       - SELENIUM_HUB_PORT=4444
