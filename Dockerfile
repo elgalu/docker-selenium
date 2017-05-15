@@ -263,17 +263,17 @@ USER root
 #=========================================================
 # Layer size: big.: 79.39 MB (with --no-install-recommends)
 # Layer size: huge: 296 MB
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
-    python2.7 \
-    python-pip \
-    python-openssl \
-    libssl-dev \
-    libffi-dev \
-  && pip install --upgrade pip \
-  && pip install --upgrade setuptools \
-  && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+# RUN apt-get -qqy update \
+#   && apt-get -qqy --no-install-recommends install \
+#     python2.7 \
+#     python-pip \
+#     python-openssl \
+#     libssl-dev \
+#     libffi-dev \
+#   && pip install --upgrade pip \
+#   && pip install --upgrade setuptools \
+#   && rm -rf /var/lib/apt/lists/* \
+#   && apt-get -qyy clean
 
 #=========================================================
 # Python3 for Supervisor, selenium tests, and other stuff
@@ -285,26 +285,26 @@ RUN apt-get -qqy update \
 # After install, make some useful symlinks that are expected to exist
 # Layer size: big.: 138.9 MB (with --no-install-recommends)
 # Layer size: huge: 309.9 MB
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
-#     python3.5 \
-#     python3-pip \
-#     python3.5-dev \
-#     python3-openssl \
-#     libssl-dev libffi-dev \
-#   && pip3 install --upgrade pip \
-#   && pip3 install --upgrade setuptools \
-#   && rm -rf /var/lib/apt/lists/* \
-#   && apt-get -qyy clean
-# RUN cd /usr/local/bin \
-#   && { [ -e easy_install ] || ln -s easy_install-* easy_install; } \
-#   && ln -s idle3 idle \
-#   && ln -s pydoc3 pydoc \
-#   && ln -s python3 python \
-#   && ln -s python3-config python-config \
-#   && ln -s /usr/bin/python3 /usr/bin/python \
-#   && python --version \
-#   && pip --version
+RUN apt-get -qqy update \
+  && apt-get -qqy --no-install-recommends install \
+    python3 \
+    python3-pip \
+    python3-dev \
+    python3-openssl \
+    libssl-dev libffi-dev \
+  && pip3 install --upgrade pip \
+  && pip3 install --upgrade setuptools \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
+RUN cd /usr/local/bin \
+  && { [ -e easy_install ] || ln -s easy_install-* easy_install; } \
+  && ln -s idle3 idle \
+  && ln -s pydoc3 pydoc \
+  && ln -s python3 python \
+  && ln -s python3-config python-config \
+  && ln -s /usr/bin/python3 /usr/bin/python \
+  && python --version \
+  && pip --version
 
 #====================
 # Supervisor install
