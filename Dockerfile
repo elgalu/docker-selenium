@@ -945,6 +945,9 @@ ENV FIREFOX_VERSION="${FF_VER}" \
 #================================
 # VOLUME ${LOGS_DIR}
 
+HEALTHCHECK --interval=1s --timeout=35s --retries=1 \
+  CMD wait_all_done 30s
+
 #================
 # Binary scripts
 #================
