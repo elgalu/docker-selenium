@@ -20,7 +20,7 @@
 Selenium 3  `docker run ... elgalu/selenium:latest`
 ![docker-selenium-grid](./images/grid3_console.png)
 
-Selenium 2  `docker run ... elgalu/selenium:2` *no longer maintained*
+Selenium 2  `docker run ... elgalu/selenium:2` **no longer maintained**
 ![docker-selenium-grid](./images/grid2_console.png)
 
 ### Purpose

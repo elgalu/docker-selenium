@@ -3,16 +3,16 @@
 ## Local
 For pull requests or local commits:
 
+    git checkout -b tmp-`cat VERSION`
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end)
     docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
     git checkout ./images/grid3_console.png scm-source.json
-    git checkout -b tmp-`cat VERSION`
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Fix: Do not set --user-data-dir"
+    git commit -m "Upgrade Chrome patch to 58.0.3029.110"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
@@ -28,7 +28,7 @@ For repository owners only:
 ### Chrome artifact
 Keep certain bins if chrome version changed for example:
 
-    cd ~/tmp_binaries && VER="58.0.3029.81" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    cd ~/tmp_binaries && VER="58.0.3029.110" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
     wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha && cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
 

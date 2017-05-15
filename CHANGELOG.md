@@ -7,8 +7,58 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## 3.3.1-p8
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-05-11)
+    + Upgrade Chrome patch to 58.0.3029.110
+    + Support Japanese/Chinese fonts #153 credits @katryo
+    + Chore: Rename requirements-sele-3.txt to requirements.txt
+    + Chore: Use `apt-get clean` for RHEL 7.3 credits @tnguyen14
+ + **Image tag details:**
+    + Selenium version: 3.3.1 (5234b32)
+    + Chrome stable:  58.0.3029.110
+    + Firefox stable: 52.0.2
+    + Geckodriver: 0.15.0
+    + Chromedriver: 2.29.461571 (8a88bbe0775e2a23afda0ceaf2ef7ee74e822cc5)
+    + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170410
+    + Python: 2.7.12
+    + Tested on kernel dev host: 4.4.0-77-generic x86_64
+    + Tested on kernel CI  host: 4.4.0-51-generic x86_64
+    + Built at dev host with: Docker version 17.05.0-ce, build 89658be
+    + Built at CI  host with: Docker version 17.05.0, build 89658be
+    + Built at dev host with: Docker Compose version 1.13.0, build 1719ceb
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.32GB
+    + Digest: sha256:a94daec0e9b29ce495596eff1a9c8ee5a7ecab529bdced73f543625ee4f79d73
+    + Image ID: sha256:e43476074c4dddb691baab4e872b03f25c93932a84bfb151c0e55088c8c60c34
+
+## 3.3.1-p7
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/113d70a33933ea54168f85c2f5...7c71c322659366daf3 (2017-05-04)
+    + Upgrade Chrome patch to 58.0.3029.96
+    + Add warning that Selenium 2 support will be deprecated
+ + **Image tag details:**
+    + Selenium version: 3.3.1 (5234b32)
+    + Chrome stable:  58.0.3029.96
+    + Firefox stable: 52.0.2
+    + Geckodriver: 0.15.0
+    + Chromedriver: 2.29.461571 (8a88bbe0775e2a23afda0ceaf2ef7ee74e822cc5)
+    + Java: OpenJDK Java 1.8.0_121-8u121-b13-0ubuntu1.16.04.2-b13
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170410
+    + Python: 2.7.12
+    + Tested on kernel dev host: 4.4.0-77-generic x86_64
+    + Tested on kernel CI  host: 4.4.0-51-generic x86_64
+    + Built at dev host with: Docker version 17.04.0-ce, build 4845c56
+    + Built at CI  host with: Docker version 17.04.0, build 4845c56
+    + Built at dev host with: Docker Compose version 1.13.0, build 1719ceb
+    + Built at CI  host with: Docker Compose version 1.11.2, build dfed245
+    + Image size: 1.29GB
+    + Digest: sha256:73fb3d7f7637afaa329c6eac3491eb60f4075ba84d4a280d7326302557766682
+    + Image ID: sha256:c6dfcc9f6c6d3ae6de2565a3ba4c38f031240379de3dc5c40e77fd98c6496255
+
 ## 3.3.1-p6
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_CUR_COMM (2017-04-26)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/c4e8df12781eb031795ea6...113d70a33933ea54168f85c2f5 (2017-04-26)
     + Fix: Do not set --user-data-dir as it breaks the ability of clients to set Chrome options via the capabilities
     + Continue deprecating Selenium 2
     + Chrome arg default: --disable-infobars

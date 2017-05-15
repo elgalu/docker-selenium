@@ -10,3 +10,4 @@ docker-compose --version
 ./host-scripts/gen-scm-source.sh
 
 docker build -t selenium .
+docker images selenium
