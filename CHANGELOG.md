@@ -7,8 +7,37 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## 3.3.1-p9
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/a219926522070fb44317...master (2017-05-15)
+    + Make proper use of haveged for random entropy
+    + Require `--privileged` else we get: `haveged: RNDADDENTROPY failed!`
+    + Upgrade to Python 3
+    + Add HEALTHCHECK docker instruction, closes #100
+    + Prefer -v /dev/shm:/dev/shm over --shm-size
+    + New --shm-size=2g suggested for Firefox credits @peterstory @cvakiitho https://goo.gl/5UzpDq
+    + Chore: Disable useless transfer-logs.sh
+ + **Image tag details:**
+    + Selenium version: 3.3.1 (5234b32)
+    + Chrome stable:  58.0.3029.110
+    + Firefox stable: 52.0.2
+    + Geckodriver: 0.15.0
+    + Chromedriver: 2.29.461571 (8a88bbe0775e2a23afda0ceaf2ef7ee74e822cc5)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170410
+    + Python: TBD_PYTHON_VERSION
+    + Tested on kernel dev host: 4.4.0-77-generic x86_64
+    + Tested on kernel CI  host: 4.4.0-51-generic x86_64
+    + Built at dev host with: Docker version 17.05.0-ce, build 89658be
+    + Built at CI  host with: Docker version 17.05.0, build 89658be
+    + Built at dev host with: Docker Compose version 1.13.0, build 1719ceb
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.36GB
+    + Digest: sha256:97a46bbf8180158d8139d1c7e58c4076e2347c1c395edb558883a10622f44724
+    + Image ID: sha256:0c6567a577377fe8331221e65432a52f5d5976399228e37922ad60c13c57abbc
+
 ## 3.3.1-p8
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-05-11)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/7c71c322659366daf3...a219926522070fb44317 (2017-05-11)
     + Upgrade Chrome patch to 58.0.3029.110
     + Support Japanese/Chinese fonts #153 credits @katryo
     + Chore: Rename requirements-sele-3.txt to requirements.txt

@@ -3,6 +3,13 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+#==============================================
+# Java blocks until kernel have enough entropy
+# to generate the /dev/random seed
+#==============================================
+# See: SeleniumHQ/docker-selenium/issues/14
+sudo haveged
+
 # Workaround that might help to get dbus working in docker
 #  http://stackoverflow.com/a/38355729/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234

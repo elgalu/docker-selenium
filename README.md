@@ -75,7 +75,7 @@ You will need to run the second `eval` command for every new terminal window.
         docker pull elgalu/selenium #upgrades to latest if a newer version is available
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            -e TZ="US/Pacific" --shm-size=1g elgalu/selenium
+            -e TZ="US/Pacific" -v /dev/shm:/dev/shm --privileged elgalu/selenium
 
 2. Wait until the grid starts properly before starting the tests _(Optional but recommended)_
 
@@ -121,7 +121,7 @@ If you want to limit yourself to this project, you still can. There are some way
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
 
         docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-            --shm-size=1g \
+            -v /dev/shm:/dev/shm --privileged \
             -e MAX_INSTANCES=20 -e MAX_SESSIONS=20 \
             elgalu/selenium
 
@@ -144,7 +144,7 @@ You can set a custom screen size at docker run time by providing `SCREEN_WIDTH` 
     docker pull elgalu/selenium
 
     docker run -d --name=grid -p 4444:24444 -p 5900:25900 \
-      --shm-size=1g \
+      -v /dev/shm:/dev/shm --privileged \
       -e SCREEN_WIDTH=1920 -e SCREEN_HEIGHT=1480 \
       elgalu/selenium
 
@@ -157,7 +157,7 @@ You can control and modify the timezone on a container by using the [TZ](https:/
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
         -e TZ="US/Pacific" \
-        --shm-size=1g elgalu/selenium
+        -v /dev/shm:/dev/shm --privileged elgalu/selenium
 
 Examples:
 
@@ -217,7 +217,7 @@ Safari Browser already comes with a built-in vnc viewer so this feature is overk
 You need to pass the environment variable `-e NOVNC=true` in order to start the noVNC service and you will be able to open a browser at [localhost:6080](http://localhost:6080)
 
     docker run --rm -ti --name=grid -p 4444:24444 -p 5900:25900 \
-      --shm-size=1g -p 6080:26080 -e NOVNC=true \
+      -v /dev/shm:/dev/shm --privileged -p 6080:26080 -e NOVNC=true \
       elgalu/selenium
 
 You can provide additional [NoVNC options](https://github.com/elgalu/noVNC/blob/dosel/app/ui.js#L156) such as `?view_only=false` to allow you to interact with the virtual desktop which now is read-only by default so you don't mess with the tests accidentally.
@@ -231,19 +231,15 @@ If the VNC password was randomly generated find out with
 
 ### Chrome crashed
 
-If your tests crashes in Chrome you may need to increase shm size or simply start your container by sharing `-v /dev/shm:/dev/shm` or, alternatively, `--shm-size=1g`
+If your tests crashes in Chrome you may need to increase shm size or simply start your container by sharing `-v /dev/shm:/dev/shm --privileged` or, alternatively, `-v /dev/shm:/dev/shm --privileged`
 
-    docker run ... --shm-size=1g
+    docker run ... -v /dev/shm:/dev/shm --privileged ...
 
-Alternatively you can increase it inside the container:
+We also found recently that when missing `--privileged` haveged will break: `haveged: RNDADDENTROPY failed!`
 
-1. start docker in privileged mode: `docker run --privileged`
-2. increase shm size from default 64mb or 68mb to something bigger:
+### Firefox crashed
 
-```sh
-docker exec grid sudo umount /dev/shm
-docker exec grid sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=512M tmpfs /dev/shm
-```
+Same as Chrome, people have [reported](https://goo.gl/5UzpDq) the shm fix might also be necessary for Firefox.
 
 ### Chrome not reachable or timeout after 60 secs
 In CentOS and apparently since docker 1.10.0 is necessary to disable [sandbox mode](http://www.chromium.org/developers/design-documents/sandbox) through [--no-sandbox](http://peter.sh/experiments/chromium-command-line-switches/#no-sandbox) example client implementation.
@@ -286,7 +282,7 @@ Host machine, terminal 1:
 Host machine, terminal 2:
 
     docker run --rm --name=ch -p=4444:24444 \
-      --shm-size=1g \
+      -v /dev/shm:/dev/shm --privileged \
       -e SCREEN_WIDTH -e SCREEN_HEIGHT -e XE_DISP_NUM \
       -v /tmp/.X11-unix/X${XE_DISP_NUM}:/tmp/.X11-unix/X${XE_DISP_NUM} \
       elgalu/selenium
@@ -368,14 +364,14 @@ So `--pid=host` is included to avoid https://github.com/docker/docker/issues/589
 Full example using `--net=host` and `--pid=host` but for this to work in OSX you need the latest docker mac package, upgrade if you haven't done so in the last month.
 
     docker run -d --name=grid --net=host --pid=host \
-      --shm-size=1g -e SELENIUM_HUB_PORT=4444 \
+      -v /dev/shm:/dev/shm --privileged -e SELENIUM_HUB_PORT=4444 \
       elgalu/selenium
     docker exec grid wait_all_done 30s
     ./test/python_test.py
 
 #### DNS example
 
-    docker run -d --net=host --pid=host --name=grid --shm-size=1g elgalu/selenium
+    docker run -d --net=host --pid=host --name=grid -v /dev/shm:/dev/shm --privileged elgalu/selenium
     docker exec grid wait_all_done 30s
 
 ## Who is using docker-selenium?

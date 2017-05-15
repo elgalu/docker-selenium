@@ -50,7 +50,8 @@ docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_PORT \
   -e CI \
   -e VIDEO_CONVERSION_MAX_WAIT="40s" \
-  --shm-size=1g \
+  -v /dev/shm:/dev/shm \
+  --privileged \
   selenium
 
 sleep ${ADDED_TEST_SLEEP} && docker logs grid
