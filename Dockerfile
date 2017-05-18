@@ -224,24 +224,9 @@ RUN apt-get -qqy update \
 USER seluser
 WORKDIR /home/seluser
 
-#========================
-# Selenium 2 (deprecated)
-#========================
-# Layer size: medium: 21.23 MB
-ENV SEL_MAJOR_VER="2.53" \
-    SEL_PATCH_LEVEL_VER="1"
-ENV SEL_VER="${SEL_MAJOR_VER}.${SEL_PATCH_LEVEL_VER}"
-RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
-  && export SELPATH="${SEL_MAJOR_VER}/selenium-server-standalone-${SEL_VER}.jar" \
-  && wget -nv ${SELBASE}/${SELPATH} \
-  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
-           "selenium-server-standalone-2.jar" \
-  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
-           "selenium-server-standalone.jar"
-
-#============
-# Selenium 3
-#============
+#=================
+# Selenium latest
+#=================
 # Layer size: medium ~22 MB
 ENV SEL_DIRECTORY="3.3" \
     SEL_VER="3.3.1"
@@ -572,20 +557,6 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && mv firefox firefox-for-sel-3 \
   && sudo ln -fs /home/seluser/firefox-for-sel-3/firefox /usr/bin/firefox
 
-#--- Stable for Selenium 2
-# Layer size: big: 107 MB
-ENV FF_VER="47.0.1"
-ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
-ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
-RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
-  && bzip2 -d "firefox.tar.bz2" \
-  && tar xf "firefox.tar" \
-  && rm "firefox.tar" \
-  && mv firefox firefox-for-sel-2 \
-  && sudo ln -fs /home/seluser/firefox-for-sel-2/firefox /usr/bin/firefox
-
-LABEL selenium2_firefox_version "47.0.1"
-LABEL selenium3_firefox_version "52.0.2"
 LABEL selenium_firefox_version "52.0.2"
 
 #=============================
@@ -616,8 +587,6 @@ ENV CHROME_VERSION_TRIGGER="58.0.3029.110" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium2_chrome_version "58.0.3029.110"
-LABEL selenium3_chrome_version "58.0.3029.110"
 LABEL selenium_chrome_version "58.0.3029.110"
 
 # Layer size: huge: 196.3 MB
@@ -688,8 +657,6 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
-# USE_SELENIUM "2" / "3"
-#   Selenium 2 or 3
 # CHROME_FLAVOR "stable"
 #   Default chrome flavor, options no longer available: beta|unstable
 # PICK_ALL_RANDOM_PORTS "true" / "false"

@@ -18,8 +18,6 @@ parser.add_argument('browser', choices=['chrome', 'firefox', 'mobile_emulation']
                     help='in which browser to test')
 args = parser.parse_args()
 
-current_selenium = os.environ.get('USE_SELENIUM', '3')
-
 # http://selenium-python.readthedocs.org/en/latest/api.html
 if args.browser == 'chrome':
     caps = DesiredCapabilities.CHROME

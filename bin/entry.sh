@@ -47,8 +47,8 @@ sudo cp /capabilities3.json /home/seluser/caps.json
 #---------------------
 # Fix/extend ENV vars
 #---------------------
-export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-${USE_SELENIUM}.jar"
-export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-${USE_SELENIUM}/firefox"
+export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-3.jar"
+export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-3/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 export DOSEL_VERSION=$(cat VERSION)
 export FIREFOX_VERSION=$(firefox_version)
@@ -61,18 +61,18 @@ echo "-- INFO: Chrome..... Version: ${CHROME_VERSION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
 
 if [ "${USE_SELENIUM}" == "2" ]; then
-  # In the future this warning will be changed to an error and exit command
-  echo "-- INFO: Using Selenium.....: ${USE_SELENIUM}"
   echo -e "\n\n\n\n"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!! WARNING!!! You are using the unmaintained Selenium 2 !!!"
   echo "!!! to continue using Selenium 2 please use the proper tag:"
   echo "!!! docker pull elgalu/selenium:2                        !!!"
+  echo "!!!                                                      !!!"
+  echo "!!! Will start with Selenium 3 anyway                    !!!"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo -e "\n\n\n\n"
-else
-  echo "-- INFO: Using Selenium.....: ${SEL_VER}"
 fi
+
+echo "-- INFO: Using Selenium.....: ${SEL_VER}"
 
 # export PATH="${PATH}:${BIN_UTILS}"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"

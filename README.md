@@ -21,7 +21,6 @@ Selenium 3  `docker run ... elgalu/selenium:latest`
 ![docker-selenium-grid](./images/grid3_console.png)
 
 Selenium 2  `docker run ... elgalu/selenium:2` **no longer maintained**
-![docker-selenium-grid](./images/grid2_console.png)
 
 ### Purpose
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
