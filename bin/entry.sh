@@ -57,12 +57,14 @@ sudo cp /capabilities3.json /home/seluser/caps.json
 export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-${USE_SELENIUM}.jar"
 export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-${USE_SELENIUM}/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
-export FIREFOX_VERSION=$(firefox_version)
-export CHROME_VESION=$(chrome_stable_version)
 export DOSEL_VERSION=$(cat VERSION)
+export FIREFOX_VERSION=$(firefox_version)
+# CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
+export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
+export CHROME_VERSION=$(chrome_${CHROME_FLAVOR}_version)
 
 echo "-- INFO: Docker Img. Version: ${DOSEL_VERSION}"
-echo "-- INFO: Chrome..... Version: ${CHROME_VESION}"
+echo "-- INFO: Chrome..... Version: ${CHROME_VERSION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
 
 if [ "${USE_SELENIUM}" == "2" ]; then
@@ -105,10 +107,6 @@ export COMMON_CAPS="${COMMON_CAPS},resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 # https://testingbot.com/support/other/test-options#screenresolution
 export COMMON_CAPS="${COMMON_CAPS},screen-resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 export COMMON_CAPS="${COMMON_CAPS},tz=${TZ}"
-
-# CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
-export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
-export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
 
 # Video
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
@@ -361,7 +359,7 @@ ga_track_start () {
         --data ul="${TZ}"
         --data cd="start ${START_META_DATA}"
         --data cd1="${USE_SELENIUM}"
-        --data cd2="${CHROME_VESION}"
+        --data cd2="${CHROME_VERSION}"
         --data cd3="${CHROME_FLAVOR}"
         --data cd4="${FIREFOX_VERSION}"
         --data cd5="${SCREEN_WIDTH}"
@@ -448,6 +446,7 @@ function get_free_display() {
       # If we can already use that display it means there is already some
       # Xvfb there which means we need to keep looking for a free one.
       export DISPLAY=":${find_display_num}"
+      echo "${DISPLAY}" > DISPLAY
       if xsetroot -cursor_name left_ptr -fg white -bg black > /dev/null 2>&1; then
         echo "-- WARN: DISPLAY=:${find_display_num} is already being used, skip it..." 1>&3
         selected_disp_num="-1"
@@ -463,6 +462,8 @@ function get_free_display() {
   done
   [ "${selected_disp_num}" = "-1" ] #|| echo "-- INFO: Found free DISPLAY=:${selected_disp_num}" 1>&3
 
+  export DISPLAY=":${selected_disp_num}"
+  echo "${DISPLAY}" > DISPLAY
   echo ${selected_disp_num}
 }
 
@@ -496,6 +497,7 @@ else
     let i=${i}+1
     export DISP_N=$(get_free_display)
     export DISPLAY=":${DISP_N}"
+    echo "${DISPLAY}" > DISPLAY
     export XEPHYR_DISPLAY=":${DISP_N}"
     if ! start_xvfb; then
       echo "-- WARN: start_xvfb() failed!" 1>&3
@@ -550,7 +552,6 @@ echo "${SELENIUM_NODE_RC_CH_PORT}" > SELENIUM_NODE_RC_CH_PORT
 echo "${SELENIUM_NODE_RC_CH_PORT}" > RC_CH_PORT
 echo "${SELENIUM_NODE_RC_FF_PORT}" > SELENIUM_NODE_RC_FF_PORT
 echo "${SELENIUM_NODE_RC_FF_PORT}" > RC_FF_PORT
-echo "${DISPLAY}" > DISPLAY
 echo "${VNC_PORT}" > VNC_PORT
 echo "${NOVNC_PORT}" > NOVNC_PORT
 echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
@@ -559,11 +560,29 @@ echo "${USE_SELENIUM}" > USE_SELENIUM
 echo "${SELENIUM_JAR_PATH}" > SELENIUM_JAR_PATH
 echo "${LOGS_DIR}" > LOGS_DIR
 echo "${FIREFOX_VERSION}" > FIREFOX_VERSION
-echo "${CHROME_VESION}" > CHROME_VESION
+echo "${CHROME_VERSION}" > CHROME_VERSION
 echo "${CHROME}" > CHROME
+echo "${CHROME_FLAVOR}" > CHROME_FLAVOR
 echo "${FIREFOX}" > FIREFOX
 echo "${RC_CHROME}" > RC_CHROME
 echo "${RC_FIREFOX}" > RC_FIREFOX
+echo "${WAIT_TIMEOUT}" > WAIT_TIMEOUT
+echo "${COMMON_CAPS}" > COMMON_CAPS
+echo "${SELENIUM_HUB_HOST}" > SELENIUM_HUB_HOST
+echo "${SELENIUM_HUB_PROTO}" > SELENIUM_HUB_PROTO
+echo "${SELENIUM_NODE_HOST}" > SELENIUM_NODE_HOST
+echo "${CHROME_PATH}" > CHROME_PATH
+echo "${MAX_SESSIONS}" > MAX_SESSIONS
+echo "${SEL_RELEASE_TIMEOUT_SECS}" > SEL_RELEASE_TIMEOUT_SECS
+echo "${SEL_BROWSER_TIMEOUT_SECS}" > SEL_BROWSER_TIMEOUT_SECS
+echo "${SEL_CLEANUPCYCLE_MS}" > SEL_CLEANUPCYCLE_MS
+echo "${SEL_NODEPOLLING_MS}" > SEL_NODEPOLLING_MS
+echo "${SEL_UNREGISTER_IF_STILL_DOWN_AFTER}" > SEL_UNREGISTER_IF_STILL_DOWN_AFTER
+echo "${SELENIUM_NODE_PARAMS}" > SELENIUM_NODE_PARAMS
+echo "${CUSTOM_SELENIUM_NODE_PROXY_PARAMS}" > CUSTOM_SELENIUM_NODE_PROXY_PARAMS
+echo "${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE}" > CUSTOM_SELENIUM_NODE_REGISTER_CYCLE
+echo "${XMANAGER}" > XMANAGER
+echo "${GRID}" > GRID
 env > env
 
 #------

@@ -5,8 +5,8 @@ echoerr() { printf "%s\n" "$*" >&2; }
 # print error and exit
 die () {
   echoerr "ERROR: $1"
-  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "3"
-  errnum=${2-3}
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "13"
+  errnum=${2-13}
   exit $errnum
 }
 
@@ -59,7 +59,7 @@ shutdown () {
 
       exec bash
     else
-      exit 3
+      exit 122
     fi
   else
     exit 0

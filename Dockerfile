@@ -294,6 +294,7 @@ RUN apt-get -qqy update \
     libssl-dev libffi-dev \
   && pip3 install --upgrade pip \
   && pip3 install --upgrade setuptools \
+  && pip3 install --upgrade numpy \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get -qyy clean
 RUN cd /usr/local/bin \
@@ -826,7 +827,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   BIN_UTILS="/usr/bin" \
   MEM_JAVA_PERCENT=80 \
   WAIT_FOREGROUND_RETRY="2s" \
-  WAIT_VNC_FOREGROUND_RETRY="7s" \
+  WAIT_VNC_FOREGROUND_RETRY="6s" \
   XVFB_STARTRETRIES=0 \
   XMANAGER_STARTRETRIES=0 \
   XMANAGER_STARTSECS=0 \
@@ -917,7 +918,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VIDEOS_DIR="/home/seluser/videos" \
   XMANAGER="fluxbox" \
   FLUXBOX_START_MAX_RETRIES=5 \
-  TAIL_LOG_LINES="15" \
+  TAIL_LOG_LINES="50" \
   SHM_TRY_MOUNT_UNMOUNT="false" \
   SHM_SIZE="512M" \
   ETHERNET_DEVICE_NAME="eth0" \
