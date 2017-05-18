@@ -558,6 +558,7 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && sudo ln -fs /home/seluser/firefox-for-sel-3/firefox /usr/bin/firefox
 
 LABEL selenium_firefox_version "52.0.2"
+LABEL selenium3_firefox_version "52.0.2"
 
 #=============================
 # sudo by default from now on
@@ -588,6 +589,7 @@ ENV CHROME_VERSION_TRIGGER="58.0.3029.110" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
 LABEL selenium_chrome_version "58.0.3029.110"
+LABEL selenium3_chrome_version "58.0.3029.110"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
