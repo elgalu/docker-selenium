@@ -13,6 +13,7 @@ Note image ids also change after scm-source.json has being updated which trigger
          From now on we will show a banner and switch directly to selenium 3
      + Upgrade Ubuntu xenial-20170410 to 20170510
      + wait_all_done was failing in some cases, closes #156
+     + When using with Zalenium do not killall when noVNC fails
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE

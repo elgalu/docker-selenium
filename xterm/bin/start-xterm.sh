@@ -42,8 +42,15 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
   shutdown "Failed while waiting for Xvfb to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
   shutdown "Failed while waiting for XManager to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || \
-  shutdown "Failed while waiting for noVNC to start!"
+
+if [ "${ZALENIUM}" == "true" ]; then
+  timeout --foreground ${NOVNC_WAIT_TIMEOUT} wait-novnc.sh || \
+    error "wait-novnc.sh failed within ${NOVNC_WAIT_TIMEOUT} -- Zalenium check."
+else
+  timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || \
+    shutdown "Failed while waiting for noVNC to start!"
+fi
+
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || \
   shutdown "Failed while waiting for selenium hub to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \
