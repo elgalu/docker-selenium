@@ -400,10 +400,6 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/selenium-node-chrome-stdout.log
     /var/log/cont/selenium-node-firefox-stderr.log
     /var/log/cont/selenium-node-firefox-stdout.log
-    /var/log/cont/selenium-rc-chrome-stderr.log
-    /var/log/cont/selenium-rc-chrome-stdout.log
-    /var/log/cont/selenium-rc-firefox-stderr.log
-    /var/log/cont/selenium-rc-firefox-stdout.log
     /var/log/cont/supervisord.log
     /var/log/cont/video-rec-stderr.log
     /var/log/cont/video-rec-stdout.log

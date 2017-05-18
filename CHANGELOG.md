@@ -9,8 +9,10 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/659750865bf0fd569d...master (TBD_DATE)
-     + BREAKING CHANGE: Drop support for Selenium 2
-         From now on we will show a banner and switch directly to selenium 3
+     + BREAKING CHANGES:
+         ++ Drop support for Selenium 2
+         ++ From now on we will show a banner and switch directly to selenium 3
+         ++ Completely remove Selenium IDE support, i.e. RC_CHROME / RC_FIREFOX
      + Upgrade Ubuntu xenial-20170410 to 20170510
      + wait_all_done was failing in some cases, closes #156
      + When using with Zalenium do not killall when noVNC fails

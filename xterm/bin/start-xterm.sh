@@ -57,10 +57,6 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \
   shutdown "Failed while waiting for selenium node chrome to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || \
   shutdown "Failed while waiting for selenium node firefox to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-rc-chrome.sh || \
-  shutdown "Failed while waiting for selenium RC node chrome to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-rc-firefox.sh || \
-  shutdown "Failed while waiting for selenium RC node firefox to start!"
 
 if [ "${VIDEO}" = "true" ]; then
   start-video &
