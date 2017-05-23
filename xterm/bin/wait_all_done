@@ -8,17 +8,17 @@ echoerr() { printf "%s\n" "$*" >&2; }
 # print error and exit
 die () {
   echoerr "ERROR: $1"
-  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "3"
-  errnum=${2-3}
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "22"
+  errnum=${2-22}
   exit $errnum
 }
 
 # if $1 is defined AND NOT EMPTY, use $1; otherwise, set to "7s"
-WAIT_TIMEOUT=${1-7s}
+WAIT_TIMEOUT=${1-9s}
 LOOP_SCRIPT_PATH="${BIN_UTILS}/wait-xterm.sh"
 
 # default $TAIL_LOG_LINES when not provided
-TAIL_LOG_LINES=${TAIL_LOG_LINES-10}
+TAIL_LOG_LINES=${TAIL_LOG_LINES-50}
 
 if [ ! -f "${LOOP_SCRIPT_PATH}" ]; then
   die "Need '${LOOP_SCRIPT_PATH}' to exist!"
@@ -31,10 +31,12 @@ if timeout --foreground ${WAIT_TIMEOUT} ${LOOP_SCRIPT_PATH}; then
     grep 'password' /var/log/cont/vnc-stdout.log || true
   fi
   grep 'IP:' /var/log/cont/xterm-stdout.log || die "Failed to grep IP:"
-  echo "Note if you are in Mac (OSX) 'boot2docker ip' or 'docker-machine ip default' will tell you the relevant IP"
   echo -e "Selenium all done and ready for testing!"
 else
+  echo "" && echo "" && echo "==> logs tailed by +- ${TAIL_LOG_LINES} <=="
   bash -c 'tail --lines=${TAIL_LOG_LINES} /var/log/cont/*' || true
+  echo "" && echo "" && echo "==> ls -la /var/log/cont/* <=="
+  bash -c 'ls -la /var/log/cont/*' || true
   echo "" && echo "" && echo "==> errors <=="
   bash -c 'errors' || true
   # bash -c "grep -v webSocketsHandshake /var/log/cont/vnc-tryouts-stderr*.log"

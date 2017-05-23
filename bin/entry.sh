@@ -34,8 +34,6 @@ stop >/dev/null 2>&1 || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
-export RC_CHROME="false"
-export RC_FIREFOX="false"
 # Support restart docker container for selenium 3 @aituganov
 if [ ! -f /usr/bin/geckodriver ]; then
   sudo mv /opt/geckodriver /usr/bin/geckodriver
@@ -46,38 +44,35 @@ sudo cp /capabilities3.json /capabilities.json
 sudo cp /capabilities3.json /home/seluser/capabilities.json
 sudo cp /capabilities3.json /home/seluser/caps.json
 
-# We need larger screens for Selenium IDE RC tests
-# if [ "${RC_CHROME}" = "true" ] || [ "${RC_FIREFOX}" = "true" ]; then
-#   export SCREEN_HEIGHT=$((SCREEN_HEIGHT*2))
-# fi
-
 #---------------------
 # Fix/extend ENV vars
 #---------------------
-export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-${USE_SELENIUM}.jar"
-export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-${USE_SELENIUM}/firefox"
+export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-3.jar"
+export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-3/firefox"
 sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
-export FIREFOX_VERSION=$(firefox_version)
-export CHROME_VESION=$(chrome_stable_version)
 export DOSEL_VERSION=$(cat VERSION)
+export FIREFOX_VERSION=$(firefox_version)
+# CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
+export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
+export CHROME_VERSION=$(chrome_${CHROME_FLAVOR}_version)
 
 echo "-- INFO: Docker Img. Version: ${DOSEL_VERSION}"
-echo "-- INFO: Chrome..... Version: ${CHROME_VESION}"
+echo "-- INFO: Chrome..... Version: ${CHROME_VERSION}"
 echo "-- INFO: Firefox.... Version: ${FIREFOX_VERSION}"
 
 if [ "${USE_SELENIUM}" == "2" ]; then
-  # In the future this warning will be changed to an error and exit command
-  echo "-- INFO: Using Selenium.....: ${USE_SELENIUM}"
   echo -e "\n\n\n\n"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!! WARNING!!! You are using the unmaintained Selenium 2 !!!"
   echo "!!! to continue using Selenium 2 please use the proper tag:"
   echo "!!! docker pull elgalu/selenium:2                        !!!"
+  echo "!!!                                                      !!!"
+  echo "!!! Will start with Selenium 3 anyway                    !!!"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo -e "\n\n\n\n"
-else
-  echo "-- INFO: Using Selenium.....: ${SEL_VER}"
 fi
+
+echo "-- INFO: Using Selenium.....: ${SEL_VER}"
 
 # export PATH="${PATH}:${BIN_UTILS}"
 export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
@@ -105,10 +100,6 @@ export COMMON_CAPS="${COMMON_CAPS},resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 # https://testingbot.com/support/other/test-options#screenresolution
 export COMMON_CAPS="${COMMON_CAPS},screen-resolution=${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 export COMMON_CAPS="${COMMON_CAPS},tz=${TZ}"
-
-# CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
-export CHROME_PATH="/usr/bin/google-chrome-${CHROME_FLAVOR}"
-export CHROME_VERSION=$(${CHROME_PATH} --version 2>&1 | grep "Google Chrome" | grep -iEo "[0-9.]{2,20}.*")
 
 # Video
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
@@ -157,14 +148,6 @@ fi
 
 if [ "${FIREFOX}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-firefox"
-fi
-
-if [ "${RC_CHROME}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-rc-chrome"
-fi
-
-if [ "${RC_FIREFOX}" = "true" ]; then
-  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-rc-firefox"
 fi
 
 if [ "${SELENIUM_HUB_PORT}" = "" ]; then
@@ -218,24 +201,6 @@ elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   # User want to pick random ports but may also want to fix some others
   if [ "${SELENIUM_NODE_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
     export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-  fi
-fi
-
-if [ "${SELENIUM_NODE_RC_CH_PORT}" = "0" ]; then
-  export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
-  # User want to pick random ports but may also want to fix some others
-  if [ "${SELENIUM_NODE_RC_CH_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" ]; then
-    export SELENIUM_NODE_RC_CH_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-  fi
-fi
-
-if [ "${SELENIUM_NODE_RC_FF_PORT}" = "0" ]; then
-  export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
-elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
-  # User want to pick random ports but may also want to fix some others
-  if [ "${SELENIUM_NODE_RC_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" ]; then
-    export SELENIUM_NODE_RC_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
 fi
 
@@ -334,8 +299,6 @@ ga_track_start () {
     START_META_DATA="${START_META_DATA} SELENIUM_NODE_HOST='${SELENIUM_NODE_HOST}'"
     START_META_DATA="${START_META_DATA} SELENIUM_HUB_PARAMS='${SELENIUM_HUB_PARAMS}'"
     START_META_DATA="${START_META_DATA} SELENIUM_NODE_PARAMS='${SELENIUM_NODE_PARAMS}'"
-    START_META_DATA="${START_META_DATA} RC_CHROME='${RC_CHROME}'"
-    START_META_DATA="${START_META_DATA} RC_FIREFOX='${RC_FIREFOX}'"
     START_META_DATA="${START_META_DATA} MEM_JAVA_PERCENT='${MEM_JAVA_PERCENT}'"
     START_META_DATA="${START_META_DATA} WAIT_TIMEOUT='${WAIT_TIMEOUT}'"
     START_META_DATA="${START_META_DATA} WAIT_FOREGROUND_RETRY='${WAIT_FOREGROUND_RETRY}'"
@@ -361,7 +324,7 @@ ga_track_start () {
         --data ul="${TZ}"
         --data cd="start ${START_META_DATA}"
         --data cd1="${USE_SELENIUM}"
-        --data cd2="${CHROME_VESION}"
+        --data cd2="${CHROME_VERSION}"
         --data cd3="${CHROME_FLAVOR}"
         --data cd4="${FIREFOX_VERSION}"
         --data cd5="${SCREEN_WIDTH}"
@@ -448,6 +411,7 @@ function get_free_display() {
       # If we can already use that display it means there is already some
       # Xvfb there which means we need to keep looking for a free one.
       export DISPLAY=":${find_display_num}"
+      echo "${DISPLAY}" > DISPLAY
       if xsetroot -cursor_name left_ptr -fg white -bg black > /dev/null 2>&1; then
         echo "-- WARN: DISPLAY=:${find_display_num} is already being used, skip it..." 1>&3
         selected_disp_num="-1"
@@ -463,6 +427,8 @@ function get_free_display() {
   done
   [ "${selected_disp_num}" = "-1" ] #|| echo "-- INFO: Found free DISPLAY=:${selected_disp_num}" 1>&3
 
+  export DISPLAY=":${selected_disp_num}"
+  echo "${DISPLAY}" > DISPLAY
   echo ${selected_disp_num}
 }
 
@@ -496,6 +462,7 @@ else
     let i=${i}+1
     export DISP_N=$(get_free_display)
     export DISPLAY=":${DISP_N}"
+    echo "${DISPLAY}" > DISPLAY
     export XEPHYR_DISPLAY=":${DISP_N}"
     if ! start_xvfb; then
       echo "-- WARN: start_xvfb() failed!" 1>&3
@@ -546,11 +513,6 @@ echo "${SELENIUM_NODE_CH_PORT}" > SELENIUM_NODE_CH_PORT
 echo "${SELENIUM_NODE_CH_PORT}" > CH_PORT
 echo "${SELENIUM_NODE_FF_PORT}" > SELENIUM_NODE_FF_PORT
 echo "${SELENIUM_NODE_FF_PORT}" > FF_PORT
-echo "${SELENIUM_NODE_RC_CH_PORT}" > SELENIUM_NODE_RC_CH_PORT
-echo "${SELENIUM_NODE_RC_CH_PORT}" > RC_CH_PORT
-echo "${SELENIUM_NODE_RC_FF_PORT}" > SELENIUM_NODE_RC_FF_PORT
-echo "${SELENIUM_NODE_RC_FF_PORT}" > RC_FF_PORT
-echo "${DISPLAY}" > DISPLAY
 echo "${VNC_PORT}" > VNC_PORT
 echo "${NOVNC_PORT}" > NOVNC_PORT
 echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
@@ -559,11 +521,27 @@ echo "${USE_SELENIUM}" > USE_SELENIUM
 echo "${SELENIUM_JAR_PATH}" > SELENIUM_JAR_PATH
 echo "${LOGS_DIR}" > LOGS_DIR
 echo "${FIREFOX_VERSION}" > FIREFOX_VERSION
-echo "${CHROME_VESION}" > CHROME_VESION
+echo "${CHROME_VERSION}" > CHROME_VERSION
 echo "${CHROME}" > CHROME
+echo "${CHROME_FLAVOR}" > CHROME_FLAVOR
 echo "${FIREFOX}" > FIREFOX
-echo "${RC_CHROME}" > RC_CHROME
-echo "${RC_FIREFOX}" > RC_FIREFOX
+echo "${WAIT_TIMEOUT}" > WAIT_TIMEOUT
+echo "${COMMON_CAPS}" > COMMON_CAPS
+echo "${SELENIUM_HUB_HOST}" > SELENIUM_HUB_HOST
+echo "${SELENIUM_HUB_PROTO}" > SELENIUM_HUB_PROTO
+echo "${SELENIUM_NODE_HOST}" > SELENIUM_NODE_HOST
+echo "${CHROME_PATH}" > CHROME_PATH
+echo "${MAX_SESSIONS}" > MAX_SESSIONS
+echo "${SEL_RELEASE_TIMEOUT_SECS}" > SEL_RELEASE_TIMEOUT_SECS
+echo "${SEL_BROWSER_TIMEOUT_SECS}" > SEL_BROWSER_TIMEOUT_SECS
+echo "${SEL_CLEANUPCYCLE_MS}" > SEL_CLEANUPCYCLE_MS
+echo "${SEL_NODEPOLLING_MS}" > SEL_NODEPOLLING_MS
+echo "${SEL_UNREGISTER_IF_STILL_DOWN_AFTER}" > SEL_UNREGISTER_IF_STILL_DOWN_AFTER
+echo "${SELENIUM_NODE_PARAMS}" > SELENIUM_NODE_PARAMS
+echo "${CUSTOM_SELENIUM_NODE_PROXY_PARAMS}" > CUSTOM_SELENIUM_NODE_PROXY_PARAMS
+echo "${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE}" > CUSTOM_SELENIUM_NODE_REGISTER_CYCLE
+echo "${XMANAGER}" > XMANAGER
+echo "${GRID}" > GRID
 env > env
 
 #------

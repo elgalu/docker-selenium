@@ -68,7 +68,7 @@ if [ "${VIDEO_FILE_EXTENSION}" == "mp4" ]; then
 
   # Portable defaults
   [ -z "${VIDEO_MP4_FIX_MAX_WAIT}" ] && export \
-      VIDEO_MP4_FIX_MAX_WAIT="7s"
+      VIDEO_MP4_FIX_MAX_WAIT="8s"
 
   if timeout --foreground "${VIDEO_MP4_FIX_MAX_WAIT}" mp4box_retry.sh; then
     log "Succeeded to mp4box_retry.sh within ${VIDEO_MP4_FIX_MAX_WAIT}"

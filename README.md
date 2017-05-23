@@ -21,7 +21,6 @@ Selenium 3  `docker run ... elgalu/selenium:latest`
 ![docker-selenium-grid](./images/grid3_console.png)
 
 Selenium 2  `docker run ... elgalu/selenium:2` **no longer maintained**
-![docker-selenium-grid](./images/grid2_console.png)
 
 ### Purpose
 The purpose of this project is to have [Selenium][] running as simple and as fast as possible.
@@ -400,10 +399,6 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/selenium-node-chrome-stdout.log
     /var/log/cont/selenium-node-firefox-stderr.log
     /var/log/cont/selenium-node-firefox-stdout.log
-    /var/log/cont/selenium-rc-chrome-stderr.log
-    /var/log/cont/selenium-rc-chrome-stdout.log
-    /var/log/cont/selenium-rc-firefox-stderr.log
-    /var/log/cont/selenium-rc-firefox-stdout.log
     /var/log/cont/supervisord.log
     /var/log/cont/video-rec-stderr.log
     /var/log/cont/video-rec-stdout.log

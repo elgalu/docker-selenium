@@ -7,8 +7,37 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## 3.3.1-p10
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/659750865bf0fd569d...master (2017-05-19)
+     + BREAKING CHANGES:
+         ++ Drop support for Selenium 2
+         ++ From now on we will show a banner and switch directly to selenium 3
+         ++ Completely remove Selenium IDE support, i.e. RC_CHROME / RC_FIREFOX
+     + Upgrade Ubuntu xenial-20170410 to 20170510
+     + wait_all_done was failing in some cases, closes #156
+     + When using with Zalenium do not killall when noVNC fails
+ + **Image tag details:**
+    + Selenium version: 3.3.1 (5234b32)
+    + Chrome stable:  58.0.3029.110
+    + Firefox stable: 52.0.2
+    + Geckodriver: 0.15.0
+    + Chromedriver: 2.29.461571 (8a88bbe0775e2a23afda0ceaf2ef7ee74e822cc5)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170510
+    + Python: TBD_PYTHON_VERSION
+    + Tested on kernel dev host: 4.4.0-77-generic x86_64
+    + Tested on kernel CI  host: 4.4.0-51-generic x86_64
+    + Built at dev host with: Docker version 17.05.0-ce, build 89658be
+    + Built at CI  host with: Docker version 17.05.0, build 89658be
+    + Built at dev host with: Docker Compose version 1.13.0, build 1719ceb
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.31GB
+    + Digest: sha256:6f1bb76ddfbd4903153e9ec387abed71d6a34b3e78a59ab543932ebaafc82d43
+    + Image ID: sha256:52158cac8f8285c5da04fc67837f03e974eca2761f5b38ba06a9d9a4ad9ffeeb
+
 ## 3.3.1-p9
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/a219926522070fb44317...master (2017-05-15)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/a219926522070fb44317...659750865bf0fd569d (2017-05-15)
     + Make proper use of haveged for random entropy
     + Require `--privileged` else we get: `haveged: RNDADDENTROPY failed!`
     + Upgrade to Python 3

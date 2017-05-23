@@ -22,7 +22,7 @@ else
     make scale chrome=3 firefox=2
     make scale chrome=3 firefox=3
   else
-    make setup compose chrome=3 firefox=5
+    make setup compose chrome=7 firefox=6
   fi
   # also has a real display so we can "see"
   make see browser=chrome node=1

@@ -18,7 +18,7 @@ timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
 
 function shutdown {
-  echo "Trapped SIGTERM/SIGINT so shutting down $0 gracefully..."
+  log "Trapped SIGTERM/SIGINT so shutting down $0 gracefully..."
   exit 0
 }
 
@@ -71,7 +71,7 @@ else
   if [ -z "${VNC_PASSWORD}" ]; then
     random_password=$(genpassword.sh)
     export VNC_PASSWORD=${VNC_PASSWORD-$random_password}
-    echo "a VNC password was generated for you: $VNC_PASSWORD"
+    log "a VNC password was generated for you: $VNC_PASSWORD"
   fi
   # Generate the password file
   x11vnc -storepasswd ${VNC_PASSWORD} ${VNC_STORE_PWD_FILE}
@@ -90,13 +90,13 @@ else
     echo "${VNC_PORT}" > VNC_PORT
     stat_failed=true
     if ! start_vnc; then
-      echo "-- WARN: start_vnc() failed!"
+      log "-- WARN: start_vnc() failed!"
     fi
     if timeout --foreground "${WAIT_VNC_FOREGROUND_RETRY}" wait-vnc.sh; then
       stat_failed=false
       break
     else
-      echo "-- WARN: wait-vnc.sh failed! for VNC_PORT=${VNC_PORT}"
+      log "-- WARN: wait-vnc.sh failed! for VNC_PORT=${VNC_PORT}"
       # killall x11vnc || true
       kill ${VNC_PID}
     fi

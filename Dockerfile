@@ -1,9 +1,9 @@
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
 # Layer size: big: 127.2 MB
-FROM ubuntu:xenial-20170410
+FROM ubuntu:xenial-20170510
 ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20170410"
+    UBUNTU_DATE="20170510"
 
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
@@ -224,24 +224,9 @@ RUN apt-get -qqy update \
 USER seluser
 WORKDIR /home/seluser
 
-#========================
-# Selenium 2 (deprecated)
-#========================
-# Layer size: medium: 21.23 MB
-ENV SEL_MAJOR_VER="2.53" \
-    SEL_PATCH_LEVEL_VER="1"
-ENV SEL_VER="${SEL_MAJOR_VER}.${SEL_PATCH_LEVEL_VER}"
-RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
-  && export SELPATH="${SEL_MAJOR_VER}/selenium-server-standalone-${SEL_VER}.jar" \
-  && wget -nv ${SELBASE}/${SELPATH} \
-  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
-           "selenium-server-standalone-2.jar" \
-  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
-           "selenium-server-standalone.jar"
-
-#============
-# Selenium 3
-#============
+#=================
+# Selenium latest
+#=================
 # Layer size: medium ~22 MB
 ENV SEL_DIRECTORY="3.4" \
     SEL_VER="3.4.0"
@@ -294,6 +279,7 @@ RUN apt-get -qqy update \
     libssl-dev libffi-dev \
   && pip3 install --upgrade pip \
   && pip3 install --upgrade setuptools \
+  && pip3 install --upgrade numpy \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get -qyy clean
 RUN cd /usr/local/bin \
@@ -571,19 +557,6 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && mv firefox firefox-for-sel-3 \
   && sudo ln -fs /home/seluser/firefox-for-sel-3/firefox /usr/bin/firefox
 
-#--- Stable for Selenium 2
-# Layer size: big: 107 MB
-ENV FF_VER="47.0.1"
-ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
-ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
-RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
-  && bzip2 -d "firefox.tar.bz2" \
-  && tar xf "firefox.tar" \
-  && rm "firefox.tar" \
-  && mv firefox firefox-for-sel-2 \
-  && sudo ln -fs /home/seluser/firefox-for-sel-2/firefox /usr/bin/firefox
-
-LABEL selenium2_firefox_version "47.0.1"
 LABEL selenium3_firefox_version "53.0"
 LABEL selenium_firefox_version "53.0"
 
@@ -615,9 +588,8 @@ ENV CHROME_VERSION_TRIGGER="58.0.3029.110" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium2_chrome_version "58.0.3029.110"
-LABEL selenium3_chrome_version "58.0.3029.110"
 LABEL selenium_chrome_version "58.0.3029.110"
+LABEL selenium3_chrome_version "58.0.3029.110"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
@@ -681,16 +653,12 @@ COPY ./dns/etc/hosts /tmp/hosts
 ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
     DEFAULT_SELENIUM_NODE_CH_PORT="25550" \
     DEFAULT_SELENIUM_NODE_FF_PORT="25551" \
-    DEFAULT_SELENIUM_NODE_RC_CH_PORT="25552" \
-    DEFAULT_SELENIUM_NODE_RC_FF_PORT="25553" \
     DEFAULT_VNC_PORT="25900" \
     DEFAULT_NOVNC_PORT="26080" \
     DEFAULT_SUPERVISOR_HTTP_PORT="19001"
 
 # Commented for now; all these versions are still available at
 #   https://github.com/elgalu/docker-selenium/releases/tag/2.47.1m
-# USE_SELENIUM "2" / "3"
-#   Selenium 2 or 3
 # CHROME_FLAVOR "stable"
 #   Default chrome flavor, options no longer available: beta|unstable
 # PICK_ALL_RANDOM_PORTS "true" / "false"
@@ -826,7 +794,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   BIN_UTILS="/usr/bin" \
   MEM_JAVA_PERCENT=80 \
   WAIT_FOREGROUND_RETRY="2s" \
-  WAIT_VNC_FOREGROUND_RETRY="7s" \
+  WAIT_VNC_FOREGROUND_RETRY="6s" \
   XVFB_STARTRETRIES=0 \
   XMANAGER_STARTRETRIES=0 \
   XMANAGER_STARTSECS=0 \
@@ -844,8 +812,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_NODE_HOST="127.0.0.1" \
   SELENIUM_NODE_CH_PORT="${DEFAULT_SELENIUM_NODE_CH_PORT}" \
   SELENIUM_NODE_FF_PORT="${DEFAULT_SELENIUM_NODE_FF_PORT}" \
-  SELENIUM_NODE_RC_CH_PORT="${DEFAULT_SELENIUM_NODE_RC_CH_PORT}" \
-  SELENIUM_NODE_RC_FF_PORT="${DEFAULT_SELENIUM_NODE_RC_FF_PORT}" \
   SELENIUM_HUB_PARAMS="" \
   SELENIUM_NODE_PARAMS="" \
   SELENIUM_NODE_PROXY_PARAMS="" \
@@ -873,6 +839,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_PASSWORD=no \
   NOVNC_PORT="${DEFAULT_NOVNC_PORT}" \
   NOVNC="false" \
+  NOVNC_WAIT_TIMEOUT="5s" \
   SUPERVISOR_HTTP_PORT="${DEFAULT_SUPERVISOR_HTTP_PORT}" \
   SUPERVISOR_HTTP_USERNAME="supervisorweb" \
   SUPERVISOR_HTTP_PASSWORD="somehttpbasicauthpwd" \
@@ -893,8 +860,6 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
-  RC_CHROME="false" \
-  RC_FIREFOX="false" \
   FFMPEG_FRAME_RATE=10 \
   FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0" \
   FFMPEG_FINAL_CRF=0 \
@@ -917,7 +882,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VIDEOS_DIR="/home/seluser/videos" \
   XMANAGER="fluxbox" \
   FLUXBOX_START_MAX_RETRIES=5 \
-  TAIL_LOG_LINES="15" \
+  TAIL_LOG_LINES="50" \
   SHM_TRY_MOUNT_UNMOUNT="false" \
   SHM_SIZE="512M" \
   ETHERNET_DEVICE_NAME="eth0" \

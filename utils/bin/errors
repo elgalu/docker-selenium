@@ -2,4 +2,10 @@
 
 grep -v "webSocketsHandshake" /var/log/cont/* | \
   grep -v "errors, etc) it may be disabled" | \
-  grep -i "error" -B 3 -A 3
+  grep -i "error" -B 7 -A 7 || true
+
+grep -v "Failed to read: session" /var/log/cont/* | \
+  grep -v "Failed to read theme item:" | \
+  grep -i "failed" -B 7 -A 7 || true
+
+grep -i "fatal" /var/log/cont/* || true
