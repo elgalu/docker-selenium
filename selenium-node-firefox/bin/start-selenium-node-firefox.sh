@@ -22,9 +22,20 @@ die () {
 [ -z "${FIREFOX_DEST_BIN}" ] && die "Required env var FIREFOX_DEST_BIN"
 
 # Wait for this process dependencies
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
+  die "Failed while waiting for Xvfb to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
+  die "Failed while waiting for XManager to start!"
+
+if [ "${ZALENIUM}" == "true" ]; then
+  timeout --foreground ${NOVNC_WAIT_TIMEOUT} wait-vnc.sh || \
+    error "wait-vnc.sh failed within ${NOVNC_WAIT_TIMEOUT} -- Zalenium check."
+  timeout --foreground ${NOVNC_WAIT_TIMEOUT} wait-novnc.sh || \
+    error "wait-novnc.sh failed within ${NOVNC_WAIT_TIMEOUT} -- Zalenium check."
+fi
+
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || \
+  die "Failed while waiting for the Selenium hub to be available!!"
 
 JAVA_OPTS="-Dwebdriver.gecko.driver=/usr/bin/geckodriver ${JAVA_OPTS}"
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"

@@ -24,6 +24,10 @@ die () {
 # Wait for this process dependencies
 timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
+if [ "${ZALENIUM}" == "true" ]; then
+  timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh
+  timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh
+fi
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh
 
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
