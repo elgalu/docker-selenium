@@ -302,11 +302,11 @@ RUN cd /usr/local/bin \
 # RUN apt-get -qqy update \
 #   && apt-get -qqy install \
 #     supervisor \
+# 2017-05-30 commit: 946d9cf3be4db3, supervisor/version.txt: 4.0.0.dev0
 # 2017-03-07 commit: 23925d017f8ecc, supervisor/version.txt: 4.0.0.dev0
 # 2017-01-05 commit: 8be5bc15e83f0f, supervisor/version.txt: 4.0.0.dev0
-# 2016-11-05 commit: cbebb93f58f4a9, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
-RUN SHA="23925d017f8eccafb1be57c509a07df75490c83d" \
+RUN SHA="946d9cf3be4db398f5c2474140e0b92880863bb2" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/* \
@@ -851,7 +851,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SUPERVISOR_STOPSIGNAL=TERM \
   SUPERVISOR_KILLASGROUP="false" \
   SUPERVISOR_STOPASGROUP="false" \
-  LOG_LEVEL=info \
+  LOG_LEVEL="info" \
   DISABLE_ROLLBACK="false" \
   LOGFILE_MAXBYTES=10MB \
   LOGFILE_BACKUPS=5 \
