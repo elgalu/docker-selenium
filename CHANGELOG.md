@@ -10,6 +10,15 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/dd21aaab3eb2fff2056d36ca93dbf...master (TBD_DATE)
     + Upgrade Chrome major to from 58 to 59.0.3071.86
+    + Removed HEALTHCHECK because is providing no value to us
+    + Bump supervisord to 2017-05-30 commit: 946d9cf3be4db3
+    + New defaults:
+      - SEL_RELEASE_TIMEOUT_SECS="19000"
+      - SEL_BROWSER_TIMEOUT_SECS="16000"
+      - SELENIUM_NODE_REGISTER_CYCLE="5000"
+      - SEL_CLEANUPCYCLE_MS="5000"
+      - SEL_NODEPOLLING_MS="5000"
+      - SEL_UNREGISTER_IF_STILL_DOWN_AFTER="2500"
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
