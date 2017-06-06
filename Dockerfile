@@ -910,8 +910,12 @@ ENV FIREFOX_VERSION="${FF_VER}" \
 #================================
 # VOLUME ${LOGS_DIR}
 
-HEALTHCHECK --interval=2m --timeout=50s --retries=2 \
-  CMD wait_all_done 30s
+# Removed HEALTHCHECK because is providing no value to us but
+# rather problems. When Zalenium starts N containers at the some time
+# the --interval will make docker check the health of all of them
+# at the same time and this causes an unnecessary CPU overhead.
+# HEALTHCHECK --interval=2m --timeout=50s --retries=2 \
+#   CMD wait_all_done 30s
 
 #================
 # Binary scripts
