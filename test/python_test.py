@@ -22,7 +22,7 @@ args = parser.parse_args()
 if args.browser == 'chrome':
     caps = DesiredCapabilities.CHROME
 elif args.browser == 'mobile_emulation':
-    mobile_emulation = {"deviceName": "Google Nexus 5"}
+    mobile_emulation = {"deviceName": "iPad"}
     opts = webdriver.ChromeOptions()
     opts.add_experimental_option("mobileEmulation", mobile_emulation)
     caps = opts.to_capabilities()
