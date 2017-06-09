@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/2165f8bc5ed5642c61fa500...master (TBD_DATE)
     + Upgrade Chromedriver minor from 2.20 to 2.30
+    + Add cleanup-container.sh for Zalenium
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
