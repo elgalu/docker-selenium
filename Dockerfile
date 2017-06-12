@@ -610,6 +610,10 @@ RUN mv /opt/google/chrome/google-chrome /opt/google/chrome/google-chrome-base
 COPY selenium-node-chrome/opt /opt
 COPY lib/* /usr/lib/
 
+# Use a custom wallpaper for Fluxbox
+COPY images/wallpaper-dosel.png /usr/share/images/fluxbox/ubuntu-light.png
+COPY images/wallpaper-zalenium.png /usr/share/images/fluxbox/
+
 #===================================================
 # Run the following commands as non-privileged user
 #===================================================
