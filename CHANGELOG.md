@@ -8,8 +8,8 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p13
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/2165f8bc5ed5642c61fa500...master (2017-06-09)
-    + Upgrade Chromedriver minor from 2.20 to 2.30
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/2165f8bc5ed5642c61fa500...6f7531b3a7a981dfb16dd (2017-06-09)
+    + Upgrade Chromedriver minor from 2.29 to 2.30
     + Add cleanup-container.sh for Zalenium
     + Tests: Replace Nexus 5 with mobile_emulation = {"deviceName": "iPad"}
  + **Image tag details:**
