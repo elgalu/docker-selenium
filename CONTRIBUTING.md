@@ -5,14 +5,14 @@ For pull requests or local commits:
 
     git checkout -b tmp-`cat VERSION`
     time (./test/bef && ./test/install && ./test/script_start && ./test/script_end)
-    docker exec grid versions && ./test/after_script && travis lint
     open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
+    docker exec grid versions && ./test/after_script && travis lint
     git checkout ./images/grid3_console.png scm-source.json
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chromedriver minor from 2.29 to 2.30"
+    git commit -m "Zalenium: Retry via start-xvfb.sh when the DISPLAY fails"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

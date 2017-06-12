@@ -51,16 +51,29 @@ elif [ "${XMANAGER}" = "fluxbox" ]; then
         stat_failed=false
         break
       else
-        echo "-- WARN: wait-xmanager.sh failed! for DISPLAY=${DISPLAY}"
+        echoerr "wait-xmanager.sh failed! for DISPLAY=${DISPLAY} during attempt ${i}"
+        killall xsetroot || true
         killall fluxbox || true
+        if [ ${i} -gt 3 ]; then
+          echoerr "wait-xmanager.sh already failed ${i} times for DISPLAY=${DISPLAY}. Will kill Xvfb and find a new DISPLAY"
+          killall Xvfb || true
+          start-xvfb.sh
+          export DISPLAY="$(cat DISPLAY)"
+          export DISP_N="$(cat DISP_N)"
+        fi
       fi
       if [ ${i} -gt ${FLUXBOX_START_MAX_RETRIES} ]; then
         echoerr "-- ERROR: Failed to start Fluxbox at $0 after many retries."
         break
       fi
+      sleep 0.2
     done
-    [ "${stat_failed}" != "true" ] && wait
-    stat_failed=true
+    if [ "${stat_failed}" != "true" ]; then
+      wait
+    else
+      stat_failed=true
+    fi
+    sleep 0.2
   done
 else
   die "The chosen X manager is not supported: '${XMANAGER}'"

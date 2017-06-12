@@ -11,6 +11,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
     + Upgrade Ubuntu xenial to 20170517.1
     + Use custom xmanager wallpaper-dosel.png or wallpaper-zalenium.png
+    + Zalenium: Retry via start-xvfb.sh when the DISPLAY fails
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
