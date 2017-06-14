@@ -70,7 +70,7 @@ function shutdown {
   echo "-- INFO: Chrome node shutdown complete."
   # First stop video recording because it needs some time to flush it
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
-  killall supervisord
+  # supervisorctl -c /etc/supervisor/supervisord.conf stop xterm
   exit 0
 }
 

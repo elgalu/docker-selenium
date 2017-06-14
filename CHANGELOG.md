@@ -13,6 +13,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Zalenium: Ensure the container dies if start-xterm receives a kill-related signal
     + Zalenium: Retry start-xvfb.sh when necessary and before continuing
     + Zalenium: autorestart=unexpected & startsecs=2 & startretries=3
+    + Zalenium: Do not kill supervisor but retry the nodes start up
     + Chore tests changes
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
