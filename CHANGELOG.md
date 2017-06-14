@@ -9,7 +9,10 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/817c21d0253ee75430adf...master (TBD_DATE)
+    + Remove unnecessary waits to increase startup time
+    + Zalenium: Ensure the container dies if start-xterm receives a kill-related signal
     + Zalenium: Retry start-xvfb.sh up to 3 times
+    + Zalenium: autorestart=unexpected & startsecs=2 & startretries=3
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE

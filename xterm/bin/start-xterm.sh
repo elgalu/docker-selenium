@@ -17,18 +17,38 @@ die () {
   exit $errnum
 }
 
-# ensures supervisord dies too
+# shutdown functions ensure supervisord dies too
+
+stop_them_all () {
+  # First stop video recording because it needs some time to flush it
+  supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-node-firefox || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-node-chrome || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-hub || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop novnc || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop vnc || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop xmanager || true
+}
+
 shutdown () {
   # communication: we are failing
   echo "failed" > ${DOCKER_SELENIUM_STATUS}
   # optionallly prints error message
   [ ! -z "$1" ] && echoerr "ERROR: $1"
-  # First stop video recording because it needs some time to flush it
-  supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
-  supervisorctl -c /etc/supervisor/supervisord.conf stop all
+  stop_them_all
   kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
   die "Some processes failed to start so quitting."
 }
+
+trapped_shutdown () {
+  echo "Trapped SIGTERM/SIGINT/SIGKILL so shutting down $0 and the whole container gracefully..."
+  stop_them_all
+  kill -SIGTERM $(cat ${SUPERVISOR_PIDFILE})
+  die "Quitting the whole container"
+}
+
+# Run function shutdown() when this process receives a killing signal
+trap trapped_shutdown SIGTERM SIGINT SIGKILL
 
 # clean status file
 echo "" > ${DOCKER_SELENIUM_STATUS}
@@ -37,26 +57,22 @@ echo "" > ${DOCKER_SELENIUM_STATUS}
 # after the specified time interval:
 #  http://www.gnu.org/software/coreutils/manual/coreutils.html#timeout-invocation
 
-# Wait for everyone to be done
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
-  shutdown "Failed while waiting for Xvfb to start!"
-timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
-  shutdown "Failed while waiting for XManager to start!"
-
-if [ "${ZALENIUM}" == "true" ]; then
-  timeout --foreground ${NOVNC_WAIT_TIMEOUT} wait-novnc.sh || \
-    error "wait-novnc.sh failed within ${NOVNC_WAIT_TIMEOUT} -- Zalenium check."
-else
+if [ "${ZALENIUM}" != "true" ]; then
   timeout --foreground ${WAIT_TIMEOUT} wait-novnc.sh || \
     shutdown "Failed while waiting for noVNC to start!"
+  timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || \
+    shutdown "Failed while waiting for selenium hub to start!"
 fi
 
-timeout --foreground ${WAIT_TIMEOUT} wait-selenium-hub.sh || \
-  shutdown "Failed while waiting for selenium hub to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \
   shutdown "Failed while waiting for selenium node chrome to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || \
   shutdown "Failed while waiting for selenium node firefox to start!"
+
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
+  shutdown "Failed while waiting for Xvfb to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
+  shutdown "Failed while waiting for XManager to start!"
 
 if [ "${VIDEO}" = "true" ]; then
   start-video &
@@ -89,8 +105,8 @@ fi
 
 # Start a GUI xTerm to help debugging when VNC into the container
 # with a random geometry so we can differentiate multiple nodes
-GEOM1="$(python -c 'import random; print(random.randint(30,80))')"
-GEOM2="$(python -c 'import random; print(random.randint(3,12))')"
+GEOM1=30
+GEOM2=3
 # Do some match to position it on the bottom right corner
 POS_X="$((${SCREEN_WIDTH}-160-${GEOM1}))"
 POS_Y="$((${SCREEN_HEIGHT}-70-${GEOM2}))"
