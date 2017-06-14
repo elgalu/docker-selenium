@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Zalenium: Retry via start-xvfb.sh when the DISPLAY fails"
+    git commit -m "Zalenium: Retry start-xvfb.sh up to 3 times"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

@@ -376,7 +376,9 @@ if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ]; then
     tmpfs /dev/shm || true
 fi
 
-start-xvfb.sh
+# Retry starting Xvfb up to 3 times:
+start-xvfb.sh || start-xvfb.sh || start-xvfb.sh
+
 export DISPLAY="$(cat DISPLAY)"
 export DISP_N="$(cat DISP_N)"
 
