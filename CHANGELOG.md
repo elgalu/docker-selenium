@@ -15,6 +15,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Zalenium: autorestart=unexpected & startsecs=2 & startretries=3
     + Zalenium: Do not kill supervisor but retry the nodes start up
     + Chore tests changes
+    + Make x-terminal-emulator optional through -e XTERM_START=true
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE

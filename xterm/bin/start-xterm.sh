@@ -101,17 +101,21 @@ else
   echo "No failed processes reported by supervisorctl status. Looking good."
 fi
 
-# Start a GUI xTerm to help debugging when VNC into the container
-# with a random geometry so we can differentiate multiple nodes
-GEOM1=30
-GEOM2=3
-# Do some match to position it on the bottom right corner
-POS_X="$((${SCREEN_WIDTH}-160-${GEOM1}))"
-POS_Y="$((${SCREEN_HEIGHT}-70-${GEOM2}))"
-x-terminal-emulator -ls  \
-  -geometry ${GEOM1}x${GEOM2}+${POS_X}+${POS_Y} \
-  -title "x-terminal-emulator" \
-  &
+if [ "${XTERM_START}" == "true" ]; then
+  # Start a GUI xTerm to help debugging when VNC into the container
+  # with a random geometry so we can differentiate multiple nodes
+  GEOM1=30
+  GEOM2=3
+  # Do some match to position it on the bottom right corner
+  POS_X="$((${SCREEN_WIDTH}-160-${GEOM1}))"
+  POS_Y="$((${SCREEN_HEIGHT}-70-${GEOM2}))"
+  x-terminal-emulator -ls  \
+    -geometry ${GEOM1}x${GEOM2}+${POS_X}+${POS_Y} \
+    -title "x-terminal-emulator" \
+    &
+else
+  sleep infinity &
+fi
 
 # Join them in 1 bash line to avoid supervisor split them in debug output
 # this output is used to signal docker-selenium is ready for testing
