@@ -3,6 +3,16 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
+echoerr() { printf "%s\n" "$*" >&3; }
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
+  errnum=${2-188}
+  exit $errnum
+}
+
 #==============================================
 # Java blocks until kernel have enough entropy
 # to generate the /dev/random seed
@@ -363,9 +373,6 @@ fix_dirs.sh
 # Docker alongside docker
 docker_alongside_docker.sh
 
-# Open a new file descriptor that redirects to stdout:
-exec 3>&1
-
 #-------------------------------
 # Fix small tiny 64mb shm issue
 #-------------------------------
@@ -375,12 +382,6 @@ if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ]; then
   sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=${SHM_SIZE} \
     tmpfs /dev/shm || true
 fi
-
-# Retry starting Xvfb up to 3 times:
-start-xvfb.sh || start-xvfb.sh || start-xvfb.sh
-
-export DISPLAY="$(cat DISPLAY)"
-export DISP_N="$(cat DISP_N)"
 
 #-------------------------------------------
 # Keep updated environment vars inside files
@@ -424,6 +425,25 @@ echo "${CUSTOM_SELENIUM_NODE_PROXY_PARAMS}" > CUSTOM_SELENIUM_NODE_PROXY_PARAMS
 echo "${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE}" > CUSTOM_SELENIUM_NODE_REGISTER_CYCLE
 echo "${XMANAGER}" > XMANAGER
 echo "${GRID}" > GRID
+
+# Open a new file descriptor that redirects to stdout:
+exec 3>&1
+
+# Try 2 times first
+start-xvfb.sh || start-xvfb.sh
+export DISPLAY="$(cat DISPLAY)"
+export DISP_N="$(cat DISP_N)"
+
+# For 1 more time for Xvfb or retry
+if ! timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh >/var/log/cont/wait-xvfb.1.log 2>&1 3>&1; then
+  start-xvfb.sh || start-xvfb.sh
+  export DISPLAY="$(cat DISPLAY)"
+  export DISP_N="$(cat DISP_N)"
+fi
+
+timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh >/var/log/cont/wait-xvfb.2.log 2>&1 3>&1 || \
+  die "Failed while waiting for Xvfb to start. We cannot continue!"
+
 env > env
 
 #------

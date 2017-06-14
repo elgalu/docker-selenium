@@ -11,7 +11,7 @@ Note image ids also change after scm-source.json has being updated which trigger
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/817c21d0253ee75430adf...master (TBD_DATE)
     + Remove unnecessary waits to increase startup time
     + Zalenium: Ensure the container dies if start-xterm receives a kill-related signal
-    + Zalenium: Retry start-xvfb.sh up to 3 times
+    + Zalenium: Retry start-xvfb.sh when necessary and before continuing
     + Zalenium: autorestart=unexpected & startsecs=2 & startretries=3
     + Chore tests changes
  + **Image tag details:**
