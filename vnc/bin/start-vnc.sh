@@ -14,7 +14,6 @@ die () {
 }
 
 # Wait for this process dependencies
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
 
 function shutdown {

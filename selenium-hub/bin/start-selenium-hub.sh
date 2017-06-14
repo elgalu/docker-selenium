@@ -3,10 +3,6 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-# Wait for this process dependencies
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
-timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh
-
 JAVA_OPTS="$(java-dynamic-memory-opts.sh) ${JAVA_OPTS}"
 echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 
