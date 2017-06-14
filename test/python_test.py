@@ -72,7 +72,7 @@ def check_hub_title():
     assert "Grid Console" in driver.title
 
 if args.browser == 'chrome':
-    driver.set_window_size(1400, 660)
+    driver.set_window_size(1400, 500)
     # Selenium grid console - open
     open_hub_page()
     time.sleep(msleep)
