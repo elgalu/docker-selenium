@@ -69,8 +69,6 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || \
   shutdown "Failed while waiting for selenium node firefox to start!"
 
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh || \
-  shutdown "Failed while waiting for Xvfb to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
   shutdown "Failed while waiting for XManager to start!"
 

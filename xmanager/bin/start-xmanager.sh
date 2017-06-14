@@ -13,9 +13,6 @@ die () {
   exit $errnum
 }
 
-# Wait for this process dependencies
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
-
 function shutdown {
   echo "Trapped SIGTERM/SIGINT so shutting down $0 gracefully..."
   exit 0

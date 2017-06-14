@@ -3,9 +3,6 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-# Wait for this process dependencies
-timeout --foreground ${WAIT_TIMEOUT} wait-xvfb.sh
-
 # Make it portable
 [ -z "${VIDEO_BASE_PATH}" ] && export \
     VIDEO_BASE_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}"
