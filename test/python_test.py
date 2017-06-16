@@ -50,7 +50,7 @@ def webdriver_connect():
     return webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
 
 driver = webdriver_connect()
-driver.implicitly_wait(10)
+driver.implicitly_wait(4)
 time.sleep(msleep)
 
 # Set location top left and size to max allowed on the container
@@ -131,17 +131,30 @@ def open_costs_page():
 open_costs_page()
 
 if args.browser != 'mobile_emulation':
-    print ("Go back to home page")
-    link = driver.find_element_by_link_text('Übersicht')
-    link.click()
-    time.sleep(msleep)
-    print ("Current title: %s" % driver.title)
-    print ("Asserting 'Google (PPC)' in driver.title")
-    assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
-    time.sleep(msleep)
+    @retry(stop_max_attempt_number=4, stop_max_delay=10100, wait_fixed=300)
+    def assert_overview_page():
+        print ("Go back to home page")
+        screen_shot_path = '/test/overview1.png'
+        print ("Taking screen shot and saving to %s" % screen_shot_path)
+        driver.get_screenshot_as_file(screen_shot_path)
+        link = driver.find_element_by_link_text('Übersicht')
+        screen_shot_path = '/test/overview2.png'
+        print ("Taking screen shot and saving to %s" % screen_shot_path)
+        driver.get_screenshot_as_file(screen_shot_path)
+        link.click()
+        time.sleep(msleep)
+        print ("Current title: %s" % driver.title)
+        print ("Asserting 'Google (PPC)' in driver.title")
+        assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
+        time.sleep(msleep)
+
+    assert_overview_page()
 
 print ("Close driver and clean up")
-driver.close()
+try:
+    driver.close()
+except:
+    pass
 time.sleep(msleep)
 
 print ("All done. SUCCESS!")

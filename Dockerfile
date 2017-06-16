@@ -270,6 +270,7 @@ USER root
 # After install, make some useful symlinks that are expected to exist
 # Layer size: big.: 138.9 MB (with --no-install-recommends)
 # Layer size: huge: 309.9 MB
+COPY test/requirements.txt /test/
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     python3 \
@@ -280,6 +281,7 @@ RUN apt-get -qqy update \
   && pip3 install --upgrade pip \
   && pip3 install --upgrade setuptools \
   && pip3 install --upgrade numpy \
+  && pip3 install --requirement /test/requirements.txt \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get -qyy clean
 RUN cd /usr/local/bin \
@@ -583,13 +585,13 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="59.0.3071.86" \
+ENV CHROME_VERSION_TRIGGER="59.0.3071.104" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium_chrome_version "59.0.3071.86"
-LABEL selenium3_chrome_version "59.0.3071.86"
+LABEL selenium_chrome_version "59.0.3071.104"
+LABEL selenium3_chrome_version "59.0.3071.104"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \

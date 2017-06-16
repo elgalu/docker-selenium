@@ -31,7 +31,7 @@ fi
 # How to find old versions?
 #  https://pypi.python.org/simple/selenium/
 mkdir -p ${HOME}/.local
-pip install --user --requirement /test/requirements.txt
+# pip install --user --requirement /test/requirements.txt
 
 python_test ${browser_name}
 
