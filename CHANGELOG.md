@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/817c21d0253ee75430adf...master (TBD_DATE)
     + Upgrade Chrome patch to 59.0.3071.104
+    + Remove forced network modes for docker-compose examples and tests
     + Remove unnecessary waits to increase startup time
     + Zalenium: Ensure the container dies if start-xterm receives a kill-related signal
     + Zalenium: Retry start-xvfb.sh when necessary and before continuing

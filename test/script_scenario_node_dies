@@ -30,7 +30,7 @@ export SELENIUM_NODE_CH_PORT=5757 \
 if [ "${CI}" = "true" ]; then
   NODE_SUICIDE_WAIT_TIME=20
 else
-  NODE_SUICIDE_WAIT_TIME=7
+  NODE_SUICIDE_WAIT_TIME=3
 fi
 
 echo "#================================================="
@@ -49,7 +49,6 @@ docker run --name=mynodes -d \
   -v /dev/shm:/dev/shm \
   --privileged \
   selenium
-  # -v /var/run/dbus:/var/run/dbus \
 
 # We need a mock service for testing
 # docker run --rm -ti --name=zalando_mock -p 8080:8080 elgalu/uk_mock
@@ -124,6 +123,10 @@ else
   curl "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}"
   die "Test failed for Firefox at $0 during curl"
 fi
+
+# Ensure clean env
+docker rm -vf mynodes || true
+docker rm -vf grid_mock || true
 
 # cleanup
 make down

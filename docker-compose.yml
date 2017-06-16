@@ -21,14 +21,15 @@ services:
     privileged: true
     environment:
       - PICK_ALL_RANDOM_PORTS=true
+      - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
       - GRID=true
       - CHROME=false
       - FIREFOX=false
+      - MOCK_SERVER_HOST=mock
 
   chrome:
     image: elgalu/selenium
-    network_mode: "service:hub"
     depends_on:
       - hub
     volumes:
@@ -36,7 +37,9 @@ services:
     privileged: true
     environment:
       - PICK_ALL_RANDOM_PORTS=true
+      - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
+      - SELENIUM_NODE_HOST={{CONTAINER_IP}}
       - VNC_FROM_PORT=${VNC_FROM_PORT-40650}
       - VNC_TO_PORT=${VNC_TO_PORT-40700}
       - SCREEN_WIDTH=1300
@@ -48,7 +51,6 @@ services:
 
   firefox:
     image: elgalu/selenium
-    network_mode: "service:hub"
     depends_on:
       - hub
     volumes:
@@ -56,7 +58,9 @@ services:
     privileged: true
     environment:
       - PICK_ALL_RANDOM_PORTS=true
+      - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
+      - SELENIUM_NODE_HOST={{CONTAINER_IP}}
       - VNC_FROM_PORT=${VNC_FROM_PORT-40650}
       - VNC_TO_PORT=${VNC_TO_PORT-40700}
       - SCREEN_WIDTH=1300
@@ -68,7 +72,6 @@ services:
 
   mock:
     image: elgalu/google_adwords_mock
-    network_mode: "service:hub"
     depends_on:
       - hub
     tty: true

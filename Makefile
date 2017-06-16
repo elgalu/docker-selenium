@@ -183,8 +183,7 @@ stop_videos_firefox:
 	@$(MAKE) -s stop_videos browser=firefox tot_nodes=${firefox}
 
 scale:
-	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} scale \
-	  ${APP_NAME}=1 hub=1 chrome=${chrome} firefox=${firefox}
+	docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} scale ${APP_NAME}=1 hub=1 chrome=${chrome} firefox=${firefox}
 	@$(MAKE) -s wait chrome=${chrome} firefox=${firefox}
 
 compose: basic_reqs cleanup

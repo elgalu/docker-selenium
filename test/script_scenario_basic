@@ -21,32 +21,27 @@ function get_mock_port() {
   echo $(docker inspect -f='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' grid_mock)
 }
 
-# Ensure the mock page loads before continuing
-i=0
-while true ; do
-  docker rm -vf grid_mock || true
-  docker run -d -t --name=grid_mock -P -e CI elgalu/google_adwords_mock
-  let i=${i}+1
+function get_mock_ip() {
+  docker inspect -f='{{.NetworkSettings.IPAddress}}' grid_mock
+}
 
-  MOCK_SERVER_PORT=$(get_mock_port)
-  if wget --timeout=2 --tries=3 --waitretry=10 \
-          "http://localhost:${MOCK_SERVER_PORT}/adwords"; then
-    break
-  fi
+docker stop grid_mock || true
+docker rm grid_mock || true
 
-  docker logs grid_mock
-  if [ ${i} -gt 3 ]; then
-    echo "-- ERROR: Failed to start the Mock at $0 after 3 retries." 1>&2
-    exit 3
-  fi
+export MOCK_SERVER_PORT=8080
+
+docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT elgalu/google_adwords_mock
+docker attach grid_mock &
+
+export MOCK_SERVER_HOST=$(get_mock_ip)
+
+while ! curl -s "http://${MOCK_SERVER_HOST}:${MOCK_SERVER_PORT}/adwords"; do
+  echo -n '.'
+  sleep 0.2
 done
-docker logs grid_mock
-
-rm adwords
-export MOCK_SERVER_PORT=$(get_mock_port)
 
 docker run --name=grid -d -e VIDEO=true \
-  -e MOCK_SERVER_HOST="d.host.loc.dev" \
+  -e MOCK_SERVER_HOST \
   -e MOCK_SERVER_PORT \
   -e CI \
   -e VIDEO_CONVERSION_MAX_WAIT="40s" \

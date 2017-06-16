@@ -15,20 +15,30 @@ die () {
   exit $errnum
 }
 
-# ID=$(docker inspect --format="{{.Id}}" ${COMPOSE_PROJ_NAME}_hub_1)
-# MASK=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers.${ID}.IPv4Address }}")
-# IP=$(echo ${MASK} | sed -e 's/\/.*//')
-# IP=`docker inspect -f='{{.NetworkSettings.IPAddress}}' ${COMPOSE_PROJ_NAME}_hub_1`
+[ -z "${VNC_CLIENT}" ] && die "Need env var VNC_CLIENT"
+[ -z "${COMPOSE_PROJ_NAME}" ] && die "Need env var COMPOSE_PROJ_NAME"
+[ -z "${browser}" ] && die "Need env var browser"
+[ -z "${node}" ] && die "Need env var node"
 
-PORT=$(docker exec ${COMPOSE_PROJ_NAME}_${browser}_${node} cat VNC_PORT)
-if [ "$(uname)" = 'Darwin' ]; then
-  IP="localhost"
-else
-  # We need a fixed port range to expose VNC
-  # due to a bug in Docker for Mac beta (1.12)
-  # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
-  IP=$(docker network inspect ${COMPOSE_PROJ_NAME}_default --format "{{ .Containers }}" | grep -oE '([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)')
+# CONT_ID=$(docker inspect --format="{{.Id}}" ${COMPOSE_PROJ_NAME}_hub_1)
+CONT_ID="${COMPOSE_PROJ_NAME}_${browser}_${node}"
+IP=`docker inspect -f='{{.NetworkSettings.IPAddress}}' ${CONT_ID}`
+
+if [ "${IP}" == "" ]; then
+  IP=`docker inspect -f='{{json .NetworkSettings.Networks.grid_default}}' ${CONT_ID} | jq .IPAddress -r`
 fi
+
+if [ "${IP}" == "" ]; then
+  die "Failed to grab IP for container ${CONT_ID}"
+fi
+
+# We need a fixed port range to expose VNC
+PORT=$(docker exec ${CONT_ID} cat VNC_PORT)
+# if [ "$(uname)" = 'Darwin' ]; then
+#   # due to a bug in Docker for Mac beta (1.12)
+#   # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+#   IP="localhost"
+# fi
 
 if [ "$(uname)" != 'Darwin' ]; then
   OPTS="-GrabKeyboard=0"
@@ -39,4 +49,4 @@ fi
 # set -x: print each command right before it is executed
 set -x
 
-"${VNC_CLIENT}" -WarnUnencrypted=0 -SendKeyEvents=0 SendPointerEvents=0 -Scaling ${SIZE} ${OPTS} ${IP}:${PORT}
+"${VNC_CLIENT}" -WarnUnencrypted=0 -SendKeyEvents=0 SendPointerEvents=0 -Scaling=${SIZE} ${OPTS} ${IP}:${PORT}

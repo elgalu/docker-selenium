@@ -3,8 +3,9 @@
 
 # To install the Python client library:
 # pip install -U selenium
-import time
 import os
+import time
+import datetime
 from retrying import retry
 
 # Import the Selenium 2 namespace (aka "webdriver")
@@ -137,7 +138,16 @@ if args.browser != 'mobile_emulation':
         screen_shot_path = '/test/overview1.png'
         print ("Taking screen shot and saving to %s" % screen_shot_path)
         driver.get_screenshot_as_file(screen_shot_path)
-        link = driver.find_element_by_link_text('Übersicht')
+        try:
+            link = driver.find_element_by_link_text('Übersicht')
+        except:
+            time.sleep(1)
+            try:
+                link = driver.find_element_by_link_text('Übersicht')
+            except:
+                time.sleep(3)
+                link = driver.find_element_by_link_text('Übersicht')
+
         screen_shot_path = '/test/overview2.png'
         print ("Taking screen shot and saving to %s" % screen_shot_path)
         driver.get_screenshot_as_file(screen_shot_path)
