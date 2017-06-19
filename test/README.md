@@ -25,7 +25,7 @@ Sample output
     Will connect to selenium at http://172.17.0.6:24444/wd/hub
     Opening page http://www.google.com/adwords
     Current title: Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)
-    Asserting 'Google Adwords' in driver.title
+    Asserting 'Google AdWords' in driver.title
     Opening page http://www.python.org
     Asserting 'Python' in driver.title
     Finding element by name: q
