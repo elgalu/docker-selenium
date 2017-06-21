@@ -7,30 +7,30 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/cd0ce13d3f2fd8dd6e9767b...master (TBD_DATE)
+## 3.3.1-p16
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/cd0ce13d3f2fd8dd6e9767b...master (2017-06-21)
     + Support google chrome --lang argument, credits @pearj
     + Upgrade ubuntu:xenial-20170619
     + Upgrade Chrome patch to 59.0.3071.109
  + **Image tag details:**
-    + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
-    + Chrome stable:  TBD_CHROME_STABLE
-    + Firefox stable: TBD_FIREFOX_FOR_SEL3
-    + Geckodriver: TBD_GECKO_DRIVER
-    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-    + Timezone: TBD_TIME_ZONE
-    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+    + Selenium version: 3.3.1 (5234b32)
+    + Chrome stable:  59.0.3071.109
+    + Firefox stable: 52.0.2
+    + Geckodriver: 0.15.0
+    + Chromedriver: 2.30.477691 (6ee44a7247c639c0703f291d320bdf05c1531b57)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170619
     + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-79-generic x86_64
-    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
-    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at CI  host with: Docker version 17.05.0, build 89658be
     + Built at dev host with: Docker Compose version 1.13.0, build 1719ceb
-    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-    + Image size: TBD_IMAGE_SIZE
-    + Digest: TBD_DIGEST
-    + Image ID: TBD_IMAGE_ID
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.35GB
+    + Digest: sha256:62840766773bee36114865f0ab94bef0f314fd1fdd3f062d0d46b0f01e640ec7
+    + Image ID: sha256:a97b76583f4d20e7b3cb37cd3fe6a6555ce8948db2ba49eb44a5efc8b9389140
 
 ## 3.3.1-p15
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/817c21d0253ee75430adf...cd0ce13d3f2fd8dd6e9767b (2017-06-19)
