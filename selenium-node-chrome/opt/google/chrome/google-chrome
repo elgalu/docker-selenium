@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# Debian/Ubuntu seems to not respect --lang, it instead needs to be a LANGUAGE environment var
+# See: https://stackoverflow.com/a/41893197/359999
+for var in "$@"; do
+   if [[ $var == --lang=* ]]; then
+      export LANGUAGE=${var//--lang=}
+   fi
+done
+
 exec /opt/google/chrome/google-chrome-base "$@" ${CHROME_ARGS} ${CHROME_ADDITIONAL_ARGS}
 
 # See: On How To Turn Chrome or Firefox Into A Single-Site Browser
