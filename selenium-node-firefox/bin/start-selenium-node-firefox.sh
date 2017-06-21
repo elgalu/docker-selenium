@@ -73,7 +73,6 @@ function shutdown {
   echo "-- INFO: Firefox node shutdown complete."
   # First stop video recording because it needs some time to flush it
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
-  # supervisorctl -c /etc/supervisor/supervisord.conf stop xterm
   exit 0
 }
 
@@ -90,8 +89,3 @@ echo "-- INFO: Passed after wait java Firefox node"
 
 # Always shutdown if the node dies
 shutdown
-
-# Note to double pipe output and keep this process logs add at the end:
-#  2>&1 | tee $SELENIUM_LOG
-# But is no longer required because individual logs are maintained by
-# supervisord right now.
