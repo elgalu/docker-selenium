@@ -165,11 +165,6 @@ if [ "${SELENIUM_HUB_PORT}" = "" ]; then
   exit 120
 fi
 
-# Fix old typo
-if [ "${PICK_ALL_RANDMON_PORTS}" == "true" ]; then
-  export PICK_ALL_RANDOM_PORTS="${PICK_ALL_RANDMON_PORTS}"
-fi
-
 # Fix extra quotes in Time zone $TZ env var
 export TZ=$(echo ${TZ} | sed "s/^\([\"']\)\(.*\)\1\$/\2/g")
 
@@ -353,6 +348,7 @@ ga_track_start () {
         --data cd17="${SELENIUM_NODE_CH_PORT}"
         --data cd18="${SELENIUM_NODE_FF_PORT}"
         --data cd19="${NOVNC_PORT}"
+        --data cd20="${ZALENIUM}"
     )
 
     curl ${GA_ENDPOINT} "${args[@]}" \
