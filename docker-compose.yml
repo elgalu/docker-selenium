@@ -20,7 +20,6 @@ services:
       - /dev/shm:/dev/shm
     privileged: true
     environment:
-      - PICK_ALL_RANDOM_PORTS=true
       - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
       - GRID=true
@@ -32,11 +31,16 @@ services:
     image: elgalu/selenium
     depends_on:
       - hub
+    ports:
+      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5901
+      - 5900:25900
+      # noVNC: See what's going on by hitting http://0.0.0.0:6081 in your browser
+      - 6080:26080
     volumes:
       - /dev/shm:/dev/shm
     privileged: true
     environment:
-      - PICK_ALL_RANDOM_PORTS=true
+      - NOVNC=true
       - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
       - SELENIUM_NODE_HOST={{CONTAINER_IP}}
@@ -53,11 +57,16 @@ services:
     image: elgalu/selenium
     depends_on:
       - hub
+    ports:
+      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5900
+      - 5901:25901
+      # noVNC: See what's going on by hitting http://0.0.0.0:6080 in your browser
+      - 6081:26081
     volumes:
       - /dev/shm:/dev/shm
     privileged: true
     environment:
-      - PICK_ALL_RANDOM_PORTS=true
+      - NOVNC=true
       - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
       - SELENIUM_NODE_HOST={{CONTAINER_IP}}
