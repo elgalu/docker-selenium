@@ -1,0 +1,79 @@
+# Usage:
+#  docker-compose -p grid up --force-recreate
+#  docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3
+version: '2.1'
+
+services:
+  hub:
+    image: elgalu/selenium
+    ports:
+      # Note 24444 is the default SELENIUM_HUB_PORT inside the container
+      #  and  4444 will be mapped into your host for easy access.
+      - 4444:4444
+      # We need a fixed port range to expose VNC
+      # due to a bug in Docker for Mac beta (1.12)
+      # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6
+      - ${VNC_FROM_PORT-40650}-${VNC_TO_PORT-40700}:${VNC_FROM_PORT-40650}-${VNC_TO_PORT-40700}
+      # e.g. (hard-coded)
+      # - 40650-40700:40650-40700
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - PICK_ALL_RANDOM_PORTS=true
+      - SELENIUM_HUB_HOST=hub
+      - SELENIUM_HUB_PORT=4444
+      - GRID=true
+      - CHROME=false
+      - FIREFOX=false
+      - MOCK_SERVER_HOST=mock
+
+  chrome:
+    image: elgalu/selenium
+    depends_on:
+      - hub
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - PICK_ALL_RANDOM_PORTS=true
+      - SELENIUM_HUB_HOST=hub
+      - SELENIUM_HUB_PORT=4444
+      - SELENIUM_NODE_HOST={{CONTAINER_IP}}
+      - VNC_FROM_PORT=${VNC_FROM_PORT-40650}
+      - VNC_TO_PORT=${VNC_TO_PORT-40700}
+      - SCREEN_WIDTH=1300
+      - SCREEN_HEIGHT=999
+      - VIDEO=${VIDEO-false}
+      - GRID=false
+      - CHROME=true
+      - FIREFOX=false
+
+  firefox:
+    image: elgalu/selenium
+    depends_on:
+      - hub
+    volumes:
+      - /dev/shm:/dev/shm
+    privileged: true
+    environment:
+      - PICK_ALL_RANDOM_PORTS=true
+      - SELENIUM_HUB_HOST=hub
+      - SELENIUM_HUB_PORT=4444
+      - SELENIUM_NODE_HOST={{CONTAINER_IP}}
+      - VNC_FROM_PORT=${VNC_FROM_PORT-40650}
+      - VNC_TO_PORT=${VNC_TO_PORT-40700}
+      - SCREEN_WIDTH=1300
+      - SCREEN_HEIGHT=999
+      - VIDEO=${VIDEO-false}
+      - GRID=false
+      - CHROME=false
+      - FIREFOX=true
+
+  mock:
+    image: elgalu/google_adwords_mock
+    depends_on:
+      - hub
+    tty: true
+    environment:
+      - MOCK_SERVER_PORT=8080

@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p17
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-07-03)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/5a95867c8ecf9e88a628...f6fa6ed112cb66336d52 (2017-07-03)
     + Upgrade Chrome patch to 59.0.3071.115
     + Add GA --data cd20="${ZALENIUM}"
     + Add attributes file to resolve eol errors #161 (#162) credits @ReservedDeveloper

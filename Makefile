@@ -2,7 +2,7 @@
 #  make setup #first time
 #  make chrome=3 firefox=5
 #   note is destructive, firsts `compose down`
-#   warns if your service is not listed in the `docker-compose.yml`
+#   warns if your service is not listed in the `docker-compose-tests.yml`
 #  make down
 #
 # All in one
@@ -39,8 +39,8 @@ ECHOERR=sh -c 'awk " BEGIN { print \"-- ERROR: $$1\" > \"/dev/fd/2\" }"' ECHOERR
 # TODO: Output warning in color: yellow
 ECHOWARN=sh -c 'awk " BEGIN { print \"-- WARN: $$1\" > \"/dev/fd/2\" }"' ECHOWARN
 
-docker-compose.yml:
-	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/docker-compose.yml"
+docker-compose-tests.yml:
+	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/docker-compose-tests.yml"
 
 mk/install_vnc.sh:
 	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/mk/install_vnc.sh" \
@@ -149,7 +149,7 @@ seeff:
 env:
 	env
 
-basic_reqs: docker-compose.yml .env mk mk/wait.sh mk/move.sh docker docker-compose
+basic_reqs: docker-compose-tests.yml .env mk mk/wait.sh mk/move.sh docker docker-compose
 
 # Gather all requisites
 setup: .env basic_reqs mk/install_vnc.sh mk/vnc_cask.rb mk/see.sh mk/install_wmctrl.sh warn_vncviewer warn_wmctrl pull
