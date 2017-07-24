@@ -598,7 +598,7 @@ RUN apt-get -qqy update \
   && mkdir -p chrome-deb \
   && wget -nv "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
           -O "./chrome-deb/google-chrome-stable_current_amd64.deb" \
-  && apt -qyy --no-install-recommends install \
+  && apt-get -qyy --no-install-recommends install \
         "${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb" \
   && rm "${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb" \
   && rm -rf ./chrome-deb \
@@ -636,8 +636,8 @@ RUN  wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && unzip chromedriver_linux${CPU_ARCH}.zip \
   && rm chromedriver_linux${CPU_ARCH}.zip \
   && mv chromedriver \
-        chromedriver-$CHROME_DRIVER_VERSION \
-  && chmod 755 chromedriver-$CHROME_DRIVER_VERSION \
+        chromedriver-${CHROME_DRIVER_VERSION} \
+  && chmod 755 chromedriver-${CHROME_DRIVER_VERSION} \
   && ln -s chromedriver-${CHROME_DRIVER_VERSION} \
            chromedriver \
   && sudo ln -s /home/seluser/chromedriver /usr/bin
