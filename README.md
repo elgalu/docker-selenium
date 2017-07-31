@@ -200,6 +200,7 @@ Relevant environment variables to customize it are:
     VIDEO_FILE_NAME="test"
     VIDEO_FILE_EXTENSION=mp4
     FFMPEG_CODEC_ARGS=""
+    FFMPEG_DRAW_MOUSE=1
 
 It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mp4* is selected.
 

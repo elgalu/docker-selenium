@@ -37,7 +37,8 @@ sudo chown seluser:seluser "${tmp_video_path}"
 ffmpeg -f x11grab \
   -framerate ${FFMPEG_FRAME_RATE} \
   -video_size ${FFMPEG_FRAME_SIZE} \
-  -i "${DISPLAY}.0+0,0+nomouse" \
+  -i "${DISPLAY}.0+0,0" \
+  -draw_mouse ${FFMPEG_DRAW_MOUSE} \
   ${FFMPEG_CODEC_ARGS} \
   -segment_format_options movflags=+faststart \
   -y -an "${tmp_video_path}" 2>&1 &

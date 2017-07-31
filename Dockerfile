@@ -758,6 +758,8 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 # FFMPEG_CODEC_ARGS
 #   Video size can be lowered down via re-encoding, see
 #    http://askubuntu.com/a/365221/134645
+# FFMPEG_DRAW_MOUSE
+#    Specify whether to draw the mouse pointer. Default: 1
 # VIDEO GRID CHROME FIREFOX RC_CHROME RC_FIREFOX
 #   true/false which services should start upon docker run
 # VIDEO_FILE_EXTENSION
@@ -871,6 +873,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   FFMPEG_FRAME_RATE=10 \
   FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0" \
   FFMPEG_FINAL_CRF=0 \
+  FFMPEG_DRAW_MOUSE=1 \
   VIDEO_TMP_FILE_EXTENSION="mkv" \
   VIDEO_FILE_EXTENSION="mp4" \
   MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS="500" \
