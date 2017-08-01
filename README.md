@@ -112,10 +112,10 @@ This image is designed to run one test on each docker container but if you still
 
 If you want to limit yourself to this project, you still can. There are some ways to do it:
 
-1. The recommended way is via [docker-compose](./docs/docker-compose.md) and you should replace `mock` with your web service under test within the [docker-compose.yml][] file.
+1. The recommended way is via [docker-compose](./docs/docker-compose.md) and you should replace `mock` with your web service under test within the [docker-compose-tests.yml][] file.
 
-        docker-compose -p grid up --force-recreate
-        docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3
+        docker-compose -f docker-compose-tests.yml -p grid up --force-recreate
+        docker-compose -f docker-compose-tests.yml -p grid scale mock=1 hub=1 chrome=3 firefox=3
 
 1. The _(not recommended)_ way is by increasing `MAX_INSTANCES` and `MAX_SESSIONS` which now [defaults](https://github.com/elgalu/docker-selenium/blob/2.53.1a/Dockerfile#L967) to 1.
 
