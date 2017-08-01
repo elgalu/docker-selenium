@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p19
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/5a06f0fc024719ca826...master (2017-07-26)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/5a06f0fc024719ca826...c4d24482f9616a141e (2017-07-26)
     + Upgrade Chrome major to 60.0.3112.78
  + **Image tag details:**
     + Selenium version: 3.3.1 (5234b32)
@@ -19,7 +19,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170619
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-83-generic x86_64
     + Tested on kernel CI  host: 4.4.0-83-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -42,7 +41,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170619
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-83-generic x86_64
     + Tested on kernel CI  host: 4.4.0-83-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -67,7 +65,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170619
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-79-generic x86_64
     + Tested on kernel CI  host: 4.4.0-81-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -92,7 +89,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170619
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-79-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -123,7 +119,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170517.1
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-79-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -148,7 +143,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170517.1
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-78-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -173,7 +167,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170510
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-78-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -205,7 +198,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170510
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-78-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -228,7 +220,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170510
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-78-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -257,7 +248,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170510
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-77-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be
@@ -286,7 +276,6 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-0ubuntu1.16.04.2-b11
     + Timezone: Europe/Berlin
     + FROM ubuntu:xenial-20170410
-    + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-77-generic x86_64
     + Tested on kernel CI  host: 4.4.0-51-generic x86_64
     + Built at dev host with: Docker version 17.05.0-ce, build 89658be

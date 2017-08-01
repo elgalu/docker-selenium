@@ -7,7 +7,7 @@ set -e
 
 # Example:
 #=> 2.7.11
-if python --version; then
+if python --version >/dev/null 2>&1; then
   python --version 2>&1 | grep -Po '(?<=Python )([a-z0-9\.]+)'
 else
   python --version #fail and show error
