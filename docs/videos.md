@@ -56,4 +56,4 @@ Start and stop on-demand
 
 Now run your tests
 
-Then stop. Follor the steps in the [Stop](#stop) section
+Then stop. Follow the steps in the [Stop](#stop) section
