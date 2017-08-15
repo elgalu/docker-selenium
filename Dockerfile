@@ -19,15 +19,16 @@ ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
 # http://askubuntu.com/a/235911/134645
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A \
+# Using the IP (91.189.89.49) instead of (keyserver.ubuntu.com) due to recurrent errors in Travis.
+RUN apt-key adv --keyserver 91.189.89.49 --recv-keys 2EA8F35793D8809A \
   && apt-key update -qqy
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 \
+RUN apt-key adv --keyserver 91.189.89.49 --recv-keys 40976EAF437D05B5 \
   && apt-key update -qqy
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 \
+RUN apt-key adv --keyserver 91.189.89.49 --recv-keys 3B4FE6ACC0B21F32 \
   && apt-key update -qqy
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF \
+RUN apt-key adv --keyserver 91.189.89.49 --recv-keys A2F683C52980AECF \
   && apt-key update -qqy
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F76221572C52609D \
+RUN apt-key adv --keyserver 91.189.89.49 --recv-keys F76221572C52609D \
   && apt-key update -qqy
 # How to remove keys? e.g. sudo apt-key del 2EA8F35793D8809A
 
