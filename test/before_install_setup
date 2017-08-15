@@ -17,19 +17,4 @@ fi
 docker --version || (echo "FATAL: No docker installed" && exit 1)
 
 # Docker Compose
-if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-  echo "OSX should already have docker-compose installed at this point"
-else
-  docker-compose --version || echo "INFO: No docker compose installed yet"
-  sudo -E bash -c './test/before_install_docker_compose'
-fi
 docker-compose --version || (echo "FATAL: No docker compose installed" && exit 1)
-
-# Git latest stable to avoid hang on `git merge travis-${TRAVIS_TAG}`
-# sudo add-apt-repository -y ppa:git-core/ppa
-# sudo apt-get -qyy update
-# sudo apt-get -qyy install git
-# git --version #=> 2.9.2
-
-# Notes:
-#  sudo -E or --preserve-env will preserve travis env vars like DOCKER_COMPOSE_VERSION

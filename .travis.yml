@@ -1,8 +1,7 @@
-# Even though we run everything inside docker Travis require
-# us to pick a language else it will pick Ruby by default
-# Choose a lightweight base image; we provide our own build tools.
-# https://github.com/lukasmartinelli/hadolint/blob/master/.travis.yml#L1
-# language: generic was failing in OSX so in that case you can use language: c
+# Even though we run everything inside docker,
+# Travis requires us to pick a language else it will pick Ruby by default.
+# Let's choose a lightweight base image then we provide our own build tools.
+# Note: `language: generic` was failing in OSX so in that case you can use language: c
 language: generic
 
 # Omit running tests on temporal branches,
@@ -28,7 +27,6 @@ matrix:
         - docker
       env:
         - DOCKER_VERSION="stable"
-          DOCKER_COMPOSE_VERSION="1.14.0"
           DOCKER_PUSH=true
           DOCKER_PUSH_LATEST=true
 
