@@ -585,13 +585,13 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="60.0.3112.90" \
+ENV CHROME_VERSION_TRIGGER="60.0.3112.101" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium_chrome_version "60.0.3112.90"
-LABEL selenium3_chrome_version "60.0.3112.90"
+LABEL selenium_chrome_version "60.0.3112.101"
+LABEL selenium3_chrome_version "60.0.3112.101"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
