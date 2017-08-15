@@ -86,6 +86,21 @@ print ("%s %s - (01/14) Will connect to selenium at %s" % (datetime.datetime.utc
 driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
 time.sleep(msleep)
 
+def get_a_chrome_headless_driver():
+    from selenium.webdriver.chrome.options import Options
+
+    CHROME_PATH = '/usr/bin/google-chrome-stable'
+    CHROMEDRIVER_PATH = '/home/user/bin/chromedriver'
+    WINDOW_SIZE = "1920,1080"
+
+    opts = Options()
+    opts.add_argument("--headless")
+    opts.add_argument("--window-size=%s" % WINDOW_SIZE)
+    opts.binary_location = CHROME_PATH
+
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=opts)
+    return driver
+
 def is_element_present(how, what):
     try: driver.find_element(by=how, value=what)
     except NoSuchElementException: return False
