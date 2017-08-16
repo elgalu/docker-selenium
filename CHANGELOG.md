@@ -14,6 +14,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Stop installing docker-compose as is already part of TravisCI env
     + Chore: Add python get_a_chrome_headless_driver() example function
     + Chore: Add ga-beacon.appspot.com GA tracker to the README file
+    + Chore: Add ga-datastudio-docker-selenium.png v1
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE

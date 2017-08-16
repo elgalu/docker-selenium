@@ -40,6 +40,9 @@ Note [SeleniumHQ/docker-selenium](https://github.com/SeleniumHQ/docker-selenium)
 
 Even though both projects share the same purpose is good to have alternatives, see also for example [docker-alpine-selenium](https://github.com/SUNx2YCH/docker-alpine-selenium). Letting more than 1 docker-selenium project grow to be able to learn from each other's success or failures ultimately impacts the final users positively. This doesn't discard that at some point all selenium maintainers will sit together a sprint to coordinate some major changes and cleanup open issues and perhaps we might merge N similar projects in the future.
 
+### Statistics
+[![ga-datastudio-docker-selenium](./images/ga-datastudio-docker-selenium.png)](https://datastudio.google.com/open/0B3GcHpfNB6-FRDd3RWo1ZWh4N3M "Docker-Selenium usage stats v1")
+
 ### Alternatives
 If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
 [Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however still requires a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
