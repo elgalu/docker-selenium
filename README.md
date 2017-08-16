@@ -3,9 +3,10 @@
 # Selenium in Docker with Chrome and Firefox
 
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium "Travis CI")
-[![Gitter](https://badges.gitter.im/elgalu/selenium.svg)](https://gitter.im/elgalu/docker-selenium "Chat support")
 [![Docker Pulls](https://img.shields.io/docker/pulls/elgalu/selenium.svg)](https://hub.docker.com/r/elgalu/selenium/tags/)
 [![Docker](https://images.microbadger.com/badges/version/elgalu/selenium.svg)](https://microbadger.com/images/elgalu/selenium "Docker Badge")
+[![Analytics](https://ga-beacon.appspot.com/UA-18144954-10/github/elgalu/docker-selenium/README.md)](https://github.com/igrigorik/ga-beaconselenium "Analytics")
+[![Gitter](https://badges.gitter.im/elgalu/selenium.svg)](https://gitter.im/elgalu/docker-selenium "Chat support")
 
 * selenium server grid with 2 nodes (chrome & firefox)
 * mp4 video recording
