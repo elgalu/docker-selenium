@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p22
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/c15e824fca396637f6c61...master (2017-08-16)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/c15e824fca396637f6c61...4cee932c06214b21c1329d7 (2017-08-16)
     + Upgrade Chrome patch to 60.0.3112.101
     + Using the IP (91.189.89.49) instead of (keyserver.ubuntu.com) due to recurrent errors in Travis
     + Stop installing docker-compose as is already part of TravisCI env

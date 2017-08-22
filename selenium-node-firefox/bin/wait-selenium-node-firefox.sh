@@ -11,10 +11,11 @@ if [ "${FIREFOX}" != "true" ]; then
 fi
 
 echo "Waiting for Selenium Node Firefox ${FIREFOX_VERSION} to be ready..."
-# This is annoying but json endpoint /wd/hub/status returns different things
-#  - on grid/hub .status should be 13
-#  - on node .state should be "success"
-while ! curl -s "${SEL_STATUS_URL}" | jq '.state' | grep "success"; do
+# Selenium >= 3.5.0 then: while ! curl -s "${SEL_STATUS_URL}" | jq .value.ready | grep "true"; do
+# Selenium <= 3.3.1 then: while ! curl -s "${SEL_STATUS_URL}" | jq '.state' | grep "success"; do
+SUCESS_CMD="jq .state | grep success"
+# SUCESS_CMD="jq .value.ready | grep true"
+while ! curl -s "${SEL_STATUS_URL}" | sh -c "${SUCESS_CMD}"; do
   echo -n '.'
   sleep 0.1
 done

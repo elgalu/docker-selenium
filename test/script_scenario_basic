@@ -56,7 +56,10 @@ docker run --name=grid -d -e VIDEO=true \
   --privileged \
   selenium
 
-sleep ${ADDED_TEST_SLEEP} && docker logs grid
+docker logs grid
+docker attach grid &
+
+# sleep ${ADDED_TEST_SLEEP} && docker logs grid
 docker exec grid wait_all_done 70s
 docker exec grid versions
 docker exec grid errors || true
