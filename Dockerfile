@@ -228,15 +228,15 @@ WORKDIR /home/seluser
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ENV SEL_DIRECTORY="3.3" \
-    SEL_VER="3.3.1"
+ENV SEL_DIRECTORY="3.4" \
+    SEL_VER="3.4.0"
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
   && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
            "selenium-server-standalone-3.jar"
 
-LABEL selenium_version "3.3.1"
+LABEL selenium_version "3.4.0"
 
 #=============================
 # sudo by default from now on
@@ -549,7 +549,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ENV FF_VER="52.0.2"
+ENV FF_VER="53.0"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
@@ -559,8 +559,8 @@ RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && mv firefox firefox-for-sel-3 \
   && sudo ln -fs /home/seluser/firefox-for-sel-3/firefox /usr/bin/firefox
 
-LABEL selenium_firefox_version "52.0.2"
-LABEL selenium3_firefox_version "52.0.2"
+LABEL selenium3_firefox_version "53.0"
+LABEL selenium_firefox_version "53.0"
 
 #=============================
 # sudo by default from now on
@@ -571,7 +571,7 @@ USER root
 # GeckoDriver
 #============
 # Layer size: tiny: ~4 MB
-ENV GECKOD_VER="0.15.0" \
+ENV GECKOD_VER="0.16.1" \
     GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
