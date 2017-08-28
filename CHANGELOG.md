@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p23
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-08-28)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/4cee932c06214b21c1329d7...ebdf480ba3fcd6ee72c20 (2017-08-28)
     + Upgrade Chrome patch to 60.0.3112.112
  + **Image tag details:**
     + Selenium version: 3.3.1 (5234b32)
