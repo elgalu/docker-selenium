@@ -9,6 +9,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/ebdf480ba3fcd6ee72c20...master (TBD_DATE)
+    + Upgrade Firefox major from 52.0.2 to 55.0.3
     + Chore: Use mock server at port 8280
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
