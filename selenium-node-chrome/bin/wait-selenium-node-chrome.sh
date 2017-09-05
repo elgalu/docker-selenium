@@ -11,10 +11,13 @@ if [ "${CHROME}" != "true" ]; then
 fi
 
 echo "Waiting for Selenium Node Chrome ${CHROME_FLAVOR} to be ready..."
-# Selenium >= 3.5.0 then: while ! curl -s "${SEL_STATUS_URL}" | jq .value.ready | grep "true"; do
+
 # Selenium <= 3.3.1 then: while ! curl -s "${SEL_STATUS_URL}" | jq '.state' | grep "success"; do
 SUCESS_CMD="jq .state | grep success"
+
+# Selenium >= 3.5.0 then: while ! curl -s "${SEL_STATUS_URL}" | jq .value.ready | grep "true"; do
 # SUCESS_CMD="jq .value.ready | grep true"
+
 while ! curl -s "${SEL_STATUS_URL}" | sh -c "${SUCESS_CMD}"; do
   echo -n '.'
   sleep 0.1

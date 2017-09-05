@@ -11,10 +11,14 @@ if [ "${GRID}" != "true" ]; then
 fi
 
 echo "Waiting for Selenium Hub to be ready..."
-# This is annoying but json endpoint /wd/hub/status returns different things
-#  - on grid/hub .status should be 13
-#  - on node .state should be "success"
-while ! curl -s "${SEL_STATUS_URL}" | jq '.status' | grep "13"; do
+
+# Selenium <= 3.3.1 then: while ! curl -s "${SEL_STATUS_URL}" | jq '.status' | grep "13"; do
+SUCESS_CMD="jq .status | grep 13"
+
+# Selenium >= 3.5.0 then: while ! curl -s "${SEL_STATUS_URL}" | jq '.status' | grep "0"; do
+# SUCESS_CMD="jq .status | grep 0"
+
+while ! curl -s "${SEL_STATUS_URL}" | sh -c "${SUCESS_CMD}"; do
   echo -n '.'
   sleep 0.1
 done
