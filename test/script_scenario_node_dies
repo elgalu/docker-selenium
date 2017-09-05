@@ -33,6 +33,8 @@ else
   NODE_SUICIDE_WAIT_TIME=3
 fi
 
+export MOCK_SERVER_PORT=8280
+
 echo "#================================================="
 echo "# Scenario 3a [node_dies]: Dies by killing Chrome"
 echo "#================================================="
@@ -51,8 +53,7 @@ docker run --name=mynodes -d \
   selenium
 
 # We need a mock service for testing
-# docker run --rm -ti --name=zalando_mock -p 8080:8080 elgalu/uk_mock
-docker run -d -t --name=grid_mock \
+docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT \
   --net=container:mynodes \
   -e CI \
   elgalu/google_adwords_mock
@@ -98,7 +99,10 @@ docker run --name=mynodes -d \
   selenium
 
 # We need a mock service for testing
-docker run -d -t --name=grid_mock --net=container:mynodes -e CI elgalu/google_adwords_mock
+docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT \
+  --net=container:mynodes \
+  -e CI \
+  elgalu/google_adwords_mock
 
 docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true

@@ -7,6 +7,29 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
+## TBD_DOCKER_TAG
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/ebdf480ba3fcd6ee72c20...master (TBD_DATE)
+    + Chore: Use mock server at port 8280
+ + **Image tag details:**
+    + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
+    + Chrome stable:  TBD_CHROME_STABLE
+    + Firefox stable: TBD_FIREFOX_FOR_SEL3
+    + Geckodriver: TBD_GECKO_DRIVER
+    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
+    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
+    + Timezone: TBD_TIME_ZONE
+    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
+    + Python: TBD_PYTHON_VERSION
+    + Tested on kernel dev host: 4.4.0-93-generic x86_64
+    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Built at dev host with: Docker version 17.05.0-ce, build 89658be
+    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at dev host with: Docker Compose version 1.14.0, build c7bdf9e
+    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+    + Image size: TBD_IMAGE_SIZE
+    + Digest: TBD_DIGEST
+    + Image ID: TBD_IMAGE_ID
+
 ## 3.3.1-p23
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/4cee932c06214b21c1329d7...ebdf480ba3fcd6ee72c20 (2017-08-28)
     + Upgrade Chrome patch to 60.0.3112.112
