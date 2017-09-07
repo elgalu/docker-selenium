@@ -44,10 +44,11 @@ Even though both projects share the same purpose is good to have alternatives, s
 [![ga-datastudio-docker-selenium](./images/ga-datastudio-docker-selenium.png)](https://datastudio.google.com/open/0B3GcHpfNB6-FRDd3RWo1ZWh4N3M "Docker-Selenium usage stats v1")
 
 ### Alternatives
-If you don't require a real browser [PhantomJS](https://github.com/ariya/phantomjs) might be enough for you.
-[Electron](https://wallabyjs.com/docs/integration/electron.html) allows to use the latest Chromium/V8 which might be equivalent to running in Chrome however still requires a display so [xvfb][xvfb-electron] is needed. You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
-You can also configure [xvfb](https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI) yourself but it involves some manual steps and doesn't include video recording, nor does PhantomJS nor Electron.
-A [new chrome --headless feature](https://chromium.googlesource.com/chromium/src/+/master/headless/README.md) looks quite [promising](https://github.com/SeleniumHQ/docker-selenium/issues/370#issuecomment-274810190) so might we worth to take a look though as of now leaves video recording out of scope there and Firefox also out of scope.
+If you don't require video recording we suggest to use either [Google Chrome in headless mode](https://chromium.googlesource.com/chromium/src/+/master/headless/README.md) or [Firefox in headless mode](https://developer.mozilla.org/en-US/Firefox/Headless_mode).
+
+We also recommend avoiding [PhantomJS](https://github.com/ariya/phantomjs) as maintenance was stopped after Chrome & Firefox headless became available.
+
+You can also use a paid service like [Sauce Labs][sauce] or [BrowserStack][], note they offer free open source accounts and straightforward [integration with Travis CI](https://docs.travis-ci.com/user/sauce-connect/).
 
 ### Requisites
 This project is normally tested in the last version of Docker and docker-compose and also in the release candidates.
