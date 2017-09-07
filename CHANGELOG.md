@@ -8,8 +8,8 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.3.1-p25
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-09-07)
-    + Upgrade Chrome major to 61.0.3163.79
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.3.1-p24...3.3.1-p25 (2017-09-07)
+    + Upgrade Chrome major to 61.0.3163.79 @iMbaundso
  + **Image tag details:**
     + Selenium version: 3.3.1 (5234b32)
     + Chrome stable:  61.0.3163.79
@@ -31,10 +31,11 @@ Note image ids also change after scm-source.json has being updated which trigger
     + Image ID: sha256:860746dc737623812d461b1b7f99d6320d46260e7f602605cf957f24d9259197
 
 ## 3.3.1-p24
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/ebdf480ba3fcd6ee72c20...master (2017-09-05)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.3.1-p23...3.3.1-p24 (2017-09-05)
     + Upgrade Firefox major from 52.0.2 to 55.0.3
     + Upgrade Chromedriver from 2.31 to 2.32
     + Chore: Use mock server at port 8280
+    + Note: There is an inconsistency in this version with the docker image LABEL selenium_chrome_version
  + **Image tag details:**
     + Selenium version: 3.3.1 (5234b32)
     + Chrome stable:  60.0.3112.113
