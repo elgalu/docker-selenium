@@ -12,7 +12,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Bump versions for 3.3.1-p26"
+    git commit -m "Add Zalenium support for having Chrome & Firefox capabilities in the same node"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

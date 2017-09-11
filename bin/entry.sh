@@ -152,6 +152,10 @@ if [ "${GRID}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-hub"
 fi
 
+if [ "${MULTINODE}" = "true" ]; then
+  export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-multinode"
+fi
+
 if [ "${CHROME}" = "true" ]; then
   export SUPERVISOR_REQUIRED_SRV_LIST="${SUPERVISOR_REQUIRED_SRV_LIST}|selenium-node-chrome"
 fi
@@ -210,6 +214,15 @@ elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   fi
 fi
 
+if [ "${SELENIUM_MULTINODE_PORT}" = "0" ]; then
+  export SELENIUM_MULTINODE_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
+elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
+  # User want to pick random ports but may also want to fix some others
+  if [ "${SELENIUM_MULTINODE_PORT}" = "${DEFAULT_SELENIUM_MULTINODE_PORT}" ]; then
+    export SELENIUM_MULTINODE_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
+  fi
+fi
+
 # Video
 export VIDEO_LOG_FILE="${LOGS_DIR}/video-rec-stdout.log"
 export VIDEO_PIDFILE="${RUN_DIR}/video.pid"
@@ -217,6 +230,7 @@ if [ "${VIDEO_FILE_NAME}" = "" ]; then
   export VIDEO_FILE_NAME="vid"
   [ "${CHROME}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_chrome_${SELENIUM_NODE_CH_PORT}"
   [ "${FIREFOX}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_firefox_${SELENIUM_NODE_FF_PORT}"
+  [ "${MULTINODE}" = "true" ] && export VIDEO_FILE_NAME="${VIDEO_FILE_NAME}_chrome_or_firefox_${SELENIUM_MULTINODE_PORT}"
 fi
 export VIDEO_PATH="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
 echo "${VIDEO_LOG_FILE}" > VIDEO_LOG_FILE
@@ -291,6 +305,11 @@ fi
 if [ "${SELENIUM_NODE_FF_PORT}" -ge "40000" ] && \
    [ "${SELENIUM_NODE_FF_PORT}" != "${DEFAULT_SELENIUM_NODE_FF_PORT}" ];then
     export SELENIUM_FIRST_NODE_PORT=${SELENIUM_NODE_FF_PORT}
+fi
+
+if [ "${SELENIUM_MULTINODE_PORT}" -ge "40000" ] && \
+   [ "${SELENIUM_MULTINODE_PORT}" != "${DEFAULT_SELENIUM_MULTINODE_PORT}" ];then
+    export SELENIUM_FIRST_NODE_PORT=${SELENIUM_MULTINODE_PORT}
 fi
 
 ga_track_start () {
@@ -392,6 +411,7 @@ echo "${SELENIUM_NODE_CH_PORT}" > SELENIUM_NODE_CH_PORT
 echo "${SELENIUM_NODE_CH_PORT}" > CH_PORT
 echo "${SELENIUM_NODE_FF_PORT}" > SELENIUM_NODE_FF_PORT
 echo "${SELENIUM_NODE_FF_PORT}" > FF_PORT
+echo "${SELENIUM_MULTINODE_PORT}" > MULTINODE_PORT
 echo "${VNC_PORT}" > VNC_PORT
 echo "${NOVNC_PORT}" > NOVNC_PORT
 echo "${SUPERVISOR_HTTP_PORT}" > SUPERVISOR_HTTP_PORT
@@ -404,6 +424,7 @@ echo "${CHROME_VERSION}" > CHROME_VERSION
 echo "${CHROME}" > CHROME
 echo "${CHROME_FLAVOR}" > CHROME_FLAVOR
 echo "${FIREFOX}" > FIREFOX
+echo "${MULTINODE}" > MULTINODE
 echo "${WAIT_TIMEOUT}" > WAIT_TIMEOUT
 echo "${COMMON_CAPS}" > COMMON_CAPS
 echo "${SELENIUM_HUB_HOST}" > SELENIUM_HUB_HOST

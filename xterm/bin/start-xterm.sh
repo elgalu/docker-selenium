@@ -24,6 +24,7 @@ stop_them_all () {
   supervisorctl -c /etc/supervisor/supervisord.conf stop video-rec || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-node-firefox || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-node-chrome || true
+  supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-multinode || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop selenium-hub || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop novnc || true
   supervisorctl -c /etc/supervisor/supervisord.conf stop vnc || true
@@ -68,6 +69,8 @@ timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-chrome.sh || \
   shutdown "Failed while waiting for selenium node chrome to start!"
 timeout --foreground ${WAIT_TIMEOUT} wait-selenium-node-firefox.sh || \
   shutdown "Failed while waiting for selenium node firefox to start!"
+timeout --foreground ${WAIT_TIMEOUT} wait-selenium-multinode.sh || \
+  shutdown "Failed while waiting for selenium multi-node chrome & firefox to start!"
 
 timeout --foreground ${WAIT_TIMEOUT} wait-xmanager.sh || \
   shutdown "Failed while waiting for XManager to start!"
