@@ -25,6 +25,7 @@ set -xe
 
 export SELENIUM_NODE_CH_PORT=5757 \
        SELENIUM_NODE_FF_PORT=6868 \
+       SELENIUM_MULTINODE_PORT=7979 \
        SHUTDOWN_END_POINT="selenium-server/driver/?cmd=shutDownSeleniumServer"
 
 if [ "${CI}" = "true" ]; then
@@ -126,6 +127,57 @@ else
   echoerr "Expected OKOK at $0 for Firefox but got something else"
   curl "http://localhost:${SELENIUM_NODE_FF_PORT}/${SHUTDOWN_END_POINT}"
   die "Test failed for Firefox at $0 during curl"
+fi
+
+echo "#======================================================"
+echo "# Scenario 3c [node_dies]: Dies by killing a Multi-node"
+echo "#======================================================"
+
+# Ensure clean env
+docker rm -vf mynodes || true
+docker rm -vf grid_mock || true
+
+# Create container for Firefox
+docker run --name=mynodes -d \
+  -v /dev/shm:/dev/shm \
+  --privileged \
+  -e CHROME=false \
+  -e FIREFOX=false \
+  -e MULTINODE=true \
+  -e CI \
+  -e SELENIUM_MULTINODE_PORT \
+  -p ${SELENIUM_MULTINODE_PORT}:${SELENIUM_MULTINODE_PORT} \
+  selenium
+
+# We need a mock service for testing
+docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT \
+  --net=container:mynodes \
+  -e CI \
+  elgalu/google_adwords_mock
+
+docker exec mynodes wait_all_done 70s
+docker exec mynodes errors || true
+docker logs mynodes
+
+# Basic checkup on both browsers (on the same node)
+docker exec -t mynodes selenium_test chrome
+docker exec -t mynodes selenium_test firefox
+docker exec mynodes errors || true
+
+# https://github.com/SeleniumHQ/selenium/issues/2852
+# if curl -s "http://localhost:${SELENIUM_MULTINODE_PORT}/${SHUTDOWN_END_POINT}" | grep "OKOK"; then
+if docker stop mynodes; then
+  # The container should have been removed
+  sleep ${NODE_SUICIDE_WAIT_TIME}
+  if docker rm mynodes; then
+    echo "Chrome & Firefox multi-node 3c PASSED"
+  else
+    die "Test failed for Chrome & Firefox multi-node at $0 during docker rm mynodes"
+  fi
+else
+  echoerr "Expected OKOK at $0 for Chrome & Firefox multi-node but got something else"
+  curl "http://localhost:${SELENIUM_MULTINODE_PORT}/${SHUTDOWN_END_POINT}"
+  die "Test failed for Chrome & Firefox multi-node at $0 during curl"
 fi
 
 # Ensure clean env
