@@ -39,11 +39,11 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 #  https://github.com/pilwon/selenium-webdriver/blob/master/java/server/src/org/openqa/grid/common/defaults/DefaultNode.json
 CHROME_BROWSER_CAPS="browserName=chrome,${COMMON_CAPS}"
 CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},version=${CHROME_VERSION}"
-CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},chrome_binary=${CHROME_PATH}"
+# CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},chrome_binary=${CHROME_PATH}"
 
 FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS}"
 FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},version=${FIREFOX_VERSION}"
-FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},firefox_binary=${FIREFOX_DEST_BIN}"
+# FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},firefox_binary=${FIREFOX_DEST_BIN}"
 
 java \
   -Dwebdriver.chrome.driver="/home/seluser/chromedriver" \
