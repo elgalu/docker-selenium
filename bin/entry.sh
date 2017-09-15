@@ -469,7 +469,14 @@ env > env
 # export NORMAL_USER_UID="$(id -u seluser)"
 # export NORMAL_USER_GID="$(id -g seluser)"
 ga_track_start
-exec run-supervisord.sh
+
+if [ "${DEBUG}" == "bash" ]; then
+  run-supervisord.sh &
+  cd /var/log/cont
+  exec bash
+else
+  exec run-supervisord.sh
+fi
 
 # Note: sudo -i creates a login shell for someUser, which implies the following:
 # - someUser's user-specific shell profile, if defined, is loaded.

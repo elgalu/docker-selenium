@@ -2,8 +2,8 @@ Miscellaneous internal notes, do not read!
 
 ## Build
 
-    time (docker build -t elgalu/selenium . ;echo $?;beep)
-    docker run --rm -ti --name=grid -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e VNC_PASSWORD=no --shm-size=1g elgalu/selenium
+    time (docker build -t selenium . ;echo $?;beep)
+    docker run --rm -ti --name=grid --privileged -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e CHROME=false -e FIREFOX=false --shm-size=1g selenium
 
 ### Wait
 Wait and get versions
@@ -25,9 +25,9 @@ Push setup, first time only:
 
 Build a grid with extra nodes
 
-    docker run --rm --name=grid -p 4444:24444 -p 5900:25900 --shm-size=1g -e VNC_PASSWORD=hola elgalu/selenium
+    docker run --rm --name=grid -p 4444:24444 -p 5900:25900 --shm-size=1g -e VNC_PASSWORD=hola selenium
 
-    docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container elgalu/selenium
+    docker run --rm --name=node -e DISP_N=13 -e SSHD_PORT=22223 -e SUPERVISOR_HTTP_PORT=29003 -e VNC_PORT=25903 -e SELENIUM_NODE_CH_PORT=25330 -e SELENIUM_NODE_FF_PORT=25331 -e GRID=false -e CHROME=true -e FIREFOX=true --net=container selenium
 
 See logs
 
@@ -54,22 +54,22 @@ List firefox versions via docker exe
 
 ## To update image id and digest
 
-    docker inspect -f='{{.Id}}' elgalu/selenium
+    docker inspect -f='{{.Id}}' selenium
     docker images --digests
 
 ## Run with shared dir
 
     docker run --rm --name=local -p=127.0.0.1:4460:24444 -p=127.0.0.1:5910:25900 \
-      -v /e2e/uploads:/e2e/uploads elgalu/selenium
+      -v /e2e/uploads:/e2e/uploads selenium
     docker run --rm --name=local -p=4460:24444 -p=5910:25900 \
-      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) elgalu/selenium
+      -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) selenium
 
 
-    docker run --rm --name=ff -p=127.0.0.1:4461:24444 -p=127.0.0.1:5911:25900 -v /e2e/uploads:/e2e/uploads elgalu/selenium
+    docker run --rm --name=ff -p=127.0.0.1:4461:24444 -p=127.0.0.1:5911:25900 -v /e2e/uploads:/e2e/uploads selenium
 
 ## Run without shared dir and bind ports to all network interfaces
 
-    docker run -d --name=local -p=0.0.0.0:4444:24444 -p=0.0.0.0:5900:25900 elgalu/selenium:0.1
+    docker run -d --name=local -p=0.0.0.0:4444:24444 -p=0.0.0.0:5900:25900 selenium:0.1
 
 ## Opening tunnels
 
@@ -88,11 +88,11 @@ List firefox versions via docker exe
 ## Run without dir and bind to all interfaces
 Note anything after the image will be taken as arguments for the cmd/entrypoint
 
-    docker run --rm --name=local -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:24444 -p=0.0.0.0:5900:25900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium
+    docker run --rm --name=local -p=0.0.0.0:8813:8484 -p=0.0.0.0:2222:2222 -p=0.0.0.0:4470:24444 -p=0.0.0.0:5900:25900 -e SCREEN_WIDTH=1800 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" selenium
 
-    docker run --rm --name=local -p=4470:24444 -p=5900:25900 -e VNC_PASSWORD=hola elgalu/selenium
-    docker run --rm --name=local -p=4470:24444 -p=5900:25900 -e VNC_PASSWORD=hola docker.io/elgalu/selenium
-    docker run --rm --name=local -p=0.0.0.0:4470:24444 -p=0.0.0.0:5900:25900 --add-host myserver.dev:172.17.42.1 elgalu/selenium
+    docker run --rm --name=local -p=4470:24444 -p=5900:25900 -e VNC_PASSWORD=hola selenium
+    docker run --rm --name=local -p=4470:24444 -p=5900:25900 -e VNC_PASSWORD=hola docker.io/selenium
+    docker run --rm --name=local -p=0.0.0.0:4470:24444 -p=0.0.0.0:5900:25900 --add-host myserver.dev:172.17.42.1 selenium
 
 However adding a custom host IP to server-selenium.local (e.g. bsele ssh config) is more work:
 
@@ -101,18 +101,18 @@ However adding a custom host IP to server-selenium.local (e.g. bsele ssh config)
 
     vncv localhost:5900 -Scaling=60%  &
 
-    docker run --rm --name=ff -p=0.0.0.0:4471:24444 -p=0.0.0.0:5921:25900 elgalu/selenium
+    docker run --rm --name=ff -p=0.0.0.0:4471:24444 -p=0.0.0.0:5921:25900 selenium
 
 Automatic builds not working for me right now, maybe there is an issue with docker registry v1 vs v2
 https://registry.hub.docker.com/u/elgalu/docker-selenium/builds_history/31621/
 
 ## Pulling
 
-    docker pull registry.hub.docker.com/elgalu/selenium
+    docker pull registry.hub.docker.com/selenium
 
 ## Pull
 
-    docker run -d --name=max -p=0.0.0.0:4411:24444 -p=0.0.0.0:5911:25900 elgalu/selenium
+    docker run -d --name=max -p=0.0.0.0:4411:24444 -p=0.0.0.0:5911:25900 selenium
 
 How to connect through vnc (need a vnc client)
 
@@ -333,7 +333,7 @@ ANYPORT=0
 REMOTE_DOCKER_SRV=localhost
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -p=0.0.0.0:${ANYPORT}:24444 \
     -p=0.0.0.0:${ANYPORT}:25900 -e SCREEN_HEIGHT=1110 -e VNC_PASSWORD=hola \
-    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" elgalu/selenium
+    -e SSH_AUTH_KEYS="$(cat ~/.ssh/id_rsa.pub)" selenium
 
 # -- Option 2.docker run- Running docker on remote docker server like in the cloud
 # Useful if the docker server is running in the cloud. Establish free local ports
@@ -343,7 +343,7 @@ ssh ${REMOTE_DOCKER_SRV} #get into the remote docker provider somehow
 # it acts as a jump host so my public key is already on that server
 CONTAINER=$(docker run -d -p=0.0.0.0:${ANYPORT}:22222 -e SCREEN_HEIGHT=1110 \
     -e VNC_PASSWORD=hola -e SSH_AUTH_KEYS="$(cat ~/.ssh/authorized_keys)" \
-    elgalu/selenium
+    selenium
 
 # -- Common: Wait for the container to start
 ./host-scripts/wait-docker-selenium.sh grid 7s
