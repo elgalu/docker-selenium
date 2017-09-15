@@ -101,7 +101,7 @@ if supervisorctl -c /etc/supervisor/supervisord.conf status 2>&1 \
   supervisorctl -c /etc/supervisor/supervisord.conf status 1>&2
   shutdown
 else
-  echo "No failed processes reported by supervisorctl status. Looking good."
+  log "Processes reported by supervisorctl status looking good."
 fi
 
 if [ "${XTERM_START}" == "true" ]; then
