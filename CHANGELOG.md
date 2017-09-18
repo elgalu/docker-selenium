@@ -8,14 +8,14 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.5.3-p0
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-09-18)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.3.1-p27...3.5.3-p0 (2017-09-18)
     + Upgrade Selenium from 3.3.1 to 3.5.3
     + Upgrade GeckoDriver from 0.15.0 to 0.19.0
  + **Image tag details:**
     + Selenium version: 3.5.3 (a88d25fe6b)
     + Chrome stable:  61.0.3163.91
     + Firefox stable: 55.0.3
-    + Geckodriver: TBD_GECKO_DRIVER
+    + Geckodriver: 0.19.0
     + Chromedriver: 2.32.498513 (2c63aa53b2c658de596ed550eb5267ec5967b351)
     + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11
     + Timezone: Europe/Berlin
