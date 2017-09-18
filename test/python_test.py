@@ -81,6 +81,13 @@ caps['name'] = nameId
 caps['build'] = buildId
 caps['recordVideo'] = 'false'
 
+if args.browser == 'firefox':
+    caps["moz:firefoxOptions"] = {
+                "log": {
+                    "level": "trace",
+                },
+            }
+
 # http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
 print ("%s %s - (01/14) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
 driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
