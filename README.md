@@ -199,13 +199,16 @@ an easy transfer with `-v $(pwd)/videos:/videos`.
 Once your tests are done you can either manually stop the recording via `docker exec grid /bin-utils/stop-video` where
 *grid* is just the arbitrary container chosen name in `docker run` command. Or simply stop the container and that will stop the video recording automatically.
 
-Relevant environment variables to customize it are:
+Relevant up-to-date environment variables to customize it are at the Dockerfile, below a possibly outdated list of settings:
 
-    FFMPEG_FRAME_RATE=25
-    VIDEO_FILE_NAME="test"
-    VIDEO_FILE_EXTENSION=mp4
-    FFMPEG_CODEC_ARGS=""
+    FFMPEG_FRAME_RATE=10
+    FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0"
+    FFMPEG_FINAL_CRF=0
     FFMPEG_DRAW_MOUSE=1
+    VIDEO_TMP_FILE_EXTENSION="mkv"
+    VIDEO_FILE_EXTENSION="mp4"
+    MP4_INTERLEAVES_MEDIA_DATA_CHUNKS_SECS="500"
+    VIDEO_FILE_NAME="test"
 
 It is important to note that `ffmpeg` video recording takes an important amount of CPU usage, even more when a well compressed format like *mp4* is selected.
 
