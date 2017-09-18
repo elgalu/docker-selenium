@@ -59,6 +59,7 @@ docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT \
   -e CI \
   elgalu/google_adwords_mock
 
+docker exec mynodes wait_all_done 20s || (docker logs mynodes && docker exec mynodes errors)
 docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true
 docker logs mynodes
@@ -105,6 +106,7 @@ docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT \
   -e CI \
   elgalu/google_adwords_mock
 
+docker exec mynodes wait_all_done 20s || (docker logs mynodes && docker exec mynodes errors)
 docker exec mynodes wait_all_done 70s
 docker exec mynodes errors || true
 docker logs mynodes
