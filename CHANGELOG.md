@@ -10,7 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
     + Upgrade Selenium from 3.3.1 to 3.5.3
-    + Upgrade GeckoDriver from 0.15.0 to 0.18.0
+    + Upgrade GeckoDriver from 0.15.0 to 0.19.0
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
