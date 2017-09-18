@@ -224,17 +224,11 @@ def assert_overview_page():
 if args.browser != 'mobile_emulation':
     assert_overview_page()
 
-print ("%s %s - (12/14) Test done - will driver.close()" % (datetime.datetime.utcnow(), longId))
-try:
-    driver.close()
-except:
-    pass
-time.sleep(msleep)
+# https://github.com/mozilla/geckodriver/issues/957
+# print ("%s %s - (12/14) Test done - will driver.close()" % (datetime.datetime.utcnow(), longId))
+# driver.close()
+# time.sleep(msleep)
 
 print ("%s %s - (13/14) Test done - will driver.quit()" % (datetime.datetime.utcnow(), longId))
-try:
-    driver.quit()
-except:
-    pass
-
+driver.quit()
 print ("%s %s - (14/14) All done. SUCCESS! - DONE driver.quit()" % (datetime.datetime.utcnow(), longId))
