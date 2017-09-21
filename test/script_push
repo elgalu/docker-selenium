@@ -223,6 +223,16 @@ git_push_tag_push() {
   fi
 }
 
+#####################################################
+# Docker run `grid` so we can fetch actual versions #
+#####################################################
+ensure_docker_run_dosel() {
+  if [[ $(docker ps -f "name=grid" --format '{{.Names}}') != "grid" ]]; then
+    docker run --name=grid -d selenium
+    docker exec grid wait_all_done 40s
+  fi
+}
+
 ########
 # Main #
 ########
@@ -234,6 +244,7 @@ elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
   docker_login_tag_push
   git_config
   git_co_fetch_merge_stash
+  ensure_docker_run_dosel
   update_changelog
   git_diff_add_commit
   git_push_tag_push
