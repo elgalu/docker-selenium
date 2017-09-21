@@ -8,7 +8,7 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## 3.5.3-p2
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-09-21)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.5.3-p1...3.5.3-p2 (2017-09-21)
     + Support non-sudo environments like K8s for running the container #175
     + TravisCI switch to the new feature: Stages
     + Add Dockerfile.older.browser example on how to install older browsers

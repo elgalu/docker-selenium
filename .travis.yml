@@ -50,7 +50,7 @@ jobs:
         - travis_retry ./test/before_install_build
         - travis_retry ./test/script_scenario_compose_N_N
 
-    - stage: Push Image (only with a tag)
+    - stage: Push Image (only with a tag) & Git push
       script:
         - travis_retry ./test/before_install_build
         - ./test/script_push
