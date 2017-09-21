@@ -133,13 +133,14 @@ fi
 
 echo "#======================================================"
 echo "# Scenario 3c [node_dies]: Dies by killing a Multi-node"
+echo "#      + run tests again simulation USE_KUBERNETES=true"
 echo "#======================================================"
 
 # Ensure clean env
 docker rm -vf mynodes || true
 docker rm -vf grid_mock || true
 
-# Create container for Firefox
+# Create container for Firefox and simulate USE_KUBERNETES=true
 docker run --name=mynodes -d \
   -v /dev/shm:/dev/shm \
   --privileged \
@@ -147,6 +148,7 @@ docker run --name=mynodes -d \
   -e FIREFOX=false \
   -e MULTINODE=true \
   -e CI \
+  -e USE_KUBERNETES=true \
   -e SELENIUM_MULTINODE_PORT \
   -p ${SELENIUM_MULTINODE_PORT}:${SELENIUM_MULTINODE_PORT} \
   selenium

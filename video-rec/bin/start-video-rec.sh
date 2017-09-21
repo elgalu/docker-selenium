@@ -10,7 +10,8 @@ set -e
     FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
 # Remove the video file if exists
-sudo rm -f "${VIDEO_BASE_PATH}"*
+# Added a non-sudo conditional so this works on non-sudo environments like K8s
+(sudo rm -f "${VIDEO_BASE_PATH}"*) || (rm -f "${VIDEO_BASE_PATH}"*)
 
 # record testing video using password file
 # using sudo due to http://stackoverflow.com/questions/23544282/
@@ -30,8 +31,9 @@ export tmp_video_path="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_TMP_FILE_EXTENSI
 export final_video_path="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
 
 # Fix perms to be able to start ffmpeg without sudo
-sudo touch "${tmp_video_path}"
-sudo chown seluser:seluser "${tmp_video_path}"
+# Added a non-sudo conditional so this works on non-sudo environments like K8s
+(sudo touch "${tmp_video_path}") || (touch "${tmp_video_path}")
+(sudo chown seluser:seluser "${tmp_video_path}") || (chown seluser:seluser "${tmp_video_path}") || true
 
 # avconv or ffmpeg
 ffmpeg -f x11grab \

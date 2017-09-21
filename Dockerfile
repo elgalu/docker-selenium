@@ -583,6 +583,9 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
   && rm -rf /opt/geckodriver* \
   && tar -C /opt -xvzf geckodriver.tar.gz \
   && chmod +x /opt/geckodriver \
+  && cp /opt/geckodriver /usr/bin/geckodriver \
+  && chown seluser:seluser /opt/geckodriver \
+  && chown seluser:seluser /usr/bin/geckodriver \
   && rm geckodriver.tar.gz
 
 #===============
@@ -619,6 +622,7 @@ COPY lib/* /usr/lib/
 # Use a custom wallpaper for Fluxbox
 COPY images/wallpaper-dosel.png /usr/share/images/fluxbox/ubuntu-light.png
 COPY images/wallpaper-zalenium.png /usr/share/images/fluxbox/
+RUN chown -R seluser:seluser /usr/share/images/fluxbox/
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -924,6 +928,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   GA_ENDPOINT=https://www.google-analytics.com/collect \
   GA_API_VERSION="1" \
   DEBIAN_FRONTEND="" \
+  USE_KUBERNETES="false" \
   DEBCONF_NONINTERACTIVE_SEEN=""
 
 #================================
@@ -957,16 +962,13 @@ COPY Analytics.md /home/seluser/
 #===================================
 # The .X11-unix stuff is useful when using Xephyr
 RUN mkdir -p /home/seluser/.vnc \
-  && sudo touch /capabilities3.json \
-  && sudo chown seluser:seluser /capabilities3.json \
-  && generate_capabilities3_json > /capabilities3.json \
-  && cp /capabilities3.json /home/seluser/capabilities3.json \
-  && cp /capabilities3.json /home/seluser/capabilities3 \
-  && cp /capabilities3.json /home/seluser/caps3.json \
-  && cp /capabilities3.json /home/seluser/caps3 \
-  && sudo cp /capabilities3.json /capabilities.json \
-  && sudo cp /capabilities3.json /home/seluser/capabilities.json \
-  && sudo cp /capabilities3.json /home/seluser/caps.json \
+  && sudo touch /capabilities.json \
+  && sudo chown seluser:seluser /capabilities.json \
+  && generate_capabilities_json > /capabilities.json \
+  && cp /capabilities.json /home/seluser/capabilities.json \
+  && cp /capabilities.json /home/seluser/capabilities \
+  && cp /capabilities.json /home/seluser/caps.json \
+  && cp /capabilities.json /home/seluser/caps \
   && mkdir -p ${VIDEOS_DIR} \
   && sudo ln -s ${VIDEOS_DIR} /videos \
   && sudo chown seluser:seluser /videos \

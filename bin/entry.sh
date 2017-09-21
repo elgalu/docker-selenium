@@ -13,12 +13,18 @@ die () {
   exit $errnum
 }
 
+if [ -f /var/run/secrets/kubernetes.io/serviceaccount/token ]; then
+  log "Kubernetes service account found."
+  export USE_KUBERNETES=true
+fi
+
 #==============================================
 # Java blocks until kernel have enough entropy
 # to generate the /dev/random seed
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
-sudo haveged
+# Added a non-sudo conditional so this works on non-sudo environments like K8s
+(sudo haveged) || haveged
 
 # Workaround that might help to get dbus working in docker
 #  http://stackoverflow.com/a/38355729/511069
@@ -26,12 +32,13 @@ sudo haveged
 #  - still unclear if this helps: `-v /var/run/dbus:/var/run/dbus`
 #  - this works generates errors: DBUS_SESSION_BUS_ADDRESS="/dev/null"
 #  - this gives less erros: DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null"
-sudo rm -f /var/lib/dbus/machine-id
-sudo mkdir -p /var/run/dbus
-sudo service dbus restart >dbus_service.log
+# Added a non-sudo conditional so this works on non-sudo environments like K8s
+(sudo rm -f /var/lib/dbus/machine-id) || (rm -f /var/lib/dbus/machine-id) || true
+(sudo mkdir -p /var/run/dbus) || (mkdir -p /var/run/dbus) || true
+(sudo service dbus restart >dbus_service.log) || (service dbus restart >dbus_service.log) || true
 # Test dbus works
-service dbus status >dbus_service_status.log
-export $(dbus-launch)
+(service dbus status >dbus_service_status.log) || true
+export $(dbus-launch) || true
 export NSS_USE_SHARED_DB=ENABLED
 # echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
 #=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
@@ -44,22 +51,11 @@ stop >/dev/null 2>&1 || true
 rm -f ${LOGS_DIR}/*
 rm -f ${RUN_DIR}/*
 
-# Support restart docker container for selenium 3 @aituganov
-if [ ! -f /usr/bin/geckodriver ]; then
-  sudo mv /opt/geckodriver /usr/bin/geckodriver
-  sudo ln -fs /usr/bin/geckodriver /opt/geckodriver
-fi
-
-sudo cp /capabilities3.json /capabilities.json
-sudo cp /capabilities3.json /home/seluser/capabilities.json
-sudo cp /capabilities3.json /home/seluser/caps.json
-
 #---------------------
 # Fix/extend ENV vars
 #---------------------
 export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-3.jar"
 export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-3/firefox"
-sudo ln -fs ${FIREFOX_DEST_BIN} /usr/bin/firefox
 export DOSEL_VERSION=$(cat VERSION)
 export FIREFOX_VERSION=$(firefox_version)
 # CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable
@@ -183,7 +179,7 @@ echo "Please send us a PR if you know how to set the path for the Firefox browse
 # When running for Zalenium prepare certain customizations
 if [ "${ZALENIUM}" == "true" ]; then
   # Set proper desktop background
-  sudo mv -f /usr/share/images/fluxbox/wallpaper-zalenium.png /usr/share/images/fluxbox/ubuntu-light.png
+  mv -f /usr/share/images/fluxbox/wallpaper-zalenium.png /usr/share/images/fluxbox/ubuntu-light.png
 fi
 
 # TODO: Remove this duplicated logic
@@ -375,24 +371,23 @@ ga_track_start () {
   fi
 }
 
-#----------------------------------------
-# Remove lock files, thanks @garagepoort
-# clear_x_locks.sh
-
 #--------------------------------
 # Improve etc/hosts and fix dirs
-improve_etc_hosts.sh
-fix_dirs.sh
+if [ "${USE_KUBERNETES}" == "false" ]; then
+  sudo improve_etc_hosts.sh
+fi
 
 #-------------------------
 # Docker alongside docker
-docker_alongside_docker.sh
+if [ "${USE_KUBERNETES}" == "false" ]; then
+  docker_alongside_docker.sh
+fi
 
 #-------------------------------
 # Fix small tiny 64mb shm issue
 #-------------------------------
 # https://github.com/elgalu/docker-selenium/issues/20
-if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ]; then
+if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ] && [ "${USE_KUBERNETES}" == "false" ]; then
   sudo umount /dev/shm || true
   sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=${SHM_SIZE} \
     tmpfs /dev/shm || true
@@ -440,6 +435,7 @@ echo "${SEL_UNREGISTER_IF_STILL_DOWN_AFTER}" > SEL_UNREGISTER_IF_STILL_DOWN_AFTE
 echo "${SELENIUM_NODE_PARAMS}" > SELENIUM_NODE_PARAMS
 echo "${CUSTOM_SELENIUM_NODE_PROXY_PARAMS}" > CUSTOM_SELENIUM_NODE_PROXY_PARAMS
 echo "${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE}" > CUSTOM_SELENIUM_NODE_REGISTER_CYCLE
+echo "${USE_KUBERNETES}" > USE_KUBERNETES
 echo "${XMANAGER}" > XMANAGER
 echo "${GRID}" > GRID
 

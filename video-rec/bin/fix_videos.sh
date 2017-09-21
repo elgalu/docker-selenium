@@ -24,10 +24,12 @@ if [ -z "${HOST_GID}" ] && [ -z "${HOST_UID}" ]; then
   [ -z "${VIDEOS_DIR}" ] && die "Need env var set \$VIDEOS_DIR"
   export HOST_GID=$(stat -c "%g" ${VIDEOS_DIR})
   export HOST_UID=$(stat -c "%u" ${VIDEOS_DIR})
+elif [ "${USE_KUBERNETES}" == "true" ]; then
+  log "No sudo support in K8s so will skip setting up sudo groupadd -g ${HOST_GID} tempgroup"
 else
   GROUP_EXISTS=$(cat /etc/group | grep ${HOST_GID} | wc -l)
   # Create new group using target GID and add seluser user
-  if [ $GROUP_EXISTS == "0" ]; then
+  if [ ${GROUP_EXISTS} == "0" ]; then
     sudo groupadd -g ${HOST_GID} tempgroup
     sudo gpasswd -a seluser tempgroup
   else
