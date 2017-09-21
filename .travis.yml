@@ -4,6 +4,14 @@
 # Note: `language: generic` was failing in OSX so in that case you can use language: c
 language: generic
 
+sudo: required
+
+os: linux
+dist: trusty
+
+services:
+  - docker
+
 # Omit running tests on temporal branches,
 #  i.e. branches with names that start with "tmp"
 branches:
@@ -14,40 +22,35 @@ env:
   global:
     - TEST_SLEEPS="0.7"
     - ADDED_TEST_SLEEP="6.5"
+    - DOCKER_VERSION="stable"
+    - DOCKER_PUSH=true
+    - DOCKER_PUSH_LATEST=true
 
-matrix:
+jobs:
   include:
-    # Linux with docker:stable compose:stable
-    # Use DOCKER_PUSH_LATEST=false to debug
-    - os: linux
-      language: generic
-      sudo: required
-      dist: trusty
-      services:
-        - docker
-      env:
-        - DOCKER_VERSION="stable"
-          DOCKER_PUSH=true
-          DOCKER_PUSH_LATEST=true
+    - stage: Integration and Unit Tests
+      env: test=scenario_basic__restart
+      script:
+        - travis_retry ./test/before_install_build
+        - travis_retry ./test/script_scenario_basic
+        - travis_retry ./test/script_scenario_restart
 
-before_install:
-  - travis_retry ./test/before_install_setup
-  - travis_retry ./test/before_install_build
+    - env: test=scenario_node_dies
+      script:
+        - travis_retry ./test/before_install_build
+        - travis_retry ./test/script_scenario_node_dies
 
-install:
-  - ./test/install
+    - env: test=scenario_make
+      script:
+        - travis_retry ./test/before_install_build
+        - travis_retry ./test/script_scenario_make
 
-script:
-  - ./test/script_start
-  - travis_retry ./test/script_scenario_basic
-  - travis_retry ./test/script_scenario_restart
-  - travis_retry ./test/script_scenario_node_dies
-  - travis_retry ./test/script_scenario_make
-  - travis_retry ./test/script_scenario_compose_N_N
+    - env: test=scenario_compose_N_N
+      script:
+        - travis_retry ./test/before_install_build
+        - travis_retry ./test/script_scenario_compose_N_N
 
-# cleanup though doesn't seem to be necessary in Travis infra
-after_script:
-  - ./test/after_script
-
-after_success:
-  - ./test/script_end
+    - stage: Push Image (only with a tag)
+      script:
+        - travis_retry ./test/before_install_build
+        - ./test/script_push

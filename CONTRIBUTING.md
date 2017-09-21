@@ -4,10 +4,9 @@
 For pull requests or local commits:
 
     git checkout -b tmp-`cat VERSION`
-    time (./test/bef && ./test/install && ./test/script_start && ./test/script_end)
+    time (./test/bef && ./test/script_start && ./test/script_archive)
     open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
-    docker exec grid versions && ./test/after_script && travis lint
-    git checkout ./images/grid3_console.png scm-source.json
+    docker exec grid versions && ./test/after_script && git checkout scm-source.json
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:

@@ -97,7 +97,7 @@ update_changelog() {
   # + Image ID: TBD_IMAGE_ID
   # + ...
   # Test locally with:
-  #  ./test/before_install_build && ./test/install
+  #  ./test/before_install_build
   #  TRAVIS_TAG=$(git rev-parse --abbrev-ref HEAD | grep -Po '(?<=tmp\-)([a-z0-9\.]+)')
   #  docker tag selenium:latest elgalu/selenium:${TRAVIS_TAG}
   # Cleanup:
