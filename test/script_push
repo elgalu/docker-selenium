@@ -131,7 +131,7 @@ update_changelog() {
     || die "while trying to get TBD_GECKO_DRIVER"
   TBD_CHROMEDRIVER_COMMIT=$(docker exec grid chromedriver_commit_version) \
     || die "while trying to get TBD_CHROMEDRIVER_COMMIT"
-  TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox-for-sel-3_version) \
+  TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox_version) \
     || die "while trying to get TBD_FIREFOX_FOR_SEL3"
   TBD_SELENIUM_3_VERSION=$(docker exec grid selenium_version) \
     || die "while trying to get TBD_SELENIUM_3_VERSION"

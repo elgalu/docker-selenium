@@ -7,7 +7,6 @@ google-chrome-stable --version
 
 echo "firefox_version=$(firefox_version)"
 firefox --version
-echo "firefox-for-sel-3_version=$(firefox-for-sel-3_version)"
 
 echo "chromedriver_version=$(chromedriver_version)"
 chromedriver --version
