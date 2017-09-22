@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## 3.5.3-p3
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.5.3-p2...3.5.3-p3 (2017-09-22)
     + Upgrade Chrome patch to 61.0.3163.100
+    + Fix cannot touch /var/log/cont/docker-selenium-status.log Permission denied
  + **Image tag details:**
     + Selenium version: 3.5.3 (a88d25fe6b)
     + Chrome stable:  61.0.3163.100
