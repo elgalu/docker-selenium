@@ -3,7 +3,7 @@
 # set -e: exit asap if a command exits with a non-zero status
 set -e
 
-echoerr() { printf "%s\n" "$*" >&3; }
+echoerr() { printf "%s\n" "$*" >&2; }
 
 # print error and exit
 die () {
@@ -18,13 +18,34 @@ if [ -f /var/run/secrets/kubernetes.io/serviceaccount/token ]; then
   export USE_KUBERNETES=true
 fi
 
+# Let's stop using sudo in K8s environments
+if [ "${REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING}" == "true" ]; then
+  # This doesn't seem to work unless you logout:
+  #  sudo gpasswd -d seluser sudo
+  sudo rm $(which sudo)
+  if sudo pwd >/dev/null 2>&1; then
+    die "Somehow we still have sudo access despite having removed it. Quitting. $(sudo pwd)"
+  fi
+fi
+
+# Flag to know if we have sudo acess
+if sudo pwd >/dev/null 2>&1; then
+  export WE_HAVE_SUDO_ACCESS="true"
+else
+  export WE_HAVE_SUDO_ACCESS="false"
+fi
+
 #==============================================
 # Java blocks until kernel have enough entropy
 # to generate the /dev/random seed
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
 # Added a non-sudo conditional so this works on non-sudo environments like K8s
-(sudo haveged) || haveged
+if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+  sudo haveged
+else
+  haveged || true
+fi
 
 # Workaround that might help to get dbus working in docker
 #  http://stackoverflow.com/a/38355729/511069
@@ -33,18 +54,21 @@ fi
 #  - this works generates errors: DBUS_SESSION_BUS_ADDRESS="/dev/null"
 #  - this gives less erros: DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null"
 # Added a non-sudo conditional so this works on non-sudo environments like K8s
-(sudo rm -f /var/lib/dbus/machine-id) || (rm -f /var/lib/dbus/machine-id) || true
-(sudo mkdir -p /var/run/dbus) || (mkdir -p /var/run/dbus) || true
-(sudo service dbus restart >dbus_service.log) || (service dbus restart >dbus_service.log) || true
-# Test dbus works
-(service dbus status >dbus_service_status.log) || true
-export $(dbus-launch) || true
-export NSS_USE_SHARED_DB=ENABLED
-# echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
-#=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
-# echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
-#=> e.g. DBUS_SESSION_BUS_PID=44
-#
+if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+  sudo rm -f /var/lib/dbus/machine-id
+  sudo mkdir -p /var/run/dbus
+  sudo service dbus restart >dbus_service.log
+
+  # Test dbus works
+  service dbus status >dbus_service_status.log
+  export $(dbus-launch)
+  export NSS_USE_SHARED_DB=ENABLED
+  # echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
+  #=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
+  # echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
+  #=> e.g. DBUS_SESSION_BUS_PID=44
+fi
+
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`
 stop >/dev/null 2>&1 || true
@@ -194,6 +218,10 @@ elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   fi
 fi
 
+if [ "${SELENIUM_NODE_CH_PORT}" == "" ]; then
+  die "SELENIUM_NODE_CH_PORT is empty"
+fi
+
 if [ "${SELENIUM_NODE_FF_PORT}" = "0" ]; then
   export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
 elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
@@ -201,6 +229,10 @@ elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ]; then
   if [ "${SELENIUM_NODE_FF_PORT}" = "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
     export SELENIUM_NODE_FF_PORT=$(get_unused_port_from_range ${RANDOM_PORT_FROM} ${RANDOM_PORT_TO})
   fi
+fi
+
+if [ "${SELENIUM_NODE_FF_PORT}" == "" ]; then
+  die "SELENIUM_NODE_FF_PORT is empty"
 fi
 
 if [ "${SELENIUM_MULTINODE_PORT}" = "0" ]; then
@@ -287,17 +319,18 @@ fi
 
 # -ge # greater than or equal
 if [ "${SELENIUM_NODE_CH_PORT}" -ge "40000" ] && \
-   [ "${SELENIUM_NODE_CH_PORT}" != "${DEFAULT_SELENIUM_NODE_CH_PORT}" ];then
+   [ "${SELENIUM_NODE_CH_PORT}" != "${DEFAULT_SELENIUM_NODE_CH_PORT}" ]; then
     SELENIUM_FIRST_NODE_PORT=${SELENIUM_NODE_CH_PORT}
 fi
 
-if [ "${SELENIUM_NODE_FF_PORT}" -ge "40000" ] && \
-   [ "${SELENIUM_NODE_FF_PORT}" != "${DEFAULT_SELENIUM_NODE_FF_PORT}" ];then
+if [ "${SELENIUM_NODE_FF_PORT}" -ge "40000" ]; then
+  if [ "${SELENIUM_NODE_FF_PORT}" != "${DEFAULT_SELENIUM_NODE_FF_PORT}" ]; then
     export SELENIUM_FIRST_NODE_PORT=${SELENIUM_NODE_FF_PORT}
+  fi
 fi
 
 if [ "${SELENIUM_MULTINODE_PORT}" -ge "40000" ] && \
-   [ "${SELENIUM_MULTINODE_PORT}" != "${DEFAULT_SELENIUM_MULTINODE_PORT}" ];then
+   [ "${SELENIUM_MULTINODE_PORT}" != "${DEFAULT_SELENIUM_MULTINODE_PORT}" ]; then
     export SELENIUM_FIRST_NODE_PORT=${SELENIUM_MULTINODE_PORT}
 fi
 
@@ -366,13 +399,13 @@ ga_track_start () {
 
 #--------------------------------
 # Improve etc/hosts and fix dirs
-if [ "${USE_KUBERNETES}" == "false" ]; then
+if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
   sudo improve_etc_hosts.sh
 fi
 
 #-------------------------
 # Docker alongside docker
-if [ "${USE_KUBERNETES}" == "false" ]; then
+if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
   docker_alongside_docker.sh
 fi
 
@@ -380,7 +413,7 @@ fi
 # Fix small tiny 64mb shm issue
 #-------------------------------
 # https://github.com/elgalu/docker-selenium/issues/20
-if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ] && [ "${USE_KUBERNETES}" == "false" ]; then
+if [ "${SHM_TRY_MOUNT_UNMOUNT}" = "true" ] && [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
   sudo umount /dev/shm || true
   sudo mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=${SHM_SIZE} \
     tmpfs /dev/shm || true

@@ -44,7 +44,6 @@ trap shutdown SIGTERM SIGINT SIGKILL
 # Redirecting to >/dev/null until https://github.com/LibVNC/x11vnc/issues/14
 export VNC_PID="9999"
 function start_vnc() {
-  # rm -f ${VNC_TRYOUT_OUT_LOG}.${VNC_PORT}.log ${VNC_TRYOUT_ERR_LOG}.${VNC_PORT}.log
   # http://stackoverflow.com/a/21028200/511069
   x11vnc ${VNC_CLI_OPTS} \
     -rfbport ${VNC_PORT} \

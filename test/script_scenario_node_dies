@@ -86,6 +86,7 @@ fi
 
 echo "#================================================="
 echo "# Scenario 3b [node_dies]: Dies by killing Firefox"
+echo "#   + REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING=true"
 echo "#================================================="
 
 # Ensure clean env
@@ -95,7 +96,7 @@ docker rm -vf grid_mock || true
 # Create container for Firefox
 docker run --name=mynodes -d \
   -v /dev/shm:/dev/shm \
-  --privileged \
+  -e REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING=true \
   -e CHROME=false -e CI \
   -e SELENIUM_NODE_FF_PORT -p ${SELENIUM_NODE_FF_PORT}:${SELENIUM_NODE_FF_PORT} \
   selenium
