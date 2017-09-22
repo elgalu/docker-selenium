@@ -593,12 +593,12 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="61.0.3163.91" \
+ENV CHROME_VERSION_TRIGGER="61.0.3163.100" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium_chrome_version "61.0.3163.91"
+LABEL selenium_chrome_version "61.0.3163.100"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
@@ -981,6 +981,18 @@ RUN mkdir -p /home/seluser/.vnc \
   && sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
   && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
   && echo ""
+
+# Moved from entry.sh
+ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
+    DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log" \
+    VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr" \
+    VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
+
+RUN  touch ${SUPERVISOR_PIDFILE} \
+  && touch ${DOCKER_SELENIUM_STATUS} \
+  && touch ${VNC_TRYOUT_ERR_LOG} \
+  && touch ${VNC_TRYOUT_OUT_LOG} \
+  && sudo chown -R seluser:seluser ${LOGS_DIR}
 
 # Include current version
 COPY VERSION /home/seluser/

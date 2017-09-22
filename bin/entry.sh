@@ -80,13 +80,6 @@ fi
 
 echo "-- INFO: Using Selenium.....: ${SEL_VER}"
 
-# export PATH="${PATH}:${BIN_UTILS}"
-export SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid"
-export DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log"
-export VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr"
-export VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
-touch ${DOCKER_SELENIUM_STATUS}
-
 # We recalculate screen dimensions because docker run supports changing them
 export SCREEN_DEPTH="${SCREEN_MAIN_DEPTH}+${SCREEN_SUB_DEPTH}"
 export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
