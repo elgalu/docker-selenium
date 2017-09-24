@@ -42,7 +42,7 @@ fi
 # See: SeleniumHQ/docker-selenium/issues/14
 # Added a non-sudo conditional so this works on non-sudo environments like K8s
 if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
-  sudo haveged
+  sudo -E haveged
 else
   haveged || true
 fi
@@ -111,6 +111,18 @@ export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
 # These values are only available when the container started
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
+
+# if [ "${DOCKER_HOST_IP}" == "" ] || [[ ${DOCKER_HOST_IP} == 127* ]]; then
+#   # TODO: Try with an alternative method
+#   # die "DOCKER_HOST_IP is '${DOCKER_HOST_IP}'"
+#   # export DOCKER_HOST_IP=$(ip route show | awk '/default/ {print $3}')
+# fi
+
+# if [ "${CONTAINER_IP}" == "" ] || [[ ${CONTAINER_IP} == 127* ]]; then
+#   # TODO: Try with an alternative method
+#   # die "CONTAINER_IP is '${CONTAINER_IP}'"
+#   # export CONTAINER_IP=$(hostname -i)
+# fi
 
 # Common capabilities for both nodes (Chrome/Firefox)
 export COMMON_CAPS="maxInstances=${MAX_INSTANCES}"
@@ -400,7 +412,7 @@ ga_track_start () {
 #--------------------------------
 # Improve etc/hosts and fix dirs
 if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
-  sudo improve_etc_hosts.sh
+  sudo -E improve_etc_hosts.sh
 fi
 
 #-------------------------
@@ -463,6 +475,9 @@ echo "${CUSTOM_SELENIUM_NODE_PROXY_PARAMS}" > CUSTOM_SELENIUM_NODE_PROXY_PARAMS
 echo "${CUSTOM_SELENIUM_NODE_REGISTER_CYCLE}" > CUSTOM_SELENIUM_NODE_REGISTER_CYCLE
 echo "${USE_KUBERNETES}" > USE_KUBERNETES
 echo "${XMANAGER}" > XMANAGER
+echo "${DOCKER_HOST_IP}" > DOCKER_HOST_IP
+echo "${CONTAINER_IP}" > CONTAINER_IP
+echo "${WE_HAVE_SUDO_ACCESS}" > WE_HAVE_SUDO_ACCESS
 echo "${GRID}" > GRID
 
 # Open a new file descriptor that redirects to stdout:
