@@ -7,28 +7,28 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
+## 3.5.3-p5
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-09-24)
     + Fix DOCKER_HOST_IP and CONTAINER_IP (in OSX use docker.for.mac.localhost) #177
  + **Image tag details:**
-    + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
-    + Chrome stable:  TBD_CHROME_STABLE
-    + Firefox stable: TBD_FIREFOX_FOR_SEL3
-    + Geckodriver: TBD_GECKO_DRIVER
-    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-    + Timezone: TBD_TIME_ZONE
-    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-    + Python: TBD_PYTHON_VERSION
+    + Selenium version: 3.5.3 (a88d25fe6b)
+    + Chrome stable:  61.0.3163.100
+    + Firefox stable: 55.0.3
+    + Geckodriver: 0.19.0
+    + Chromedriver: 2.32.498513 (2c63aa53b2c658de596ed550eb5267ec5967b351)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170915
+    + Python: 3.5.2
     + Tested on kernel dev host: 4.4.0-96-generic x86_64
-    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at dev host with: Docker version 17.07.0-ce, build 8784753
-    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at dev host with: Docker Compose version 1.14.0, build c7bdf9e
-    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-    + Image size: TBD_IMAGE_SIZE
-    + Digest: TBD_DIGEST
-    + Image ID: TBD_IMAGE_ID
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.44 GB
+    + Digest: sha256:5f1d733776af585c92eb7bc2657c27bbb865aac49529a4e75e2a5bafa087c017
+    + Image ID: sha256:2470cd7891b41b222da3c5bb3b67d2b498908f62bdf660993d32a65f37149991
 
 ## 3.5.3-p4
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.5.3-p3...3.5.3-p4 (2017-09-22)
