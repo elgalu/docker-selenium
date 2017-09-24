@@ -86,3 +86,23 @@ fi
 docker exec grid errors || true
 docker cp grid:/test/console.png ./images/grid3_console.png
 docker cp grid:/capabilities.json .
+
+echo "#=================================================="
+echo "# Scenario 1c [basic]: Make sure guest.docker works"
+echo "#=================================================="
+
+docker exec grid curl localhost:24444/grid/console
+docker exec grid curl d.guest.loc.dev:24444/grid/console
+docker exec grid curl guest.docker:24444/grid/console
+
+echo "#======================================================"
+echo "# Scenario 1d [basic]: Make sure host.docker works #177"
+echo "#======================================================"
+docker run -d -t --name=basic_webserver \
+  -p 8710:80 \
+  nginx
+
+docker attach basic_webserver &
+
+docker exec grid curl d.host.loc.dev:8710
+docker exec grid curl host.docker:8710
