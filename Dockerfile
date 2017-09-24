@@ -369,11 +369,13 @@ RUN apt-get -qqy update \
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
+# xfce4-notifyd adds 5mb but allows `notify-send` notifications
 # Layer size: small: 9.659 MB
 # Layer size: small: 6.592 MB (with --no-install-recommends)
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     fluxbox \
+    xfce4-notifyd \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get -qyy clean
 
