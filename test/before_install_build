@@ -11,3 +11,17 @@ docker-compose --version
 
 docker build -t selenium .
 docker images selenium
+
+if [ "${TRAVIS_BUILD_NUMBER}" != "" ]; then
+  # Let's push this image to re-use it in TravisCI stages
+  # in order to speed up the build
+  docker tag selenium:latest elgalu/build_selenium:${TRAVIS_BUILD_NUMBER}
+
+  [ "${DOCKER_USERNAME}" == "" ] && die "Need env var DOCKER_USERNAME to push to docker"
+  [ "${DOCKER_PASSWORD}" == "" ] && die "Need env var DOCKER_PASSWORD to push to docker"
+
+  docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+  echo "Logged in to docker with user '${DOCKER_USERNAME}'"
+
+  docker push elgalu/build_selenium:${TRAVIS_BUILD_NUMBER}
+fi
