@@ -6,12 +6,12 @@ For pull requests or local commits:
     git checkout -b tmp-`cat VERSION`
     time (./test/bef && ./test/script_start && ./test/script_archive)
     open ./images/grid3_console.png && open ./videos/mobile_emulation/*.mp4
-    docker exec grid versions && ./test/after_script && git checkout scm-source.json
+    git checkout scm-source.json && docker exec grid versions && ./test/after_script
     #git add ... git commit ... git push ... open pull request
 
 For repository owners only:
 
-    git commit -m "Upgrade Chrome patch to 61.0.3163.100"
+    git commit -m "Fix DOCKER_HOST_IP and CONTAINER_IP (in OSX use docker.for.mac.localhost) #177"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK

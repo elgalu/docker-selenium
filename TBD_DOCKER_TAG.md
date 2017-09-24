@@ -11,9 +11,9 @@
     + Timezone: TBD_TIME_ZONE
     + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
     + Python: TBD_PYTHON_VERSION
-    + Tested on kernel dev host: 4.4.0-93-generic x86_64
+    + Tested on kernel dev host: 4.4.0-96-generic x86_64
     + Tested on kernel CI  host: TBD_HOST_UNAME
-    + Built at dev host with: Docker version 17.05.0-ce, build 89658be
+    + Built at dev host with: Docker version 17.07.0-ce, build 8784753
     + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
     + Built at dev host with: Docker Compose version 1.14.0, build c7bdf9e
     + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
