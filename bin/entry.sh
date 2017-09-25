@@ -33,6 +33,7 @@ if sudo pwd >/dev/null 2>&1; then
   export WE_HAVE_SUDO_ACCESS="true"
 else
   export WE_HAVE_SUDO_ACCESS="false"
+  warn "We don't have sudo"
 fi
 
 #==============================================
@@ -71,9 +72,18 @@ fi
 
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`
+log "Stopping supervisord to support docker restart..."
 stop >/dev/null 2>&1 || true
-rm -f ${LOGS_DIR}/*
-rm -f ${RUN_DIR}/*
+
+if ! rm -f ${LOGS_DIR}/* ; then
+  warn "The container has just started yet we already don't have write access to ${LOGS_DIR}/*"
+  ls -la ${LOGS_DIR}/ || true
+fi
+
+if ! rm -f ${RUN_DIR}/* ; then
+  warn "The container has just started yet we already don't have write access to ${RUN_DIR}/*"
+  ls -la ${RUN_DIR}/ || true
+fi
 
 #---------------------
 # Fix/extend ENV vars
