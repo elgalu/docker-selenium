@@ -39,7 +39,6 @@ else
   bash -c 'ls -la /var/log/cont/*' || true
   echo "" && echo "" && echo "==> errors <=="
   bash -c 'errors' || true
-  # bash -c "grep -v webSocketsHandshake /var/log/cont/vnc-tryouts-stderr*.log"
 
   die "
    Your docker-selenium didn't start properly.

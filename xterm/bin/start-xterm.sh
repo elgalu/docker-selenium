@@ -79,13 +79,6 @@ if [ "${VIDEO}" = "true" ]; then
   start-video &
 fi
 
-# TODO: Re enable shutdown at some point. But fails when
-# we have little ports available (corner case but fails)
-# if ! timeout --foreground ${WAIT_TIMEOUT} wait-vnc.sh; then
-#   bash -c "grep -v webSocketsHandshake ${VNC_TRYOUT_ERR_LOG}*.log" 1>&2
-#   shutdown "Failed while waiting for VNC to start!"
-# fi
-
 # Help at http://supervisord.org/subprocess.html#process-states
 echo "Checking process-states through supervisorctl status"
 if ! supervisorctl -c /etc/supervisor/supervisord.conf \
