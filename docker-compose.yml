@@ -32,9 +32,9 @@ services:
     depends_on:
       - hub
     ports:
-      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5901
+      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5900
       - 5900:25900
-      # noVNC: See what's going on by hitting http://0.0.0.0:6081 in your browser
+      # noVNC: See what's going on by hitting http://0.0.0.0:6080 in your browser
       - 6080:26080
     volumes:
       - /dev/shm:/dev/shm
@@ -58,10 +58,10 @@ services:
     depends_on:
       - hub
     ports:
-      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5900
-      - 5901:25901
-      # noVNC: See what's going on by hitting http://0.0.0.0:6080 in your browser
-      - 6081:26081
+      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5901
+      - 5901:25900
+      # noVNC: See what's going on by hitting http://0.0.0.0:6081 in your browser
+      - 6081:26080
     volumes:
       - /dev/shm:/dev/shm
     privileged: true
