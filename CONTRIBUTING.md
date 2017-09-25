@@ -11,7 +11,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "CI: Re-use the built docker image between stages"
+    git commit -m "Add WARN upon failure while removing LOGS_DIR or RUN_DIR #177"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
