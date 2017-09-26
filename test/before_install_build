@@ -7,8 +7,14 @@ set -xe
 docker --version
 docker-compose --version
 
-./host-scripts/gen-scm-source.sh
+if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
+      ${TRAVIS_PULL_REQUEST_SLUG} != ${TRAVIS_REPO_SLUG} && \
+      ${TRAVIS_PULL_REQUEST} != "false" ]]; then
+  echo "WARN: External PRs are untrusted by default therefore we need can't reuse and push the image"
+  exit 0
+fi
 
+./host-scripts/gen-scm-source.sh
 docker build -t selenium .
 docker images selenium
 

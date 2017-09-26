@@ -19,6 +19,15 @@ docker-compose --version
 
 [ "${TRAVIS_BUILD_NUMBER}" == "" ] && die "Need env var TRAVIS_BUILD_NUMBER to know where to pull from"
 
-docker pull elgalu/build_selenium:${TRAVIS_BUILD_NUMBER}
-docker tag elgalu/build_selenium:${TRAVIS_BUILD_NUMBER} selenium:latest
+if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
+      ${TRAVIS_PULL_REQUEST_SLUG} != ${TRAVIS_REPO_SLUG} && \
+      ${TRAVIS_PULL_REQUEST} != "false" ]]; then
+  echo "WARN: External PRs are untrusted by default therefore we need can't reuse and pull the image so building it from scratch..."
+  ./host-scripts/gen-scm-source.sh
+  docker build -t selenium .
+else
+  docker pull elgalu/build_selenium:${TRAVIS_BUILD_NUMBER}
+  docker tag elgalu/build_selenium:${TRAVIS_BUILD_NUMBER} selenium:latest
+fi
+
 docker images selenium
