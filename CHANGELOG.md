@@ -9,7 +9,6 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.5.3-p8...3.5.3-p9 (TBD_DATE)
-    + Tests: Upgrade python bindings from 3.5.0 to selenium==3.6.0
     + Tests: CI: Add logic for untrusted PRs
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
