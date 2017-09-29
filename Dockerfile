@@ -550,6 +550,11 @@ USER seluser
 # Regarding the pip packages, see released versions at:
 #  https://github.com/mozilla/mozdownload/releases
 
+#=============================
+# sudo by default from now on
+#=============================
+USER root
+
 ENV FF_LANG="en-US" \
     FF_BASE_URL="https://archive.mozilla.org/pub" \
     FF_PLATFORM="linux-x86_64" \
@@ -560,19 +565,16 @@ ENV FF_LANG="en-US" \
 ENV FF_VER="56.0"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
-RUN  wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
+RUN cd /opt \
+  && wget -nv "${FF_URL}" -O "firefox.tar.bz2" \
   && bzip2 -d "firefox.tar.bz2" \
   && tar xf "firefox.tar" \
   && rm "firefox.tar" \
-  && mv firefox firefox-for-sel-3 \
-  && sudo ln -fs /home/seluser/firefox-for-sel-3/firefox /usr/bin/firefox
+  && ln -fs /opt/firefox/firefox /usr/bin/firefox \
+  && chown -R seluser:seluser /opt/firefox \
+  && chmod -R 777 /opt/firefox
 
 LABEL selenium_firefox_version "56.0"
-
-#=============================
-# sudo by default from now on
-#=============================
-USER root
 
 #============
 # GeckoDriver
@@ -624,7 +626,8 @@ COPY lib/* /usr/lib/
 # Use a custom wallpaper for Fluxbox
 COPY images/wallpaper-dosel.png /usr/share/images/fluxbox/ubuntu-light.png
 COPY images/wallpaper-zalenium.png /usr/share/images/fluxbox/
-RUN chown -R seluser:seluser /usr/share/images/fluxbox/
+RUN chown -R seluser:seluser /usr/share/images/fluxbox/ \
+ && chmod -R 777 /usr/share/images/fluxbox
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -960,6 +963,15 @@ COPY images ./images
 COPY LICENSE.md /home/seluser/
 COPY Analytics.md /home/seluser/
 
+# Include current version
+COPY VERSION /home/seluser/
+
+# Moved from entry.sh
+ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
+    DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log" \
+    VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr" \
+    VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
+
 #===================================
 # Fix dirs (again) and final chores
 #===================================
@@ -977,21 +989,8 @@ RUN mkdir -p /home/seluser/.vnc \
   && sudo mkdir -p ${LOGS_DIR} \
   && sudo mkdir -p ${RUN_DIR} \
   && sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
+  && sudo fixperms.sh \
   && echo ""
-
-# Moved from entry.sh
-ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
-    DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log" \
-    VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr" \
-    VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
-
-# Include current version
-COPY VERSION /home/seluser/
-
-######################################################################
-# Relaxing permissions for OpenShift and other non-sudo environments #
-######################################################################
-RUN sudo fixperms.sh
 
 #=====================================================
 # Meta JSON file to hold commit info of current build

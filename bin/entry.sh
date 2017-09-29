@@ -111,7 +111,7 @@ fi
 # Fix/extend ENV vars
 #---------------------
 export SELENIUM_JAR_PATH="/home/seluser/selenium-server-standalone-3.jar"
-export FIREFOX_DEST_BIN="/home/seluser/firefox-for-sel-3/firefox"
+export FIREFOX_DEST_BIN="/usr/bin/firefox"
 export DOSEL_VERSION=$(cat VERSION)
 export FIREFOX_VERSION=$(firefox_version)
 # CHROME_FLAVOR would allow to have separate installations for stable, beta, unstable

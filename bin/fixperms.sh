@@ -3,9 +3,13 @@
 # set +e: don't exit if a command exits with a non-zero status
 set +e
 
+######################################################################
+# Relaxing permissions for OpenShift and other non-sudo environments #
+######################################################################
+
 # List of directories in which we need to fix perms:
-DIR_LIST="/usr/share/images/fluxbox /var/lib/dbus /tmp /var/run /run /var/log /etc/supervisor"
-DIR_LIST="${DIR_LIST} /videos /test /home/seluser"
+DIR_LIST="/var/lib/dbus /tmp /var/run /run /var/log/cont /etc/supervisor"
+DIR_LIST="${DIR_LIST} /videos ${VIDEOS_DIR} /test /home/seluser"
 
 # Relaxing permissions for OpenShift and other non-sudo environments
 chmod 777 /etc/passwd
