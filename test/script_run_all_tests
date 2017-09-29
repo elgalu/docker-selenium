@@ -8,9 +8,9 @@ rm -rf ./videos
 ./test/script_bats
 
 # In Travis these ones require travis_retry
-# TODO: fix flakiness
 if [ "${CI}" != "true" ]; then
   ./test/script_scenario_basic
+  # ./test/script_scenario_arbitrary_uid
   ./test/script_scenario_restart
   ./test/script_scenario_node_dies
   ./test/script_scenario_make

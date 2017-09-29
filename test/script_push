@@ -27,7 +27,6 @@ docker_login_tag_push() {
   [ "${DOCKER_USERNAME}" == "" ] && die "Need env var DOCKER_USERNAME to push to docker"
   [ "${DOCKER_PASSWORD}" == "" ] && die "Need env var DOCKER_PASSWORD to push to docker"
 
-  # -e="$DOCKER_EMAIL"
   docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
   echo "Logged in to docker with user '${DOCKER_USERNAME}'"
   echo "docker tag and docker push using TRAVIS_TAG=${TRAVIS_TAG}"

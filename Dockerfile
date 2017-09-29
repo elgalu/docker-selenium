@@ -974,15 +974,9 @@ RUN mkdir -p /home/seluser/.vnc \
   && cp /capabilities.json /home/seluser/caps \
   && mkdir -p ${VIDEOS_DIR} \
   && sudo ln -s ${VIDEOS_DIR} /videos \
-  && sudo chown seluser:seluser /videos \
   && sudo mkdir -p ${LOGS_DIR} \
-  && sudo chown -R seluser:seluser ${LOGS_DIR} \
   && sudo mkdir -p ${RUN_DIR} \
-  && sudo chown -R seluser:seluser ${RUN_DIR} \
-  && sudo chown -R seluser:seluser /etc/supervisor \
-  && sudo chown -R seluser:seluser /test \
   && sudo mkdir -p /tmp/.X11-unix /tmp/.ICE-unix \
-  && sudo chmod 1777 /tmp/.X11-unix /tmp/.ICE-unix \
   && echo ""
 
 # Moved from entry.sh
@@ -991,14 +985,13 @@ ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
     VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr" \
     VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
 
-RUN  touch ${SUPERVISOR_PIDFILE} \
-  && touch ${DOCKER_SELENIUM_STATUS} \
-  && touch ${VNC_TRYOUT_ERR_LOG} \
-  && touch ${VNC_TRYOUT_OUT_LOG} \
-  && sudo chown -R seluser:seluser ${LOGS_DIR}
-
 # Include current version
 COPY VERSION /home/seluser/
+
+######################################################################
+# Relaxing permissions for OpenShift and other non-sudo environments #
+######################################################################
+RUN sudo fixperms.sh
 
 #=====================================================
 # Meta JSON file to hold commit info of current build

@@ -28,6 +28,18 @@ if [ "${REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING}" == "true" ]; then
   fi
 fi
 
+CURRENT_UID="$(id -u)"
+CURRENT_GID="$(id -g)"
+
+# Ensure that assigned uid has entry in /etc/passwd.
+if [ ${CURRENT_UID} -ne 1000 ]; then
+  echo "${USER}:x:${CURRENT_UID}:${CURRENT_GID}:,,,:/home/seluser:/bin/bash" >> /tmp/passwd
+  # cat /etc/passwd | sed -e "s/^${USER}:/builder:/" > /tmp/passwd
+  cat /etc/passwd | sed -e "s/^${USER}:/seluser:/" > /tmp/passwd
+  cat /tmp/passwd > /etc/passwd
+  rm /tmp/passwd
+fi
+
 # Flag to know if we have sudo acess
 if sudo pwd >/dev/null 2>&1; then
   export WE_HAVE_SUDO_ACCESS="true"
@@ -36,6 +48,17 @@ else
   warn "We don't have sudo"
 fi
 
+# if [ ${CURRENT_UID} -ne 1000 ]; then
+#   if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+#     warn 1
+#     sudo groupadd --gid ${CURRENT_GID} selgroup
+#     warn 2
+#     sudo gpasswd -a ${USER} seluser
+#     warn 3
+#     sudo gpasswd -a ${USER} selgroup
+#   fi
+# fi
+
 #==============================================
 # Java blocks until kernel have enough entropy
 # to generate the /dev/random seed
@@ -43,6 +66,8 @@ fi
 # See: SeleniumHQ/docker-selenium/issues/14
 # Added a non-sudo conditional so this works on non-sudo environments like K8s
 if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+  # We found that, for better entropy, running haveged
+  # with --privileged and sudo here works more reliable
   sudo -E haveged
 else
   haveged || true
@@ -54,21 +79,18 @@ fi
 #  - still unclear if this helps: `-v /var/run/dbus:/var/run/dbus`
 #  - this works generates errors: DBUS_SESSION_BUS_ADDRESS="/dev/null"
 #  - this gives less erros: DBUS_SESSION_BUS_ADDRESS="unix:abstract=/dev/null"
-# Added a non-sudo conditional so this works on non-sudo environments like K8s
-if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
-  sudo rm -f /var/lib/dbus/machine-id
-  sudo mkdir -p /var/run/dbus
-  sudo service dbus restart >dbus_service.log
+rm -f /var/lib/dbus/machine-id
+mkdir -p /var/run/dbus
+service dbus restart >dbus_service.log
 
-  # Test dbus works
-  service dbus status >dbus_service_status.log
-  export $(dbus-launch)
-  export NSS_USE_SHARED_DB=ENABLED
-  # echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
-  #=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
-  # echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
-  #=> e.g. DBUS_SESSION_BUS_PID=44
-fi
+# Test dbus works
+service dbus status >dbus_service_status.log
+export $(dbus-launch)
+export NSS_USE_SHARED_DB=ENABLED
+# echo "-- INFO: DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}"
+#=> e.g. DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-APZO4BE4TJ,guid=6e9c098d053d3038cb0756ae57ecc885
+# echo "-- INFO: DBUS_SESSION_BUS_PID=${DBUS_SESSION_BUS_PID}"
+#=> e.g. DBUS_SESSION_BUS_PID=44
 
 #-----------------------------------------------
 # Perform cleanup to support `docker restart`

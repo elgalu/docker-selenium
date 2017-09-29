@@ -6,3 +6,6 @@ docker stop grid || true
 docker rm grid || true
 # quick destroy
 docker rm -vf grid_mock || true
+
+docker stop grid_x_user || true
+docker rm grid_x_user || true

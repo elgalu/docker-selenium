@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+function get_mock_ip() {
+  docker inspect -f='{{.NetworkSettings.IPAddress}}' grid_mock
+}
+
+set +x
+echo "#================================"
+echo "# Scenario 1e [basic]: Setup mock"
+echo "#================================"
+set -x
+
+docker rm -vf grid_mock || true
+
+export MOCK_SERVER_PORT=8280
+
+docker run -d -t --name=grid_mock -e MOCK_SERVER_PORT \
+  -p $MOCK_SERVER_PORT:$MOCK_SERVER_PORT \
+  elgalu/google_adwords_mock
+
+docker attach grid_mock &
+
+export MOCK_SERVER_HOST=$(get_mock_ip)
+
+while ! curl -s "http://localhost:${MOCK_SERVER_PORT}/adwords"; do
+  echo -n '.'
+  sleep 0.2
+done
+
+set +x
+echo "#======================================================================="
+echo "# Scenario 1e [basic]: Make sure it can run with an arbitrary uid number"
+echo "#======================================================================="
+set -x
+
+docker rm -vf grid_x_user || true
+
+docker run --name=grid_x_user -d -e VIDEO=true \
+  -e MOCK_SERVER_HOST \
+  -e MOCK_SERVER_PORT \
+  -e CI \
+  -v /dev/shm:/dev/shm \
+  -u 1000060000:1000060000 \
+  selenium
+
+docker logs grid_x_user
+docker attach grid_x_user &
+
+docker exec grid_x_user wait_all_done 70s
+docker exec grid_x_user versions
+docker exec grid_x_user errors || true
+docker logs grid_x_user
+
+if ! docker exec -t grid_x_user run_test; then
+  docker logs grid_x_user
+  docker exec grid_x_user errors || true
+  exit 103
+fi
+
+# Test videos
+docker exec grid_x_user stop-video
+docker logs grid_x_user
+docker exec -t grid_x_user log "-- DEBUG: video-rec-stdout.log ----"
+docker exec -t grid_x_user tail -n 40 /var/log/cont/video-rec-stdout.log || true
+docker exec -t grid_x_user log "-- DEBUG: video-rec-stderr.log ----"
+docker exec -t grid_x_user tail -n 40 /var/log/cont/video-rec-stderr.log || true
+
+set +x
+echo "#============================================================================="
+echo "# Scenario 1f [basic]: arbitrary uid + REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING"
+echo "#============================================================================="
+set -x
+
+docker stop grid_x_user
+docker rm grid_x_user
+
+docker run --name=grid_x_user -d -e VIDEO=true \
+  -e MOCK_SERVER_HOST \
+  -e MOCK_SERVER_PORT \
+  -e REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING=true \
+  -e CI \
+  -v /dev/shm:/dev/shm \
+  -u 1000060000:1000060000 \
+  selenium
+
+docker logs grid_x_user
+docker attach grid_x_user &
+
+docker exec grid_x_user wait_all_done 70s
+docker exec grid_x_user versions
+docker exec grid_x_user errors || true
+docker logs grid_x_user
+
+if ! docker exec -t grid_x_user run_test; then
+  docker logs grid_x_user
+  docker exec grid_x_user errors || true
+  exit 103
+fi
+
+# Test videos
+docker exec grid_x_user stop-video
+docker logs grid_x_user
+docker exec -t grid_x_user log "-- DEBUG: video-rec-stdout.log ----"
+docker exec -t grid_x_user tail -n 40 /var/log/cont/video-rec-stdout.log || true
+docker exec -t grid_x_user log "-- DEBUG: video-rec-stderr.log ----"
+docker exec -t grid_x_user tail -n 40 /var/log/cont/video-rec-stderr.log || true

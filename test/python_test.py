@@ -89,7 +89,7 @@ if args.browser == 'firefox':
             }
 
 # http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
-print ("%s %s - (01/14) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
+print ("%s %s - (01/15) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
 driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
 time.sleep(msleep)
 
@@ -160,11 +160,11 @@ pageurl = ("http://%s:%s/adwords" % (page_host, page_port))
 
 @retry(stop_max_attempt_number=20, stop_max_delay=40100, wait_fixed=300)
 def open_web_page():
-    print ("%s %s - (02/14) Opening page %s" % (datetime.datetime.utcnow(), longId, pageurl))
+    print ("%s %s - (02/15) Opening page %s" % (datetime.datetime.utcnow(), longId, pageurl))
     driver.get(pageurl)
     time.sleep(msleep)
-    print ("%s %s - (03/14) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
-    print ("%s %s - (04/14) Asserting 'Google Adwords' in driver.title" % (datetime.datetime.utcnow(), longId))
+    print ("%s %s - (03/15) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
+    print ("%s %s - (04/15) Asserting 'Google Adwords' in driver.title" % (datetime.datetime.utcnow(), longId))
     assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
 
 open_web_page()
@@ -172,12 +172,12 @@ open_web_page()
 @retry(stop_max_attempt_number=12, stop_max_delay=5000, wait_fixed=300)
 def mobile_emulation_get_costs():
     pageurl = ("http://%s:%s/adwords/costs" % (page_host, page_port))
-    print ("%s %s - (04/14) mobile_emulation test: Opening page %s" % (datetime.datetime.utcnow(), longId, pageurl))
+    print ("%s %s - (04/15) mobile_emulation test: Opening page %s" % (datetime.datetime.utcnow(), longId, pageurl))
     driver.get(pageurl)
 
 @retry(stop_max_attempt_number=40, stop_max_delay=40100, wait_fixed=300)
 def click_kosten():
-    print ("%s %s - (04/14) Click link 'Kosten'" % (datetime.datetime.utcnow(), longId))
+    print ("%s %s - (04/15) Click link 'Kosten'" % (datetime.datetime.utcnow(), longId))
     assert is_element_present(By.LINK_TEXT, "Kosten")
     link = driver.find_element_by_link_text('Kosten')
     assert link.is_displayed()
@@ -202,22 +202,25 @@ time.sleep(msleep)
 
 @retry(stop_max_attempt_number=20, stop_max_delay=40100, wait_fixed=300)
 def assert_at_costs_page():
-    print ("%s %s - (05/14) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
-    print ("%s %s - (06/14) Asserting 'Kosten' in driver.title" % (datetime.datetime.utcnow(), longId))
+    print ("%s %s - (05/15) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
+    print ("%s %s - (06/15) Asserting 'Kosten' in driver.title" % (datetime.datetime.utcnow(), longId))
     assert "Kosten von Google AdWords | Google AdWords" in driver.title
 
 assert_at_costs_page()
 
+print ("%s %s - (13/15) Will driver.maximize_window()" % (datetime.datetime.utcnow(), longId))
+driver.maximize_window()
+
 @retry(stop_max_attempt_number=40, stop_max_delay=40100, wait_fixed=300)
 def assert_overview_page():
-    print ("%s %s - (07/14) Go back to home page" % (datetime.datetime.utcnow(), longId))
+    print ("%s %s - (07/15) Go back to home page" % (datetime.datetime.utcnow(), longId))
     assert is_element_present(By.LINK_TEXT, 'Übersicht')
     link = driver.find_element_by_link_text('Übersicht')
     assert link.is_displayed()
     link.click()
     time.sleep(msleep)
-    print ("%s %s - (10/14) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
-    print ("%s %s - (11/14) Asserting 'Google (PPC)' in driver.title" % (datetime.datetime.utcnow(), longId))
+    print ("%s %s - (10/15) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
+    print ("%s %s - (11/15) Asserting 'Google (PPC)' in driver.title" % (datetime.datetime.utcnow(), longId))
     assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
     time.sleep(msleep)
 
@@ -225,10 +228,10 @@ if args.browser != 'mobile_emulation':
     assert_overview_page()
 
 # https://github.com/mozilla/geckodriver/issues/957
-# print ("%s %s - (12/14) Test done - will driver.close()" % (datetime.datetime.utcnow(), longId))
+# print ("%s %s - (12/15) Test done - will driver.close()" % (datetime.datetime.utcnow(), longId))
 # driver.close()
 # time.sleep(msleep)
 
-print ("%s %s - (13/14) Test done - will driver.quit()" % (datetime.datetime.utcnow(), longId))
+print ("%s %s - (14/15) Test done - will driver.quit()" % (datetime.datetime.utcnow(), longId))
 driver.quit()
-print ("%s %s - (14/14) All done. SUCCESS! - DONE driver.quit()" % (datetime.datetime.utcnow(), longId))
+print ("%s %s - (15/15) All done. SUCCESS! - DONE driver.quit()" % (datetime.datetime.utcnow(), longId))

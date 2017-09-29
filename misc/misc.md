@@ -3,7 +3,10 @@ Miscellaneous internal notes, do not read!
 ## Build
 
     time (docker build -t selenium . ;echo $?;beep)
-    docker run --rm -ti --name=grid --privileged -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e CHROME=false -e FIREFOX=false --shm-size=1g selenium
+    docker run --rm -ti --name=grid --privileged -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e CHROME=true -e FIREFOX=true -e DEBUG=bash --shm-size=1g selenium
+
+### Uid
+    docker run --rm -ti -u 1000060000:1000060000 --name=grid --privileged -e SELENIUM_HUB_PORT=4444 -p=4444:4444 -p=5900:25900 -e VIDEO=true -e CHROME=false -e FIREFOX=false --shm-size=1g selenium
 
 ### Wait
 Wait and get versions

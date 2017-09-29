@@ -4,33 +4,28 @@
 # set -x: print each command right before it is executed
 set -xe
 
-echo "#==================================================================="
-echo "# Scenario 1a [basic]: SETUP: Run tests right after the cont started"
-echo "#==================================================================="
+set +x
+echo "#================================"
+echo "# Scenario 1a [basic]: Setup mock"
+echo "#================================"
+set -x
 
 [ -z "${ADDED_TEST_SLEEP}" ] && export ADDED_TEST_SLEEP="0.5"
 
 docker tag selenium:latest elgalu/selenium:latest
 
-# Ensure clean env
-docker rm -vf grid || true
 # Some dummy log files
 rm -rf **/*"conflicted copy"*.log
 
-function get_mock_port() {
-  echo $(docker inspect -f='{{(index (index .NetworkSettings.Ports "8280/tcp") 0).HostPort}}' grid_mock)
-}
+# function get_mock_port() {
+#   echo $(docker inspect -f='{{(index (index .NetworkSettings.Ports "8280/tcp") 0).HostPort}}' grid_mock)
+# }
 
 function get_mock_ip() {
-  #if [ "$(uname)" == 'Darwin' ]; then
-  #  echo "192.168.65.1"
-  #else
-    docker inspect -f='{{.NetworkSettings.IPAddress}}' grid_mock
-  #fi
+  docker inspect -f='{{.NetworkSettings.IPAddress}}' grid_mock
 }
 
-docker stop grid_mock || true
-docker rm grid_mock || true
+docker rm -vf grid_mock || true
 
 export MOCK_SERVER_PORT=8280
 
@@ -46,6 +41,14 @@ while ! curl -s "http://localhost:${MOCK_SERVER_PORT}/adwords"; do
   echo -n '.'
   sleep 0.2
 done
+
+set +x
+echo "#==================================================================="
+echo "# Scenario 1a [basic]: SETUP: Run tests right after the cont started"
+echo "#==================================================================="
+set -x
+
+docker rm -vf grid || true
 
 docker run --name=grid -d -e VIDEO=true \
   -e MOCK_SERVER_HOST \
@@ -73,9 +76,11 @@ docker exec -t grid tail -n 40 /var/log/cont/video-rec-stdout.log || true
 docker exec -t grid log "-- DEBUG: video-rec-stderr.log ----"
 docker exec -t grid tail -n 40 /var/log/cont/video-rec-stderr.log || true
 
+set +x
 echo "#==================================================================="
 echo "# Scenario 1b [basic]: Run tests right after the container started"
 echo "#==================================================================="
+set -x
 
 if ! docker exec -t grid run_test; then
   docker logs grid
@@ -87,17 +92,22 @@ docker exec grid errors || true
 docker cp grid:/test/console.png ./images/grid3_console.png
 docker cp grid:/capabilities.json .
 
+set +x
 echo "#=================================================="
 echo "# Scenario 1c [basic]: Make sure guest.docker works"
 echo "#=================================================="
+set -x
 
 docker exec grid curl localhost:24444/grid/console
 docker exec grid curl d.guest.loc.dev:24444/grid/console
 docker exec grid curl guest.docker:24444/grid/console
 
+set +x
 echo "#======================================================"
 echo "# Scenario 1d [basic]: Make sure host.docker works #177"
 echo "#======================================================"
+set -x
+
 BASIC_WEB_SERVER_PORT=8710
 
 docker stop basic_webserver || true

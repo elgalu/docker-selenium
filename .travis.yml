@@ -40,6 +40,11 @@ jobs:
         - travis_retry ./test/script_scenario_basic
         - travis_retry ./test/script_scenario_restart
 
+    # - env: test=scenario_arbitrary_uid
+    #   script:
+    #     - travis_retry ./test/before_install_pull
+    #     - travis_retry ./test/script_scenario_arbitrary_uid
+
     - env: test=scenario_node_dies
       script:
         - travis_retry ./test/before_install_pull
