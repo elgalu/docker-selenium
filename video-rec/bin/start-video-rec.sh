@@ -11,7 +11,11 @@ set -e
 
 # Remove the video file if exists
 # Added a non-sudo conditional so this works on non-sudo environments like K8s
-(sudo rm -f "${VIDEO_BASE_PATH}"*) || (rm -f "${VIDEO_BASE_PATH}"*)
+if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+  sudo rm -f "${VIDEO_BASE_PATH}"*
+else
+  rm -f "${VIDEO_BASE_PATH}"*
+fi
 
 # record testing video using password file
 # using sudo due to http://stackoverflow.com/questions/23544282/
@@ -32,8 +36,15 @@ export final_video_path="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION
 
 # Fix perms to be able to start ffmpeg without sudo
 # Added a non-sudo conditional so this works on non-sudo environments like K8s
-(sudo touch "${tmp_video_path}") || (touch "${tmp_video_path}")
-(sudo chown seluser:seluser "${tmp_video_path}") || (chown seluser:seluser "${tmp_video_path}") || true
+if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+  TMP_CUR_USER=$(whoami)
+  TMP_CUR_GROUP=$(id -g)
+  sudo touch "${tmp_video_path}"
+  sudo chown ${TMP_CUR_USER}:${TMP_CUR_GROUP} "${tmp_video_path}"
+  sudo chmod 666 "${tmp_video_path}"
+else
+  touch "${tmp_video_path}"
+fi
 
 # avconv or ffmpeg
 ffmpeg -f x11grab \

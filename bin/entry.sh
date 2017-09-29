@@ -18,26 +18,20 @@ if [ -f /var/run/secrets/kubernetes.io/serviceaccount/token ]; then
   export USE_KUBERNETES=true
 fi
 
-# Let's stop using sudo in K8s environments
-if [ "${REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING}" == "true" ]; then
-  # This doesn't seem to work unless you logout:
-  #  sudo gpasswd -d seluser sudo
-  sudo rm $(which sudo)
-  if sudo pwd >/dev/null 2>&1; then
-    die "Somehow we still have sudo access despite having removed it. Quitting. $(sudo pwd)"
-  fi
-fi
-
 CURRENT_UID="$(id -u)"
 CURRENT_GID="$(id -g)"
 
 # Ensure that assigned uid has entry in /etc/passwd.
-if [ ${CURRENT_UID} -ne 1000 ]; then
-  echo "${USER}:x:${CURRENT_UID}:${CURRENT_GID}:,,,:/home/seluser:/bin/bash" >> /tmp/passwd
-  # cat /etc/passwd | sed -e "s/^${USER}:/builder:/" > /tmp/passwd
-  cat /etc/passwd | sed -e "s/^${USER}:/seluser:/" > /tmp/passwd
-  cat /tmp/passwd > /etc/passwd
-  rm /tmp/passwd
+if ! whoami &> /dev/null; then
+  echo "extrauser:x:${CURRENT_UID}:0::/home/extrauser:/bin/bash" >> /etc/passwd
+fi
+
+# Tests if the container works without sudo access
+if [ "${REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING}" == "true" ]; then
+  sudo rm $(which sudo)
+  if sudo pwd >/dev/null 2>&1; then
+    die "Somehow we still have sudo access despite having removed it. Quitting. $(sudo pwd)"
+  fi
 fi
 
 # Flag to know if we have sudo acess
@@ -48,16 +42,13 @@ else
   warn "We don't have sudo"
 fi
 
-# if [ ${CURRENT_UID} -ne 1000 ]; then
-#   if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
-#     warn 1
-#     sudo groupadd --gid ${CURRENT_GID} selgroup
-#     warn 2
-#     sudo gpasswd -a ${USER} seluser
-#     warn 3
-#     sudo gpasswd -a ${USER} selgroup
-#   fi
-# fi
+if [ ${CURRENT_GID} -ne 1000 ]; then
+  if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
+    sudo groupadd --gid ${CURRENT_GID} selgroup
+    # sudo gpasswd -a ${USER} seluser
+    sudo gpasswd -a ${USER} selgroup
+  fi
+fi
 
 #==============================================
 # Java blocks until kernel have enough entropy
@@ -70,7 +61,7 @@ if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
   # with --privileged and sudo here works more reliable
   sudo -E haveged
 else
-  haveged || true
+  haveged
 fi
 
 # Workaround that might help to get dbus working in docker

@@ -156,8 +156,14 @@ RUN useradd seluser \
          --create-home \
   && usermod -a -G sudo seluser \
   && gpasswd -a seluser video \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
-  && echo 'seluser:secret' | chpasswd
+  && echo 'seluser:secret' | chpasswd \
+  && useradd extrauser \
+         --shell /bin/bash  \
+  && usermod -a -G sudo extrauser \
+  && gpasswd -a extrauser video \
+  && gpasswd -a extrauser seluser \
+  && echo 'extrauser:secret' | chpasswd \
+  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 #==============================
 # Java8 - OpenJDK JRE headless
