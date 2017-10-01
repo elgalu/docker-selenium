@@ -39,9 +39,11 @@ make cleanup
 make down
 docker rm -vf grid_hub_1 || true
 
+set +x
 echo "#==================================="
 echo "# Scenario 4b [make]: wget Makefile"
 echo "#==================================="
+set -x
 
 # Test clean directory
 if [ "${TRAVIS_PULL_REQUEST}" == "true" ]; then

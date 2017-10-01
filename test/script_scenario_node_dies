@@ -36,9 +36,11 @@ fi
 
 export MOCK_SERVER_PORT=8280
 
+set +x
 echo "#================================================="
 echo "# Scenario 3a [node_dies]: Dies by killing Chrome"
 echo "#================================================="
+set -x
 
 # Ensure clean env
 docker rm -vf mynodes || true
@@ -84,10 +86,12 @@ else
   die "Test failed for Chrome at $0 during curl"
 fi
 
+set +x
 echo "#================================================="
 echo "# Scenario 3b [node_dies]: Dies by killing Firefox"
 echo "#   + REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING=true"
 echo "#================================================="
+set -x
 
 # Ensure clean env
 docker rm -vf mynodes || true
@@ -132,10 +136,12 @@ else
   die "Test failed for Firefox at $0 during curl"
 fi
 
+set +x
 echo "#======================================================"
 echo "# Scenario 3c [node_dies]: Dies by killing a Multi-node"
 echo "#      + run tests again simulation USE_KUBERNETES=true"
 echo "#======================================================"
+set -x
 
 # Ensure clean env
 docker rm -vf mynodes || true

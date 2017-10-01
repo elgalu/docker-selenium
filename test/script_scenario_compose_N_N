@@ -20,9 +20,12 @@ export COMPOSE_FILE="docker-compose-host.yml" \
        DO_COMPOSE_UP="false"
 ./test/compose-test.sh
 
+set +x
 echo "#===================================================="
 echo "# Scenario 6b [compose_N_N]: Docker Compose many nodes"
 echo "#===================================================="
+set -x
+
 export VNC_FROM_PORT="26950" VNC_TO_PORT="26999"
 export COMPOSE_FILE="docker-compose-tests.yml" \
        DO_COMPOSE_UP="true"
