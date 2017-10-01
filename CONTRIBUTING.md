@@ -11,7 +11,7 @@ For pull requests or local commits:
 
 For repository owners only:
 
-    git commit -m "Improve resiliency for arbitrary docker run -u 1006:1006 environments #175"
+    git commit -m "Add script_scenario_zalenium for Zalenium integration tests"
     git tag -d latest; git tag -d `cat VERSION`; git push origin :`cat VERSION`; git tag `cat VERSION` && git push --force origin tmp-`cat VERSION` && git push --tags
 
 -- Wait for Travis to pass OK
