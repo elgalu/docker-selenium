@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+# set -x: print each command right before it is executed
+set -xe
+
+echoerr() { printf "%s\n" "$*" >&2; }
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "150"
+  errnum=${2-188}
+  exit $errnum
+}
+
+set +x
+echo "#===================================================="
+echo "# Scenario 7a [zalenium]: Integration"
+echo "#   with Zalenium and the one-liner should still work"
+echo "#===================================================="
+set -x
+
+function stop_zalenium() {
+  curl -sSL https://raw.githubusercontent.com/dosel/t/i/p | \
+    PULL_DEPENDENCIES=false bash -s \
+      stop
+}
+
+# Cleanup
+stop_zalenium
+rm -rf $(pwd)/tmp_videos
+
+# Dependencies
+pip install --upgrade -r test/requirements.txt
+docker pull dosel/zalenium
+
+# Use Zalenium one-liner but don't pull
+# TODO: --maxTestSessions 5
+curl -sSL https://raw.githubusercontent.com/dosel/t/i/p | \
+  PULL_DEPENDENCIES=false bash -s \
+    start --firefoxContainers 0 \
+          --chromeContainers 0 \
+          --videos-dir $(pwd)/tmp_videos
+
+set +x
+
+docker logs zalenium
+
+# Usage
+#  bash parallel.sh {browser} {threads} {test-per-thread=5}
+VIDEO=true bash test/parallel.sh hybrid 2 3
+
+# There should be a dashboard
+if ! ls -la tmp_videos/dashboard.html; then
+  die "The dashboard.html file is missing but should be there" 110
+fi
+
+# There should be (2 * 3) videos
+if ! ls -la tmp_videos/zalenium-build/*.mp4; then
+  ls -la tmp_videos/ || true
+  die "Video files were not found in the expected folder" 120
+fi
+
+export VID_EXT="mp4"
+export EXPECTED_VID_COUNT="6"
+export VID_FOLDER="tmp_videos/zalenium-build"
+
+# Wait up to 40 seconds for the videos to be there
+if ! timeout --foreground 40s test/wait_videos_count; then
+  ls -la tmp_videos/zalenium-build/ || true
+  die "Waited a few seconds for '${EXPECTED_VID_COUNT}' '${VID_EXT}' videos to be at ${VID_FOLDER}"
+fi
+
+# Cleanup
+stop_zalenium

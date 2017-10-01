@@ -4,7 +4,7 @@
 # set -x: print each command right before it is executed
 set -xe
 
-rm -rf ./videos
+rm -rf ./videos ./tmp_videos
 ./test/script_bats
 
 # In Travis these ones require travis_retry
@@ -15,4 +15,5 @@ if [ "${CI}" != "true" ]; then
   ./test/script_scenario_node_dies
   ./test/script_scenario_make
   ./test/script_scenario_compose_N_N
+  ./test/script_scenario_zalenium
 fi

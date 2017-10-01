@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# set -e: exit asap if a command exits with a non-zero status
+set -e
+
+echoerr() { printf "%s\n" "$*" >&2; }
+
+# print error and exit
+die () {
+  echoerr "ERROR: $1"
+  # if $2 is defined AND NOT EMPTY, use $2; otherwise, set to "160"
+  errnum=${2-160}
+  exit $errnum
+}
+
+# Required params
+[ -z "${VID_EXT}" ] && die "Need env var VID_EXT"
+[ -z "${EXPECTED_VID_COUNT}" ] && die "Need env var EXPECTED_VID_COUNT"
+[ -z "${VID_FOLDER}" ] && die "Need env var VID_FOLDER"
+
+echo "Waiting for total ${VID_EXT} videos to be ${EXPECTED_VID_COUNT}"
+while [ $(ls -1q ${VID_FOLDER}/*.${VID_EXT} 2>/dev/null | wc -l) -lt ${EXPECTED_VID_COUNT} ]; do
+  echo -n '.'
+  sleep 0.2;
+done
+echo "SUCCESS: Videos count ${EXPECTED_VID_COUNT} was reached."

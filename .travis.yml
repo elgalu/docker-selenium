@@ -2,7 +2,10 @@
 # Travis requires us to pick a language else it will pick Ruby by default.
 # Let's choose a lightweight base image then we provide our own build tools.
 # Note: `language: generic` was failing in OSX so in that case you can use language: c
-language: generic
+# UPDATE: Switching to python as we want to run Zalenium tests from the host
+language: python
+python:
+  - "3.6"
 
 sudo: required
 
@@ -59,6 +62,11 @@ jobs:
       script:
         - travis_retry ./test/before_install_pull
         - travis_retry ./test/script_scenario_compose_N_N
+
+    - env: test=Zalenium
+      script:
+        - travis_retry ./test/before_install_pull
+        - travis_retry ./test/script_scenario_zalenium
 
     - stage: Push Image (only with a tag) & Git push
       script:

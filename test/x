@@ -1,0 +1,183 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Dependencies
+#  pip install selenium==3.3.1
+#  pip install retrying>=1.3.3
+# Usage
+#  curl -sSL https://raw.github.com/dosel/t/i/x | python
+import os
+import time
+import datetime
+from retrying import retry
+
+# Import the Selenium 2 namespace (aka "webdriver")
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
+
+import argparse
+parser = argparse.ArgumentParser(description='Perform some basic selenium tests.')
+parser.add_argument('browser', choices=['chrome', 'firefox'], nargs='?', default='chrome',
+                    help='in which browser to test')
+args = parser.parse_args()
+
+# http://selenium-python.readthedocs.org/en/latest/api.html
+if args.browser == 'chrome':
+    caps = DesiredCapabilities.CHROME
+elif args.browser == 'firefox':
+    caps = DesiredCapabilities.FIREFOX
+else:
+    raise ValueError("Invalid browser '%s'" % args.browser)
+
+msleep = float( os.environ.get('TEST_SLEEPS', '0.1') )
+
+# http://selenium-python.readthedocs.io/api.html#desired-capabilities
+# Create a desired capabilities object as a starting point.
+browserName = args.browser
+browserVersion = os.environ.get('CAPS_BROWSER_VERSION', '')
+
+# http://selenium-python.readthedocs.org/en/latest/api.html
+sel_proto = os.environ.get('SELENIUM_HUB_PROTO','http')
+sel_host = os.environ.get('SELENIUM_HUB_HOST','localhost')
+sel_port = os.environ.get('SELENIUM_HUB_PORT','4444')
+myselenium_base_url = "%s://%s:%s" % (sel_proto, sel_host, sel_port)
+myselenium_grid_console_url = "%s/grid/console" % (myselenium_base_url)
+myselenium_hub_url = "%s/wd/hub" % (myselenium_base_url)
+myselenium_hub_url = os.environ.get('SELENIUM_URL', myselenium_hub_url)
+
+# Group tests by `build`
+buildId = "%s%s" % (os.environ.get('JOB_NAME', ''), os.environ.get('BUILD_NUMBER', ''))
+if buildId == '':
+    buildId = 'zalenium-build'
+
+# Within `build` identify one test by `name`
+nameId = os.environ.get('TEST_ID', 'test-adwords')
+
+# Have a long Id for the log outpus
+longId = "%s - %s - %s%s" % (buildId, nameId, browserName, browserVersion)
+
+# Set location top left and size to max allowed on the container
+width = os.environ.get('SCREEN_WIDTH','1700')
+height = os.environ.get('SCREEN_HEIGHT','1600')
+
+# Build the capabilities
+caps = {'browserName': browserName}
+caps['platform'] = os.environ.get('CAPS_OS_PLATFORM', 'ANY')
+caps['version'] = browserVersion
+# caps['tunnelIdentifier'] = os.environ.get('TUNNEL_ID', 'zalenium')
+caps['tunnel-identifier'] = os.environ.get('TUNNEL_ID', 'zalenium')
+# caps['screenResolution'] = "%sx%sx24" % (width, height)
+caps['screenResolution'] = "%sx%s" % (width, height)
+caps['name'] = nameId
+caps['build'] = buildId
+caps['recordVideo'] = os.environ.get('VIDEO','false')
+
+# http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
+@retry(stop_max_attempt_number=8, stop_max_delay=40100, wait_fixed=1000)
+def create_selenium_session():
+    print ("%s %s - (1%%) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
+    driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
+    # driver.implicitly_wait(4)
+    return driver
+
+driver = create_selenium_session()
+time.sleep(msleep)
+
+def is_element_present(how, what):
+    try: driver.find_element(by=how, value=what)
+    except NoSuchElementException: return False
+    return True
+
+driver.set_window_position(0, 0)
+driver.set_window_size(width, height)
+
+# Test: https://code.google.com/p/chromium/issues/detail?id=519952
+# e.g. pageurl = "http://localhost:8082/adwords"
+# e.g. pageurl = "http://www.google.com:80/adwords"
+# e.g. pageurl = "https://www.google.com:443/adwords"
+# e.g. pageurl = "http://d.host.loc.dev:8082/adwords"
+page_port = os.environ.get('MOCK_SERVER_PORT','8082')
+page_host = os.environ.get('MOCK_SERVER_HOST','localhost')
+pageurl = ("http://%s:%s/adwords" % (page_host, page_port))
+
+def mark_test_failed():
+    driver.add_cookie({'name' : 'zaleniumTestPassed', 'value' : 'false'})
+
+def mark_test_passed():
+    driver.add_cookie({'name' : 'zaleniumTestPassed', 'value' : 'true'})
+
+@retry(stop_max_attempt_number=20, stop_max_delay=40100, wait_fixed=300)
+def open_adwords_page():
+    print ("%s %s - (10%%) Opening page %s" % (datetime.datetime.utcnow(), longId, pageurl))
+    driver.get(pageurl)
+    time.sleep(msleep)
+    assert_at_home_page()
+
+@retry(stop_max_attempt_number=80, stop_max_delay=40100, wait_fixed=400)
+def click_kosten():
+    print ("%s %s - (20%%) assert is_element_present(By.LINK_TEXT, 'Kosten')" % (datetime.datetime.utcnow(), longId))
+    assert is_element_present(By.LINK_TEXT, 'Kosten')
+    print ("%s %s - (21%%) assert is_displayed() find_element_by_link_text('Kosten')" % (datetime.datetime.utcnow(), longId))
+    link = driver.find_element_by_link_text('Kosten')
+    assert link.is_displayed()
+    print ("%s %s - (22%%) Click link 'Kosten'" % (datetime.datetime.utcnow(), longId))
+    link.click()
+
+@retry(stop_max_attempt_number=40, stop_max_delay=40100, wait_fixed=400)
+def assert_at_kosten_page():
+    print ("%s %s - (41%%) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
+    print ("%s %s - (42%%) Asserting 'Kosten von Google AdWords' in driver.title" % (datetime.datetime.utcnow(), longId))
+    assert "Kosten von Google AdWords | Google AdWords" in driver.title
+    time.sleep(msleep)
+
+@retry(stop_max_attempt_number=80, stop_max_delay=90100, wait_fixed=1000)
+def kosten_test():
+    try:
+        click_kosten()
+        assert_at_kosten_page()
+    except:
+        time.sleep(4)
+        open_adwords_page()
+        click_kosten()
+        assert_at_kosten_page()
+
+@retry(stop_max_attempt_number=80, stop_max_delay=40100, wait_fixed=400)
+def go_back_to_home_page():
+    print ("%s %s - (70%%) assert is_element_present(By.LINK_TEXT, 'Übersicht')"% (datetime.datetime.utcnow(), longId))
+    assert is_element_present(By.LINK_TEXT, 'Übersicht')
+    print ("%s %s - (71%%) assert is_displayed() find_element_by_link_text('Übersicht')"% (datetime.datetime.utcnow(), longId))
+    link = driver.find_element_by_link_text('Übersicht')
+    assert link.is_displayed()
+    print ("%s %s - (72%%) Click link 'Übersicht' to go back to the home page" % (datetime.datetime.utcnow(), longId))
+    link.click()
+    time.sleep(msleep)
+
+def assert_at_home_page():
+    print ("%s %s - (90%%) Current title: %s" % (datetime.datetime.utcnow(), longId, driver.title))
+    print ("%s %s - (91%%) Asserting 'Google (PPC)' in driver.title" % (datetime.datetime.utcnow(), longId))
+    assert "Google AdWords | Pay-per-Click-Onlinewerbung auf Google (PPC)" in driver.title
+    time.sleep(msleep)
+
+def driver_quit():
+    print ("%s %s - (99%%) Test done - will driver.quit()" % (datetime.datetime.utcnow(), longId))
+    driver.quit()
+    print ("%s %s - (100%%) All done. SUCCESS! - DONE driver.quit()" % (datetime.datetime.utcnow(), longId))
+
+##############
+# Test steps #
+##############
+try:
+    open_adwords_page()
+    kosten_test()
+    time.sleep(msleep)
+    go_back_to_home_page()
+    assert_at_home_page()
+    mark_test_passed()
+    driver_quit()
+except:
+    mark_test_failed()
+    driver_quit()
+    raise

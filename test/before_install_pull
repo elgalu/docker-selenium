@@ -28,6 +28,7 @@ if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
 else
   docker pull elgalu/build_selenium:${TRAVIS_BUILD_NUMBER}
   docker tag elgalu/build_selenium:${TRAVIS_BUILD_NUMBER} selenium:latest
+  docker tag elgalu/build_selenium:${TRAVIS_BUILD_NUMBER} elgalu/selenium:latest
 fi
 
 docker images selenium
