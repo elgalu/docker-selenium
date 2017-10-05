@@ -7,28 +7,28 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
+## 3.5.3-p14
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (2017-10-05)
     + Upgrade Chromedriver from 2.32 to 2.33
  + **Image tag details:**
-    + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
-    + Chrome stable:  TBD_CHROME_STABLE
-    + Firefox stable: TBD_FIREFOX_FOR_SEL3
-    + Geckodriver: TBD_GECKO_DRIVER
-    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-    + Timezone: TBD_TIME_ZONE
-    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-    + Python: TBD_PYTHON_VERSION
+    + Selenium version: 3.5.3 (a88d25fe6b)
+    + Chrome stable:  61.0.3163.100
+    + Firefox stable: 56.0
+    + Geckodriver: 0.19.0
+    + Chromedriver: 2.33.506092 (733a02544d189eeb751fe0d7ddca79a0ee28cce4)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170915
+    + Python: 3.5.2
     + Tested on kernel dev host: 4.4.0-96-generic x86_64
-    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at dev host with: Docker version 17.07.0-ce, build 8784753
-    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at dev host with: Docker Compose version 1.16.1, build 6d1ac21
-    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-    + Image size: TBD_IMAGE_SIZE
-    + Digest: TBD_DIGEST
-    + Image ID: TBD_IMAGE_ID
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.49 GB
+    + Digest: sha256:90f2e0cceac174f9decd029e925af39da9a43bf7a26faccea856c08dfbe9754d
+    + Image ID: sha256:d3b51a556fc74b96fc5a0b1109b72b0054f7d253cc2836fd95800b6fd074f1ef
 
 ## 3.5.3-p13
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.5.3-p12...3.5.3-p13 (2017-10-01)
