@@ -240,15 +240,15 @@ WORKDIR /home/seluser
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ENV SEL_DIRECTORY="3.5" \
-    SEL_VER="3.5.3"
+ENV SEL_DIRECTORY="3.6" \
+    SEL_VER="3.6.0"
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
   && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
            "selenium-server-standalone-3.jar"
 
-LABEL selenium_version "3.5.3"
+LABEL selenium_version "3.6.0"
 
 #=============================
 # sudo by default from now on
