@@ -18,6 +18,10 @@ if [ -f /var/run/secrets/kubernetes.io/serviceaccount/token ]; then
   export USE_KUBERNETES=true
 fi
 
+#==============================================
+# OpenShift or non-sudo environments support
+#==============================================
+
 CURRENT_UID="$(id -u)"
 CURRENT_GID="$(id -g)"
 
@@ -34,7 +38,7 @@ if [ "${REMOVE_SELUSER_FROM_SUDOERS_FOR_TESTING}" == "true" ]; then
   fi
 fi
 
-# Flag to know if we have sudo acess
+# Flag to know if we have sudo access
 if sudo pwd >/dev/null 2>&1; then
   export WE_HAVE_SUDO_ACCESS="true"
 else
@@ -45,8 +49,7 @@ fi
 if [ ${CURRENT_GID} -ne 1000 ]; then
   if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
     sudo groupadd --gid ${CURRENT_GID} selgroup
-    # sudo gpasswd -a ${USER} seluser
-    sudo gpasswd -a ${USER} selgroup
+    sudo gpasswd -a $(whoami) selgroup
   fi
 fi
 
