@@ -1,10 +1,10 @@
 ## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...master (TBD_DATE)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_NEXT_COMM (TBD_DATE)
     + TBD_COMMIT_MSG
  + **Image tag details:**
-    + Selenium version: TBD_SELENIUM_3_VERSION (TBD_SELENIUM_3_REVISION)
+    + Selenium version: TBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
-    + Firefox stable: TBD_FIREFOX_FOR_SEL3
+    + Firefox stable: TBD_FIREFOX_VERSION
     + Geckodriver: TBD_GECKO_DRIVER
     + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
     + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD

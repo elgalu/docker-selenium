@@ -134,12 +134,12 @@ update_changelog() {
     || die "while trying to get TBD_GECKO_DRIVER"
   TBD_CHROMEDRIVER_COMMIT=$(docker exec grid chromedriver_commit_version) \
     || die "while trying to get TBD_CHROMEDRIVER_COMMIT"
-  TBD_FIREFOX_FOR_SEL3=$(docker exec grid firefox_version) \
-    || die "while trying to get TBD_FIREFOX_FOR_SEL3"
-  TBD_SELENIUM_3_VERSION=$(docker exec grid selenium_version) \
-    || die "while trying to get TBD_SELENIUM_3_VERSION"
-  TBD_SELENIUM_3_REVISION=$(docker exec grid selenium_revision_version) \
-    || die "while trying to get TBD_SELENIUM_3_REVISION"
+  TBD_FIREFOX_VERSION=$(docker exec grid firefox_version) \
+    || die "while trying to get TBD_FIREFOX_VERSION"
+  TBD_SELENIUM_VERSION=$(docker exec grid selenium_version) \
+    || die "while trying to get TBD_SELENIUM_VERSION"
+  TBD_SELENIUM_REVISION=$(docker exec grid selenium_revision_version) \
+    || die "while trying to get TBD_SELENIUM_REVISION"
   TBD_PYTHON_VERSION=$(docker exec grid python_version) \
     || die "while trying to get TBD_PYTHON_VERSION"
   TBD_JAVA_BUILD=$(docker exec grid java_build_version) \
@@ -166,9 +166,9 @@ update_changelog() {
   sed -i -- "s/TBD_CHROME_DRIVER/${TBD_CHROME_DRIVER}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_GECKO_DRIVER/${TBD_GECKO_DRIVER}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_CHROMEDRIVER_COMMIT/${TBD_CHROMEDRIVER_COMMIT}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_FIREFOX_FOR_SEL3/${TBD_FIREFOX_FOR_SEL3}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SELENIUM_3_VERSION/${TBD_SELENIUM_3_VERSION}/g" CHANGELOG.md || true
-  sed -i -- "s/TBD_SELENIUM_3_REVISION/${TBD_SELENIUM_3_REVISION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_FIREFOX_VERSION/${TBD_FIREFOX_VERSION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_SELENIUM_VERSION/${TBD_SELENIUM_VERSION}/g" CHANGELOG.md || true
+  sed -i -- "s/TBD_SELENIUM_REVISION/${TBD_SELENIUM_REVISION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_PYTHON_VERSION/${TBD_PYTHON_VERSION}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_JAVA_BUILD/${TBD_JAVA_BUILD}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_JAVA_VENDOR/${TBD_JAVA_VENDOR}/g" CHANGELOG.md || true
