@@ -55,8 +55,8 @@ This project is normally tested in the last version of Docker and docker-compose
 To figure out the currently used specific versions it surely works on,
 see file [.travis.yml](./.travis.yml) example values:
 
-    docker --version         #=> 1.13.0
-    docker-compose --version #=> 1.10.0
+    docker --version         #=> 17.09.0-ce
+    docker-compose --version #=> 1.16.1
 
 If you need to use docker-machine to run docker
 (like for example on a Mac before the Docker native version 1.12),
