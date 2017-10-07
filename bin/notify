@@ -2,4 +2,4 @@
 
 export DISPLAY=$(cat DISPLAY)
 
-exec notify-send $@
+exec notify-send "$@"
