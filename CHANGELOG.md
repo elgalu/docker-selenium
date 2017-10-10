@@ -7,29 +7,29 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_NEXT_COMM (TBD_DATE)
+## 3.6.0-p3
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_NEXT_COMM (2017-10-10)
     + Upgrade Firefox patch to 56.0.1
     + Use getent hosts and HOSTNAME to improve figuring the CONTAINER_IP
  + **Image tag details:**
-    + Selenium version: TBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
-    + Chrome stable:  TBD_CHROME_STABLE
-    + Firefox stable: TBD_FIREFOX_VERSION
-    + Geckodriver: TBD_GECKO_DRIVER
-    + Chromedriver: TBD_CHROME_DRIVER (TBD_CHROMEDRIVER_COMMIT)
-    + Java: TBD_JAVA_VENDOR Java TBD_JAVA_BUILD
-    + Timezone: TBD_TIME_ZONE
-    + FROM ubuntu:UBUNTU_FLAVOR-UBUNTU_DATE
-    + Python: TBD_PYTHON_VERSION
+    + Selenium version: 3.6.0 (6fbf3ec767)
+    + Chrome stable:  61.0.3163.100
+    + Firefox stable: 56.0.1
+    + Geckodriver: 0.19.0
+    + Chromedriver: 2.33.506092 (733a02544d189eeb751fe0d7ddca79a0ee28cce4)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11
+    + Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20170915
+    + Python: 3.5.2
     + Tested on kernel dev host: 4.4.0-96-generic x86_64
-    + Tested on kernel CI  host: TBD_HOST_UNAME
+    + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at dev host with: Docker version 17.07.0-ce, build 8784753
-    + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
+    + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at dev host with: Docker Compose version 1.16.1, build 6d1ac21
-    + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
-    + Image size: TBD_IMAGE_SIZE
-    + Digest: TBD_DIGEST
-    + Image ID: TBD_IMAGE_ID
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.49 GB
+    + Digest: sha256:f1c56abfb40909f4caf388679e7c11bdc0baed9d34fc35281147773883cc3ed4
+    + Image ID: sha256:9cb348d9a0049dcfba41df76d9c56097a5a501a03d51ed094590cd0c3e3a0831
 
 ## 3.6.0-p2
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p1...3.6.0-p2 (2017-10-08)
