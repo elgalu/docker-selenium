@@ -8,9 +8,10 @@ Note image ids also change after scm-source.json has being updated which trigger
     docker exec grid versions
 
 ## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_NEXT_COMM (TBD_DATE)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p2...3.6.0-p3 (TBD_DATE)
     + Upgrade Firefox patch to 56.0.1
     + Use getent hosts and HOSTNAME to improve figuring the CONTAINER_IP
+    + Improve gpg --keyserver pool and retry code
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
