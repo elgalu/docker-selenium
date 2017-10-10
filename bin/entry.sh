@@ -18,6 +18,9 @@ if [ -f /var/run/secrets/kubernetes.io/serviceaccount/token ]; then
   export USE_KUBERNETES=true
 fi
 
+# Required env vars
+[ -z "${HOSTNAME}" ] && die "Need env var HOSTNAME"
+
 #==============================================
 # OpenShift or non-sudo environments support
 #==============================================
@@ -136,7 +139,10 @@ export GEOMETRY="${SCREEN_WIDTH}""x""${SCREEN_HEIGHT}""x""${SCREEN_DEPTH}"
 
 # These values are only available when the container started
 export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
-export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
+
+# export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
+# 2017-09 Found a more portable, even works in alpine:
+export CONTAINER_IP=`getent hosts ${HOSTNAME} | awk '{ print $1 }'`
 
 # if [ "${DOCKER_HOST_IP}" == "" ] || [[ ${DOCKER_HOST_IP} == 127* ]]; then
 #   # TODO: Try with an alternative method

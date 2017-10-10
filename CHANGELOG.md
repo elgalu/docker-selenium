@@ -10,6 +10,7 @@ Note image ids also change after scm-source.json has being updated which trigger
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_NEXT_COMM (TBD_DATE)
     + Upgrade Firefox patch to 56.0.1
+    + Use getent hosts and HOSTNAME to improve figuring the CONTAINER_IP
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
