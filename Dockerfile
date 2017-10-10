@@ -18,24 +18,24 @@ LABEL maintainer "Team TIP <elgalu3+team-tip@gmail.com>"
 ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
-# http://askubuntu.com/a/235911/134645
-# https://github.com/moby/moby/issues/20022#issuecomment-182169732
-# Using the (pgp.mit.edu) instead of (keyserver.ubuntu.com) due to recurrent errors in Travis.
-RUN (apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 2EA8F35793D8809A || \
-     apt-key adv --keyserver pgp.mit.edu          --recv-keys 2EA8F35793D8809A) \
-  && apt-key update -qqy
-RUN (apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 || \
-     apt-key adv --keyserver pgp.mit.edu          --recv-keys 40976EAF437D05B5) \
-  && apt-key update -qqy
-RUN (apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 || \
-     apt-key adv --keyserver pgp.mit.edu          --recv-keys 3B4FE6ACC0B21F32) \
-  && apt-key update -qqy
-RUN (apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A2F683C52980AECF || \
-     apt-key adv --keyserver pgp.mit.edu          --recv-keys A2F683C52980AECF) \
-  && apt-key update -qqy
-RUN (apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F76221572C52609D || \
-     apt-key adv --keyserver pgp.mit.edu          --recv-keys F76221572C52609D) \
-  && apt-key update -qqy
+# GPG servers aren't too reliable (especially in out test builds)
+# so fallback servers are needed
+#  ref: https://github.com/nodejs/docker-node/issues/340#issuecomment-321669029
+#  ref: http://askubuntu.com/a/235911/134645
+#  ref: https://github.com/moby/moby/issues/20022#issuecomment-182169732
+RUN set -ex \
+  && for key in \
+    2EA8F35793D8809A \
+    40976EAF437D05B5 \
+    3B4FE6ACC0B21F32 \
+    A2F683C52980AECF \
+    F76221572C52609D \
+  ; do \
+    gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
+    gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
+    gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" ; \
+  done
 # How to remove keys? e.g. sudo apt-key del 2EA8F35793D8809A
 
 #========================
