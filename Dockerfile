@@ -568,7 +568,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ENV FF_VER="56.0"
+ENV FF_VER="56.0.1"
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN cd /opt \
@@ -580,7 +580,7 @@ RUN cd /opt \
   && chown -R seluser:seluser /opt/firefox \
   && chmod -R 777 /opt/firefox
 
-LABEL selenium_firefox_version "56.0"
+LABEL selenium_firefox_version "56.0.1"
 
 #============
 # GeckoDriver
