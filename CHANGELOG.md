@@ -7,13 +7,8 @@ Note image ids also change after scm-source.json has being updated which trigger
 ###### To get container versions
     docker exec grid versions
 
-<<<<<<< HEAD
-## 3.6.0-p3
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_NEXT_COMM (2017-10-10)
-=======
 ## 3.6.0-p3
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p2...3.6.0-p3 (2017-10-10)
->>>>>>> travis-3.6.0-p3
     + Upgrade Firefox patch to 56.0.1
     + Use getent hosts and HOSTNAME to improve figuring the CONTAINER_IP
     + Improve gpg --keyserver pool and retry code
