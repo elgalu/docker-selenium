@@ -148,9 +148,9 @@ update_changelog() {
     || die "while trying to get TBD_JAVA_VENDOR"
   TBD_TIME_ZONE="$(docker exec grid printenv TZ | sed -r 's/[\/]+/\\\//g')" \
     || die "while trying to get TBD_TIME_ZONE"
-  UBUNTU_FLAVOR=$(docker exec grid printenv UBUNTU_FLAVOR) \
+  UBUNTU_FLAVOR=$(docker exec grid cat UBUNTU_FLAVOR) \
     || die "while trying to get UBUNTU_FLAVOR"
-  UBUNTU_DATE=$(docker exec grid printenv UBUNTU_DATE) \
+  UBUNTU_DATE=$(docker exec grid cat UBUNTU_DATE) \
     || die "while trying to get UBUNTU_DATE"
   sed -i -- "s/TBD_DOCKER_TAG/${TBD_DOCKER_TAG}/g" CHANGELOG.md || true
   sed -i -- "s/TBD_DIGEST/${TBD_DIGEST}/g" CHANGELOG.md || true

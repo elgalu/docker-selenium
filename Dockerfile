@@ -1,18 +1,36 @@
+#== FROM instructions support variables that are declared by
+# any ARG instructions that occur before the first FROM
+# ref: https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+#
+# To overwrite the build args use:
+#  docker build ... --build-arg UBUNTU_DATE=20171006
+ARG UBUNTU_FLAVOR=xenial
+ARG UBUNTU_DATE=20171006
+
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
-# Layer size: big: 127.2 MB
-FROM ubuntu:xenial-20170915
-ENV UBUNTU_FLAVOR="xenial" \
-    UBUNTU_DATE="20170915"
+# Layer size: ~122 MB
+FROM ubuntu:${UBUNTU_FLAVOR}-${UBUNTU_DATE}
+
+#== An ARG declared before a FROM is outside of a build stage,
+# so it can’t be used in any instruction after a FROM. To use
+# the default value of an ARG declared before the first
+# FROM use an ARG instruction without a value inside of a build stage
+# ref: https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
+ARG UBUNTU_FLAVOR
+ARG UBUNTU_DATE
+
+# Docker build debug logging, green colored
+RUN printf "\033[1;32mFROM ubuntu:${UBUNTU_FLAVOR}-${UBUNTU_DATE} \033[0m\n"
 
 #== Ubuntu flavors - common
 RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
   && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-updates main universe\n" >> /etc/apt/sources.list \
   && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-security main universe\n" >> /etc/apt/sources.list
 
-MAINTAINER Team TIP <elgalu3+team-tip@gmail.com>
+MAINTAINER Leo Gallucci <elgalu3+dosel@gmail.com>
 # https://github.com/docker/docker/pull/25466#discussion-diff-74622923R677
-LABEL maintainer "Team TIP <elgalu3+team-tip@gmail.com>"
+LABEL maintainer "Leo Gallucci <elgalu3+dosel@gmail.com>"
 
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -23,6 +41,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 #  ref: https://github.com/nodejs/docker-node/issues/340#issuecomment-321669029
 #  ref: http://askubuntu.com/a/235911/134645
 #  ref: https://github.com/moby/moby/issues/20022#issuecomment-182169732
+# How to remove keys? e.g. sudo apt-key del 2EA8F35793D8809A
 RUN set -ex \
   && for key in \
     2EA8F35793D8809A \
@@ -36,7 +55,6 @@ RUN set -ex \
     gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" ; \
   done
-# How to remove keys? e.g. sudo apt-key del 2EA8F35793D8809A
 
 #========================
 # Miscellaneous packages
@@ -236,12 +254,18 @@ RUN apt-get -qqy update \
 USER seluser
 WORKDIR /home/seluser
 
+# Docker backward compatibility
+RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
+ && echo "${UBUNTU_DATE}" > UBUNTU_DATE
+
 #=================
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
 ENV SEL_DIRECTORY="3.6" \
     SEL_VER="3.6.0"
+
+RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
   && wget -nv ${SELBASE}/${SELPATH} \
@@ -603,12 +627,12 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="61.0.3163.100" \
+ENV CHROME_VERSION_TRIGGER="62.0.3202.62" \
     CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium_chrome_version "61.0.3163.100"
+LABEL selenium_chrome_version "62.0.3202.62"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \

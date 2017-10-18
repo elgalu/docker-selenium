@@ -13,9 +13,9 @@
     + Python: TBD_PYTHON_VERSION
     + Tested on kernel dev host: 4.4.0-96-generic x86_64
     + Tested on kernel CI  host: TBD_HOST_UNAME
-    + Built at dev host with: Docker version 17.07.0-ce, build 8784753
+    + Built at dev host with: Docker version 17.10.0-ce, build f4ffd25
     + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
-    + Built at dev host with: Docker Compose version 1.16.1, build 6d1ac21
+    + Built at dev host with: Docker Compose version 1.17.0-rc1, build a0f95af
     + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
     + Image size: TBD_IMAGE_SIZE
     + Digest: TBD_DIGEST
