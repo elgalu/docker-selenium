@@ -262,8 +262,8 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ENV SEL_DIRECTORY="3.6" \
-    SEL_VER="3.6.0"
+ARG SEL_DIRECTORY="3.6"
+ARG SEL_VER="3.6.0"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -272,7 +272,7 @@ RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
   && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
            "selenium-server-standalone-3.jar"
 
-LABEL selenium_version "3.6.0"
+LABEL selenium_version "${SEL_VER}"
 
 #=============================
 # sudo by default from now on
@@ -593,6 +593,7 @@ ENV FF_LANG="en-US" \
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
 ARG FF_VER="56.0.2"
+
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
 RUN cd /opt \
@@ -623,6 +624,7 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
   && rm geckodriver.tar.gz
 
 COPY bin/fail /usr/bin/
+
 #===============
 # Google Chrome
 #===============
@@ -650,6 +652,7 @@ RUN apt-get -qqy update \
   && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
   && echo "CH_STABLE_VER:'${CH_STABLE_VER}' vs EXPECTED_CHROME_VERSION:'${EXPECTED_CHROME_VERSION}'" \
   && [ "${CH_STABLE_VER}" = "${EXPECTED_CHROME_VERSION}" ] || fail
+
 # We have a wrapper for /opt/google/chrome/google-chrome
 RUN mv /opt/google/chrome/google-chrome /opt/google/chrome/google-chrome-base
 COPY selenium-node-chrome/opt /opt
