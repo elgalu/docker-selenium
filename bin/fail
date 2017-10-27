@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Prints debug info with precise time
+echo "--${SELENIUM_FIRST_NODE_PORT}ERROR $(date "+%H:%M:%S:%N") $@" >&2
+exit 101

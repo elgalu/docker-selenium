@@ -622,17 +622,18 @@ RUN wget --no-verbose -O geckodriver.tar.gz \
   && chown seluser:seluser /usr/bin/geckodriver \
   && rm geckodriver.tar.gz
 
+COPY bin/fail /usr/bin/
 #===============
 # Google Chrome
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ENV CHROME_VERSION_TRIGGER="62.0.3202.62" \
-    CHROME_URL="https://dl.google.com/linux/direct" \
+ARG EXPECTED_CHROME_VERSION="62.0.3202.75"
+ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
 
-LABEL selenium_chrome_version "62.0.3202.62"
+LABEL selenium_chrome_version "${EXPECTED_CHROME_VERSION}"
 
 # Layer size: huge: 196.3 MB
 RUN apt-get -qqy update \
@@ -647,7 +648,8 @@ RUN apt-get -qqy update \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get -qyy clean \
   && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
-  && echo "${CH_STABLE_VER}"
+  && echo "CH_STABLE_VER:'${CH_STABLE_VER}' vs EXPECTED_CHROME_VERSION:'${EXPECTED_CHROME_VERSION}'" \
+  && [ "${CH_STABLE_VER}" = "${EXPECTED_CHROME_VERSION}" ] || fail
 # We have a wrapper for /opt/google/chrome/google-chrome
 RUN mv /opt/google/chrome/google-chrome /opt/google/chrome/google-chrome-base
 COPY selenium-node-chrome/opt /opt
