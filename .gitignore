@@ -28,3 +28,4 @@ tmposx/
 *.log
 NEXT_RELEASE.md
 temp.md
+git_shortlog.stdout

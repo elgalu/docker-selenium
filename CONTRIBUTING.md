@@ -45,7 +45,7 @@ Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to
     travis env set DOCKER_EMAIL me@example.com
     travis env set DOCKER_USERNAME elgalubot
      travis env set DOCKER_PASSWORD secretsecret #1st space in purpose
-     travis env set GH_TOKEN secretsecret
+     travis env set GITHUB_TOKEN secretsecret
 
 ### Bot setup
 #### github.com

@@ -77,7 +77,7 @@ git_config() {
 git_co_fetch_merge_stash() {
   echo "script_push::git_co_fetch_merge_stash"
   git checkout -b travis-${TRAVIS_TAG}
-  git remote add github "https://elgalubot:${GH_TOKEN}@github.com/elgalu/docker-selenium.git"
+  git remote add github "https://elgalubot:${GITHUB_TOKEN}@github.com/elgalu/docker-selenium.git"
   git fetch github
   git stash save || true
   git checkout -t github/master -b github/master
@@ -171,10 +171,41 @@ generate_NEXT_RELEASE_by_updating_TBDs() {
   sed -i -- "s/TBD_TIME_ZONE/${TBD_TIME_ZONE}/g" NEXT_RELEASE.md || true
   sed -i -- "s/UBUNTU_FLAVOR/${UBUNTU_FLAVOR}/g" NEXT_RELEASE.md || true
   sed -i -- "s/UBUNTU_DATE/${UBUNTU_DATE}/g" NEXT_RELEASE.md || true
+}
 
-  # TODO: Add `git shortlog ${TBD_PREV_COM}..HEAD` with indent `    + ` in the 3rd line
-  # ...
+#############################################################
+# Add commits grouped by authors in between NEXT_RELEASE.md #
+#############################################################
+add_commits_to_NEXT_RELEASE() {
+  # Get commits history grouped by author
+  # https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats
+  # e.g. git shortlog --format="[%h] %s" 3.6.0-p6..HEAD
+  # e.g. git shortlog --format="[%h] %s" --no-merges --author='^(?!Leo Gallucci Bot).*$' --perl-regexp 3.6.0-p6..HEAD
+  rm -f git_shortlog.stdout
+  git shortlog \
+    --format="[%h] %s" \
+    --no-merges \
+    --author='^(?!Leo Gallucci Bot).*$' --perl-regexp \
+    ${TBD_PREV_COM}..HEAD > git_shortlog.stdout
 
+  # Add some indentation prefix
+  sed -i -e 's/^/    + /' git_shortlog.stdout
+
+  # Use a temporal file
+  rm -f temp.md
+  mv NEXT_RELEASE.md temp.md
+
+  # Add first 2 lines to the final new release change log part
+  head -n 2 temp.md > NEXT_RELEASE.md
+
+  # Add git short log with indent `    + ` in the 3rd line of NEXT_RELEASE.md
+  cat git_shortlog.stdout >> NEXT_RELEASE.md
+
+  # Add the rest of the original NEXT_RELEASE.md
+  tail -n +3 temp.md >> NEXT_RELEASE.md
+
+  # Remove intermediate files
+  rm temp.md git_shortlog.stdout
 }
 
 add_NEXT_RELEASE_to_top_of_CHANGELOG() {
@@ -185,7 +216,28 @@ add_NEXT_RELEASE_to_top_of_CHANGELOG() {
 }
 
 github_release_from_NEXT_RELEASE() {
-  echo "TODO: Release via GH API"
+  echo "Release via GH API"
+
+  [ -z "${GITHUB_TOKEN}" ] && die "Need env var GITHUB_TOKEN"
+  [ "${TRAVIS_TAG}" == "" ] && die "Need env var TRAVIS_TAG"
+
+  hub --version || die "github.com/hub is not installed!"
+
+  # If the release exists, delete it
+  if hub release | grep -q "^${TRAVIS_TAG}\$"; then
+    hub release delete "${TRAVIS_TAG}"
+  fi
+
+  # https://github.com/github/hub/blob/master/share/man/man1/hub.1.ronn#L123
+  export HUB_VERBOSE=1
+
+  # https://github.com/github/hub/blob/master/commands/release.go#L59
+  # TODO: Add real assents (.deb, ...)
+  hub release create \
+    --asset "Dockerfile" \
+    --asset "capabilities.json" \
+    --file "NEXT_RELEASE.md" \
+    "${TRAVIS_TAG}"
 }
 
 #########################
@@ -194,8 +246,8 @@ github_release_from_NEXT_RELEASE() {
 update_changelog() {
   echo "script_push::update_changelog"
   generate_NEXT_RELEASE_by_updating_TBDs
+  add_commits_to_NEXT_RELEASE
   add_NEXT_RELEASE_to_top_of_CHANGELOG
-  github_release_from_NEXT_RELEASE
 }
 
 ####################################
@@ -224,7 +276,7 @@ git_push_tag_push() {
   if git push github HEAD:master >git_push_master.log 2>&1; then \
     failed=false; else failed=true; fi
   # hide secrets
-  sed -i -- "s/${GH_TOKEN}/\[SECRET\]/g" git_push_master.log || true
+  sed -i -- "s/${GITHUB_TOKEN}/\[SECRET\]/g" git_push_master.log || true
   if [ ${failed} == "true" ]; then
     echoerr "Failed to git push to master!"
     cat git_push_master.log 1>&2
@@ -237,7 +289,7 @@ git_push_tag_push() {
   if git push --tags -f >git_push_tags.log 2>&1; then \
     failed=false; else failed=true; fi
   # hide secrets
-  sed -i -- "s/${GH_TOKEN}/\[SECRET\]/g" git_push_tags.log || true
+  sed -i -- "s/${GITHUB_TOKEN}/\[SECRET\]/g" git_push_tags.log || true
   if [ ${failed} == "true" ]; then
     echoerr "Failed to push git tags!"
     cat git_push_master.log 1>&2
@@ -272,6 +324,9 @@ elif [ "${TRAVIS_TAG}" != "latest" ] && [ "${TRAVIS_TAG}" != "" ]; then
   update_changelog
   git_diff_add_commit
   git_push_tag_push
+  github_release_from_NEXT_RELEASE
+  # Remove intermediate files (optional)
+  rm NEXT_RELEASE.md
 else
   echo "This is not git tagged so no version push to docker"
 fi

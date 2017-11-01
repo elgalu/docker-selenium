@@ -11,8 +11,11 @@ if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
   # docker --version || exit 0
   # docker --version && exit 1 #that's how I'll know
   ./test/before_install_docker_osx
+  # https://github.com/github/hub#homebrew
+  brew install hub
 else
   sudo -E bash -c './test/before_install_docker_linux'
+  sudo -E bash -c './test/install_hub_cli'
 fi
 docker --version || (echo "FATAL: No docker installed" && exit 1)
 
