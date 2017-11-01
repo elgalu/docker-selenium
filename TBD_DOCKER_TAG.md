@@ -1,6 +1,5 @@
 ## TBD_DOCKER_TAG
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_DOCKER_TAG (TBD_DATE)
-    + TBD_COMMIT_MSG
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
