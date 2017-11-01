@@ -235,6 +235,17 @@ github_release_from_NEXT_RELEASE() {
   rm NEXT_RELEASE.md
   mv temp.md NEXT_RELEASE.md
 
+  # We need to gather the chrome.deb artifact to include it in the release
+  CHROME_VERSION=$(docker exec grid chrome_stable_version) \
+    || die "while trying to get CHROME_VERSION"
+
+  CHROME_DEB_FILE_NAME="google-chrome-stable_${CHROME_VERSION}_amd64"
+  wget -nv --show-progress -O "${CHROME_DEB_FILE_NAME}.deb" \
+    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+
+  md5sum ${CHROME_DEB_FILE_NAME}.deb > ${CHROME_DEB_FILE_NAME}.md5
+  shasum ${CHROME_DEB_FILE_NAME}.deb > ${CHROME_DEB_FILE_NAME}.sha
+
   # If the release exists, delete it
   if hub release | grep -q "^${TRAVIS_TAG}\$"; then
     hub release delete "${TRAVIS_TAG}"
@@ -246,8 +257,9 @@ github_release_from_NEXT_RELEASE() {
   # https://github.com/github/hub/blob/master/commands/release.go#L59
   # TODO: Add real assents (.deb, ...)
   hub release create \
-    -a "Dockerfile" \
-    -a "capabilities.json" \
+    -a "${CHROME_DEB_FILE_NAME}.md5" \
+    -a "${CHROME_DEB_FILE_NAME}.sha" \
+    -a "${CHROME_DEB_FILE_NAME}.deb" \
     -F "NEXT_RELEASE.md" \
     "${TRAVIS_TAG}"
 }
