@@ -1,13 +1,10 @@
 ## 3.6.0-p7
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p6M...3.6.0-p7 (2017-11-01)
     + Christophe Gosiau (1):
-    +       [eeba60c] Fix logs for video-recording (#184)
-    + 
-    + Leo Gallucci (3):
-    +       [e66707e] Fork PRs improvements. Changelog improvements
-    +       [326c503] Automate CHANGELOG.md
-    +       [3e21b3c] Automate releases via github.com/hub
-    + 
+        * [eeba60c] Fix logs for video-recording (#184)
+    + Leo Gallucci (2):
+        * [e66707e] Fork PRs improvements. Changelog improvements
+        * [326c503] WIP automating CHANGELOG.md
  + **Image tag details:**
     + Selenium version: 3.6.0 (6fbf3ec767)
     + Chrome stable:  62.0.3202.75
