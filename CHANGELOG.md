@@ -1,3 +1,26 @@
+## 3.6.0-p8
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p7M...3.6.0-p8 (2017-11-01)
+    + Leo Gallucci (3):
+        * [da43680] Fix previous 3.6.0-p7 CHANGELOG.md text
+        * [8327741] Bump version for 3.6.0-p8
+        * [bf6fe96] Fix CHANGELOG.md TravisCI automation
+ + **Image tag details:**
+    + Selenium version: 3.6.0 (6fbf3ec767)
+    + Chrome stable:  62.0.3202.75
+    + Firefox stable: 56.0.2
+    + Geckodriver: 0.19.0
+    + Chromedriver: 2.33.506092 (733a02544d189eeb751fe0d7ddca79a0ee28cce4)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11
+    + Default Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20171006
+    + Python: 3.5.2
+    + Tested on kernel CI  host: 4.4.0-93-generic x86_64
+    + Built at CI  host with: Docker version 17.03.1, build c6d412e
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.4 GB
+    + Digest: sha256:ca04fa5b4e253f0cf0e9cd7ea1399653adf1bf4d05237275ad129659566394f9
+    + Image ID: sha256:283f34c667e51d6f45ffdab77490bac772128df26e899b98b66e0d17c1f6b211
+
 ## 3.6.0-p7
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p6M...3.6.0-p7 (2017-11-01)
     + Christophe Gosiau (1):
