@@ -1,5 +1,5 @@
 ## 3.6.0-p8
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p7M...3.6.0-p8 (2017-11-01)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p7...3.6.0-p8 (2017-11-01)
     + Leo Gallucci (3):
         * [da43680] Fix previous 3.6.0-p7 CHANGELOG.md text
         * [8327741] Bump version for 3.6.0-p8
@@ -22,7 +22,7 @@
     + Image ID: sha256:283f34c667e51d6f45ffdab77490bac772128df26e899b98b66e0d17c1f6b211
 
 ## 3.6.0-p7
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p6M...3.6.0-p7 (2017-11-01)
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p6...3.6.0-p7 (2017-11-01)
     + Christophe Gosiau (1):
         * [eeba60c] Fix logs for video-recording (#184)
     + Leo Gallucci (2):
