@@ -188,8 +188,14 @@ add_commits_to_NEXT_RELEASE() {
     --author='^(?!Leo Gallucci Bot).*$' --perl-regexp \
     ${TBD_PREV_COM}..HEAD > git_shortlog.stdout
 
+  # Delete empty lines
+  sed -i -e '/^\s*$/d' git_shortlog.stdout
+
   # Add some indentation prefix
   sed -i -e 's/^/    + /' git_shortlog.stdout
+
+  # Fix prefix for commits lines
+  sed -i -e 's/^\s*+\s*\[/        * \[/' git_shortlog.stdout
 
   # Use a temporal file
   rm -f temp.md

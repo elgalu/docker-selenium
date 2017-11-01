@@ -4,13 +4,17 @@
 # set -x: print each command right before it is executed
 set -xe
 
-mkdir -p tmp_hub
-cd tmp_hub
+if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+  brew install hub
+else
+  mkdir -p tmp_hub
+  cd tmp_hub
 
-wget -nv -O hub.tgz "https://github.com/github/hub/releases/download/v2.3.0-pre10/hub-linux-amd64-2.3.0-pre10.tgz"
-tar -xvzf hub.tgz
-./hub*/bin/hub --version
-mv hub*/bin/hub /usr/bin/
+  wget -nv -O hub.tgz "https://github.com/github/hub/releases/download/v2.3.0-pre10/hub-linux-amd64-2.3.0-pre10.tgz"
+  tar -xvzf hub.tgz
+  ./hub*/bin/hub --version
+  sudo mv hub*/bin/hub /usr/bin/
 
-cd ..
-rm -rf tmp_hub
+  cd ..
+  rm -rf tmp_hub
+fi

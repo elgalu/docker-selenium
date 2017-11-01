@@ -71,5 +71,6 @@ jobs:
 
     - stage: Push Image (only with a tag) & Git push
       script:
+        - travis_retry ./test/install_hub_cli
         - travis_retry ./test/before_install_pull
         - ./test/script_push
