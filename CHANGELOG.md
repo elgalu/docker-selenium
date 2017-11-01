@@ -1,3 +1,30 @@
+## 3.6.0-p7
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p6M...3.6.0-p7 (2017-11-01)
+    + Christophe Gosiau (1):
+    +       [eeba60c] Fix logs for video-recording (#184)
+    + 
+    + Leo Gallucci (3):
+    +       [e66707e] Fork PRs improvements. Changelog improvements
+    +       [326c503] Automate CHANGELOG.md
+    +       [3e21b3c] Automate releases via github.com/hub
+    + 
+ + **Image tag details:**
+    + Selenium version: 3.6.0 (6fbf3ec767)
+    + Chrome stable:  62.0.3202.75
+    + Firefox stable: 56.0.2
+    + Geckodriver: 0.19.0
+    + Chromedriver: 2.33.506092 (733a02544d189eeb751fe0d7ddca79a0ee28cce4)
+    + Java: OpenJDK Java 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11
+    + Default Timezone: Europe/Berlin
+    + FROM ubuntu:xenial-20171006
+    + Python: 3.5.2
+    + Tested on kernel CI  host: 4.4.0-93-generic x86_64
+    + Built at CI  host with: Docker version 17.03.1, build c6d412e
+    + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image size: 1.4 GB
+    + Digest: sha256:137a958e6074473e19154108dbf5b792e0b1ee48843066dd6d50efdeab66b028
+    + Image ID: sha256:a1ef7e0591908193835f7e4db5aa03cbf499cc3f2a6530320e43ff9b9f35b277
+
 ## 3.6.0-p6
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p5...3.6.0-p6 (2017-10-30)
     + Cleaning up notifications before the next test starts (#183) @diemol
