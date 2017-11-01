@@ -39,6 +39,9 @@ else
   die "Were unable to stop video recording within '${WAIT_TIME_OUT_VIDEO_STOP}'"
 fi
 
+sed -i -e "s/\r/\n/g" ${LOGS_DIR}/video-rec-stderr.log || true
+sed -i -e "s/\r/\n/g" ${LOGS_DIR}/video-rec-stdout.log || true
+
 # Include videos log in the output
 log "-- DEBUG: video-rec-stdout.log ----"
 tail -n 40 ${LOGS_DIR}/video-rec-stdout.log || true
