@@ -420,6 +420,17 @@ Powered by Supervisor, the container leaves many logs;
     /var/log/cont/xvfb-stderr.log
     /var/log/cont/xvfb-stdout.log
 
+## Changelog
+See [CHANGELOG.md](./CHANGELOG.md)
+
+The sha256 digests are generated after pushing the image to the registry therefore the last version of this docker-selenium will always have digest TBD (to be determined) but will be updated manually at [releases][]
+
+The image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set there and updated in the [releases][] page by navigating into any release tag.
+
+How to get container versions
+
+    docker exec grid versions
+
 ## Security
 See [SECURITY.md](./SECURITY.md)
 
@@ -433,4 +444,5 @@ See [LICENSE.md](./LICENSE.md)
 [BrowserStack]: https://www.browserstack.com/automate
 [xvfb-electron]: http://electron.atom.io/docs/tutorial/testing-on-headless-ci
 [docker-compose.yml]: ./docker-compose.yml
+[releases]: https://github.com/elgalu/docker-selenium/releases/
 [Zalenium]: https://github.com/zalando/zalenium

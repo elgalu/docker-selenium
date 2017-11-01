@@ -1,12 +1,3 @@
-# Changelog
-
-Note sha256 digests are generated after pushing the image to the registry therefore the last version of this docker-selenium will always have digest TBD (to be determined) but will be updated manually at [releases][]
-
-Note image ids also change after scm-source.json has being updated which triggers a cyclic problem so value TBD will be set here and updated in the [releases][] page by navigating into any release tag.
-
-###### To get container versions
-    docker exec grid versions
-
 ## 3.6.0-p6
  + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p5...3.6.0-p6 (2017-10-30)
     + Cleaning up notifications before the next test starts (#183) @diemol
@@ -4395,6 +4386,3 @@ Note image ids also change after scm-source.json has being updated which trigger
 
 ## v2.42.2 (2014-07-11) - alpha
  + Initial working version (Leo Gallucci)
-
-
-[releases]: https://github.com/elgalu/docker-selenium/releases/

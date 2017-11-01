@@ -14,8 +14,8 @@ die () {
   exit $errnum
 }
 
-docker --version
-docker-compose --version
+docker --version || echo "WARN: No docker installed yet"
+docker-compose --version || echo "WARN: No docker-compose installed yet"
 
 [ "${TRAVIS_BUILD_NUMBER}" == "" ] && die "Need env var TRAVIS_BUILD_NUMBER to know where to pull from"
 
