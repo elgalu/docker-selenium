@@ -98,7 +98,7 @@ generate_NEXT_RELEASE_by_updating_TBDs() {
   #-----------------------------------
 
   TBD_DOCKER_TAG=${TRAVIS_TAG}
-  TBD_PREV_COM=$(grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | head -n 1)
+  TBD_PREV_COMM=$(grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | head -n 1)
 
   TBD_DIGEST=$(grep -Po '(?<=digest: )([a-z0-9:]+)' docker_push.log) \
     || die "while trying to get TBD_DIGEST"
@@ -148,7 +148,7 @@ generate_NEXT_RELEASE_by_updating_TBDs() {
     || die "while trying to get UBUNTU_DATE"
 
   sed -i -- "s/TBD_DOCKER_TAG/${TBD_DOCKER_TAG}/g" NEXT_RELEASE.md || true
-  sed -i -- "s/TBD_PREV_COM/${TBD_PREV_COM}/g" NEXT_RELEASE.md || true
+  sed -i -- "s/TBD_PREV_COMM/${TBD_PREV_COMM}/g" NEXT_RELEASE.md || true
   sed -i -- "s/TBD_DIGEST/${TBD_DIGEST}/g" NEXT_RELEASE.md || true
   sed -i -- "s/TBD_IMAGE_ID/${TBD_IMAGE_ID}/g" NEXT_RELEASE.md || true
   sed -i -- "s/TBD_IMAGE_SIZE/${TBD_IMAGE_SIZE}/g" NEXT_RELEASE.md || true
@@ -186,7 +186,7 @@ add_commits_to_NEXT_RELEASE() {
     --format="[%h] %s" \
     --no-merges \
     --author='^(?!Leo Gallucci Bot).*$' --perl-regexp \
-    ${TBD_PREV_COM}..HEAD > git_shortlog.stdout
+    ${TBD_PREV_COMM}..HEAD > git_shortlog.stdout
 
   # Delete empty lines
   sed -i -e '/^\s*$/d' git_shortlog.stdout
@@ -229,20 +229,26 @@ github_release_from_NEXT_RELEASE() {
 
   hub --version || die "github.com/hub is not installed!"
 
+  # We need to separate the release title from its description
+  rm -f temp.md
+  echo -e "${TRAVIS_TAG}\n" | cat - NEXT_RELEASE.md > temp.md
+  rm NEXT_RELEASE.md
+  mv temp.md NEXT_RELEASE.md
+
   # If the release exists, delete it
   if hub release | grep -q "^${TRAVIS_TAG}\$"; then
     hub release delete "${TRAVIS_TAG}"
   fi
 
   # https://github.com/github/hub/blob/master/share/man/man1/hub.1.ronn#L123
-  export HUB_VERBOSE=1
+  # export HUB_VERBOSE=1
 
   # https://github.com/github/hub/blob/master/commands/release.go#L59
   # TODO: Add real assents (.deb, ...)
   hub release create \
-    --asset "Dockerfile" \
-    --asset "capabilities.json" \
-    --file "NEXT_RELEASE.md" \
+    -a "Dockerfile" \
+    -a "capabilities.json" \
+    -F "NEXT_RELEASE.md" \
     "${TRAVIS_TAG}"
 }
 
