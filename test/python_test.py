@@ -6,6 +6,7 @@
 # Usage
 #  curl -sSL https://raw.github.com/dosel/t/i/s | python
 import os
+import sys
 import time
 import datetime
 from retrying import retry
@@ -21,6 +22,9 @@ import argparse
 parser = argparse.ArgumentParser(description='Perform some basic selenium tests.')
 parser.add_argument('browser', choices=['chrome', 'firefox', 'mobile_emulation'], nargs='?', default='chrome',
                     help='in which browser to test')
+parser.add_argument('only_screenshot', choices=['true', 'false'], nargs='?', default='false',
+                    help='if we just want to take selenium versions screen shots')
+
 args = parser.parse_args()
 
 # http://selenium-python.readthedocs.org/en/latest/api.html
@@ -146,6 +150,9 @@ if args.browser == 'chrome':
     screen_shot_path = '/test/console.png'
     print ("Taking screen shot and saving to %s" % screen_shot_path)
     driver.get_screenshot_as_file(screen_shot_path)
+
+    if args.only_screenshot == 'true':
+        sys.exit(0)
 
 driver.set_window_size(width, height)
 
