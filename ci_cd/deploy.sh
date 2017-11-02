@@ -410,7 +410,7 @@ UBUNTU_DATE=$(docker exec grid cat UBUNTU_DATE) \
 
 NEXT_SELENIUM_VERSION="${TBD_SELENIUM_VERSION}"
 PREV_RELEASE="${PREV_RELEASE_FROM_CHANGELOG}"
-PREV_SELENIUM_VERSION
+PREV_SELENIUM_VERSION=$(echo "${PREV_RELEASE}" | grep -Po '([0-9\.]+)' | head -n 1)
 PREV_PATCH_LEVEL=$(echo "${PREV_RELEASE}" | grep -Po '(?<=p)([0-9]+)')
 
 if [ "$1" == "bump" ]; then
