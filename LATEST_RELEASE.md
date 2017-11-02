@@ -1,7 +1,12 @@
-## 3.6.0-p11
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p10...3.6.0-p11 (2017-11-01)
-    + Leo Gallucci (1):
-        * [ff34979] Fix build: match wget version in TravisCI
+## 3.6.0-p12
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p11...3.6.0-p12 (2017-11-02)
+    + Leo Gallucci (6):
+        * [a7a2446] Automate releasing from master branch on tagged commits
+        * [9c9d09e] Simplify CONTRIBUTING.md and local testing
+        * [6654655] Allow to run python_test to only take the grid screen shot
+        * [92434a1] Fix PREV_SELENIUM_VERSION in deploy.sh
+        * [e1982a6] Fix bump_setup_and_checks() and add travis_tag_checks()
+        * [2251995] Tag latest should not trigger a push and release
  + **Image tag details:**
     + Selenium version: 3.6.0 (6fbf3ec767)
     + Chrome stable:  62.0.3202.75
@@ -15,7 +20,7 @@
     + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
+    + Image version: 3.6.0-192
     + Image size: 1.4 GB
-    + Digest: sha256:b39c39090e01c6ee3b9a1b61d5c60a66398a7c2febf70e28a0fe262a490eb205
-    + Image ID: sha256:1b013d7ca34a6612e81ecad7970c4054c8465adebe524a105e731b3786f0a639
+    + Digest: sha256:7700fc71e451635e60d9b2c3ff400016b02ff627037b6240dbb02819b9c10773
 
