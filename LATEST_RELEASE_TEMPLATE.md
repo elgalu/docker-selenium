@@ -1,5 +1,5 @@
-## TBD_DOCKER_TAG
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/TBD_PREV_COMM...TBD_DOCKER_TAG (TBD_DATE)
+## NEXT_RELEASE
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/PREV_RELEASE...NEXT_RELEASE (TBD_DATE)
  + **Image tag details:**
     + Selenium version: TBD_SELENIUM_VERSION (TBD_SELENIUM_REVISION)
     + Chrome stable:  TBD_CHROME_STABLE
@@ -13,7 +13,7 @@
     + Tested on kernel CI  host: TBD_HOST_UNAME
     + Built at CI  host with: Docker version TBD_DOCKER_VERS, build TBD_DOCKER_BUILD
     + Built at CI  host with: Docker Compose version TBD_DOCKER_COMPOSE_VERS, build TBD_DOCKER_COMPOSE_BUILD
+    + Image version: TBD_IMAGE_VERSION
     + Image size: TBD_IMAGE_SIZE
     + Digest: TBD_DIGEST
-    + Image ID: TBD_IMAGE_ID
 

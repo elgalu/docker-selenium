@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # long wait
+docker exec grid versions || true
 docker exec grid stop || true
 docker stop grid || true
 docker rm grid || true

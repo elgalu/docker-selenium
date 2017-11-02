@@ -528,3 +528,40 @@ https://github.com/mozilla/geckodriver/issues/362#issuecomment-273948335
 https://github.com/SeleniumHQ/selenium/commit/40a5d80e995071fb85f86e70e15e4b96cc692d11
 
 Outside of the running tests.
+
+### Chrome artifact
+Keep certain bins if chrome version changed for example:
+
+    cd ~/tmp_binaries && VER="62.0.3202.75" && NAME="google-chrome-stable_${VER}_amd64" && echo ${NAME}
+    wget -nv --show-progress -O ${NAME}.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    md5sum ${NAME}.deb > ${NAME}.md5 && shasum ${NAME}.deb > ${NAME}.sha && cp ${NAME}.md5 ${NAME}.sha ~/dosel/binaries
+
+## Docker push from Travis CI
+Travis [steps](https://docs.travis-ci.com/user/docker/#Pushing-a-Docker-Image-to-a-Registry) involve `docker login` and docker credentials encryptions.
+
+### Requirements
+
+* Ruby
+* `gem install travis --no-rdoc --no-ri`
+* `travis login --user elgalu`
+* Encrypt environment variables with travis cli
+
+### Encrypt
+    travis env set DOCKER_EMAIL me@example.com
+    travis env set DOCKER_USERNAME elgalubot
+     travis env set DOCKER_PASSWORD secretsecret #1st space in purpose
+     travis env set GITHUB_TOKEN secretsecret
+
+### Bot setup
+#### github.com
+- bot: Fork the repo
+- owner: Add bot as collaborator
+- bot: Accept collaborator invitation
+- bot: Generate personal token
+
+#### hub.docker
+- owner: Add bot as collaborator
+
+#### travis-ci.org
+- owner: Enable the project
+- owner: Run all the required `travis env set`

@@ -15,19 +15,11 @@ dist: trusty
 services:
   - docker
 
-# Omit running tests on temporal branches,
-#  i.e. branches with names that start with "tmp"
-branches:
-  except:
-    - /^tmp/
-
 env:
   global:
     - TEST_SLEEPS="0.7"
     - ADDED_TEST_SLEEP="6.5"
     - DOCKER_VERSION="stable"
-    - DOCKER_PUSH=true
-    - DOCKER_PUSH_LATEST=true
 
 jobs:
   include:
@@ -70,7 +62,27 @@ jobs:
         - travis_retry ./test/script_scenario_zalenium
 
     - stage: Push Image (only with a tag) & Git push
+      if: branch = master
       script:
         - travis_retry ./test/install_hub_cli
         - travis_retry ./test/before_install_pull
-        - ./test/script_push
+
+      deploy:
+
+        # Commit to master without a tag: Bump version
+        - provider: script
+          script:
+            - ./ci_cd/deploy.sh bump
+          skip_cleanup: true
+          on:
+            tags: false
+            branch: master
+
+        # Commit to master with a tag: Docker push
+        - provider: script
+          script:
+            - ./ci_cd/deploy.sh release
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master

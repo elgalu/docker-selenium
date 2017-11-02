@@ -1000,7 +1000,8 @@ COPY LICENSE.md /home/seluser/
 COPY Analytics.md /home/seluser/
 
 # Include current version
-COPY VERSION /home/seluser/
+COPY GLOBAL_PATCH_LEVEL.txt /home/seluser/
+RUN echo "${SEL_VER}-$(cat GLOBAL_PATCH_LEVEL.txt)" > /home/seluser/VERSION
 
 # Moved from entry.sh
 ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
