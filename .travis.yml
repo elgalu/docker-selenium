@@ -15,6 +15,10 @@ dist: trusty
 services:
   - docker
 
+branches:
+  except:
+  - latest
+
 env:
   global:
     - TEST_SLEEPS="0.7"
