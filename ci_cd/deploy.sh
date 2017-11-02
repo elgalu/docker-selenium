@@ -103,13 +103,23 @@ add_LATEST_RELEASE_to_top_of_CHANGELOG() {
   mv temp.md CHANGELOG.md
 }
 
-bump_setup_and_checks() {
+travis_tag_checks() {
   if grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | grep "${TRAVIS_TAG}"; then
     die "TRAVIS_TAG='${TRAVIS_TAG}' is already present in CHANGELOG.md"
   fi
 
   if hub release | grep "${TRAVIS_TAG}"; then
     die "TRAVIS_TAG='${TRAVIS_TAG}' has already being released according to: hub release"
+  fi
+}
+
+bump_setup_and_checks() {
+  if grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | grep "${NEXT_RELEASE}"; then
+    die "NEXT_RELEASE='${NEXT_RELEASE}' is already present in CHANGELOG.md"
+  fi
+
+  if hub release | grep "${NEXT_RELEASE}"; then
+    die "NEXT_RELEASE='${NEXT_RELEASE}' has already being released according to: hub release"
   fi
 
   # Remove LATEST_RELEASE.md as we will overwrite it
@@ -285,13 +295,13 @@ git_co_fetch_merge_stash() {
   git checkout -b travis-${TRAVIS_BUILD_NUMBER}
   git remote add github "https://elgalubot:${GITHUB_TOKEN}@github.com/elgalu/docker-selenium.git"
   git fetch github
-  git stash save || true
+  # git stash save || true
   git checkout -t github/master -b github/master
   echo "Will git merge into master"
   if ! timeout --foreground "30s" git merge travis-${TRAVIS_BUILD_NUMBER}; then
     echo "WARN: Timed out on git merge!" 1>&2
   fi
-  git stash pop || true
+  # git stash pop || true
 }
 
 #####################################################
@@ -436,10 +446,6 @@ if [ "$1" == "bump" ]; then
 
   git_co_fetch_merge_stash
 
-  bump_setup_and_checks
-
-  increment_global_patch_level_for_GA
-
   if [ "${PREV_SELENIUM_VERSION}" == "${NEXT_SELENIUM_VERSION}" ]; then
     NEXT_PATCH_LEVEL=$((PREV_PATCH_LEVEL+1))
   else
@@ -448,6 +454,10 @@ if [ "$1" == "bump" ]; then
   fi
 
   NEXT_RELEASE="${NEXT_SELENIUM_VERSION}-p${NEXT_PATCH_LEVEL}"
+
+  bump_setup_and_checks
+
+  increment_global_patch_level_for_GA
 
   generate_LATEST_RELEASE_by_updating_TBDs
 
@@ -470,6 +480,8 @@ elif [ "$1" == "release" ]; then
   if [ "${TRAVIS_TAG}" == "" ]; then
     die "This commit is not tagged. Something went bad while releasing."
   fi
+
+  travis_tag_checks
 
   docker_login_tag_push
 
