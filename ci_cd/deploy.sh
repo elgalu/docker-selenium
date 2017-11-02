@@ -144,7 +144,7 @@ git_diff_add_commit() {
   git add GLOBAL_PATCH_LEVEL.txt
   git add capabilities.json
   git add images/grid3_console.png
-  git commit -m "${NEXT_RELEASE}: Update CHANGELOG, image digest, capabilities & png [ci skip]"
+  git commit -m "${NEXT_RELEASE}: Update CHANGELOG, image digest, capabilities & png"
   git --no-pager log -n3
   git branch
 }
@@ -430,7 +430,7 @@ if [ "$1" == "bump" ]; then
   # - Create LATEST_RELEASE.md from LATEST_RELEASE_TEMPLATE.md
   # - Update LATEST_RELEASE.md with accumulated commits
   # - Update the CHANGELOG by adding LATEST_RELEASE.md on top
-  # - Git commit with [ci skip] to avoid unnecessary builds
+  # - Git commit
   # - Git tag the bumped version to trigger the "release" section
 
   if [ "${TRAVIS_TAG}" != "" ]; then
@@ -479,6 +479,11 @@ elif [ "$1" == "release" ]; then
 
   if [ "${TRAVIS_TAG}" == "" ]; then
     die "This commit is not tagged. Something went bad while releasing."
+  fi
+
+  if [ "${TRAVIS_TAG}" == "latest" ]; then
+    echo "Tag latest will not trigger a push and release"
+    exit 0
   fi
 
   travis_tag_checks
