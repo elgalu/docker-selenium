@@ -61,28 +61,16 @@ jobs:
         - travis_retry ./test/before_install_pull
         - travis_retry ./test/script_scenario_zalenium
 
-    - stage: Push Image (only with a tag) & Git push
-      if: branch = master
+    - stage: Bump versions
+      if: branch = master AND sender != elgalubot AND tag IS blank
       script:
         - travis_retry ./test/install_hub_cli
         - travis_retry ./test/before_install_pull
+        - ./ci_cd/deploy.sh bump
 
-      deploy:
-
-        # Commit to master without a tag: Bump version
-        - provider: script
-          script:
-            - ./ci_cd/deploy.sh bump
-          skip_cleanup: true
-          on:
-            tags: false
-            branch: master
-
-        # Commit to master with a tag: Docker push
-        - provider: script
-          script:
-            - ./ci_cd/deploy.sh release
-          skip_cleanup: true
-          on:
-            tags: true
-            branch: master
+    - stage: Push Image & Release
+      if: tag =~ ^\d+\.\d+\.\d+-p\d+$
+      script:
+        - travis_retry ./test/install_hub_cli
+        - travis_retry ./test/before_install_pull
+        - ./ci_cd/deploy.sh release
