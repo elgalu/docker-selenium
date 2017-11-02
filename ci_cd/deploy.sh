@@ -104,8 +104,8 @@ add_LATEST_RELEASE_to_top_of_CHANGELOG() {
 }
 
 travis_tag_checks() {
-  if grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | grep "${TRAVIS_TAG}"; then
-    die "TRAVIS_TAG='${TRAVIS_TAG}' is already present in CHANGELOG.md"
+  if ! grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | grep "${TRAVIS_TAG}"; then
+    die "TRAVIS_TAG='${TRAVIS_TAG}' should be already present in CHANGELOG.md"
   fi
 
   if hub release | grep "${TRAVIS_TAG}"; then
