@@ -66,14 +66,14 @@ jobs:
         - travis_retry ./test/script_scenario_zalenium
 
     - stage: Bump versions
-      if: branch = master AND sender != elgalubot AND tag IS blank
+      if: branch = master AND sender != elgalubot AND tag IS blank AND type != pull_request
       script:
         - travis_retry ./test/install_hub_cli
         - travis_retry ./test/before_install_pull
         - ./ci_cd/deploy.sh bump
 
     - stage: Push Image & Release
-      if: tag =~ ^\d+\.\d+\.\d+-p\d+$
+      if: tag =~ ^\d+\.\d+\.\d+-p\d+$ AND type != pull_request
       script:
         - travis_retry ./test/install_hub_cli
         - travis_retry ./test/before_install_pull
