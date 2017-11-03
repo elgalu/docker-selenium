@@ -1,7 +1,7 @@
-## 3.6.0-p14
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p13...3.6.0-p14 (2017-11-03)
-    + javpaw (1):
-        * [f3b7572] Upgrade geckodriver patch level to 0.19.01 (#185)
+## 3.6.0-p15
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p14...3.6.0-p15 (2017-11-03)
+    + Leo Gallucci (1):
+        * [b84cc9c] Turn some ENVs into ARGs. Fix CI from forks
  + **Image tag details:**
     + Selenium version: 3.6.0 (6fbf3ec767)
     + Chrome stable:  62.0.3202.75
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
-    + Image version: 3.6.0-196
+    + Image version: 3.6.0-197
     + Image size: 1.4 GB
-    + Digest: sha256:df4061bb84ab212082209aee4844e2fcd90cb1f12dec09e692a757c19db10d2f
+    + Digest: sha256:5b81f4ff29590677bd92da123f22a3f555485e20d5b1b4430b463fa6761eb97b
 
