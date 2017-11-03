@@ -26,6 +26,7 @@ if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
   ./test/before_install_setup
   ./host-scripts/gen-scm-source.sh
   docker build -t selenium .
+  docker tag selenium:latest elgalu/selenium:latest
 else
   docker pull elgalu/build_selenium:${TRAVIS_BUILD_NUMBER}
   docker tag elgalu/build_selenium:${TRAVIS_BUILD_NUMBER} selenium:latest
@@ -33,3 +34,4 @@ else
 fi
 
 docker images selenium
+docker images elgalu/selenium

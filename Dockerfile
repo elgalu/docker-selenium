@@ -611,8 +611,8 @@ LABEL selenium_firefox_version "${FF_VER}"
 # GeckoDriver
 #============
 # Layer size: tiny: ~4 MB
-ENV GECKOD_VER="0.19.1" \
-    GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
+ARG GECKOD_VER="0.19.1"
+ENV GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
   && rm -rf /opt/geckodriver* \
@@ -673,8 +673,8 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ENV CHROME_DRIVER_VERSION="2.33" \
-    CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
+ARG CHROME_DRIVER_VERSION="2.33"
+ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}"
