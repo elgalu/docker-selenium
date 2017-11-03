@@ -1,9 +1,11 @@
-## 3.6.0-p15
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p14...3.6.0-p15 (2017-11-03)
+## 3.7.0-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.6.0-p15...3.7.0-p0 (2017-11-03)
+    + Christophe Gosiau (1):
+        * [ef96b7b] Upgrade Selenium minor to 3.7.0 (#186)
     + Leo Gallucci (1):
-        * [b84cc9c] Turn some ENVs into ARGs. Fix CI from forks
+        * [b77e006] Missing .travis.yml stages condition AND type != pull_request
  + **Image tag details:**
-    + Selenium version: 3.6.0 (6fbf3ec767)
+    + Selenium version: 3.7.0 (2321c73)
     + Chrome stable:  62.0.3202.75
     + Firefox stable: 56.0.2
     + Geckodriver: 0.19.1
@@ -15,7 +17,7 @@
     + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
-    + Image version: 3.6.0-197
-    + Image size: 1.4 GB
-    + Digest: sha256:5b81f4ff29590677bd92da123f22a3f555485e20d5b1b4430b463fa6761eb97b
+    + Image version: 3.7.0-198
+    + Image size: 1.39 GB
+    + Digest: sha256:6403925d280f702f5b6b92757e6671e65bd10aa869c2c29fe9b3e9503244f55a
 
