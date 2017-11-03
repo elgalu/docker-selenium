@@ -115,11 +115,15 @@ travis_tag_checks() {
 
 bump_setup_and_checks() {
   if grep -Po '(?<=## )([a-z0-9\.-]+)' CHANGELOG.md | grep "${NEXT_RELEASE}"; then
-    die "NEXT_RELEASE='${NEXT_RELEASE}' is already present in CHANGELOG.md"
+    echo "WARN: NEXT_RELEASE='${NEXT_RELEASE}' is already present in CHANGELOG.md"
+    echo "WARN: Will abort the bump as it's happening probably in parallel with another one"
+    exit 0
   fi
 
   if hub release | grep "${NEXT_RELEASE}"; then
-    die "NEXT_RELEASE='${NEXT_RELEASE}' has already being released according to: hub release"
+    echo "WARN: NEXT_RELEASE='${NEXT_RELEASE}' has already being released according to: hub release"
+    echo "WARN: Will abort the bump as it's happening probably in parallel with another one"
+    exit 0
   fi
 
   # Remove LATEST_RELEASE.md as we will overwrite it
