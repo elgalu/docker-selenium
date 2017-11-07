@@ -263,7 +263,7 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 #=================
 # Layer size: medium ~22 MB
 ARG SEL_DIRECTORY="3.7"
-ARG SEL_VER="3.7.0"
+ARG SEL_VER="3.7.1"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
