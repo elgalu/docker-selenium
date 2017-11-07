@@ -1,10 +1,11 @@
-## 3.7.0-p2
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.7.0-p1...3.7.0-p2 (2017-11-05)
-    + Leo Gallucci (1):
-        * [9d5a970] Bump Supervisor master commit from 2017-May to 2017-Oct for #163 (PR #188)
+## 3.7.1-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.7.0-p2...3.7.1-p0 (2017-11-07)
+    + Diego Molina (2):
+        * [5d95ffa] Upgrading to 3.7.1
+        * [1b73deb] Bumping Chrome version
  + **Image tag details:**
-    + Selenium version: 3.7.0 (2321c73)
-    + Chrome stable:  62.0.3202.75
+    + Selenium version: 3.7.1 (8a0099a)
+    + Chrome stable:  62.0.3202.89
     + Firefox stable: 56.0.2
     + Geckodriver: 0.19.1
     + Chromedriver: 2.33.506092 (733a02544d189eeb751fe0d7ddca79a0ee28cce4)
@@ -15,7 +16,7 @@
     + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
-    + Image version: 3.7.0-200
+    + Image version: 3.7.1-201
     + Image size: 1.39 GB
-    + Digest: sha256:f07b1bc86ee34850a71bc39f962d6a7c65039f2ec8e10a1bd2aab70eee25c291
+    + Digest: sha256:e3f56a1d63927975832038a317705da74b6d52dfc864009e7e788b3e3d3d8f17
 
