@@ -263,7 +263,7 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 #=================
 # Layer size: medium ~22 MB
 ARG SEL_DIRECTORY="3.7"
-ARG SEL_VER="3.7.0"
+ARG SEL_VER="3.7.1"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -631,7 +631,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="62.0.3202.75"
+ARG EXPECTED_CHROME_VERSION="62.0.3202.89"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
