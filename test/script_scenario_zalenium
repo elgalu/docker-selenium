@@ -67,10 +67,26 @@ export EXPECTED_VID_COUNT="6"
 export VID_FOLDER="tmp_videos/zalenium-build"
 
 # Wait up to 40 seconds for the videos to be there
-if ! timeout --foreground 40s test/wait_videos_count; then
-  ls -la tmp_videos/zalenium-build/ || true
-  die "Waited a few seconds for '${EXPECTED_VID_COUNT}' '${VID_EXT}' videos to be at ${VID_FOLDER}"
+if [ "$(uname)" = 'Darwin' ]; then
+  ./test/wait_videos_count
+else
+  if ! timeout --foreground 40s test/wait_videos_count; then
+    ls -la tmp_videos/zalenium-build/ || true
+    die "Waited a few seconds for '${EXPECTED_VID_COUNT}' '${VID_EXT}' videos to be at ${VID_FOLDER}"
+  fi
 fi
 
 # Cleanup
 stop_zalenium
+
+# Upload videos to
+# http://zalenium.bitballoon.com/dashboard.html
+if [ "${BITBALLOON_ACCESS_TOKEN}" != "" ] && [ "${BITBALLOON_SITE_ID}" != "" ]; then
+  # Only update the site upon releases
+  if [ "${TRAVIS_TAG}" != "" ]; then
+    echo "{\"access_token\":\"${BITBALLOON_ACCESS_TOKEN}\",\"site_id\":\"${BITBALLOON_SITE_ID}\"}" > .bitballoon
+    ls -la tmp_videos/ || die "We need tmp_videos to upload to bitballoon"
+    bitballoon deploy tmp_videos/
+    #=> Site deployed: http://zalenium.bitballoon.com
+  fi
+fi
