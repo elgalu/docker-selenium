@@ -1,7 +1,7 @@
-## 3.7.1-p2
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.7.1-p1...3.7.1-p2 (2017-11-14)
-    + Diego Molina (1):
-        * [f74166c] Bumping Chrome and Firefox versions
+## 3.7.1-p3
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.7.1-p2...3.7.1-p3 (2017-11-14)
+    + Leo Gallucci (1):
+        * [2e5c59b] Fix bind on tests for some host environments
  + **Image tag details:**
     + Selenium version: 3.7.1 (8a0099a)
     + Chrome stable:  62.0.3202.94
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
-    + Image version: 3.7.1-203
+    + Image version: 3.7.1-204
     + Image size: 1.39 GB
-    + Digest: sha256:8768cb27292a3ab0eafcf409936fea7468d2331766d5202827f006d4a9cf17fd
+    + Digest: sha256:3faf06ee1e1c368e5874224696d552a6de98dea0186657c61370f4dd29773ef4
 
