@@ -4,7 +4,7 @@ Simply put your changes in a new branch and open a pull request.
 ## Local Testing
 To test your local changes:
 
-    ./test/run_tests_locally.sh
+    ./test/run_locally.sh
 
 Optionally, manually check if the png and videos were generated:
 
