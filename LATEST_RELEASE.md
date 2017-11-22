@@ -1,7 +1,7 @@
-## 3.7.1-p4
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.7.1-p3...3.7.1-p4 (2017-11-18)
+## 3.7.1-p5
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.7.1-p4...3.7.1-p5 (2017-11-22)
     + Leo Gallucci (1):
-        * [8d2bfb1] Upgrade Ubuntu xenial-20171114 (date)
+        * [a190874] Fix docker-compose examples for #192
  + **Image tag details:**
     + Selenium version: 3.7.1 (8a0099a)
     + Chrome stable:  62.0.3202.94
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-93-generic x86_64
     + Built at CI  host with: Docker version 17.03.1, build c6d412e
     + Built at CI  host with: Docker Compose version 1.13.0, build 1719ceb
-    + Image version: 3.7.1-205
+    + Image version: 3.7.1-206
     + Image size: 1.39 GB
-    + Digest: sha256:99c77f5a9c33ac52e0689a0e8605ae1c53f3cfb87627fb34f8285201eb787ca3
+    + Digest: sha256:df2228989eb524b4105332e5c382ce3e4a4e1a0aee27c8dfc5787a0d281f53e6
 
