@@ -107,8 +107,8 @@ RUN set -ex \
 #     has `ts` that will prepend a timestamp to every line of input you give it
 # Layer size: medium: 29.8 MB
 # Layer size: medium: 27.9 MB (with --no-install-recommends)
-RUN apt-get -qqy update \
-  && apt-get -qqy install \
+RUN apt -qqy update \
+  && apt -qqy install \
     libltdl7 \
     libhavege1 \
     netcat-openbsd \
@@ -126,9 +126,9 @@ RUN apt-get -qqy update \
     dbus-x11 \
     wget \
     curl \
-  && apt-get -qyy autoremove \
+  && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #==============================
 # Locale and encoding settings
@@ -142,16 +142,16 @@ ENV LANGUAGE ${LANG_WHICH}_${LANG_WHERE}.${ENCODING}
 ENV LANG ${LANGUAGE}
 # Layer size: small: ~9 MB
 # Layer size: small: ~9 MB MB (with --no-install-recommends)
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     language-pack-en \
     tzdata \
     locales \
   && locale-gen ${LANGUAGE} \
   && dpkg-reconfigure --frontend noninteractive locales \
-  && apt-get -qyy autoremove \
+  && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #===================
 # Timezone settings
@@ -193,16 +193,16 @@ RUN useradd seluser \
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 # Layer size: big: 132.2 MB
 # Layer size: big: 132.2 MB (with --no-install-recommends)
-RUN apt-get -qqy update \
-  && apt-get -qqy install \
+RUN apt -qqy update \
+  && apt -qqy install \
     openjdk-8-jre-headless \
   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
        /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-  && apt-get -qyy autoremove \
+  && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #==================
 # Java8 - Oracle
@@ -212,26 +212,26 @@ RUN apt-get -qqy update \
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
 # Layer size: huge: 618.6 MB (with --no-install-recommends)
 # Layer size: huge: 661.1 MB
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
+# RUN apt -qqy update \
+#   && apt -qqy --no-install-recommends install \
 #     software-properties-common \
 #   && echo debconf shared/accepted-oracle-license-v1-1 \
 #       select true | debconf-set-selections \
 #   && echo debconf shared/accepted-oracle-license-v1-1 \
 #       seen true | debconf-set-selections \
 #   && add-apt-repository ppa:webupd8team/java \
-#   && apt-get -qqy update \
-#   && apt-get -qqy install \
+#   && apt -qqy update \
+#   && apt -qqy install \
 #     oracle-java8-installer \
 #   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
 #        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
 #   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
 #        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-#   && apt-get -qqy install \
+#   && apt -qqy install \
 #     oracle-java8-set-default \
-#   && apt-get -qyy autoremove \
+#   && apt -qyy autoremove \
 #   && rm -rf /var/lib/apt/lists/* \
-#   && apt-get -qyy clean
+#   && apt -qyy clean
 
 #==============================================
 # Java blocks until kernel have enough entropy
@@ -239,15 +239,15 @@ RUN apt-get -qqy update \
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
 # Layer size: tiny: 0.8 MB
-RUN apt-get -qqy update \
+RUN apt -qqy update \
   && apt-key update -qqy \
-  && apt-get -qqy install \
+  && apt -qqy install \
     haveged rng-tools \
   && service haveged start \
   && update-rc.d haveged defaults \
-  && apt-get -qyy autoremove \
+  && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -285,8 +285,8 @@ USER root
 #=========================================================
 # Layer size: big.: 79.39 MB (with --no-install-recommends)
 # Layer size: huge: 296 MB
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
+# RUN apt -qqy update \
+#   && apt -qqy --no-install-recommends install \
 #     python2.7 \
 #     python-pip \
 #     python-openssl \
@@ -295,7 +295,7 @@ USER root
 #   && pip install --upgrade pip \
 #   && pip install --upgrade setuptools \
 #   && rm -rf /var/lib/apt/lists/* \
-#   && apt-get -qyy clean
+#   && apt -qyy clean
 
 #=========================================================
 # Python3 for Supervisor, selenium tests, and other stuff
@@ -308,8 +308,8 @@ USER root
 # Layer size: big.: 138.9 MB (with --no-install-recommends)
 # Layer size: huge: 309.9 MB
 COPY test/requirements.txt /test/
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     python3 \
     python3-pip \
     python3-dev \
@@ -320,7 +320,7 @@ RUN apt-get -qqy update \
   && pip3 install --upgrade numpy \
   && pip3 install --requirement /test/requirements.txt \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 RUN cd /usr/local/bin \
   && { [ -e easy_install ] || ln -s easy_install-* easy_install; } \
   && ln -s idle3 idle \
@@ -338,8 +338,8 @@ RUN cd /usr/local/bin \
 # Check every now and then if version 4 is finally the stable one
 #  https://pypi.python.org/pypi/supervisor
 #  https://github.com/Supervisor/supervisor
-# RUN apt-get -qqy update \
-#   && apt-get -qqy install \
+# RUN apt -qqy update \
+#   && apt -qqy install \
 #     supervisor \
 # 2017-10-21 commit: 3f04badc3237f0, supervisor/version.txt: 4.0.0.dev0
 # 2017-05-30 commit: 946d9cf3be4db3, supervisor/version.txt: 4.0.0.dev0
@@ -350,7 +350,7 @@ RUN SHA="3f04badc3237f0d86fa88208455d8560c20bc2e7" \
   && pip install --upgrade \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #================
 # Font libraries
@@ -371,8 +371,8 @@ RUN SHA="3f04badc3237f0d86fa88208455d8560c20bc2e7" \
 #  https://github.com/SeleniumHQ/docker-selenium/issues/383#issuecomment-278367069
 # Layer size: small: 36.28 MB (with --no-install-recommends)
 # Layer size: small: 36.28 MB
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     libfontconfig \
     libfreetype6 \
     xfonts-cyrillic \
@@ -382,7 +382,7 @@ RUN apt-get -qqy update \
     fonts-wqy-zenhei \
     ttf-ubuntu-font-family \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #=========
 # Openbox
@@ -391,11 +391,11 @@ RUN apt-get -qqy update \
 # Let's disable this as is only filling disk space
 # Layer size: huge: 153.4 MB (with --no-install-recommends)
 # Layer size: huge: 224.4 MB
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
+# RUN apt -qqy update \
+#   && apt -qqy --no-install-recommends install \
 #     openbox obconf menu \
 #   && rm -rf /var/lib/apt/lists/* \
-#   && apt-get -qyy clean
+#   && apt -qyy clean
 
 #=========
 # fluxbox
@@ -404,12 +404,12 @@ RUN apt-get -qqy update \
 # xfce4-notifyd adds 5mb but allows `notify-send` notifications
 # Layer size: small: 9.659 MB
 # Layer size: small: 6.592 MB (with --no-install-recommends)
-RUN apt-get -qqy update \
-  && apt-get -qqy install \
+RUN apt -qqy update \
+  && apt -qqy install \
     fluxbox \
     xfce4-notifyd \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #============================
 # Xvfb X virtual framebuffer
@@ -423,23 +423,23 @@ RUN apt-get -qqy update \
 #   xserver-xorg-video-dummy  116.7 MB  no-recommends: 90.52 MB
 # Layer size: big: 136.9 MB (with --no-install-recommends)
 # Layer size: big: 162.6 MB
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     xvfb \
     xorg \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #============
 # VNC Server
 #============
 # Layer size: medium: 12.67 MB
 # Layer size: medium: 10.08 MB (with --no-install-recommends)
-RUN apt-get -qqy update \
-  && apt-get -qqy install \
+RUN apt -qqy update \
+  && apt -qqy install \
     x11vnc \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -482,11 +482,11 @@ USER root
 #       https://www.youtube.com/html5
 # Layer size: big: 149.9 MB
 # Layer size: big: 135.4 MB (with --no-install-recommends)
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     gstreamer1.0-libav \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #=================================================
 # ffmpeg/libav/avconv video codecs & dependencies
@@ -496,14 +496,14 @@ RUN apt-get -qqy update \
 #   libavformat-dev libavcodec-dev libavutil-dev libqt4-dev make g++ libz-dev
 # Layer size: medium: ~12 MB (with --no-install-recommends)
 # Layer size: medium: ~21 MB
-# RUN apt-get -qqy update \
-#   && apt-get -qqy --no-install-recommends install \
+# RUN apt -qqy update \
+#   && apt -qqy --no-install-recommends install \
 #     libx264-dev \
 #     libvorbis-dev \
 #     libx11-dev \
 #     gpac \
 #   && rm -rf /var/lib/apt/lists/* \
-#   && apt-get -qyy clean
+#   && apt -qyy clean
 
 #========
 # ffmpeg
@@ -513,12 +513,12 @@ RUN apt-get -qqy update \
 #   (use in Ubuntu >= 15) packages: ffmpeg
 # Layer size: medium: ~12 MB (with --no-install-recommends)
 # Layer size: medium: ~17 MB
-RUN apt-get -qqy update \
-  && apt-get -qqy install \
+RUN apt -qqy update \
+  && apt -qqy install \
     ffmpeg \
     gpac \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #==============
 # libav/avconv
@@ -528,11 +528,11 @@ RUN apt-get -qqy update \
 # libav-tools (avconv): a fork of ffmpeg
 #   a better alternative to Pyvnc2swf
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     libav-tools \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 # ------------------------#
 # Sauce Connect Tunneling #
@@ -554,11 +554,11 @@ RUN apt-get -qqy update \
     # libasound2 \
     # libpulse-dev \
     # xul-ext-ubufox \
-RUN apt-get -qqy update \
-  && apt-get -qqy --no-install-recommends install \
+RUN apt -qqy update \
+  && apt -qqy --no-install-recommends install \
     `apt-cache depends firefox | awk '/Depends:/{print$2}'` \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean
+  && apt -qyy clean
 
 #===================================================
 # Run the following commands as non-privileged user
@@ -640,17 +640,17 @@ ENV CHROME_URL="https://dl.google.com/linux/direct" \
 LABEL selenium_chrome_version "${EXPECTED_CHROME_VERSION}"
 
 # Layer size: huge: 196.3 MB
-RUN apt-get -qqy update \
+RUN apt -qqy update \
   && mkdir -p chrome-deb \
   && wget -nv "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
           -O "./chrome-deb/google-chrome-stable_current_amd64.deb" \
-  && apt-get -qyy --no-install-recommends install \
+  && apt -qyy --no-install-recommends install \
         "${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb" \
   && rm "${CHROME_BASE_DEB_PATH}-stable_current_amd64.deb" \
   && rm -rf ./chrome-deb \
-  && apt-get -qyy autoremove \
+  && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
-  && apt-get -qyy clean \
+  && apt -qyy clean \
   && export CH_STABLE_VER=$(/usr/bin/google-chrome-stable --version | grep -iEo "${GREP_ONLY_NUMS_VER}") \
   && echo "CH_STABLE_VER:'${CH_STABLE_VER}' vs EXPECTED_CHROME_VERSION:'${EXPECTED_CHROME_VERSION}'" \
   && [ "${CH_STABLE_VER}" = "${EXPECTED_CHROME_VERSION}" ] || fail
