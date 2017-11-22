@@ -65,9 +65,9 @@ fi
 if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
   # We found that, for better entropy, running haveged
   # with --privileged and sudo here works more reliable
-  sudo -E haveged
+  sudo -E haveged || true
 else
-  haveged
+  haveged || true
 fi
 
 # Workaround that might help to get dbus working in docker
