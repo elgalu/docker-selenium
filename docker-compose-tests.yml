@@ -1,3 +1,5 @@
+# The purpose of this -test example is for the e2e tests of this project
+#
 # Usage:
 #  docker-compose -p grid up --force-recreate
 #  docker-compose -p grid scale mock=1 hub=1 chrome=3 firefox=3

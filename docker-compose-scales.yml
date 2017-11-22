@@ -1,11 +1,9 @@
-# The purpose of this `docker-compose.yml` example is to run 1 hub, 1 chrome, 1 firefox
-# i.e. this example doesn't scale, but there is another file for that: docker-compose-scales.yml
-# i.e. this example doesn't support `docker-compose scale`
-#
-# If you try to scale this one you will get `Bind for 0.0.0.0:6080 failed: port is already allocated`
+# The purpose of this -scales example is to run 1 hub, N chromes, N firefox
 #
 # Usage:
-#  docker-compose -p grid up --force-recreate
+#  docker-compose -f docker-compose-scales.yml -p grid up --force-recreate
+# How to scale it:
+#  docker-compose -f docker-compose-scales.yml -p grid scale hub=1 chrome=2 firefox=1
 version: '3'
 
 services:
@@ -27,17 +25,10 @@ services:
     image: elgalu/selenium
     depends_on:
       - hub
-    ports:
-      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5900
-      - 5900:25900
-      # noVNC: See what's going on by hitting http://0.0.0.0:6080 in your browser
-      #        Important: http://127.0.0.1:6080 works but http://localhost:6080 doesn't
-      - 6080:26080
     volumes:
       - /dev/shm:/dev/shm
     privileged: true
     environment:
-      - NOVNC=true
       - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
       - SELENIUM_NODE_HOST={{CONTAINER_IP}}
@@ -52,16 +43,10 @@ services:
     image: elgalu/selenium
     depends_on:
       - hub
-    ports:
-      # VNC: See what's going on by connecting your VNC client to 0.0.0.0:5901
-      - 5901:25900
-      # noVNC: See what's going on by hitting http://0.0.0.0:6081 in your browser
-      - 6081:26080
     volumes:
       - /dev/shm:/dev/shm
     privileged: true
     environment:
-      - NOVNC=true
       - SELENIUM_HUB_HOST=hub
       - SELENIUM_HUB_PORT=4444
       - SELENIUM_NODE_HOST={{CONTAINER_IP}}
