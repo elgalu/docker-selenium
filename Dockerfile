@@ -110,6 +110,7 @@ RUN set -ex \
 RUN apt-get -qqy update \
   && apt-get -qqy install \
     libltdl7 \
+    libhavege1 \
     netcat-openbsd \
     pwgen \
     bc \
