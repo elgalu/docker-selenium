@@ -143,6 +143,19 @@ export DOCKER_HOST_IP=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 # export CONTAINER_IP=$(ip addr show dev ${ETHERNET_DEVICE_NAME} | grep "inet " | awk '{print $2}' | cut -d '/' -f 1)
 # 2017-09 Found a more portable, even works in alpine:
 export CONTAINER_IP=`getent hosts ${HOSTNAME} | awk '{ print $1 }'`
+# Trying again to retrieve the container IP when using Zalenium
+if [ "${ZALENIUM}" == "true" ] && [ "${CONTAINER_IP}" == "" ]; then
+    # Sometimes the networking is not fast and the container IP is not there, we retry a few times for one minute to get it.
+    WAIT_UNTIL=$((SECONDS + 60))
+    while [ $SECONDS -lt ${WAIT_UNTIL} ]; do
+        export CONTAINER_IP=`getent hosts ${HOSTNAME} | awk '{ print $1 }'`
+        if [ "${CONTAINER_IP}" != "" ]; then
+          break
+        fi
+        echo -n '.'
+        sleep 2
+    done
+fi
 
 # if [ "${DOCKER_HOST_IP}" == "" ] || [[ ${DOCKER_HOST_IP} == 127* ]]; then
 #   # TODO: Try with an alternative method
