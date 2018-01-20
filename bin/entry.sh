@@ -146,6 +146,7 @@ export CONTAINER_IP=`getent hosts ${HOSTNAME} | awk '{ print $1 }'`
 # Trying again to retrieve the container IP when using Zalenium
 if [ "${ZALENIUM}" == "true" ] && [ "${CONTAINER_IP}" == "" ]; then
     # Sometimes the networking is not fast and the container IP is not there, we retry a few times for one minute to get it.
+    echo "Retrying to get CONTAINER_IP..." 1>&2
     WAIT_UNTIL=$((SECONDS + 60))
     while [ $SECONDS -lt ${WAIT_UNTIL} ]; do
         export CONTAINER_IP=`getent hosts ${HOSTNAME} | awk '{ print $1 }'`
