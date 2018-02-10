@@ -1,9 +1,9 @@
-## 3.9.0-p1
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.9.0-p0...3.9.0-p1 (2018-02-08)
+## 3.9.1-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.9.0-p1...3.9.1-p0 (2018-02-10)
     + Diego Molina (1):
-        * [144275a] Bump Firefox to 58.0.2 (#213)
+        * [c666226] Bump to Selenium 3.9.1
  + **Image tag details:**
-    + Selenium version: 3.9.0 (698b3178f0)
+    + Selenium version: 3.9.1 (63f7b50)
     + Chrome stable:  64.0.3282.140
     + Firefox stable: 58.0.2
     + Geckodriver: 0.19.1
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.9.0-224
+    + Image version: 3.9.1-225
     + Image size: 1.4GB
-    + Digest: sha256:43596df425663fe262a9ea43188a15f2f201915226252aa5d13593281d57b85b
+    + Digest: sha256:5cefdc2d820372ed209647919ae5eba2ed0fe174636b1d22025599771b70fe41
 
