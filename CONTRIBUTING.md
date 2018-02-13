@@ -1,6 +1,9 @@
 # Contributing
 Simply put your changes in a new branch and open a pull request.
 
+## Build Locally
+    ./test/before_install_build
+
 ## Local Testing
 To test your local changes:
 

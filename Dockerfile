@@ -28,8 +28,11 @@ RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n
   && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-updates main universe\n" >> /etc/apt/sources.list \
   && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-security main universe\n" >> /etc/apt/sources.list
 
+MAINTAINER Diego Molina <diemol@gmail.com>
 MAINTAINER Leo Gallucci <elgalu3+dosel@gmail.com>
+
 # https://github.com/docker/docker/pull/25466#discussion-diff-74622923R677
+LABEL maintainer "Diego Molina <diemol@gmail.com>"
 LABEL maintainer "Leo Gallucci <elgalu3+dosel@gmail.com>"
 
 # No interactive frontend during docker build
