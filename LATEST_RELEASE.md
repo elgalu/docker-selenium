@@ -1,9 +1,9 @@
-## 3.9.1-p2
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.9.1-p1...3.9.1-p2 (2018-02-23)
-    + Leo Gallucci (1):
-        * [9e79bc3] Upgrade Chrome Patch to 64.0.3282.186
+## 3.10.0-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.9.1-p2...3.10.0-p0 (2018-03-04)
+    + Diego Molina (1):
+        * [8a4f363] Upgrading to 3.10.0
  + **Image tag details:**
-    + Selenium version: 3.9.1 (63f7b50)
+    + Selenium version: 3.10.0 (176b4a9)
     + Chrome stable:  64.0.3282.186
     + Firefox stable: 58.0.2
     + Geckodriver: 0.19.1
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.9.1-227
+    + Image version: 3.10.0-228
     + Image size: 1.38GB
-    + Digest: sha256:797ac113064552355f316410fed94c788c4f4873877f3770baa16d940b06c3bc
+    + Digest: sha256:15732906c6eaac33174b25902495b6cddd936cb36543276bf419bb62c917be06
 
