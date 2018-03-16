@@ -29,7 +29,7 @@ function stop_zalenium() {
 
 # Cleanup
 stop_zalenium
-rm -rf $(pwd)/tmp_videos
+rm -rf $(pwd)/tmp_videos || true
 
 # Dependencies
 pip install --upgrade -r test/requirements.txt
