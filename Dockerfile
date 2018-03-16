@@ -52,6 +52,7 @@ RUN set -ex \
     3B4FE6ACC0B21F32 \
     A2F683C52980AECF \
     F76221572C52609D \
+    58118E89F3A912897C070ADBF76221572C52609D \
   ; do \
     gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
     gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
