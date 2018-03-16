@@ -53,9 +53,9 @@ RUN set -ex \
     A2F683C52980AECF \
     F76221572C52609D \
   ; do \
+    gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
     gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
     gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" ; \
   done
 
