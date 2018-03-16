@@ -23,7 +23,7 @@ if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
       ${TRAVIS_PULL_REQUEST_SLUG} != ${TRAVIS_REPO_SLUG} && \
       ${TRAVIS_PULL_REQUEST} != "false" ]]; then
   echo "WARN: External PRs are untrusted by default therefore we need can't reuse and pull the image so building it from scratch..."
-  ./test/before_install_setup
+  # ./test/before_install_setup
   ./host-scripts/gen-scm-source.sh
   docker build -t selenium .
   docker tag selenium:latest elgalu/selenium:latest

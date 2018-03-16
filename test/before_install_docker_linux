@@ -55,16 +55,16 @@ export DEBCONF_NONINTERACTIVE_SEEN=true
 # sudo apt -qqy install docker-engine
 sudo apt -qyy install docker-ce
 
-if [ "${DOCKER_VERSION}" != "stable" ]; then
-  # wget -nv -O docker.tgz "https://github.com/docker/docker/archive/v${DOCKER_VERSION}.tar.gz"
-  # tar xvzf docker.tgz
-  # mv docker-${DOCKER_VERSION} docker_src
-  # mv docker_src/* /usr/bin/
-  wget -nv -O docker.tgz "https://test.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz"
-  tar -xvzf docker.tgz
-  sudo mv docker/* /usr/bin/
-  sudo service docker stop || true
-fi
+# if [ "${DOCKER_VERSION}" != "stable" ]; then
+#   # wget -nv -O docker.tgz "https://github.com/docker/docker/archive/v${DOCKER_VERSION}.tar.gz"
+#   # tar xvzf docker.tgz
+#   # mv docker-${DOCKER_VERSION} docker_src
+#   # mv docker_src/* /usr/bin/
+#   wget -nv -O docker.tgz "https://test.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz"
+#   tar -xvzf docker.tgz
+#   sudo mv docker/* /usr/bin/
+#   sudo service docker stop || true
+# fi
 
 sudo service docker start || true
 
