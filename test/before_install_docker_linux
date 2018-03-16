@@ -42,7 +42,7 @@ done
 # install
 CODE_NAME=$(lsb_release -sc) #e.g. trusty
 [ "${CODE_NAME}" == "" ] && CODE_NAME=trusty
-sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list'
+# sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list'
 # sed -i.bak '/docker/d' /etc/apt/sources.list.d/docker.list
 sudo apt -qqy update
 sudo apt -qqy install apt-transport-https ca-certificates
