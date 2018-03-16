@@ -5,17 +5,19 @@
 set -xe
 
 # cleanup
-service docker stop || true
-rm -f /etc/apt/sources.list.d/docker.list
-rm -f /usr/lib/systemd/system/docker.service
-apt-get -qqy purge lxc-docker || true
-apt-get -qqy purge docker-engine || true
-/etc/init.d/apparmor stop || true
-rm -rf /var/lib/docker /dev/mapper/docker* /usr/bin/docker /run/docker /etc/docker
-rm -rf /etc/apt/sources.list.d/docker* /etc/default/docker /etc/init.d/docker /etc/apparmor.d/cache/docker
-rm -rf /etc/apparmor.d/docker /etc/bash_completion.d/docker /var/log/upstart/docker*
-rm -rf /var/lib/apt/lists/*docker* /var/lib/dpkg/info/*docker* /dev/disk/by-id/*docker*
-rm -rf /var/cache/apt/archives/docker*
+sudo service docker stop || true
+sudo rm -f /etc/apt/sources.list.d/docker.list
+sudo rm -f /usr/lib/systemd/system/docker.service
+sudo apt -qqy purge lxc-docker || true
+sudo apt -qqy purge docker-engine || true
+sudo /etc/init.d/apparmor stop || true
+sudo rm -rf /var/lib/docker /dev/mapper/docker* /usr/bin/docker /run/docker /etc/docker || true
+sudo rm -rf /etc/apt/sources.list.d/docker* /etc/default/docker /etc/init.d/docker /etc/apparmor.d/cache/docker || true
+sudo rm -rf /etc/apparmor.d/docker /etc/bash_completion.d/docker /var/log/upstart/docker* || true
+sudo rm -rf /var/lib/apt/lists/*docker* /var/lib/dpkg/info/*docker* /dev/disk/by-id/*docker* || true
+sudo rm -rf /var/cache/apt/archives/docker* || true
+
+sudo chown -R ${USER} /home/travis/.gnupg || true
 
 # GPG servers aren't too reliable (especially in out test builds)
 # so fallback servers are needed
@@ -40,17 +42,18 @@ done
 # install
 CODE_NAME=$(lsb_release -sc) #e.g. trusty
 [ "${CODE_NAME}" == "" ] && CODE_NAME=trusty
-echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list
+sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list'
 # sed -i.bak '/docker/d' /etc/apt/sources.list.d/docker.list
-apt-get -qqy update
-apt-get -qqy install apt-transport-https ca-certificates
+sudo apt -qqy update
+sudo apt -qqy install apt-transport-https ca-certificates
 
-apt-cache policy docker-engine || true
-apt-get -qqy install linux-image-extra-$(uname -r)
-apt-get -qqy install apparmor
-/etc/init.d/apparmor start || true
+sudo apt-cache policy docker-engine || true
+sudo apt -qqy install linux-image-extra-$(uname -r)
+sudo apt -qqy install apparmor
+sudo /etc/init.d/apparmor start || true
 export DEBCONF_NONINTERACTIVE_SEEN=true
-apt-get -qqy install docker-engine
+# sudo apt -qqy install docker-engine
+sudo apt -qyy install docker-ce
 
 if [ "${DOCKER_VERSION}" != "stable" ]; then
   # wget -nv -O docker.tgz "https://github.com/docker/docker/archive/v${DOCKER_VERSION}.tar.gz"
@@ -59,10 +62,10 @@ if [ "${DOCKER_VERSION}" != "stable" ]; then
   # mv docker_src/* /usr/bin/
   wget -nv -O docker.tgz "https://test.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz"
   tar -xvzf docker.tgz
-  mv docker/* /usr/bin/
-  service docker stop || true
+  sudo mv docker/* /usr/bin/
+  sudo service docker stop || true
 fi
 
-service docker start || true
+sudo service docker start || true
 
 docker --version
