@@ -17,14 +17,6 @@ rm -rf /etc/apparmor.d/docker /etc/bash_completion.d/docker /var/log/upstart/doc
 rm -rf /var/lib/apt/lists/*docker* /var/lib/dpkg/info/*docker* /dev/disk/by-id/*docker*
 rm -rf /var/cache/apt/archives/docker*
 
-# install
-CODE_NAME=$(lsb_release -sc) #e.g. trusty
-[ "${CODE_NAME}" == "" ] && CODE_NAME=trusty
-echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list
-# sed -i.bak '/docker/d' /etc/apt/sources.list.d/docker.list
-apt-get -qqy update
-apt-get -qqy install apt-transport-https ca-certificates
-
 # GPG servers aren't too reliable (especially in out test builds)
 # so fallback servers are needed
 #  ref: https://github.com/nodejs/docker-node/issues/340#issuecomment-321669029
@@ -44,6 +36,14 @@ set -ex \
     gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" ; \
   done
+
+# install
+CODE_NAME=$(lsb_release -sc) #e.g. trusty
+[ "${CODE_NAME}" == "" ] && CODE_NAME=trusty
+echo "deb https://apt.dockerproject.org/repo ubuntu-${CODE_NAME} main" >> /etc/apt/sources.list.d/docker.list
+# sed -i.bak '/docker/d' /etc/apt/sources.list.d/docker.list
+apt-get -qqy update
+apt-get -qqy install apt-transport-https ca-certificates
 
 apt-cache policy docker-engine || true
 apt-get -qqy install linux-image-extra-$(uname -r)
