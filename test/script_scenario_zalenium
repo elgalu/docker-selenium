@@ -85,8 +85,11 @@ if [ "${BITBALLOON_ACCESS_TOKEN}" != "" ] && [ "${BITBALLOON_SITE_ID}" != "" ]; 
   # Only update the site upon releases
   if [ "${TRAVIS_TAG}" != "" ]; then
     echo "{\"access_token\":\"${BITBALLOON_ACCESS_TOKEN}\",\"site_id\":\"${BITBALLOON_SITE_ID}\"}" > .bitballoon
-    ls -la tmp_videos/ || die "We need tmp_videos to upload to bitballoon"
-    bitballoon deploy tmp_videos/
-    #=> Site deployed: http://zalenium.bitballoon.com
+    if ls -la tmp_videos/; then
+      bitballoon deploy tmp_videos/ || true
+      #=> Site deployed: http://zalenium.bitballoon.com
+    else
+      echo "ERROR! We need tmp_videos/ to upload to bitballoon"
+    fi
   fi
 fi

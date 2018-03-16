@@ -61,7 +61,7 @@ jobs:
 
     - env: test=Zalenium
       script:
-        - gem install bitballoon
+        - gem install bitballoon || true
         - travis_retry ./test/before_install_pull
         - travis_retry ./test/script_scenario_zalenium
 
