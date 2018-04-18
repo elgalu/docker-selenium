@@ -296,7 +296,7 @@ USER root
 #     python-openssl \
 #     libssl-dev \
 #     libffi-dev \
-#   && pip install --upgrade pip \
+#   && pip install --upgrade pip==9.0.3 \
 #   && pip install --upgrade setuptools \
 #   && rm -rf /var/lib/apt/lists/* \
 #   && apt -qyy clean
@@ -319,10 +319,10 @@ RUN apt -qqy update \
     python3-dev \
     python3-openssl \
     libssl-dev libffi-dev \
-  && pip3 install --upgrade pip \
-  && pip3 install --upgrade setuptools \
-  && pip3 install --upgrade numpy \
-  && pip3 install --requirement /test/requirements.txt \
+  && pip3 install --no-cache --upgrade pip==9.0.3 \
+  && pip3 install --no-cache setuptools \
+  && pip3 install --no-cache numpy \
+  && pip3 install --no-cache --requirement /test/requirements.txt \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
 RUN cd /usr/local/bin \
@@ -351,7 +351,7 @@ RUN cd /usr/local/bin \
 # 2017-01-05 commit: 8be5bc15e83f0f, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
 RUN SHA="3f04badc3237f0d86fa88208455d8560c20bc2e7" \
-  && pip install --upgrade \
+  && pip install --no-cache \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
