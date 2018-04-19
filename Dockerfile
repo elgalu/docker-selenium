@@ -296,7 +296,7 @@ USER root
 #     python-openssl \
 #     libssl-dev \
 #     libffi-dev \
-#   && pip install --upgrade pip \
+#   && pip install --upgrade pip==9.0.3 \
 #   && pip install --upgrade setuptools \
 #   && rm -rf /var/lib/apt/lists/* \
 #   && apt -qyy clean
@@ -319,10 +319,10 @@ RUN apt -qqy update \
     python3-dev \
     python3-openssl \
     libssl-dev libffi-dev \
-  && pip3 install --upgrade pip \
-  && pip3 install --upgrade setuptools \
-  && pip3 install --upgrade numpy \
-  && pip3 install --requirement /test/requirements.txt \
+  && pip3 install --no-cache --upgrade pip==9.0.3 \
+  && pip3 install --no-cache setuptools \
+  && pip3 install --no-cache numpy \
+  && pip3 install --no-cache --requirement /test/requirements.txt \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
 RUN cd /usr/local/bin \
@@ -351,7 +351,7 @@ RUN cd /usr/local/bin \
 # 2017-01-05 commit: 8be5bc15e83f0f, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
 RUN SHA="3f04badc3237f0d86fa88208455d8560c20bc2e7" \
-  && pip install --upgrade \
+  && pip install --no-cache \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
@@ -636,7 +636,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="65.0.3325.181"
+ARG EXPECTED_CHROME_VERSION="66.0.3359.117"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -679,7 +679,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="2.37"
+ARG CHROME_DRIVER_VERSION="2.38"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
