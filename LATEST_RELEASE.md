@@ -1,10 +1,7 @@
-## 3.11.0-p10
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.11.0-p9...3.11.0-p10 (2018-05-03)
-    + Diego Molina (1):
-        * [890f7ea] Upgrade FF to 59.0.3
-    + Leo Gallucci (2):
-        * [9e78c2e] Upgrade Ubuntu xenial-20180417 (date)
-        * [0b0594c] Upgrade Firefox patch level to 59.0.3
+## 3.11.0-p11
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.11.0-p10...3.11.0-p11 (2018-05-04)
+    + Kristian Jensen (1):
+        * [8aba49f] Fixing 236 (#237) via __CONTAINER_IP__
  + **Image tag details:**
     + Selenium version: 3.11.0 (e59cfb3)
     + Chrome stable:  66.0.3359.139
@@ -18,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.11.0-247
+    + Image version: 3.11.0-248
     + Image size: 1.37GB
-    + Digest: sha256:06d741c323b5657f5c67b32e6fa185964cb19ff8b8bc62f5977f59844d3d4f6e
+    + Digest: sha256:3c80c72474a1fb1c3f5b022f8778b520ebf0ce96db4c08dbdf56d5e11b089d2a
 
