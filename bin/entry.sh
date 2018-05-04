@@ -186,7 +186,7 @@ export COMMON_CAPS="${COMMON_CAPS},tz=${TZ}"
 export FFMPEG_FRAME_SIZE="${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 
 # {{CONTAINER_IP}} is a place holder for dynamically setting the IP of a node
-if [ "${SELENIUM_NODE_HOST}" = "{{CONTAINER_IP}}" ] || [ "${SELENIUM_NODE_HOST}" = "USE_CONTAINER_IP" ]; then
+if [ "${SELENIUM_NODE_HOST}" = "{{CONTAINER_IP}}" ] || [ "${SELENIUM_NODE_HOST}" = "__CONTAINER_IP__" ]; then
   export SELENIUM_NODE_HOST="${CONTAINER_IP}"
 fi
 
