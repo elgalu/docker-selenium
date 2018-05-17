@@ -267,8 +267,8 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ARG SEL_DIRECTORY="3.11"
-ARG SEL_VER="3.11.0"
+ARG SEL_DIRECTORY="3.12"
+ENV SEL_VER="3.12.0"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -851,6 +851,7 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 ENV FIREFOX_VERSION="${FF_VER}" \
   USE_SELENIUM="3" \
   CHROME_FLAVOR="stable" \
+  DEBUG="false" \
   PICK_ALL_RANDOM_PORTS="false" \
   RANDOM_PORT_FROM="23100" \
   RANDOM_PORT_TO="29999" \
