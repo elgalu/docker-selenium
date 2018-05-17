@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SEL_STATUS_URL="http://localhost:${SELENIUM_MULTINODE_PORT}/wd/hub/status"
+SEL_STATUS_URL="http://${SELENIUM_NODE_HOST}:${SELENIUM_MULTINODE_PORT}/wd/hub/status"
 
 # set -e: exit asap if a command exits with a non-zero status
 set -e
