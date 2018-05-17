@@ -43,7 +43,6 @@ CHROME_BROWSER_CAPS="${CHROME_BROWSER_CAPS},version=${CHROME_VERSION}"
 
 FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS}"
 FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},version=${FIREFOX_VERSION}"
-# FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},firefox_binary=${FIREFOX_DEST_BIN}"
 
 java \
   -Dwebdriver.chrome.driver="/home/seluser/chromedriver" \

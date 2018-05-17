@@ -38,7 +38,6 @@ echo "INFO: JAVA_OPTS are '${JAVA_OPTS}'"
 # TODO: how to set default firefox to latest?
 FIREFOX_BROWSER_CAPS="browserName=firefox,${COMMON_CAPS}"
 FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},version=${FIREFOX_VERSION}"
-# FIREFOX_BROWSER_CAPS="${FIREFOX_BROWSER_CAPS},firefox_binary=${FIREFOX_DEST_BIN}"
 
 # public static final String BROWSER_LOGFILE = "webdriver.firefox.logfile";
 #   System property that defines the location of the file where Firefox log should be stored.
