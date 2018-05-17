@@ -14,8 +14,11 @@ if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
   exit 0
 fi
 
+pip install --upgrade -r test/requirements.txt
+
 ./host-scripts/gen-scm-source.sh
 docker build -t selenium .
+docker tag selenium:latest elgalu/selenium:latest
 docker images selenium
 
 if [ "${TRAVIS_BUILD_NUMBER}" != "" ]; then
