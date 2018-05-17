@@ -1,9 +1,12 @@
-## 3.11.0-p15
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.11.0-p14...3.11.0-p15 (2018-05-17)
-    + Leo Gallucci (1):
-        * [bdc5130] Upgrade Firefox patch level to 60.0.1 (#243)
+## 3.12.0-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.11.0-p15...3.12.0-p0 (2018-05-17)
+    + Leo Gallucci (4):
+        * [adc8ed4] Improve debugging support via -e DEBUG=true or DEBUG=bash
+        * [393e49a] Upgrade Selenium (minor) from 3.11.0 to 3.12.0
+        * [c0791ae] Minor testing cleanups
+        * [13a2dc0] Fix network interface binding issue provoked by Selenium 3.12 changes
  + **Image tag details:**
-    + Selenium version: 3.11.0 (e59cfb3)
+    + Selenium version: 3.12.0 (7c6e0b3)
     + Chrome stable:  66.0.3359.181
     + Firefox stable: 60.0.1
     + Geckodriver: 0.20.1
@@ -15,7 +18,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.11.0-252
+    + Image version: 3.12.0-253
     + Image size: 1.37GB
-    + Digest: sha256:a0ec23adc2589d0b81e3213407b7aa3c677ec5aade46abab3925938fd66c381c
+    + Digest: sha256:bb4781588dea3148a7810422e7bc12b77d76b868359980f7844877f651bdbc59
 
