@@ -57,21 +57,21 @@ if ! ls -la tmp_videos/dashboard.html; then
 fi
 
 # There should be (2 * 3) videos
-if ! ls -la tmp_videos/zalenium-build/*.mp4; then
+if ! ls -la tmp_videos/zalenium_build/*.mp4; then
   ls -la tmp_videos/ || true
   die "Video files were not found in the expected folder" 120
 fi
 
 export VID_EXT="mp4"
 export EXPECTED_VID_COUNT="6"
-export VID_FOLDER="tmp_videos/zalenium-build"
+export VID_FOLDER="tmp_videos/zalenium_build"
 
 # Wait up to 40 seconds for the videos to be there
 if [ "$(uname)" = 'Darwin' ]; then
   ./test/wait_videos_count
 else
   if ! timeout --foreground 40s test/wait_videos_count; then
-    ls -la tmp_videos/zalenium-build/ || true
+    ls -la tmp_videos/zalenium_build/ || true
     die "Waited a few seconds for '${EXPECTED_VID_COUNT}' '${VID_EXT}' videos to be at ${VID_FOLDER}"
   fi
 fi
