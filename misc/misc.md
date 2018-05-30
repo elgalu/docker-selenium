@@ -11,12 +11,12 @@ Miscellaneous internal notes, do not read!
 ### K8s How to run
 Add ` -- bash` at the end to run an arbitrary command.
 
-    zkubectl run dosel -ti --rm=false --attach=true --leave-stdin-open=true --port=24444 \
+    kubectl run dosel -ti --rm=false --attach=true --leave-stdin-open=true --port=24444 \
       --env="SELENIUM_HUB_PORT=24444" --env="FIREFOX=false"  \
       --replicas=1 --image=elgalu/selenium \
       --requests="cpu=500m,memory=2Gi" --limits="cpu=900m,memory=3Gi"
 
-    zkubectl get pods -l "run=dosel" --output "jsonpath={.items..status.containerStatuses..state}"
+    kubectl get pods -l "run=dosel" --output "jsonpath={.items..status.containerStatuses..state}"
     #=> e.g. success:
     #=>        map[waiting:map[reason:ContainerCreating]]
     #=>        map[running:map[startedAt:2017-10-09T11:46:53Z]]
@@ -24,28 +24,28 @@ Add ` -- bash` at the end to run an arbitrary command.
     #=>        map[waiting:map[reason:ImagePullBackOff message:Back-off pulling image "elgalu/docker-selenium"]]
 
 #### K8s get pod name
-    POD_NAME=$(zkubectl get pod -l "run=dosel" -o "jsonpath={.items..metadata.name}")
+    POD_NAME=$(kubectl get pod -l "run=dosel" -o "jsonpath={.items..metadata.name}")
 
 #### What's my cluster-internal IP?
-    zkubectl get pods -l "run=dosel" --output "jsonpath={.items..status.podIP}"
+    kubectl get pods -l "run=dosel" --output "jsonpath={.items..status.podIP}"
 
 #### K8s Forward port 6000 of Pod to your to 5000 on your local machine
-    zkubectl port-forward ${POD_NAME} 4444:24444
+    kubectl port-forward ${POD_NAME} 4444:24444
     curl -sSL https://raw.githubusercontent.com/dosel/t/i/s | python
 
 #### K8s re-attach to the pod
-    zkubectl attach ${POD_NAME} -c dosel -ti
+    kubectl attach ${POD_NAME} -c dosel -ti
 
 #### K8s events to understand reason of failure
 
-    zkubectl describe pods dosel
+    kubectl describe pods dosel
     #=> Failed to pull image "elgalu/docker-selenium": rpc error: code = 2 desc =
     #=> Error: image elgalu/docker-selenium:latest not found
 
 #### K8s Delete
 Using `all` is handy but in this case `deployment` should also be enough as deleting the deployment will also delete the pod
 
-    zkubectl delete all -l run=dosel
+    kubectl delete all -l run=dosel
     #=> pod "dosel-2170010665-wv8zd" deleted
     #=> deployment "dosel" deleted
 
