@@ -1,10 +1,10 @@
-## 3.12.0-p7
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.12.0-p6...3.12.0-p7 (2018-06-16)
+## 3.12.0-p8
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.12.0-p7...3.12.0-p8 (2018-06-26)
     + Leo Gallucci (1):
-        * [2d7afb3] Upgrade GeckoDriver minor to 0.21.0
+        * [b0464aa] Upgrade Chrome patch level to 67.0.3396.99
  + **Image tag details:**
     + Selenium version: 3.12.0 (7c6e0b3)
-    + Chrome stable:  67.0.3396.87
+    + Chrome stable:  67.0.3396.99
     + Firefox stable: 60.0.2
     + Geckodriver: 0.21.0
     + Chromedriver: 2.40.565383 (76257d1ab79276b2d53ee976b2c3e3b9f335cde7)
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.12.0-261
+    + Image version: 3.12.0-262
     + Image size: 1.38GB
-    + Digest: sha256:07298d87f44fff630b02e99dc86530a34bd254dbeeba9a84c5e5f36152f8e680
+    + Digest: sha256:4828a256072a8df5d59991ec670676491d50073e782c01be62aa1e082953dccb
 
