@@ -7,7 +7,7 @@
     },
     {
       "BROWSER_NAME": "firefox",
-      "VERSION": "61.0",
+      "VERSION": "61.0.1",
       "PLATFORM": "LINUX"
     }
   ]
