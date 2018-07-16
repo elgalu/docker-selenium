@@ -202,7 +202,7 @@ Once your tests are done you can either manually stop the recording via `docker 
 Relevant up-to-date environment variables to customize it are at the Dockerfile, below a possibly outdated list of settings:
 
     FFMPEG_FRAME_RATE=10
-    FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0"
+    FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0 -pix_fmt yuv420p"
     FFMPEG_FINAL_CRF=0
     FFMPEG_DRAW_MOUSE=1
     VIDEO_TMP_FILE_EXTENSION="mkv"
