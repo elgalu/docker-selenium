@@ -5,7 +5,7 @@
 # To overwrite the build args use:
 #  docker build ... --build-arg UBUNTU_DATE=20171006
 ARG UBUNTU_FLAVOR=xenial
-ARG UBUNTU_DATE=20180417
+ARG UBUNTU_DATE=20180525
 
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
@@ -267,8 +267,8 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ARG SEL_DIRECTORY="3.12"
-ENV SEL_VER="3.12.0"
+ARG SEL_DIRECTORY="3.13"
+ENV SEL_VER="3.13.0"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -345,13 +345,14 @@ RUN cd /usr/local/bin \
 # RUN apt -qqy update \
 #   && apt -qqy install \
 #     supervisor \
+# 2018-06-01 commit: ec495be4e28c69, supervisor/version.txt: 4.0.0.dev0
 # 2017-10-21 commit: 3f04badc3237f0, supervisor/version.txt: 4.0.0.dev0
 # 2017-05-30 commit: 946d9cf3be4db3, supervisor/version.txt: 4.0.0.dev0
-# 2017-03-07 commit: 23925d017f8ecc, supervisor/version.txt: 4.0.0.dev0
-# 2017-01-05 commit: 8be5bc15e83f0f, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
-RUN SHA="3f04badc3237f0d86fa88208455d8560c20bc2e7" \
+RUN SHA="ec495be4e28c694af1e41514e08c03cf6f1496c8" \
   && pip install --no-cache \
+      "https://github.com/Supervisor/supervisor/zipball/${SHA}" || \
+     pip install --no-cache \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
@@ -598,7 +599,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ARG FF_VER="60.0.1"
+ARG FF_VER="61.0.1"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
@@ -617,7 +618,7 @@ LABEL selenium_firefox_version "${FF_VER}"
 # GeckoDriver
 #============
 # Layer size: tiny: ~4 MB
-ARG GECKOD_VER="0.20.1"
+ARG GECKOD_VER="0.21.0"
 ENV GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
@@ -636,7 +637,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="67.0.3396.62"
+ARG EXPECTED_CHROME_VERSION="67.0.3396.99"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -679,7 +680,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="2.38"
+ARG CHROME_DRIVER_VERSION="2.40"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
@@ -930,7 +931,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   FIREFOX="true" \
   MULTINODE="false" \
   FFMPEG_FRAME_RATE=10 \
-  FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0" \
+  FFMPEG_CODEC_ARGS="-crf 0 -preset ultrafast -qp 0 -pix_fmt yuv420p" \
   FFMPEG_FINAL_CRF=0 \
   FFMPEG_DRAW_MOUSE=1 \
   VIDEO_TMP_FILE_EXTENSION="mkv" \
