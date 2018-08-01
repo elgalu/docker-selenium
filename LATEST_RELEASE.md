@@ -1,12 +1,10 @@
-## 3.13.0-p2
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.13.0-p1...3.13.0-p2 (2018-07-28)
-    + Leo Gallucci (3):
-        * [016aa64] Upgrade Ubuntu xenial date to 20180726
-        * [e215cec] Upgrade Chromedriver from 2.40 to 2.41
-        * [ec7d1e6] Upgrade Chrome major to 68.0.3440.75
+## 3.13.0-p3
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.13.0-p2...3.13.0-p3 (2018-08-01)
+    + Leo Gallucci (1):
+        * [fdccba2] Upgrade Chrome patch level to 68.0.3440.84
  + **Image tag details:**
     + Selenium version: 3.13.0 (2f0d292)
-    + Chrome stable:  68.0.3440.75
+    + Chrome stable:  68.0.3440.84
     + Firefox stable: 61.0.1
     + Geckodriver: 0.21.0
     + Chromedriver: 2.41.578700 (2f1ed5f9343c13f73144538f15c00b370eda6706)
@@ -17,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.13.0-267
+    + Image version: 3.13.0-268
     + Image size: 1.39GB
-    + Digest: sha256:6d48dedd200ba2fd058f0de808f900bf1f5294b3e0564501707d97fd01c526bc
+    + Digest: sha256:464cc5a7582d477adb3aabf15e73932c36791438e269ab318a09858b19e4984b
 
