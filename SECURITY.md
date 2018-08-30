@@ -16,7 +16,7 @@ You can simply verify that image id is indeed the correct one.
 
     # e.g. full image id for some specific tag version
     export IMGID="<<Please see CHANGELOG.md>>"
-    if docker inspect -f='{{.Id}}' elgalu/selenium:latest |grep ${IMGID} &> /dev/null; then
+    if docker inspect -f='{{.Id}}' elgalu/selenium:latest |grep ${IMGID} >/dev/null; then
         echo "Image ID tested ok"
     else
         echo "Image ID doesn't match"

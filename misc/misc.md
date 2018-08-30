@@ -326,7 +326,7 @@ Alternative to active wait until VNC server is listening
 Alternative to active wait until selenium is up
 Inspired from: http://stackoverflow.com/a/21378425/511069
 
-    while ! curl http://localhost:24444/wd/hub/status &>/dev/null; do :; done
+    while ! curl http://localhost:24444/wd/hub/status >/dev/null; do :; done
     for i in $(seq 1 $MAX_WAIT_RETRY_ATTEMPTS); do
       curl http://localhost:$SELENIUM_PORT/wd/hub/status >/dev/null 2>&1
       [ $? -eq 0 ] && break

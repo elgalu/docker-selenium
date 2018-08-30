@@ -29,7 +29,7 @@ CURRENT_UID="$(id -u)"
 CURRENT_GID="$(id -g)"
 
 # Ensure that assigned uid has entry in /etc/passwd.
-if ! whoami &> /dev/null; then
+if ! whoami >/dev/null; then
   echo "extrauser:x:${CURRENT_UID}:0::/home/extrauser:/bin/bash" >> /etc/passwd
 fi
 
