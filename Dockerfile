@@ -5,7 +5,7 @@
 # To overwrite the build args use:
 #  docker build ... --build-arg UBUNTU_DATE=20171006
 ARG UBUNTU_FLAVOR=xenial
-ARG UBUNTU_DATE=20180525
+ARG UBUNTU_DATE=20180808
 
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
@@ -267,8 +267,8 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ARG SEL_DIRECTORY="3.13"
-ENV SEL_VER="3.13.0"
+ARG SEL_DIRECTORY="3.14"
+ENV SEL_VER="3.14.0"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
@@ -599,7 +599,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ARG FF_VER="61.0.1"
+ARG FF_VER="61.0.2"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
@@ -637,7 +637,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="67.0.3396.99"
+ARG EXPECTED_CHROME_VERSION="68.0.3440.106"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -680,7 +680,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="2.40"
+ARG CHROME_DRIVER_VERSION="2.41"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"

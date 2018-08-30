@@ -1,21 +1,22 @@
-## 3.13.0-p1
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.13.0-p0...3.13.0-p1 (2018-07-17)
-    + Tobias Gruetzmacher (1):
-        * [e08a073] Encode with YUV420P, to be more compatible
+## 3.14.0-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.13.0-p4...3.14.0-p0 (2018-08-18)
+    + Diego Molina (2):
+        * [3a8e47d] Upgrading to 3.14.0
+        * [d1c5f7c] Upgrading Python bindings to 3.14.0
  + **Image tag details:**
-    + Selenium version: 3.13.0 (2f0d292)
-    + Chrome stable:  67.0.3396.99
-    + Firefox stable: 61.0.1
+    + Selenium version: 3.14.0 (aacccce0)
+    + Chrome stable:  68.0.3440.106
+    + Firefox stable: 61.0.2
     + Geckodriver: 0.21.0
-    + Chromedriver: 2.40.565383 (76257d1ab79276b2d53ee976b2c3e3b9f335cde7)
-    + Java: OpenJDK Java 1.8.0_171-8u171-b11-0ubuntu0.16.04.1-b11
+    + Chromedriver: 2.41.578700 (2f1ed5f9343c13f73144538f15c00b370eda6706)
+    + Java: OpenJDK Java 1.8.0_181-8u181-b13-0ubuntu0.16.04.1-b13
     + Default Timezone: Europe/Berlin
-    + FROM ubuntu:xenial-20180525
+    + FROM ubuntu:xenial-20180726
     + Python: 3.5.2
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.13.0-266
+    + Image version: 3.14.0-270
     + Image size: 1.39GB
-    + Digest: sha256:43b86b9fb66633d9ab82625ac5f1bc1f081540fbe38219464d44764da8340a6a
+    + Digest: sha256:edbacde03fa76325bdffbc8e731bb4f7ba479e6d4dac76836f626bffb28ea3e0
 
