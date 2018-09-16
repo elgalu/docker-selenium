@@ -618,7 +618,7 @@ LABEL selenium_firefox_version "${FF_VER}"
 # GeckoDriver
 #============
 # Layer size: tiny: ~4 MB
-ARG GECKOD_VER="0.21.0"
+ARG GECKOD_VER="0.22.0"
 ENV GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
