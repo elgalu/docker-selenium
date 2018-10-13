@@ -345,11 +345,12 @@ RUN cd /usr/local/bin \
 # RUN apt -qqy update \
 #   && apt -qqy install \
 #     supervisor \
+# 2018-09-28 commit: 837c159ae51f3b, supervisor/version.txt: 4.0.0.dev0
 # 2018-06-01 commit: ec495be4e28c69, supervisor/version.txt: 4.0.0.dev0
 # 2017-10-21 commit: 3f04badc3237f0, supervisor/version.txt: 4.0.0.dev0
 # 2017-05-30 commit: 946d9cf3be4db3, supervisor/version.txt: 4.0.0.dev0
 ENV RUN_DIR="/var/run/sele"
-RUN SHA="ec495be4e28c694af1e41514e08c03cf6f1496c8" \
+RUN SHA="837c159ae51f3bf12c1d30a8cb44f3450611983c" \
   && pip install --no-cache \
       "https://github.com/Supervisor/supervisor/zipball/${SHA}" || \
      pip install --no-cache \
