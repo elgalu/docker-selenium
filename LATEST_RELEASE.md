@@ -1,7 +1,7 @@
-## 3.14.0-p9
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p8...3.14.0-p9 (2018-10-05)
-    + Diego Molina (1):
-        * [255fff0] Upgrading GeckoDriver to 0.23.0
+## 3.14.0-p10
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p9...3.14.0-p10 (2018-10-13)
+    + Leo Gallucci (1):
+        * [0a34116] Bump Supervisor to 2018-09-28 837c159ae51f3b
  + **Image tag details:**
     + Selenium version: 3.14.0 (aacccce0)
     + Chrome stable:  69.0.3497.100
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.14.0-279
+    + Image version: 3.14.0-280
     + Image size: 1.4GB
-    + Digest: sha256:3989980bf24db1514664aa6669b16030dd1c4f1157ee9961aed15bb6c9e7b4ee
+    + Digest: sha256:9e1e4b2ed3f3df7475cb049404309121f7acf1aabf80847188df0459a3a59003
 
