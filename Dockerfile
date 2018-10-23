@@ -5,7 +5,7 @@
 # To overwrite the build args use:
 #  docker build ... --build-arg UBUNTU_DATE=20171006
 ARG UBUNTU_FLAVOR=xenial
-ARG UBUNTU_DATE=20180808
+ARG UBUNTU_DATE=20181005
 
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
