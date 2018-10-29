@@ -48,13 +48,13 @@ fi
 
 # avconv or ffmpeg
 ffmpeg -f x11grab \
-  -framerate ${FFMPEG_FRAME_RATE} \
-  -video_size ${FFMPEG_FRAME_SIZE} \
-  -i "${DISPLAY}.0+0,0" \
+  -s ${FFMPEG_FRAME_SIZE} \
+  -i "${DISPLAY}.0" \
   -draw_mouse ${FFMPEG_DRAW_MOUSE} \
   ${FFMPEG_CODEC_ARGS} \
-  -segment_format_options movflags=+faststart \
+  -r ${FFMPEG_FRAME_RATE} \
   -y -an "${tmp_video_path}" 2>&1 &
+
 VID_TOOL_PID=$!
 
 # Exit all child processes properly
