@@ -1,7 +1,7 @@
-## 3.14.0-p14
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p13...3.14.0-p14 (2018-10-29)
+## 3.14.0-p15
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p14...3.14.0-p15 (2018-10-30)
     + Diego Molina (1):
-        * [a2b76d0] Upgrade Chrome to 70.0.3538.77 (#281)
+        * [645d5b4] Fixing video recording so it works in all browsers. Fixes #263 (#282)
  + **Image tag details:**
     + Selenium version: 3.14.0 (aacccce0)
     + Chrome stable:  70.0.3538.77
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.14.0-284
+    + Image version: 3.14.0-285
     + Image size: 1.41GB
-    + Digest: sha256:2a35bd2d5fafd0256f392860bef9352616386f6c51052bdec3f8f80dc97f6c97
+    + Digest: sha256:008da9924f6905b7967c61bfdd3df36e20367b268ccd48e962109a1fa5119c55
 
