@@ -1,10 +1,10 @@
-## 3.14.0-p16
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p15...3.14.0-p16 (2018-11-01)
+## 3.14.0-p17
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p16...3.14.0-p17 (2018-11-10)
     + Diego Molina (1):
-        * [29d6c90] Upgrading Firefox to 63.0.1 (#283)
+        * [db27d29] Upgrading Chrome to 70.0.3538.102 (#285)
  + **Image tag details:**
     + Selenium version: 3.14.0 (aacccce0)
-    + Chrome stable:  70.0.3538.77
+    + Chrome stable:  70.0.3538.102
     + Firefox stable: 63.0.1
     + Geckodriver: 0.23.0
     + Chromedriver: 2.43.600233 (523efee95e3d68b8719b3a1c83051aa63aa6b10d)
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.14.0-286
+    + Image version: 3.14.0-287
     + Image size: 1.41GB
-    + Digest: sha256:8f22189f1cfc6ce5ae5ee1c95b36ba5c20e20902ff9fb023e63f9f0e00985079
+    + Digest: sha256:b8a130c157e1b55741c1ca2850584c419468eda5a1dd47d824a796934bdfa944
 
