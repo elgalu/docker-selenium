@@ -33,7 +33,7 @@ fi
 
 set +x
 echo "#==================================="
-echo "# Waiting for the Grid before running tests.
+echo "# Waiting for the Grid before running tests."
 echo "#==================================="
 
 while ! curl -sSL "http://localhost:4444/wd/hub/status" 2>&1 \
