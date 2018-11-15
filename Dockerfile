@@ -267,8 +267,8 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 # Selenium latest
 #=================
 # Layer size: medium ~22 MB
-ARG SEL_DIRECTORY="3.14"
-ENV SEL_VER="3.14.0"
+ARG SEL_DIRECTORY="3.141"
+ENV SEL_VER="3.141.59"
 
 RUN echo $SEL_VER
 RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \

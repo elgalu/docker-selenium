@@ -31,6 +31,7 @@ else
   # import -screen -window "${WIN_TITLE}" images/vnc_screenshot.png
 fi
 
+make wait
 make test
 rm -f videos/*.mp4
 make videos
@@ -68,6 +69,7 @@ if [ "${GIT_TAG_OR_BRANCH}" != "" ]; then
   fi
   # Test default 1 chrome 1 firefox case
   make
+  make wait
   make test
   # Test alias
   make down
