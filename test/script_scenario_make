@@ -31,19 +31,7 @@ else
   # import -screen -window "${WIN_TITLE}" images/vnc_screenshot.png
 fi
 
-set +x
-echo "#==================================="
-echo "# Waiting for the Grid before running tests."
-echo "#==================================="
-
-while ! curl -sSL "http://localhost:4444/wd/hub/status" 2>&1 \
-        | jq -r '.value.ready' 2>&1 | grep "true" >/dev/null; do
-    echo 'Waiting for the Grid'
-    sleep 1
-done
-set -x
-
-
+make wait
 make test
 rm -f videos/*.mp4
 make videos
@@ -81,6 +69,7 @@ if [ "${GIT_TAG_OR_BRANCH}" != "" ]; then
   fi
   # Test default 1 chrome 1 firefox case
   make
+  make wait
   make test
   # Test alias
   make down
