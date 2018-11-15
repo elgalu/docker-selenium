@@ -1,9 +1,17 @@
-## 3.14.0-p17
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p16...3.14.0-p17 (2018-11-10)
-    + Diego Molina (1):
-        * [db27d29] Upgrading Chrome to 70.0.3538.102 (#285)
+## 3.141.59-p0
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p17...3.141.59-p0 (2018-11-15)
+    + Diego Molina (7):
+        * [97ca77c] Upgrading to 3.141.0
+        * [d639d92] Upgrading Python bindings
+        * [72c8ef2] Bumping right away to 3.141.5
+        * [34ee050] Bumping now to 3.141.59
+        * [93fa669] Waiting for the Grid to be ready before starting tests.
+        * [24cca86] Waiting for the Grid to be ready before starting tests, in the right spot
+        * [ba832ea] Fixing typo
+    + Leo Gallucci (1):
+        * [60e70b3] Use make wait before make test
  + **Image tag details:**
-    + Selenium version: 3.14.0 (aacccce0)
+    + Selenium version: 3.141.59 (e82be7d358)
     + Chrome stable:  70.0.3538.102
     + Firefox stable: 63.0.1
     + Geckodriver: 0.23.0
@@ -15,7 +23,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.14.0-287
-    + Image size: 1.41GB
-    + Digest: sha256:b8a130c157e1b55741c1ca2850584c419468eda5a1dd47d824a796934bdfa944
+    + Image version: 3.141.59-288
+    + Image size: 1.39GB
+    + Digest: sha256:ee0ea0ec9101631191af9988999ccc134a03635cff980de0675d28358b918c8d
 
