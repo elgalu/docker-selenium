@@ -31,10 +31,13 @@ function stop_zalenium() {
 stop_zalenium
 rm -rf $(pwd)/tmp_videos || true
 
+# Can take Zalenium docker tag as first argument
+_zalenium_tag=${1-latest}
+
 # Dependencies
 pip install --upgrade -r test/requirements.txt
-docker pull dosel/zalenium:3.14.0g
-docker tag dosel/zalenium:3.14.0g dosel/zalenium:latest
+docker pull dosel/zalenium:${_zalenium_tag}
+docker tag dosel/zalenium:${_zalenium_tag} dosel/zalenium:latest
 
 # Use Zalenium one-liner but don't pull
 # TODO: --maxTestSessions 5
