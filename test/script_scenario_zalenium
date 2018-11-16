@@ -33,14 +33,14 @@ rm -rf $(pwd)/tmp_videos || true
 
 # Dependencies
 pip install --upgrade -r test/requirements.txt
-docker pull dosel/zalenium
+docker pull dosel/zalenium:3.14.0g
+docker tag dosel/zalenium:3.14.0g dosel/zalenium:latest
 
 # Use Zalenium one-liner but don't pull
 # TODO: --maxTestSessions 5
 curl -sSL https://raw.githubusercontent.com/dosel/t/i/p | \
   PULL_DEPENDENCIES=false bash -s \
-    start --firefoxContainers 0 \
-          --chromeContainers 0 \
+    start --desiredContainers 0 \
           --videos-dir $(pwd)/tmp_videos
 
 set +x
