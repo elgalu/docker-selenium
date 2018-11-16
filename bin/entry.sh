@@ -154,7 +154,7 @@ if [ "${ZALENIUM}" == "true" ] && [ "${CONTAINER_IP}" == "" ]; then
           break
         fi
         echo -n '.'
-        sleep 2
+        sleep 1
     done
 fi
 

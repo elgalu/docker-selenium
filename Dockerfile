@@ -551,7 +551,7 @@ RUN apt -qqy update \
 # Please use https://github.com/zalando/zalenium
 
 #-----------------#
-# Mozilla 
+# Mozilla
 #
 #-----------------#
 # Install all Firefox dependencies
@@ -879,7 +879,10 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   SELENIUM_HUB_PORT="${DEFAULT_SELENIUM_HUB_PORT}" \
   SELENIUM_HUB_PROTO="http" \
   SELENIUM_HUB_HOST="127.0.0.1" \
-  SELENIUM_NODE_HOST="127.0.0.1" \
+  # Unfortunately selenium is missing a -bind setting so -host
+  # is used multipurpose forcing us to set it now to 0.0.0.0
+  # to match the binding meaning in oposed to host meaning
+  SELENIUM_NODE_HOST="0.0.0.0" \
   SELENIUM_NODE_CH_PORT="${DEFAULT_SELENIUM_NODE_CH_PORT}" \
   SELENIUM_NODE_FF_PORT="${DEFAULT_SELENIUM_NODE_FF_PORT}" \
   SELENIUM_MULTINODE_PORT="${DEFAULT_SELENIUM_MULTINODE_PORT}" \
