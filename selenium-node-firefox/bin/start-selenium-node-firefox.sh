@@ -47,7 +47,7 @@ java \
   ${JAVA_OPTS} \
   -jar ${SELENIUM_JAR_PATH} \
   -port ${SELENIUM_NODE_FF_PORT} \
-  -host ${SELENIUM_NODE_HOST} \
+  -host "${SELENIUM_NODE_HOST}" \
   -role node \
   -hub "${SELENIUM_HUB_PROTO}://${SELENIUM_HUB_HOST}:${SELENIUM_HUB_PORT}/grid/register" \
   -browser "${FIREFOX_BROWSER_CAPS}" \

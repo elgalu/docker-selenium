@@ -59,7 +59,13 @@ jobs:
         - travis_retry ./test/before_install_pull
         - travis_retry ./test/script_scenario_compose_N_N
 
-    - env: test=Zalenium
+    - env: test=Zalenium_Prev
+      script:
+        - gem install bitballoon || true
+        - travis_retry ./test/before_install_pull
+        - travis_retry ./test/script_scenario_zalenium "3.14.0g"
+
+    - env: test=Zalenium_Latest
       script:
         - gem install bitballoon || true
         - travis_retry ./test/before_install_pull
