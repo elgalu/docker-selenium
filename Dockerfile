@@ -5,7 +5,7 @@
 # To overwrite the build args use:
 #  docker build ... --build-arg UBUNTU_DATE=20171006
 ARG UBUNTU_FLAVOR=xenial
-ARG UBUNTU_DATE=20181005
+ARG UBUNTU_DATE=20181113
 
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
@@ -639,7 +639,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="70.0.3538.102"
+ARG EXPECTED_CHROME_VERSION="70.0.3538.110"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -682,7 +682,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="2.43"
+ARG CHROME_DRIVER_VERSION="2.44"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
