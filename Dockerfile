@@ -601,7 +601,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ARG FF_VER="64.0.2"
+ARG FF_VER="65.0"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
@@ -620,7 +620,7 @@ LABEL selenium_firefox_version "${FF_VER}"
 # GeckoDriver
 #============
 # Layer size: tiny: ~4 MB
-ARG GECKOD_VER="0.23.0"
+ARG GECKOD_VER="0.24.0"
 ENV GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
@@ -639,7 +639,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="71.0.3578.98"
+ARG EXPECTED_CHROME_VERSION="72.0.3626.81"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
