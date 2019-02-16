@@ -443,8 +443,8 @@ if [ "$1" == "bump" ]; then
 
   PREV_RELEASE_FROM_HUB=$(hub release | head -n 1)
 
-  # [ "${PREV_RELEASE_FROM_CHANGELOG}" == "${PREV_RELEASE_FROM_HUB}" ] || die \
-  #   "Last release from CHANGELOG='${PREV_RELEASE_FROM_CHANGELOG}' doesn't match /docker-selenium/releases: '${PREV_RELEASE_FROM_HUB}'"
+  [ "${PREV_RELEASE_FROM_CHANGELOG}" == "${PREV_RELEASE_FROM_HUB}" ] || die \
+    "Last release from CHANGELOG='${PREV_RELEASE_FROM_CHANGELOG}' doesn't match /docker-selenium/releases: '${PREV_RELEASE_FROM_HUB}'"
 
   git_config
 
