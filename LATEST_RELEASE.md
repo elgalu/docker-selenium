@@ -1,7 +1,8 @@
-## 3.14.0-p18
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p17...3.14.0-p18 (2019-02-16)
-    + Leo Gallucci (1):
-        * [36f32a6] Rollback to 3.14.0 due to #296
+## 3.14.0-p19
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.14.0-p18...3.14.0-p19 (2019-02-16)
+    + Leo Gallucci (2):
+        * [5367bc3] Fix LATEST_RELEASE.md [ci skip]
+        * [d2a3861] Re-enable validation on releases
  + **Image tag details:**
     + Selenium version: 3.14.0 (aacccce0)
     + Chrome stable:  72.0.3626.109
@@ -15,6 +16,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.14.0-300
+    + Image version: 3.14.0-301
     + Image size: 1.46GB
-    + Digest: sha256:6ccf8b0d414fb6fbc66ffc68f0d754276383a623f924e7812514560ff34c99f9
+    + Digest: sha256:690abb59ee432df70ab406a33ab07649fef842e7c21c7f53a9c8ff1eeb110438
+
