@@ -94,8 +94,16 @@ if args.browser == 'firefox':
 
 # https://selenium-python.readthedocs.io/getting-started.html#using-selenium-with-remote-webdriver
 print ("%s %s - (01/15) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
-myselenium_hub_url="http://localhost:4444/wd/hub"
-driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
+try:
+    driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
+except:    
+    print ("%s %s - Failed connecting to %s" %
+           (datetime.datetime.utcnow(), longId, myselenium_grid_console_url))
+    myselenium_hub_url="http://localhost:4444/wd/hub"
+    print ("%s %s - Now trying to connect to %s" %
+           (datetime.datetime.utcnow(), longId, myselenium_grid_console_url))
+    driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
+
 time.sleep(msleep)
 
 def get_a_chrome_headless_driver():
