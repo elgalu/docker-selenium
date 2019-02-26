@@ -99,6 +99,8 @@ driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilit
 try:
     driver.implicitly_wait(4)
 except:
+    driver.quit()
+    time.sleep(2)
     myselenium_hub_url="http://localhost:4444/wd/hub"
     print ("%s %s - Now trying to connect to %s" %
             (datetime.datetime.utcnow(), longId, myselenium_hub_url))
