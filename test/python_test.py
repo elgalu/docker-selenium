@@ -92,8 +92,9 @@ if args.browser == 'firefox':
                 },
             }
 
-# http://selenium-python.readthedocs.org/en/latest/getting-started.html#using-selenium-with-remote-webdriver
+# https://selenium-python.readthedocs.io/getting-started.html#using-selenium-with-remote-webdriver
 print ("%s %s - (01/15) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
+myselenium_hub_url="http://localhost:4444/wd/hub"
 driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
 time.sleep(msleep)
 
