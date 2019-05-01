@@ -23,7 +23,7 @@ ifeq ($(UNAME_S),Linux)
 export VNC_CLIENT := vncviewer
 endif
 ifeq ($(UNAME_S),Darwin)
-export VNC_CLIENT := /Applications/RealVNC/VNC Viewer.app/Contents/MacOS/vncviewer
+export VNC_CLIENT := /Applications/VNC Viewer.app/Contents/MacOS/vncviewer
 endif
 
 default: compose
