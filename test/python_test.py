@@ -87,25 +87,14 @@ caps['recordVideo'] = 'false'
 
 if args.browser == 'firefox':
     caps["moz:firefoxOptions"] = {
-                "log": {
-                    "level": "trace",
-                },
-            }
+        "log": {
+            "level": "trace",
+        },
+    }
 
 # https://selenium-python.readthedocs.io/getting-started.html#using-selenium-with-remote-webdriver
 print ("%s %s - (01/15) Will connect to selenium at %s" % (datetime.datetime.utcnow(), longId, myselenium_hub_url))
 driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
-
-try:
-    driver.implicitly_wait(4)
-except:
-    driver.quit()
-    time.sleep(2)
-    myselenium_hub_url="http://localhost:4444/wd/hub"
-    print ("%s %s - Now trying to connect to %s" %
-            (datetime.datetime.utcnow(), longId, myselenium_hub_url))
-    driver = webdriver.Remote(command_executor=myselenium_hub_url, desired_capabilities=caps)
-
 time.sleep(msleep)
 
 def get_a_chrome_headless_driver():
