@@ -268,21 +268,14 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 #=================
 # Layer size: medium ~22 MB
 ARG SEL_DIRECTORY="3.14"
-ENV SEL_VER="3.141.59"
+ENV SEL_VER="3.14.0"
 
-RUN wget -nv "https://github.com/dosel/selenium/releases/download/selenium-3.141.59-patch-d47e74d6f2/selenium.jar" \
-  && ln -s "selenium.jar" \
-           "selenium-server-standalone-${SEL_VER}.jar" \
-  && ln -s "selenium.jar" \
+RUN echo $SEL_VER
+RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
+  && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
+  && wget -nv ${SELBASE}/${SELPATH} \
+  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
            "selenium-server-standalone-3.jar"
-
-# TODO: Enable this again when Selenium 4.0 is released
-#RUN echo $SEL_VER
-#RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
-#  && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
-#  && wget -nv ${SELBASE}/${SELPATH} \
-#  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
-#           "selenium-server-standalone-3.jar"
 
 LABEL selenium_version "${SEL_VER}"
 
@@ -608,7 +601,7 @@ ENV FF_LANG="en-US" \
 
 #--- For Selenium 3
 # Layer size: big: 108.2 MB
-ARG FF_VER="65.0.1"
+ARG FF_VER="66.0"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
@@ -646,7 +639,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="72.0.3626.119"
+ARG EXPECTED_CHROME_VERSION="74.0.3729.108"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -689,7 +682,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="2.46"
+ARG CHROME_DRIVER_VERSION="74.0.3729.6"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
