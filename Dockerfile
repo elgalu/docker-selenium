@@ -268,14 +268,21 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 #=================
 # Layer size: medium ~22 MB
 ARG SEL_DIRECTORY="3.14"
-ENV SEL_VER="3.14.0"
+ENV SEL_VER="3.141.59"
 
-RUN echo $SEL_VER
-RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
-  && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
-  && wget -nv ${SELBASE}/${SELPATH} \
-  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
+RUN wget -nv "https://github.com/dosel/selenium/releases/download/selenium-3.141.59-patch-d47e74d6f2/selenium.jar" \
+  && ln -s "selenium.jar" \
+           "selenium-server-standalone-${SEL_VER}.jar" \
+  && ln -s "selenium.jar" \
            "selenium-server-standalone-3.jar"
+
+# TODO: Enable this again when Selenium 4.0 is released
+#RUN echo $SEL_VER
+#RUN  export SELBASE="https://selenium-release.storage.googleapis.com" \
+#  && export SELPATH="${SEL_DIRECTORY}/selenium-server-standalone-${SEL_VER}.jar" \
+#  && wget -nv ${SELBASE}/${SELPATH} \
+#  && ln -s "selenium-server-standalone-${SEL_VER}.jar" \
+#           "selenium-server-standalone-3.jar"
 
 LABEL selenium_version "${SEL_VER}"
 
