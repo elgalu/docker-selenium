@@ -454,7 +454,7 @@ if [ "$1" == "bump" ]; then
     NEXT_PATCH_LEVEL=$((PREV_PATCH_LEVEL+1))
   else
     # If the Selenium version changed, restart the patch level
-    NEXT_PATCH_LEVEL=0
+    NEXT_PATCH_LEVEL=12
   fi
 
   NEXT_RELEASE="${NEXT_SELENIUM_VERSION}-p${NEXT_PATCH_LEVEL}"
