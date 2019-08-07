@@ -1,10 +1,10 @@
-## 3.141.59-p17
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p16...3.141.59-p17 (2019-07-31)
+## 3.141.59-p18
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p17...3.141.59-p18 (2019-08-07)
     + Bartek Florczak (1):
-        * [499a644] Bump Chrome and Chromedriver to v76, FF to v68.0.1 (#335)
+        * [1d0b8d5] Bump Chrome to 76.0.3809.100 (#337)
  + **Image tag details:**
     + Selenium version: 3.141.59 (82b03c358b)
-    + Chrome stable:  76.0.3809.87
+    + Chrome stable:  76.0.3809.100
     + Firefox stable: 68.0.1
     + Geckodriver: 0.24.0
     + Chromedriver: 76.0.3809.68 (420c9498db8ce8fcd190a954d51297672c1515d5)
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.141.59-312
+    + Image version: 3.141.59-313
     + Image size: 1.47GB
-    + Digest: sha256:492a5c83c9a1ee0a4dcb02853a1abd9fb7b46ef3316ba364de54042f5b77a601
+    + Digest: sha256:e16d1d300e5d752cf7a947280c9b6d2b49ca996d825d665edd4f3db33541494c
 
