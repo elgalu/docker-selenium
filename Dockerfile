@@ -627,7 +627,7 @@ LABEL selenium_firefox_version "${FF_VER}"
 # GeckoDriver
 #============
 # Layer size: tiny: ~4 MB
-ARG GECKOD_VER="0.24.0"
+ARG GECKOD_VER="0.25.0"
 ENV GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
      "${GECKOD_URL}/v${GECKOD_VER}/geckodriver-v${GECKOD_VER}-linux64.tar.gz" \
@@ -646,7 +646,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="76.0.3809.132"
+ARG EXPECTED_CHROME_VERSION="77.0.3865.75"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -689,7 +689,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="76.0.3809.126"
+ARG CHROME_DRIVER_VERSION="77.0.3865.40"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
