@@ -22,11 +22,6 @@ ARG UBUNTU_DATE
 # Docker build debug logging, green colored
 RUN printf "\033[1;32mFROM ubuntu:${UBUNTU_FLAVOR}-${UBUNTU_DATE} \033[0m\n"
 
-#== Ubuntu flavors - common
-RUN  echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR} main universe\n" > /etc/apt/sources.list \
-  && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-updates main universe\n" >> /etc/apt/sources.list \
-  && echo "deb http://archive.ubuntu.com/ubuntu ${UBUNTU_FLAVOR}-security main universe\n" >> /etc/apt/sources.list
-
 MAINTAINER Diego Molina <diemol@gmail.com>
 MAINTAINER Leo Gallucci <elgalu3+dosel@gmail.com>
 
@@ -37,27 +32,6 @@ LABEL maintainer "Leo Gallucci <elgalu3+dosel@gmail.com>"
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
-
-# GPG servers aren't too reliable (especially in out test builds)
-# so fallback servers are needed
-#  ref: https://github.com/nodejs/docker-node/issues/340#issuecomment-321669029
-#  ref: http://askubuntu.com/a/235911/134645
-#  ref: https://github.com/moby/moby/issues/20022#issuecomment-182169732
-# How to remove keys? e.g. sudo apt-key del 2EA8F35793D8809A
-RUN set -ex \
-  && for key in \
-    2EA8F35793D8809A \
-    40976EAF437D05B5 \
-    3B4FE6ACC0B21F32 \
-    A2F683C52980AECF \
-    F76221572C52609D \
-    58118E89F3A912897C070ADBF76221572C52609D \
-  ; do \
-    gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
-    gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" ; \
-  done
 
 #========================
 # Miscellaneous packages
