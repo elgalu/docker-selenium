@@ -9,7 +9,6 @@ ARG UBUNTU_DATE=20181113
 
 #== Ubuntu xenial is 16.04, i.e. FROM ubuntu:16.04
 # Find latest images at https://hub.docker.com/r/library/ubuntu/
-# Layer size: ~122 MB
 FROM ubuntu:${UBUNTU_FLAVOR}-${UBUNTU_DATE}
 
 #== An ARG declared before a FROM is outside of a build stage,
@@ -63,54 +62,41 @@ RUN set -ex \
 #========================
 # Miscellaneous packages
 #========================
-# libltdl7        0.3 MB
+# libltdl7
 #   allows to run docker alongside docker
-# netcat-openbsd  0.5 MB
+# netcat-openbsd
 #   inlcues `nc` an arbitrary TCP and UDP connections and listens
-# pwgen           0.4 MB
+# pwgen
 #   generates random, meaningless but pronounceable passwords
-# bc              0.5 MB
+# bc
 #   An arbitrary precision calculator language
-# unzip           0.7 MB
+# unzip
 #   uncompress zip files
-# bzip2           1.29 MB
+# bzip2
 #   uncompress bzip files
-# apt-utils       1.0 MB
+# apt-utils
 #   commandline utilities related to package management with APT
-# net-tools       0.8 MB
+# net-tools
 #   arp, hostname, ifconfig, netstat, route, plipconfig, iptunnel
-# jq              1.1 MB
+# jq
 #   jq is like sed for JSON data, you can use it to slice and filter and map
-# sudo            1.3 MB
+# sudo
 #   sudo binary
-# psmisc          1.445 MB
+# psmisc
 #   fuser – identifies what processes are using files.
 #   killall – kills a process by its name, similar to a pkill Unices.
 #   pstree – Shows currently running processes in a tree format.
 #   peekfd – Peek at file descriptors of running processes.
-# iproute2        2.971 MB
+# iproute2
 #   to use `ip` command
-# iputils-ping    3.7 MB
+# iputils-ping
 #   ping, ping6 - send ICMP ECHO_REQUEST to network hosts
-# dbus-x11        4.6 MB
+# dbus-x11
 #   is needed to avoid http://askubuntu.com/q/237893/134645
-# wget            7.3 MB
+# wget
 #   The non-interactive network downloader
-# curl             17 MB (real +diff when with wget: 7 MB)
+# curl
 #   transfer URL data using various Internet protocols
-# ---------------------------------------------------------
-# If we install them separately the total SUM() gives 39 MB
-# If we install them together   the total SUM() gives 25 MB
-# ---------------------------------------------------------
-# Removed packages:
-#   telnet          5.2 MB
-#     for debugging firewall issues
-#   grc              33 MB !!
-#     is a terminal colorizer that works nice with tail https://github.com/garabik/grc
-#   moreutils        44 MB !!
-#     has `ts` that will prepend a timestamp to every line of input you give it
-# Layer size: medium: 29.8 MB
-# Layer size: medium: 27.9 MB (with --no-install-recommends)
 RUN apt -qqy update \
   && apt -qqy install \
     libltdl7 \
@@ -144,8 +130,6 @@ ENV LANG_WHERE US
 ENV ENCODING UTF-8
 ENV LANGUAGE ${LANG_WHICH}_${LANG_WHERE}.${ENCODING}
 ENV LANG ${LANGUAGE}
-# Layer size: small: ~9 MB
-# Layer size: small: ~9 MB MB (with --no-install-recommends)
 RUN apt -qqy update \
   && apt -qqy --no-install-recommends install \
     language-pack-en \
@@ -165,7 +149,6 @@ RUN apt -qqy update \
 # e.g. ENV TZ "US/Pacific"
 ENV TZ="Europe/Berlin"
 # Apply TimeZone
-# Layer size: tiny: 1.339 MB
 RUN echo "Setting time zone to '${TZ}'" \
   && echo "${TZ}" > /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
@@ -173,7 +156,6 @@ RUN echo "Setting time zone to '${TZ}'" \
 #========================================
 # Add normal user with passwordless sudo
 #========================================
-# Layer size: tiny: 0.3 MB
 RUN useradd seluser \
          --shell /bin/bash  \
          --create-home \
@@ -195,8 +177,6 @@ RUN useradd seluser \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# Layer size: big: 132.2 MB
-# Layer size: big: 132.2 MB (with --no-install-recommends)
 RUN apt -qqy update \
   && apt -qqy install \
     openjdk-8-jre-headless \
@@ -214,8 +194,6 @@ RUN apt -qqy update \
 # Regarding urandom see
 #  http://stackoverflow.com/q/26021181/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# Layer size: huge: 618.6 MB (with --no-install-recommends)
-# Layer size: huge: 661.1 MB
 # RUN apt -qqy update \
 #   && apt -qqy --no-install-recommends install \
 #     software-properties-common \
@@ -242,7 +220,6 @@ RUN apt -qqy update \
 # to generate the /dev/random seed
 #==============================================
 # See: SeleniumHQ/docker-selenium/issues/14
-# Layer size: tiny: 0.8 MB
 RUN apt -qqy update \
   && apt-key update -qqy \
   && apt -qqy install \
@@ -266,7 +243,6 @@ RUN echo "${UBUNTU_FLAVOR}" > UBUNTU_FLAVOR \
 #=================
 # Selenium latest
 #=================
-# Layer size: medium ~22 MB
 ARG SEL_DIRECTORY="3.14"
 ENV SEL_VER="3.141.59"
 
@@ -294,8 +270,6 @@ USER root
 #=========================================================
 # Python2 for Supervisor, selenium tests, and other stuff
 #=========================================================
-# Layer size: big.: 79.39 MB (with --no-install-recommends)
-# Layer size: huge: 296 MB
 # RUN apt -qqy update \
 #   && apt -qqy --no-install-recommends install \
 #     python2.7 \
@@ -316,8 +290,6 @@ USER root
 # Note Python3 fails installing mozInstall==1.12 with
 #  NameError: name 'file' is not defined
 # After install, make some useful symlinks that are expected to exist
-# Layer size: big.: 138.9 MB (with --no-install-recommends)
-# Layer size: huge: 309.9 MB
 COPY test/requirements.txt /test/
 RUN apt -qqy update \
   && apt -qqy --no-install-recommends install \
@@ -368,22 +340,13 @@ RUN SHA="837c159ae51f3bf12c1d30a8cb44f3450611983c" \
 #================
 # Font libraries
 #================
-# libfontconfig            ~1 MB
-# libfreetype6             ~1 MB
-# xfonts-cyrillic          ~2 MB
-# xfonts-scalable          ~2 MB
-# fonts-liberation         ~3 MB
-# fonts-ipafont-gothic     ~13 MB
-# fonts-wqy-zenhei         ~17 MB
-# ttf-ubuntu-font-family   ~5 MB
+# ttf-ubuntu-font-family
 #   Ubuntu Font Family, sans-serif typeface hinted for clarity
 # Removed packages:
-# xfonts-100dpi            ~6 MB
-# xfonts-75dpi             ~6 MB
+# xfonts-100dpi
+# xfonts-75dpi
 # Regarding fonts-liberation see:
 #  https://github.com/SeleniumHQ/docker-selenium/issues/383#issuecomment-278367069
-# Layer size: small: 36.28 MB (with --no-install-recommends)
-# Layer size: small: 36.28 MB
 RUN apt -qqy update \
   && apt -qqy --no-install-recommends install \
     libfontconfig \
@@ -402,8 +365,6 @@ RUN apt -qqy update \
 # A lightweight window manager using freedesktop standards
 #=========
 # Let's disable this as is only filling disk space
-# Layer size: huge: 153.4 MB (with --no-install-recommends)
-# Layer size: huge: 224.4 MB
 # RUN apt -qqy update \
 #   && apt -qqy --no-install-recommends install \
 #     openbox obconf menu \
@@ -414,9 +375,7 @@ RUN apt -qqy update \
 # fluxbox
 # A fast, lightweight and responsive window manager
 #=========
-# xfce4-notifyd adds 5mb but allows `notify-send` notifications
-# Layer size: small: 9.659 MB
-# Layer size: small: 6.592 MB (with --no-install-recommends)
+# xfce4-notifyd allows `notify-send` notifications
 RUN apt -qqy update \
   && apt -qqy install \
     fluxbox \
@@ -430,12 +389,6 @@ RUN apt -qqy update \
 # xvfb: Xvfb or X virtual framebuffer is a display server
 #  + implements the X11 display server protocol
 #  + performs all graphical operations in memory
-# Packages that used to be together in this layer
-#   xvfb                      75.69 MB  no-recommends: 68.2 MB
-#   xorg                      160.3 MB  no-recommends: 134.6 MB
-#   xserver-xorg-video-dummy  116.7 MB  no-recommends: 90.52 MB
-# Layer size: big: 136.9 MB (with --no-install-recommends)
-# Layer size: big: 162.6 MB
 RUN apt -qqy update \
   && apt -qqy --no-install-recommends install \
     xvfb \
@@ -446,8 +399,6 @@ RUN apt -qqy update \
 #============
 # VNC Server
 #============
-# Layer size: medium: 12.67 MB
-# Layer size: medium: 10.08 MB (with --no-install-recommends)
 RUN apt -qqy update \
   && apt -qqy install \
     x11vnc \
@@ -467,7 +418,6 @@ USER seluser
 # Download kanaka/noVNC dated 2016-02-24 commit b403cb92fb8de82d04f305b4f14fa978003890d7
 # Download kanaka/websockify dated 2016-10-10 commit cb1508fa495bea4b333173705772c1997559ae4b
 # Download kanaka/websockify dated 2015-06-02 commit 558a6439f14b0d85a31145541745e25c255d576b
-# Layer size: small: 2.919 MB
 ENV NOVNC_SHA="9223e8f2d1c207fb74cb4b8cc243e59d84f9e2f6" \
     WEBSOCKIFY_SHA="cb1508fa495bea4b333173705772c1997559ae4b"
 RUN  wget -nv -O noVNC.zip \
@@ -493,8 +443,6 @@ USER root
 #   for mp4 & html5 video browser support: https://www.youtube.com/html5
 # TODO: Add test to see what the browser supports by opening
 #       https://www.youtube.com/html5
-# Layer size: big: 149.9 MB
-# Layer size: big: 135.4 MB (with --no-install-recommends)
 RUN apt -qqy update \
   && apt -qqy --no-install-recommends install \
     gstreamer1.0-libav \
@@ -507,8 +455,6 @@ RUN apt -qqy update \
 # MP4Box (gpac) to clean the video credits to @taskworld @dtinth
 # ponchio/untrunc dependencies to restore a damaged (truncated) video
 #   libavformat-dev libavcodec-dev libavutil-dev libqt4-dev make g++ libz-dev
-# Layer size: medium: ~12 MB (with --no-install-recommends)
-# Layer size: medium: ~21 MB
 # RUN apt -qqy update \
 #   && apt -qqy --no-install-recommends install \
 #     libx264-dev \
@@ -524,8 +470,6 @@ RUN apt -qqy update \
 # MP4Box (gpac) to clean the video credits to @taskworld @dtinth
 # ffmpeg (ffmpeg): Is a better alternative to Pyvnc2swf
 #   (use in Ubuntu >= 15) packages: ffmpeg
-# Layer size: medium: ~12 MB (with --no-install-recommends)
-# Layer size: medium: ~17 MB
 RUN apt -qqy update \
   && apt -qqy install \
     ffmpeg \
@@ -536,8 +480,6 @@ RUN apt -qqy update \
 #==============
 # libav/avconv
 #==============
-# Layer size: medium: 11.58 MB (with --no-install-recommends)
-# Layer size: medium: 16.75 MB
 # libav-tools (avconv): a fork of ffmpeg
 #   a better alternative to Pyvnc2swf
 #   (use in Ubuntu <= 14) packages: libav-tools libx264-142
@@ -559,10 +501,8 @@ RUN apt -qqy update \
 
 #-----------------#
 # Mozilla
-#
 #-----------------#
 # Install all Firefox dependencies
-# Layer size: big: 83.51 MB
 # Adding libasound2 and others, credits to @jackTheRipper
 #  https://github.com/SeleniumHQ/docker-selenium/pull/418
     # libasound2 \
@@ -607,7 +547,6 @@ ENV FF_LANG="en-US" \
     FF_INNER_PATH="firefox/releases"
 
 #--- For Selenium 3
-# Layer size: big: 108.2 MB
 ARG FF_VER="69.0"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
@@ -626,7 +565,6 @@ LABEL selenium_firefox_version "${FF_VER}"
 #============
 # GeckoDriver
 #============
-# Layer size: tiny: ~4 MB
 ARG GECKOD_VER="0.25.0"
 ENV GECKOD_URL="https://github.com/mozilla/geckodriver/releases/download"
 RUN wget --no-verbose -O geckodriver.tar.gz \
@@ -653,7 +591,6 @@ ENV CHROME_URL="https://dl.google.com/linux/direct" \
 
 LABEL selenium_chrome_version "${EXPECTED_CHROME_VERSION}"
 
-# Layer size: huge: 196.3 MB
 RUN apt -qqy update \
   && mkdir -p chrome-deb \
   && wget -nv "${CHROME_URL}/google-chrome-stable_current_amd64.deb" \
@@ -695,7 +632,6 @@ ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
 ENV CHROME_DRIVER_URL="https://${CHROME_DRIVER_BASE}/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}"
 # Gets latest chrome driver version. Or you can hard-code it, e.g. 2.15
-# Layer size: small: 6.932 MB
 RUN  wget -nv -O chromedriver_linux${CPU_ARCH}.zip ${CHROME_DRIVER_URL} \
   && unzip chromedriver_linux${CPU_ARCH}.zip \
   && rm chromedriver_linux${CPU_ARCH}.zip \
