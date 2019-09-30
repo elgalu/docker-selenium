@@ -162,33 +162,6 @@ RUN apt -qqy update \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
 
-#==================
-# Java8 - Oracle
-#==================
-# Regarding urandom see
-#  http://stackoverflow.com/q/26021181/511069
-#  https://github.com/SeleniumHQ/docker-selenium/issues/14#issuecomment-67414070
-# RUN apt -qqy update \
-#   && apt -qqy --no-install-recommends install \
-#     software-properties-common \
-#   && echo debconf shared/accepted-oracle-license-v1-1 \
-#       select true | debconf-set-selections \
-#   && echo debconf shared/accepted-oracle-license-v1-1 \
-#       seen true | debconf-set-selections \
-#   && add-apt-repository ppa:webupd8team/java \
-#   && apt -qqy update \
-#   && apt -qqy install \
-#     oracle-java8-installer \
-#   && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-#        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-#   && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-#        /usr/lib/jvm/java-8-oracle/jre/lib/security/java.security \
-#   && apt -qqy install \
-#     oracle-java8-set-default \
-#   && apt -qyy autoremove \
-#   && rm -rf /var/lib/apt/lists/* \
-#   && apt -qyy clean
-
 #==============================================
 # Java blocks until kernel have enough entropy
 # to generate the /dev/random seed
@@ -259,8 +232,6 @@ USER root
 #=========================================================
 # Python3 for Supervisor, selenium tests, and other stuff
 #=========================================================
-# Note Python2 comes already installed with Oracle Java
-#  so better stick to it to avoid occupying more disk space
 # Note Python3 fails installing mozInstall==1.12 with
 #  NameError: name 'file' is not defined
 # After install, make some useful symlinks that are expected to exist
