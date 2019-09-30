@@ -74,7 +74,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt -qqy update \
   && apt -qqy install \
     libltdl7 \
-    libhavege1 \
     netcat-openbsd \
     pwgen \
     bc \
@@ -154,25 +153,8 @@ RUN useradd seluser \
 RUN apt -qqy update \
   && apt -qqy install \
     openjdk-8-jre-headless \
-  && sed -i 's/securerandom.source=file:\/dev\/urandom/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-  && sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/.\/urandom/g' \
-       /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security \
-  && apt -qyy autoremove \
-  && rm -rf /var/lib/apt/lists/* \
-  && apt -qyy clean
-
-#==============================================
-# Java blocks until kernel have enough entropy
-# to generate the /dev/random seed
-#==============================================
-# See: SeleniumHQ/docker-selenium/issues/14
-RUN apt -qqy update \
-  && apt-key update -qqy \
-  && apt -qqy install \
-    haveged rng-tools \
-  && service haveged start \
-  && update-rc.d haveged defaults \
+  && sed -i '/securerandom.source=/ s|/dev/u?random|/dev/./urandom|g' \
+       /etc/java-*/security/java.security \
   && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean

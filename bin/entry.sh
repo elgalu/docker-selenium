@@ -56,20 +56,6 @@ if [ ${CURRENT_GID} -ne 1000 ]; then
   fi
 fi
 
-#==============================================
-# Java blocks until kernel have enough entropy
-# to generate the /dev/random seed
-#==============================================
-# See: SeleniumHQ/docker-selenium/issues/14
-# Added a non-sudo conditional so this works on non-sudo environments like K8s
-if [ "${WE_HAVE_SUDO_ACCESS}" == "true" ]; then
-  # We found that, for better entropy, running haveged
-  # with --privileged and sudo here works more reliable
-  sudo -E haveged || true
-else
-  haveged || true
-fi
-
 # Workaround that might help to get dbus working in docker
 #  http://stackoverflow.com/a/38355729/511069
 #  https://github.com/SeleniumHQ/docker-selenium/issues/87#issuecomment-187659234

@@ -243,8 +243,6 @@ If your tests crashes in Chrome you may need to increase shm size or simply star
 
     docker run ... -v /dev/shm:/dev/shm --privileged ...
 
-We also found recently that when missing `--privileged` haveged will break: `haveged: RNDADDENTROPY failed!`
-
 ### Firefox crashed
 
 Same as Chrome, people have [reported](https://goo.gl/5UzpDq) the shm fix might also be necessary for Firefox.
