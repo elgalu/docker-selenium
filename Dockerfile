@@ -423,21 +423,6 @@ RUN apt -qqy update \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
 
-#=================================================
-# ffmpeg/libav/avconv video codecs & dependencies
-#=================================================
-# MP4Box (gpac) to clean the video credits to @taskworld @dtinth
-# ponchio/untrunc dependencies to restore a damaged (truncated) video
-#   libavformat-dev libavcodec-dev libavutil-dev libqt4-dev make g++ libz-dev
-# RUN apt -qqy update \
-#   && apt -qqy --no-install-recommends install \
-#     libx264-dev \
-#     libvorbis-dev \
-#     libx11-dev \
-#     gpac \
-#   && rm -rf /var/lib/apt/lists/* \
-#   && apt -qyy clean
-
 #========
 # ffmpeg
 #========
@@ -448,18 +433,6 @@ RUN apt -qqy update \
   && apt -qqy install \
     ffmpeg \
     gpac \
-  && rm -rf /var/lib/apt/lists/* \
-  && apt -qyy clean
-
-#==============
-# libav/avconv
-#==============
-# libav-tools (avconv): a fork of ffmpeg
-#   a better alternative to Pyvnc2swf
-#   (use in Ubuntu <= 14) packages: libav-tools libx264-142
-RUN apt -qqy update \
-  && apt -qqy --no-install-recommends install \
-    libav-tools \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
 

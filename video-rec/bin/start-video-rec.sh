@@ -29,7 +29,6 @@ fi
 #  -y             overwrite output files
 #  -i             display and pos
 #  https://www.ffmpeg.org/ffmpeg-codecs.html
-# sudo avconv -an -y -f x11grab \
 
 export tmp_video_path="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_TMP_FILE_EXTENSION}"
 export final_video_path="${VIDEOS_DIR}/${VIDEO_FILE_NAME}.${VIDEO_FILE_EXTENSION}"
@@ -46,7 +45,7 @@ else
   touch "${tmp_video_path}"
 fi
 
-# avconv or ffmpeg
+# ffmpeg
 ffmpeg -f x11grab \
   -s ${FFMPEG_FRAME_SIZE} \
   -draw_mouse ${FFMPEG_DRAW_MOUSE} \
