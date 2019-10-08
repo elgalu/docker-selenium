@@ -705,6 +705,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   HOME="/home/seluser" \
   VNC_STORE_PWD_FILE="/home/seluser/.vnc/passwd" \
   BIN_UTILS="/usr/bin" \
+  LIB_UTILS="/usr/lib" \
   MEM_JAVA_PERCENT=80 \
   WAIT_FOREGROUND_RETRY="2s" \
   WAIT_VNC_FOREGROUND_RETRY="6s" \
@@ -757,6 +758,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   NOVNC_PORT="${DEFAULT_NOVNC_PORT}" \
   NOVNC="false" \
   NOVNC_WAIT_TIMEOUT="5s" \
+  BROWSERMOBPROXY_START="false" \
   SUPERVISOR_HTTP_PORT="${DEFAULT_SUPERVISOR_HTTP_PORT}" \
   SUPERVISOR_HTTP_USERNAME="supervisorweb" \
   SUPERVISOR_HTTP_PASSWORD="somehttpbasicauthpwd" \
@@ -816,6 +818,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_STOP_SIGNAL="TERM" \
   NOVNC_STOP_SIGNAL="TERM" \
   VIDEO_REC_STOP_SIGNAL="INT" \
+  BROWSERMOBPROXY_STOP_SIGNAL="TERM" \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.1" \
   ZALENIUM="false" \
@@ -854,6 +857,9 @@ COPY test/python_test.py /usr/bin/python_test
 COPY images ./images
 COPY LICENSE.md /home/seluser/
 COPY Analytics.md /home/seluser/
+
+# Include Lib Browsermob Proxy
+COPY browsermobproxy/lib/* ${LIB_UTILS}/
 
 # Include current version
 COPY GLOBAL_PATCH_LEVEL.txt /home/seluser/
