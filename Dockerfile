@@ -419,23 +419,6 @@ RUN apt -qqy update \
 #===================================================
 USER seluser
 
-#--- Nightly
-# ENV FF_VER="52.0a0" \
-#     FF_PLATFORM="linux-i686" \
-#     FF_INNER_PATH="firefox/nightly/latest-mozilla-central"
-# ENV FF_COMP="firefox-${FF_VER}.${FF_LANG}.${FF_PLATFORM}.tar.bz2"
-# ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_COMP}"
-#
-# Where to find latest version:
-#  https://archive.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
-#  https://download-installer.cdn.mozilla.net/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
-#  https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
-# e.g. 44.0 instead of latest
-#  https://archive.mozilla.org/pub/firefox/releases/44.0/linux-x86_64/en-US/firefox-44.0.tar.bz2
-# FF_LANG can be either en-US // de // fr and so on
-# Regarding the pip packages, see released versions at:
-#  https://github.com/mozilla/mozdownload/releases
-
 #=============================
 # sudo by default from now on
 #=============================
@@ -447,7 +430,7 @@ ENV FF_LANG="en-US" \
     FF_INNER_PATH="firefox/releases"
 
 #--- For Selenium 3
-ARG FF_VER="70.0"
+ARG FF_VER="70.0.1"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
@@ -484,7 +467,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="78.0.3904.70"
+ARG EXPECTED_CHROME_VERSION="78.0.3904.87"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
