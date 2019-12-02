@@ -1,9 +1,7 @@
-## 3.141.59-p29
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p28...3.141.59-p29 (2019-11-19)
-    + Bartek Florczak (1):
-        * [58d94d7] Bump Chromedriver and Chrome patch version to 78.0.3904.105 (#354)
-    + Leo Gallucci (1):
-        * [26e090f] Re-trigger build
+## 3.141.59-p30
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p29...3.141.59-p30 (2019-12-02)
+    + lcharlois-neotys (1):
+        * [dd0167e] FIX #357 : Use CGROUP limit to determine Java Xmx parameter. (#358)
  + **Image tag details:**
     + Selenium version: 3.141.59 (82b03c358b)
     + Chrome stable:  78.0.3904.108
@@ -17,7 +15,7 @@
     + Tested on kernel CI  host: 4.4.0-101-generic x86_64
     + Built at CI  host with: Docker version 17.09.0, build afdb6d4
     + Built at CI  host with: Docker Compose version 1.17.1, build 6d101fb
-    + Image version: 3.141.59-324
+    + Image version: 3.141.59-325
     + Image size: 1.47GB
-    + Digest: sha256:496354c27c87c2bbce7632a13ac323f6fbf83b58c1f882d6321d7f5d5df45fbc
+    + Digest: sha256:cbc26c0c983a8419fa4b5dec4ce91e868bc61491c26a5a71890eca059fd4ab20
 
