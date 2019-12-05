@@ -39,9 +39,9 @@ sleep ${SLEEP_TIME}
 
 # Wait then show errors, if any
 if ! docker exec grid_hub_1 wait_all_done ${WAIT_ALL_DONE}; then
-  docker exec grid_hub_1 errors || true
+  docker exec grid_hub_1 errors || docker ps -a
   docker-compose -f ${COMPOSE_FILE} -p grid logs hub
-  die "Failed to start the Hub"
+  die "$0 Failed to start the Hub"
 fi
 
 for i in $(seq 1 ${NUM_NODES}); do

@@ -55,7 +55,7 @@ To update latest version of this docker image either `docker pull elgalu/seleniu
 
     make pull
 
-Every now and then you will want to upgrade the script files [.env](../.env), [docker-compose.yml][], [mk/](../mk) and so on.
+Every now and then you will want to upgrade the script files [.menv](../.menv), [docker-compose.yml][], [mk/](../mk) and so on.
 But given the upgrades are destructive is better to git clone this repository and do `git pull` from time to time.
 If you make changes to these config files locally git will advise how to merge latest changes and you will be safe of losing your customizations.
 

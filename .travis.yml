@@ -10,7 +10,7 @@ python:
 sudo: required
 
 os: linux
-dist: trusty
+dist: xenial
 
 services:
   - docker

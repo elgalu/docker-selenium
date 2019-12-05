@@ -117,7 +117,7 @@ docker rm basic_webserver || true
 # Let's bind to all host interfaces in case the host has ufw enabled
 docker run -d -t --name=basic_webserver \
   -p 0.0.0.0:${BASIC_WEB_SERVER_PORT}:80 \
-  nginx
+  nginx:1.15.11
 
 docker attach basic_webserver &
 
@@ -127,6 +127,10 @@ while ! curl -s "http://localhost:${BASIC_WEB_SERVER_PORT}"; do
   sleep 0.2
 done
 
+# sudo vim /etc/default/ufw
+# DEFAULT_FORWARD_POLICY="ACCEPT"
+# sudo ufw reload
+# sudo iptables -I INPUT -i docker0 -j ACCEPT
 docker exec grid curl d.host.loc.dev:${BASIC_WEB_SERVER_PORT}
 docker exec grid curl host.docker:${BASIC_WEB_SERVER_PORT}
 

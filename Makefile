@@ -28,12 +28,12 @@ endif
 
 default: compose
 
-get: .env
+get: .menv
 
-.env:
-	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.env"
+.menv:
+	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.menv"
 
-include .env
+include .menv
 
 ECHOERR=sh -c 'awk " BEGIN { print \"-- ERROR: $$1\" > \"/dev/fd/2\" }"' ECHOERR
 # TODO: Output warning in color: yellow
@@ -149,10 +149,10 @@ seeff:
 env:
 	env
 
-basic_reqs: docker-compose-tests.yml .env mk mk/wait.sh mk/move.sh docker docker-compose
+basic_reqs: docker-compose-tests.yml .menv mk mk/wait.sh mk/move.sh docker docker-compose
 
 # Gather all requisites
-setup: .env basic_reqs mk/install_vnc.sh mk/vnc_cask.rb mk/see.sh mk/install_wmctrl.sh warn_vncviewer warn_wmctrl pull
+setup: .menv basic_reqs mk/install_vnc.sh mk/vnc_cask.rb mk/see.sh mk/install_wmctrl.sh warn_vncviewer warn_wmctrl pull
 	@echo "Requirements checked."
 
 cleanup:
