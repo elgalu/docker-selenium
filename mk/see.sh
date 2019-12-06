@@ -20,20 +20,20 @@ die () {
 [ -z "${browser}" ] && die "Need env var browser"
 [ -z "${node}" ] && die "Need env var node"
 
-# CONT_ID=$(docker inspect --format="{{.Id}}" ${COMPOSE_PROJ_NAME}_hub_1)
-CONT_ID="${COMPOSE_PROJ_NAME}_${browser}_${node}"
-IP=`docker inspect -f='{{.NetworkSettings.IPAddress}}' ${CONT_ID}`
+# Gather actual container name as hard-coding it is unreliable
+CONT_NAME=$(docker ps --filter status=running --filter "name=${COMPOSE_PROJ_NAME}_${browser}_${node}" --format "{{.Names}}" -q)
+IP=`docker inspect -f='{{.NetworkSettings.IPAddress}}' ${CONT_NAME}`
 
 if [ "${IP}" == "" ]; then
-  IP=`docker inspect -f='{{json .NetworkSettings.Networks.grid_default}}' ${CONT_ID} | jq .IPAddress -r`
+  IP=`docker inspect -f='{{json .NetworkSettings.Networks.grid_default}}' ${CONT_NAME} | jq .IPAddress -r`
 fi
 
 if [ "${IP}" == "" ]; then
-  die "Failed to grab IP for container ${CONT_ID}"
+  die "Failed to grab IP for container ${CONT_NAME}"
 fi
 
 # We need a fixed port range to expose VNC
-PORT=$(docker exec ${CONT_ID} cat VNC_PORT)
+PORT=$(docker exec ${CONT_NAME} cat VNC_PORT)
 # if [ "$(uname)" = 'Darwin' ]; then
 #   # due to a bug in Docker for Mac beta (1.12)
 #   # https://forums.docker.com/t/docker-for-mac-beta-not-forwarding-ports/8658/6

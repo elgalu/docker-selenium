@@ -31,7 +31,11 @@ default: compose
 get: .menv
 
 .menv:
-	wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.menv"
+	@if ! wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.menv"; then \
+	  ${ECHOERR} ".menv file is still not on master branch" ; \
+	  wget -nv "${GIT_BASE_URL}/${GIT_TAG_OR_BRANCH}/.env" ; \
+	  mv .env .menv ; \
+	fi
 
 include .menv
 
@@ -159,7 +163,7 @@ cleanup:
 	@echo -n "Stopping and removing ${COMPOSE_PROJ_NAME}..."
 	@docker-compose -f ${COMPOSE_FILE} -p ${COMPOSE_PROJ_NAME} down \
 	  --remove-orphans >./mk/compose_down.log 2>&1
-	@echo "Done!"
+	@echo "Done with Stopping and removing ${COMPOSE_PROJ_NAME} !"
 
 # like cleanup but verbose plus graceful stop-video
 down:
@@ -172,7 +176,7 @@ down:
 
 stop_videos:
 	@for node in $(shell seq -s ' ' 1 ${tot_nodes}); do \
-	  docker exec "${proj}_${browser}_$$node" stop-video \
+	  docker-compose -f ${COMPOSE_FILE} -p ${proj} exec --index=$$node ${browser} stop-video \
 	    >./mk/stop_video_${browser}_$$node.log || true ; \
 	done
 
@@ -199,15 +203,7 @@ move: check_wmctrl
 	./mk/move.sh
 
 gather_videos:
-	mkdir -p ./videos
-	@for node in $(shell seq -s ' ' 1 ${tot_nodes}); do \
-	  docker exec "${proj}_${browser}_$$node" stop-video \
-	    >./mk/stop_video_${browser}_$$node.log || true ; \
-	  docker cp "${proj}_${browser}_$$node:/videos/." videos ; \
-	  docker exec "${proj}_${browser}_$$node" rm_videos || true ; \
-	  docker exec "${proj}_${browser}_$$node" start-video ; \
-	done
-	ls -la ./videos/
+	./mk/gather_videos.sh
 
 gather_videos_chrome:
 	@$(MAKE) -s gather_videos browser=chrome tot_nodes=${chrome}

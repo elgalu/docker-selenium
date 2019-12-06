@@ -38,20 +38,20 @@ docker-compose -f ${COMPOSE_FILE} -p grid scale mock=1 hub=1 chrome=${NUM_NODES}
 sleep ${SLEEP_TIME}
 
 # Wait then show errors, if any
-if ! docker exec grid_hub_1 wait_all_done ${WAIT_ALL_DONE}; then
-  docker exec grid_hub_1 errors || docker ps -a
+if ! docker-compose -f ${COMPOSE_FILE} -p grid exec --index=1 hub wait_all_done ${WAIT_ALL_DONE}; then
+  docker-compose -f ${COMPOSE_FILE} -p grid exec --index=1 hub errors || docker ps -a
   docker-compose -f ${COMPOSE_FILE} -p grid logs hub
   die "$0 Failed to start the Hub"
 fi
 
 for i in $(seq 1 ${NUM_NODES}); do
   if ! docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} chrome wait_all_done ${WAIT_ALL_DONE}; then
-    docker logs grid_chrome_${i}
+    docker-compose -f ${COMPOSE_FILE} -p grid logs chrome
     docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} chrome errors || true
     die "Failed to start Node chrome ${i}"
   fi
   if ! docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} firefox wait_all_done ${WAIT_ALL_DONE}; then
-    docker logs grid_firefox_${i}
+    docker-compose -f ${COMPOSE_FILE} -p grid logs firefox
     docker-compose -f ${COMPOSE_FILE} -p grid exec --index ${i} firefox errors || true
     die "Failed to start Node firefox ${i}"
   fi
@@ -71,8 +71,8 @@ for i in $(seq 1 ${PARAL_TESTS}); do
   #  in dockerpty/io.py", line 42, in set_blocking
   #  ValueError: file descriptor cannot be a negative integer (-1)
   # docker-compose -f ${COMPOSE_FILE} -p grid exec --index 1 hub run_test &
-  docker exec -t grid_hub_1 selenium_test chrome &
-  docker exec -t grid_hub_1 selenium_test firefox &
+  docker-compose -f ${COMPOSE_FILE} -p grid exec --index=1 hub selenium_test chrome &
+  docker-compose -f ${COMPOSE_FILE} -p grid exec --index=1 hub selenium_test firefox &
 done
 
 # sleep a moment to let the UI tests start
@@ -88,11 +88,13 @@ for job in `jobs -p`; do
 done
 
 # Show logs also
-docker logs grid_hub_1
-for i in $(seq 1 ${NUM_NODES}); do
-  docker logs grid_chrome_${i}
-  docker logs grid_firefox_${i}
-done
+docker-compose -f ${COMPOSE_FILE} -p grid logs hub
+docker-compose -f ${COMPOSE_FILE} -p grid logs chrome
+docker-compose -f ${COMPOSE_FILE} -p grid logs firefox
+# for i in $(seq 1 ${NUM_NODES}); do
+#   docker logs grid_chrome_${i}
+#   docker logs grid_firefox_${i}
+# done
 
 # Cleanup
 docker-compose -f ${COMPOSE_FILE} -p grid down
