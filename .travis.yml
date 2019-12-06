@@ -26,6 +26,9 @@ env:
     - DOCKER_VERSION="stable"
 
 jobs:
+  allow_failures:
+    - env: test=scenario_make
+
   include:
     - stage: Docker build (re-use in stages)
       env: step=build_push
