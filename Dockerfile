@@ -484,7 +484,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="77.0.3865.90"
+ARG EXPECTED_CHROME_VERSION="78.0.3904.108"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -858,9 +858,6 @@ COPY images ./images
 COPY LICENSE.md /home/seluser/
 COPY Analytics.md /home/seluser/
 
-# Include Lib Browsermob Proxy
-COPY browsermobproxy/lib/* ${LIB_UTILS}/
-
 # Include current version
 COPY GLOBAL_PATCH_LEVEL.txt /home/seluser/
 RUN echo "${SEL_VER}-$(cat GLOBAL_PATCH_LEVEL.txt)" > /home/seluser/VERSION
@@ -870,6 +867,21 @@ ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
     DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log" \
     VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr" \
     VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
+
+# Include Lib Browsermob Proxy
+USER root
+
+ENV BROWSERMOBPROXY_VER=2.1.4
+ENV BROWSERMOBPROXY_FOLDER=browsermob-proxy-${BROWSERMOBPROXY_VER}
+
+RUN  wget -nv -O browsermob-proxy.zip \
+       "https://github.com/lightbody/browsermob-proxy/releases/download/browsermob-proxy-${BROWSERMOBPROXY_VER}/browsermob-proxy-${BROWSERMOBPROXY_VER}-bin.zip" \
+  && unzip -x browsermob-proxy.zip \
+  && rm browsermob-proxy.zip \
+  && mv ${BROWSERMOBPROXY_FOLDER}/lib/browsermob-dist-${BROWSERMOBPROXY_VER}.jar ${LIB_UTILS}/ \
+  && rm -r ${BROWSERMOBPROXY_FOLDER}
+
+USER seluser
 
 #===================================
 # Fix dirs (again) and final chores
