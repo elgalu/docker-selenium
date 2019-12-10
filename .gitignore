@@ -31,3 +31,5 @@ temp.md
 git_shortlog.stdout
 .bitballoon
 .idea
+*.DS_Store
+*.iml

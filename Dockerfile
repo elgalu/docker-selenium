@@ -688,6 +688,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   HOME="/home/seluser" \
   VNC_STORE_PWD_FILE="/home/seluser/.vnc/passwd" \
   BIN_UTILS="/usr/bin" \
+  LIB_UTILS="/usr/lib" \
   MEM_JAVA_PERCENT=80 \
   WAIT_FOREGROUND_RETRY="2s" \
   WAIT_VNC_FOREGROUND_RETRY="6s" \
@@ -740,6 +741,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   NOVNC_PORT="${DEFAULT_NOVNC_PORT}" \
   NOVNC="false" \
   NOVNC_WAIT_TIMEOUT="5s" \
+  BROWSERMOBPROXY_START="false" \
   SUPERVISOR_HTTP_PORT="${DEFAULT_SUPERVISOR_HTTP_PORT}" \
   SUPERVISOR_HTTP_USERNAME="supervisorweb" \
   SUPERVISOR_HTTP_PASSWORD="somehttpbasicauthpwd" \
@@ -799,6 +801,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   VNC_STOP_SIGNAL="TERM" \
   NOVNC_STOP_SIGNAL="TERM" \
   VIDEO_REC_STOP_SIGNAL="INT" \
+  BROWSERMOBPROXY_STOP_SIGNAL="TERM" \
   DOCKER_SOCK="/var/run/docker.sock" \
   TEST_SLEEPS="0.1" \
   ZALENIUM="false" \
@@ -847,6 +850,21 @@ ENV SUPERVISOR_PIDFILE="${RUN_DIR}/supervisord.pid" \
     DOCKER_SELENIUM_STATUS="${LOGS_DIR}/docker-selenium-status.log" \
     VNC_TRYOUT_ERR_LOG="${LOGS_DIR}/vnc-tryouts-stderr" \
     VNC_TRYOUT_OUT_LOG="${LOGS_DIR}/vnc-tryouts-stdout"
+
+# Include Lib Browsermob Proxy
+USER root
+
+ENV BROWSERMOBPROXY_VER=2.1.4
+ENV BROWSERMOBPROXY_FOLDER=browsermob-proxy-${BROWSERMOBPROXY_VER}
+
+RUN  wget -nv -O browsermob-proxy.zip \
+       "https://github.com/lightbody/browsermob-proxy/releases/download/browsermob-proxy-${BROWSERMOBPROXY_VER}/browsermob-proxy-${BROWSERMOBPROXY_VER}-bin.zip" \
+  && unzip -x browsermob-proxy.zip \
+  && rm browsermob-proxy.zip \
+  && mv ${BROWSERMOBPROXY_FOLDER}/lib/browsermob-dist-${BROWSERMOBPROXY_VER}.jar ${LIB_UTILS}/ \
+  && rm -r ${BROWSERMOBPROXY_FOLDER}
+
+USER seluser
 
 #===================================
 # Fix dirs (again) and final chores
