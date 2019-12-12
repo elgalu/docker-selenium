@@ -381,6 +381,7 @@ fi
 ga_track_start () {
   if [ "${SEND_ANONYMOUS_USAGE_INFO}" == "true" ]; then
     DisplayDataProcessingAgreement
+    DisplaySponsorRequest
 
     START_META_DATA=""
     START_META_DATA="${START_META_DATA} -proxy='${SELENIUM_NODE_PROXY_PARAMS}'"

@@ -16,6 +16,7 @@ die () {
 ga_track_shutdown () {
   if [ "${SEND_ANONYMOUS_USAGE_INFO}" == "true" ]; then
     DisplayDataProcessingAgreement
+    DisplaySponsorRequest
 
     local args=(
         --max-time 10
