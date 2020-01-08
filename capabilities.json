@@ -2,12 +2,12 @@
   "caps": [
     {
       "BROWSER_NAME": "chrome",
-      "VERSION": "79.0.3945.79",
+      "VERSION": "79.0.3945.117",
       "PLATFORM": "LINUX"
     },
     {
       "BROWSER_NAME": "firefox",
-      "VERSION": "71.0",
+      "VERSION": "72.0.1",
       "PLATFORM": "LINUX"
     }
   ]
