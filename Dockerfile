@@ -430,7 +430,7 @@ ENV FF_LANG="en-US" \
     FF_INNER_PATH="firefox/releases"
 
 #--- For Selenium 3
-ARG FF_VER="71.0"
+ARG FF_VER="72.0.1"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
