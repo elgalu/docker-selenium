@@ -89,6 +89,8 @@ RUN apt -qqy update \
     dbus-x11 \
     wget \
     curl \
+    pulseaudio socat \
+    alsa-utils \
   && apt -qyy autoremove \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
@@ -466,7 +468,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="80.0.3987.106"
+ARG EXPECTED_CHROME_VERSION="80.0.3987.132"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -762,8 +764,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   CHROME="true" \
   FIREFOX="true" \
   MULTINODE="false" \
-  FFMPEG_FRAME_RATE=10 \
-  FFMPEG_CODEC_ARGS="-vcodec libx264 -preset ultrafast -pix_fmt yuv420p" \
+  FFMPEG_FRAME_RATE=30 \
+  FFMPEG_CODEC_ARGS="-acodec libopus -vcodec libx264 -preset ultrafast" \
   FFMPEG_FINAL_CRF=0 \
   FFMPEG_DRAW_MOUSE=1 \
   VIDEO_TMP_FILE_EXTENSION="mkv" \
