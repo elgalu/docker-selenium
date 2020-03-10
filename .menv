@@ -53,6 +53,9 @@ export SIZE ?= 50%
 # Enable video recording
 export VIDEO ?= true
 
+# Enable audio recording
+export AUDIO ?= true
+
 # App name is the service name for the web app under test
 # export APP ?= zalando_uk
 export APP ?= mock

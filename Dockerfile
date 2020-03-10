@@ -22,9 +22,6 @@ ARG UBUNTU_DATE
 # Docker build debug logging, green colored
 RUN printf "\033[1;32mFROM ubuntu:${UBUNTU_FLAVOR}-${UBUNTU_DATE} \033[0m\n"
 
-MAINTAINER Diego Molina <diemol@gmail.com>
-MAINTAINER Leo Gallucci <elgalu3+dosel@gmail.com>
-
 # https://github.com/docker/docker/pull/25466#discussion-diff-74622923R677
 LABEL maintainer "Diego Molina <diemol@gmail.com>"
 LABEL maintainer "Leo Gallucci <elgalu3+dosel@gmail.com>"
@@ -760,12 +757,13 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   LOGFILE_BACKUPS=5 \
   LOGS_DIR="/var/log/cont" \
   VIDEO="false" \
+  AUDIO="false" \
   GRID="true" \
   CHROME="true" \
   FIREFOX="true" \
   MULTINODE="false" \
   FFMPEG_FRAME_RATE=30 \
-  FFMPEG_CODEC_ARGS="-acodec libopus -vcodec libx264 -preset ultrafast" \
+  FFMPEG_CODEC_ARGS="-vcodec libx264 -preset ultrafast" \
   FFMPEG_FINAL_CRF=0 \
   FFMPEG_DRAW_MOUSE=1 \
   VIDEO_TMP_FILE_EXTENSION="mkv" \

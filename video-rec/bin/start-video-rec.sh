@@ -56,14 +56,24 @@ pacmd set-default-sink v1
 pacmd set-default-source v1.monitor
 
 # ffmpeg
-ffmpeg -r ${FFMPEG_FRAME_RATE} \
-  -f "pulse" \
-  -i "default" \
+if  ["${AUDIO}" == "true"]; then
+  ffmpeg -r ${FFMPEG_FRAME_RATE} \
+    -f "pulse" \
+    -i "default" \
+    -f "x11grab" \
+    -s "${FFMPEG_FRAME_SIZE}" \
+    -i "${DISPLAY}.0" \
+    "-acodec libopus ${FFMPEG_CODEC_ARGS}" \
+    -y "${tmp_video_path}"
+else
+  ffmpeg -r ${FFMPEG_FRAME_RATE} \
   -f "x11grab" \
   -s "${FFMPEG_FRAME_SIZE}" \
   -i "${DISPLAY}.0" \
   "${FFMPEG_CODEC_ARGS}" \
   -y "${tmp_video_path}"
+fi
+
 
 VID_TOOL_PID=$!
 

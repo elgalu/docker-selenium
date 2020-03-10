@@ -23,6 +23,7 @@ echo "#==================================================================="
 set -x
 
 export VIDEO="false"
+export AUDIO="false"
 export NUM_NODES=2 PARAL_TESTS=2 WAIT_ALL_DONE="390s" SLEEP_TIME=10 PAUSE_SECS_BETWEEN_RUN_TEST="0"
 
 export VNC_FROM_PORT="26950" VNC_TO_PORT="26999"
