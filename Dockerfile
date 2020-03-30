@@ -465,7 +465,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="80.0.3987.132"
+ARG EXPECTED_CHROME_VERSION="80.0.3987.149"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -637,7 +637,7 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #    ${LOGS_DIR}/*.log
 # FFMPEG_FRAME_RATE
 #   ffmpeg encoding options
-# FFMPEG_CODEC_ARGS
+# FFMPEG_CODEC_V_ARGS
 #   Video size can be lowered down via re-encoding, see
 #    http://askubuntu.com/a/365221/134645
 # FFMPEG_DRAW_MOUSE
@@ -763,7 +763,8 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   FIREFOX="true" \
   MULTINODE="false" \
   FFMPEG_FRAME_RATE=30 \
-  FFMPEG_CODEC_ARGS="-vcodec libx264 -preset ultrafast" \
+  FFMPEG_CODEC_V_ARGS="-vcodec libx264 -preset ultrafast" \
+  FFMPEG_CODEC_VA_ARGS="-vcodec libx264 -acodec copy -preset ultrafast" \
   FFMPEG_FINAL_CRF=0 \
   FFMPEG_DRAW_MOUSE=1 \
   VIDEO_TMP_FILE_EXTENSION="mkv" \

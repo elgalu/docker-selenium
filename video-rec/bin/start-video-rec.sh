@@ -63,15 +63,15 @@ if  ["${AUDIO}" == "true"]; then
     -f "x11grab" \
     -s "${FFMPEG_FRAME_SIZE}" \
     -i "${DISPLAY}.0" \
-    "-acodec libopus ${FFMPEG_CODEC_ARGS}" \
+    ${FFMPEG_CODEC_VA_ARGS} \
     -y "${tmp_video_path}"
 else
   ffmpeg -r ${FFMPEG_FRAME_RATE} \
   -f "x11grab" \
   -s "${FFMPEG_FRAME_SIZE}" \
   -i "${DISPLAY}.0" \
-  "${FFMPEG_CODEC_ARGS}" \
-  -y "${tmp_video_path}"
+  ${FFMPEG_CODEC_V_ARGS} \
+  -y -an "${tmp_video_path}" 2>&1 &
 fi
 
 

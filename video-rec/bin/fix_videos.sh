@@ -52,7 +52,7 @@ if [ "${VIDEO_TMP_FILE_EXTENSION}" != "${VIDEO_FILE_EXTENSION}" ]; then
   # TODO: Move this mkv to mp4 conversion to a post-processing Zalenium thread
   # ffmpeg -i ${tmp_video_path} ${final_video_path}
   if timeout --foreground "${VIDEO_CONVERSION_MAX_WAIT}" \
-        ffmpeg -i ${tmp_video_path} -vcodec libx264 ${FFMPEG_CODEC_ARGS} ${final_video_path}; \
+        ffmpeg -i ${tmp_video_path} -vcodec libx264 ${FFMPEG_CODEC_V_ARGS} ${final_video_path}; \
         then
     log "Conversion from ${VIDEO_TMP_FILE_EXTENSION} to ${VIDEO_FILE_EXTENSION} succeeded!"
     log "Cleaning up ${tmp_video_path} ..."
