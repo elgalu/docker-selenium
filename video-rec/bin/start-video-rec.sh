@@ -70,7 +70,7 @@ else
   -f "x11grab" \
   -s "${FFMPEG_FRAME_SIZE}" \
   -i "${DISPLAY}.0" \
-  ${FFMPEG_CODEC_V_ARGS} \
+  ${FFMPEG_CODEC_ARGS} \
   -y -an "${tmp_video_path}" 2>&1 &
 fi
 

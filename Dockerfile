@@ -637,7 +637,7 @@ ENV DEFAULT_SELENIUM_HUB_PORT="24444" \
 #    ${LOGS_DIR}/*.log
 # FFMPEG_FRAME_RATE
 #   ffmpeg encoding options
-# FFMPEG_CODEC_V_ARGS
+# FFMPEG_CODEC_ARGS
 #   Video size can be lowered down via re-encoding, see
 #    http://askubuntu.com/a/365221/134645
 # FFMPEG_DRAW_MOUSE
@@ -763,7 +763,7 @@ ENV FIREFOX_VERSION="${FF_VER}" \
   FIREFOX="true" \
   MULTINODE="false" \
   FFMPEG_FRAME_RATE=30 \
-  FFMPEG_CODEC_V_ARGS="-vcodec libx264 -preset ultrafast" \
+  FFMPEG_CODEC_ARGS="-vcodec libx264 -preset ultrafast" \
   FFMPEG_CODEC_VA_ARGS="-vcodec libx264 -acodec copy -preset ultrafast" \
   FFMPEG_FINAL_CRF=0 \
   FFMPEG_DRAW_MOUSE=1 \
