@@ -44,6 +44,7 @@ services:
       - SCREEN_WIDTH=1300
       - SCREEN_HEIGHT=999
       - VIDEO=false
+      - AUDIO=false
       - GRID=false
       - CHROME=true
       - FIREFOX=false
@@ -68,6 +69,7 @@ services:
       - SCREEN_WIDTH=1300
       - SCREEN_HEIGHT=999
       - VIDEO=false
+      - AUDIO=false
       - GRID=false
       - CHROME=false
       - FIREFOX=true
