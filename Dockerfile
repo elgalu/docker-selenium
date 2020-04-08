@@ -428,7 +428,7 @@ ENV FF_LANG="en-US" \
     FF_PLATFORM="linux-x86_64" \
     FF_INNER_PATH="firefox/releases"
 
-ARG FF_VER="73.0"
+ARG FF_VER="75.0"
 
 ENV FF_COMP="firefox-${FF_VER}.tar.bz2"
 ENV FF_URL="${FF_BASE_URL}/${FF_INNER_PATH}/${FF_VER}/${FF_PLATFORM}/${FF_LANG}/${FF_COMP}"
