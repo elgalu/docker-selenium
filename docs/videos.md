@@ -11,7 +11,7 @@ Pull image
 Run a new grid
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
-      --shm-size=1g -e VNC_PASSWORD=hola \
+      --shm-size=2g -e VNC_PASSWORD=hola \
       -e VIDEO=true elgalu/selenium
 
 ### Wait
@@ -53,7 +53,7 @@ Check your video, note it may be splitted in many files if is too long
 If you want to additionaly record audio with the video use this
 
     docker run --rm --name=grid -p 4444:24444 -p 5920:25900 \
-      --shm-size=1g -e VNC_PASSWORD=hola \
+      --shm-size=2g -e VNC_PASSWORD=hola \
       -e VIDEO=true \
       -e AUDIO=true elgalu/selenium
 
