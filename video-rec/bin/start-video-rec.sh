@@ -62,11 +62,11 @@ if  [ "${AUDIO}" == "true" ]; then
     -draw_mouse ${FFMPEG_DRAW_MOUSE} \
     -r ${FFMPEG_FRAME_RATE} \
     -f "x11grab" \
-    -i "default" \
     -i "${DISPLAY}.0" \
     -f "pulse" \
+    -i "default" \
     ${FFMPEG_CODEC_VA_ARGS} \
-    -y -an "${tmp_video_path}" 2>&1 &
+    -y "${tmp_video_path}" 2>&1 &
 else
   ffmpeg \
     -s ${FFMPEG_FRAME_SIZE} \
