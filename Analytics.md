@@ -1,5 +1,11 @@
 # Docker-selenium's Anonymous Aggregate User Behaviour Analytics
-Docker-selenium has begun gathering anonymous aggregate user behaviour analytics and reporting these to Google Analytics. You are notified about this when you start and stop Docker-selenium.
+Docker-selenium no longer gathers anonymous aggregate user behaviour analytics and reporting to Google Analytics.
+
+We are stopping GA tracking due to:
+https://www.allenovery.com/en-gb/global/news-and-insights/publications/werbe-cookies-erfordern-die-aktive-einwilligung-des-nutzers
+
+> a statement or clear affirmative action by the user is required
+> website operators can no longer rely on an opt-out procedure.
 
 ## Why?
 Docker-selenium is provided free of charge and we don't have direct communication with its users nor time resources to ask directly for their feedback. As a result, we now use anonymous aggregate user analytics to help us understand how Docker-selenium is being used, the most common used features based on how, where and when people use it. With this information we can prioritize some features over other ones, understand better which Selenium or Docker versions we should support depending on the usage, and get execution exceptions to identify bugs.

@@ -538,7 +538,8 @@ env > env
 #------
 # export NORMAL_USER_UID="$(id -u seluser)"
 # export NORMAL_USER_GID="$(id -g seluser)"
-ga_track_start
+# no longer tracking due to German law
+# ga_track_start
 
 if [ "${DEBUG}" == "bash" ]; then
   run-supervisord.sh &
