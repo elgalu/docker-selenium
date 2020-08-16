@@ -2,9 +2,7 @@
 
 # Selenium in Docker with Chrome and Firefox
 
-This project is being sponsored by GitAds:
-
-<a href="https://tracking.gitads.io/?repo=docker-selenium"> <img width="520" src="https://images.gitads.io/docker-selenium" alt="GitAds"/></a>
+This project is [sponsored by GitAds](https://tracking.gitads.io/?repo=docker-selenium)
 
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium "Travis CI")
 [![Docker Pulls](https://img.shields.io/docker/pulls/elgalu/selenium.svg)](https://hub.docker.com/r/elgalu/selenium/tags/)
