@@ -1,8 +1,7 @@
-## 3.141.59-p46
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p45...3.141.59-p46 (2020-10-12)
-    + Leo Gallucci (2):
-        * [86fb012] Remove GitAds (shutdown) [ci skip]
-        * [d326470] Upgrade Chrome, FF
+## 3.141.59-p47
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p46...3.141.59-p47 (2020-10-13)
+    + jahmed2345 (1):
+        * [24b92b6] Added LambdaTest under cloud service providers (#398)
  + **Image tag details:**
     + Selenium version: 3.141.59 (82b03c358b)
     + Chrome stable:  86.0.4240.75
@@ -16,7 +15,7 @@
     + Tested on kernel CI  host: 4.15.0-1077-gcp x86_64
     + Built at CI  host with: Docker version 18.06.0, build 0ffa825
     + Built at CI  host with: Docker Compose version 1.23.1, build b02f1306
-    + Image version: 3.141.59-343
+    + Image version: 3.141.59-344
     + Image size: 1.57GB
-    + Digest: sha256:870e09318759b35555368360e56e3db8485b252100b52e9975b741a59ed3a0f7
+    + Digest: sha256:eed7b68a808810d240cec654011421b031a53a0734f75fc5224a1e854abb2c9e
 
