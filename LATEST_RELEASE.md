@@ -1,7 +1,7 @@
-## 3.141.59-p50
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p49...3.141.59-p50 (2020-11-20)
-    + ewul (1):
-        * [15d35f7] update chrome and driver to 87 (#403)
+## 3.141.59-p51
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p50...3.141.59-p51 (2020-11-24)
+    + Jérôme Gillard (1):
+        * [f7632e0] Add Swarm documentation (#405)
  + **Image tag details:**
     + Selenium version: 3.141.59 (82b03c358b)
     + Chrome stable:  87.0.4280.66
@@ -15,7 +15,7 @@
     + Tested on kernel CI  host: 4.15.0-1077-gcp x86_64
     + Built at CI  host with: Docker version 18.06.0, build 0ffa825
     + Built at CI  host with: Docker Compose version 1.23.1, build b02f1306
-    + Image version: 3.141.59-347
+    + Image version: 3.141.59-348
     + Image size: 1.57GB
-    + Digest: sha256:d765b78abb3c53168bc0833a2d899aa74bd2149b28b1f6490119eae755088ca4
+    + Digest: sha256:62c870c715d198080813af8e59c95bf30627f8f9699c24fc2490f51c930d971d
 
