@@ -466,7 +466,7 @@ COPY bin/fail /usr/bin/
 #===============
 # TODO: Use Google fingerprint to verify downloads
 #  https://www.google.de/linuxrepositories/
-ARG EXPECTED_CHROME_VERSION="88.0.4324.146"
+ARG EXPECTED_CHROME_VERSION="89.0.4389.72"
 ENV CHROME_URL="https://dl.google.com/linux/direct" \
     CHROME_BASE_DEB_PATH="/home/seluser/chrome-deb/google-chrome" \
     GREP_ONLY_NUMS_VER="[0-9.]{2,20}"
@@ -508,7 +508,7 @@ USER seluser
 # Chrome webdriver
 #==================
 # How to get cpu arch dynamically: $(lscpu | grep Architecture | sed "s/^.*_//")
-ARG CHROME_DRIVER_VERSION="88.0.4324.96"
+ARG CHROME_DRIVER_VERSION="89.0.4389.23"
 ENV CHROME_DRIVER_BASE="chromedriver.storage.googleapis.com" \
     CPU_ARCH="64"
 ENV CHROME_DRIVER_FILE="chromedriver_linux${CPU_ARCH}.zip"
