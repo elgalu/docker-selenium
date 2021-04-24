@@ -19,6 +19,13 @@ docker-compose --version || echo "WARN: No docker-compose installed yet"
 
 [ "${TRAVIS_BUILD_NUMBER}" == "" ] && die "Need env var TRAVIS_BUILD_NUMBER to know where to pull from"
 
+# We always need to login to docker to avoid: toomanyrequests
+[ "${DOCKER_USERNAME}" == "" ] && die "Need env var DOCKER_USERNAME to pull from docker"
+[ "${DOCKER_PASSWORD}" == "" ] && die "Need env var DOCKER_PASSWORD to pull from docker"
+
+docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+echo "Logged in to docker with user '${DOCKER_USERNAME}'"
+
 if [[ ${TRAVIS_PULL_REQUEST_SLUG} != "" && \
       ${TRAVIS_PULL_REQUEST_SLUG} != ${TRAVIS_REPO_SLUG} && \
       ${TRAVIS_PULL_REQUEST} != "false" ]]; then
