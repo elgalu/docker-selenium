@@ -1,7 +1,5 @@
-## 3.141.59-p58
- + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p57...3.141.59-p58 (2021-05-26)
-    + Bartek Florczak (1):
-        * [2be09ef] Bump Chrome and Chromedriver to v91
+## 3.141.59-p59
+ + **Changes:** https://github.com/elgalu/docker-selenium/compare/3.141.59-p58...3.141.59-p59 (2021-05-26)
  + **Image tag details:**
     + Selenium version: 3.141.59 (82b03c358b)
     + Chrome stable:  91.0.4472.77
@@ -15,7 +13,7 @@
     + Tested on kernel CI  host: 4.15.0-1077-gcp x86_64
     + Built at CI  host with: Docker version 18.06.0, build 0ffa825
     + Built at CI  host with: Docker Compose version 1.23.1, build b02f1306
-    + Image version: 3.141.59-356
+    + Image version: 3.141.59-357
     + Image size: 1.62GB
-    + Digest: sha256:8384421cd80b4e1ce5fd7e3257147197078b42f7c3955e00b4fa11e99bcbfb42
+    + Digest: sha256:8b83d2a3bc0cf26d0aed929c25dd09ecbc5949a852a8f01081ff14d175b4619d
 
