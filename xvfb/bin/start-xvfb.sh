@@ -89,11 +89,13 @@ function start_xvfb() {
 }
 
 if [ ! -z "${XE_DISP_NUM}" ]; then
+  # we do not wish to start another X server if it is provided externally
   echo "INFO: XE_DISP_NUM '${XE_DISP_NUM}' was provided so switching to that DISPLAY"
   echo "INFO:   and skipping virtual framebuffer startup in favor of remote."
   export DISP_N="${XE_DISP_NUM}"
   export DISPLAY=":${DISP_N}"
-  start_xvfb
+  echo "${DISPLAY}" > DISPLAY
+  echo "${DISP_N}" > DISP_N
 # elif [ "${PICK_ALL_RANDOM_PORTS}" = "true" ] || [ "${DISP_N}" = "-1" ]; then
 else
   # Find a free DISPLAY port starting with current DISP_N if any
