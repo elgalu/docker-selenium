@@ -1,3 +1,6 @@
+# [NOT MAINTAINED] Please use <https://github.com/SeleniumHQ/docker-selenium>
+
+
 <img id="header" width="700" src="./images/icons/logo_wide.jpg" />
 
 # Selenium in Docker with Chrome and Firefox
@@ -5,8 +8,6 @@
 [![Build Status](https://travis-ci.org/elgalu/docker-selenium.svg?branch=master)](https://travis-ci.org/elgalu/docker-selenium "Travis CI")
 [![Docker Pulls](https://img.shields.io/docker/pulls/elgalu/selenium.svg)](https://hub.docker.com/r/elgalu/selenium/tags/)
 [![Docker](https://images.microbadger.com/badges/version/elgalu/selenium.svg)](https://microbadger.com/images/elgalu/selenium "Docker Badge")
-[![Analytics](https://ga-beacon.appspot.com/UA-18144954-10/github/elgalu/docker-selenium/README.md)](https://github.com/igrigorik/ga-beacon "Analytics")
-[![Gitter](https://badges.gitter.im/elgalu/selenium.svg)](https://gitter.im/elgalu/docker-selenium "Chat support")
 
 * selenium server grid with 2 nodes (chrome & firefox)
 * mp4 video recording
